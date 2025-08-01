@@ -2,10 +2,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
+import { useNavigate } from 'react-router-dom';
 
 export function Action() {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
+  const navigate = useNavigate();
 
   return (
     <div className="space-y-3">
@@ -34,7 +36,7 @@ export function Action() {
                 : 'w-full justify-start hover:bg-sidebar-accent text-sidebar-foreground hover:text-sidebar-accent-foreground transition-all duration-300'
             }`}
             variant="ghost"
-            size={isCollapsed ? 'sm' : 'default'}
+            onClick={() => navigate('/components')}
           >
             <Plus className={isCollapsed ? "h-4 w-4" : "h-4 w-4"} />
             {!isCollapsed && (
