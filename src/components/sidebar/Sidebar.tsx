@@ -27,10 +27,19 @@ export function DashboardSidebar() {
         duration: 0.3,
         ease: [0.4, 0, 0.2, 1],
       }}
-      className="relative"
-      style={{border: 'none', margin: '0', padding: '0', borderRight: 'none', gap: '0'}}
+      className={`relative ${isCollapsed ? 'overflow-hidden' : ''}`}
+      style={{
+        border: 'none', 
+        margin: '0', 
+        padding: '0', 
+        borderRight: 'none', 
+        gap: '0'
+      }}
     >
-      <Sidebar className="border-r-0 bg-sidebar-background backdrop-blur-xl h-full m-0 p-0" style={{border: 'none', margin: '0', padding: '0'}}>
+      <Sidebar 
+        className="border-r-0 bg-sidebar-background backdrop-blur-xl h-full m-0 p-0 transition-all duration-300" 
+        style={{border: 'none', margin: '0', padding: '0'}}
+      >
         {/* Collapsed state expand button */}
         <AnimatePresence>
           {isCollapsed && (
@@ -48,29 +57,39 @@ export function DashboardSidebar() {
           )}
         </AnimatePresence>
 
-        <SidebarHeader className="p-4 border-b border-sidebar-border">
-          <DashboardTitle />
-        </SidebarHeader>
+        {!isCollapsed && (
+          <>
+            <SidebarHeader className="p-4 border-b border-sidebar-border">
+              <DashboardTitle />
+            </SidebarHeader>
 
-        <SidebarContent className="flex flex-col h-full">
-          {/* Main Content Area with Panels */}
-          <div className="flex-1 p-4 space-y-6">
+            <SidebarContent className="flex flex-col h-full">
+              {/* Main Content Area with Panels */}
+              <div className="flex-1 p-4 space-y-6">
+                <Action />
+                
+                {/* Divider */}
+                <div className="h-px bg-white/10" />
+                
+                <Tools />
+                
+                {/* Divider */}
+                <div className="h-px bg-white/10" />
+                
+                <Settings />
+              </div>
+
+              {/* Bottom Section - Profile, Settings, Sign In */}
+              <UserNavigation />
+            </SidebarContent>
+          </>
+        )}
+
+        {isCollapsed && (
+          <div className="flex flex-col items-center py-4 h-full">
             <Action />
-            
-            {/* Divider */}
-            <div className="h-px bg-white/10" />
-            
-            <Tools />
-            
-            {/* Divider */}
-            <div className="h-px bg-white/10" />
-            
-            <Settings />
           </div>
-
-          {/* Bottom Section - Profile, Settings, Sign In */}
-          <UserNavigation />
-        </SidebarContent>
+        )}
       </Sidebar>
     </motion.div>
   );
