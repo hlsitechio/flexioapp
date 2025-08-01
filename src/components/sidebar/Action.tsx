@@ -24,7 +24,7 @@ export function Action() {
           </motion.h3>
         )}
       </AnimatePresence>
-      <div className="space-y-2">
+      <div className={isCollapsed ? "flex justify-center" : ""}>
         <motion.div
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -32,7 +32,7 @@ export function Action() {
           <Button 
             className={`${
               isCollapsed 
-                ? 'w-10 h-10 p-0 mx-auto hover:bg-sidebar-accent text-sidebar-foreground hover:text-sidebar-accent-foreground transition-all duration-300 flex items-center justify-center' 
+                ? 'w-10 h-10 p-0 hover:bg-sidebar-accent text-sidebar-foreground hover:text-sidebar-accent-foreground transition-all duration-300 flex items-center justify-center' 
                 : 'w-full justify-start hover:bg-sidebar-accent text-sidebar-foreground hover:text-sidebar-accent-foreground transition-all duration-300'
             }`}
             variant="ghost"
