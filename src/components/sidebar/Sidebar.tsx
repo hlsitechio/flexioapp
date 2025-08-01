@@ -29,7 +29,10 @@ export function DashboardSidebar() {
       }}
       className="relative"
     >
-      <Sidebar className="border-r border-sidebar-border bg-sidebar-background backdrop-blur-xl h-full">
+      <Sidebar 
+        className="border-r border-sidebar-border bg-sidebar-background backdrop-blur-xl h-full"
+        collapsible="icon"
+      >
         {/* Collapsed state expand button */}
         <AnimatePresence>
           {isCollapsed && (

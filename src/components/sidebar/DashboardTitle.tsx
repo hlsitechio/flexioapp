@@ -20,8 +20,9 @@ export function DashboardTitle() {
           <Crown className="h-5 w-5" />
         </motion.button>
       ) : (
-        <AnimatePresence>
+        <>
           <motion.button
+            key="title-button"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
@@ -33,6 +34,7 @@ export function DashboardTitle() {
             <span>Premium Dashboard</span>
           </motion.button>
           <motion.div
+            key="sidebar-trigger"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
@@ -40,7 +42,7 @@ export function DashboardTitle() {
           >
             <SidebarTrigger className="ml-auto text-sidebar-foreground hover:text-sidebar-primary transition-colors" />
           </motion.div>
-        </AnimatePresence>
+        </>
       )}
     </div>
   );

@@ -35,20 +35,10 @@ export function Action() {
             }`}
             size={isCollapsed ? 'sm' : 'default'}
           >
-            <Plus className="h-4 w-4" />
-            <AnimatePresence>
-              {!isCollapsed && (
-                <motion.span
-                  initial={{ opacity: 0, width: 0 }}
-                  animate={{ opacity: 1, width: 'auto' }}
-                  exit={{ opacity: 0, width: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="ml-2 overflow-hidden"
-                >
-                  Add Component
-                </motion.span>
-              )}
-            </AnimatePresence>
+            <Plus className={isCollapsed ? "h-4 w-4" : "h-4 w-4"} />
+            {!isCollapsed && (
+              <span className="ml-2">Add Component</span>
+            )}
           </Button>
         </motion.div>
       </div>

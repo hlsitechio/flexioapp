@@ -9,15 +9,11 @@ export function Settings() {
   return (
     <div className="space-y-3">
       {isCollapsed ? (
-        <motion.div
-          className="flex justify-center"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-        >
+        <div className="flex justify-center">
           <div className="p-2 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all cursor-pointer">
             <SettingsIcon className="h-4 w-4" />
           </div>
-        </motion.div>
+        </div>
       ) : (
         <>
           <AnimatePresence>
