@@ -1,23 +1,26 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useSidebar, SidebarTrigger } from '@/components/ui/sidebar';
 
 export function DashboardTitle() {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
+  const navigate = useNavigate();
 
   return (
     <div className="flex items-center justify-between">
       <AnimatePresence>
         {!isCollapsed && (
-          <motion.h2
+          <motion.button
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.2 }}
-            className="text-lg font-semibold text-sidebar-foreground"
+            onClick={() => navigate('/')}
+            className="text-lg font-semibold text-sidebar-foreground hover:text-sidebar-primary transition-colors cursor-pointer"
           >
             Dashboard
-          </motion.h2>
+          </motion.button>
         )}
       </AnimatePresence>
       <AnimatePresence>
