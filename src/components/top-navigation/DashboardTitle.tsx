@@ -8,7 +8,7 @@ export function DashboardTitle({ customTitle }: DashboardTitleProps) {
   const location = useLocation();
   
   const getPageTitle = () => {
-    if (customTitle && location.pathname === '/') {
+    if (customTitle && customTitle.trim() !== '') {
       return customTitle;
     }
     

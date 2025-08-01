@@ -103,7 +103,7 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
                     <Input
                       value={customHeaderTitle}
                       onChange={(e) => setCustomHeaderTitle(e.target.value)}
-                      placeholder="Enter custom title"
+                      placeholder="Enter custom navigation title"
                     />
                   </div>
                 )}
