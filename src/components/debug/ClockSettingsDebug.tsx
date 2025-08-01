@@ -98,11 +98,12 @@ export function ClockSettingsDebug() {
         </Button>
         
         <div className="text-xs text-muted-foreground bg-muted p-3 rounded">
-          <strong>How it works:</strong><br/>
-          • Settings auto-save 1 second after changes<br/>
-          • When authenticated: saves to Supabase database<br/>
-          • When not authenticated: saves to localStorage<br/>
-          • Settings sync across devices when logged in
+          <strong>🔧 Persistence Strategy:</strong><br/>
+          • Settings save to localStorage IMMEDIATELY when changed<br/>
+          • Backend sync happens 1 second later (when authenticated)<br/>
+          • Page reload always loads from localStorage first<br/>
+          • Backend settings only override if different from localStorage<br/>
+          • Check console for detailed save/load logging
         </div>
       </CardContent>
     </Card>

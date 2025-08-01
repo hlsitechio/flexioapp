@@ -42,6 +42,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     try {
       if (typeof window !== 'undefined') {
         const item = localStorage.getItem(key);
+        console.log(`Getting localStorage ${key}:`, item, 'defaulting to:', defaultValue);
         return item !== null ? JSON.parse(item) : defaultValue;
       }
     } catch (error) {
@@ -53,7 +54,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const getStorageString = (key: string, defaultValue: string) => {
     try {
       if (typeof window !== 'undefined') {
-        return localStorage.getItem(key) || defaultValue;
+        const item = localStorage.getItem(key) || defaultValue;
+        console.log(`Getting localStorage string ${key}:`, item);
+        return item;
       }
     } catch (error) {
       console.warn(`Error reading ${key} from localStorage:`, error);
@@ -77,12 +80,14 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize settings from localStorage first, then override with backend if authenticated
   useEffect(() => {
+    console.log('SettingsContext: Initializing settings...');
     // Always load localStorage first to have immediate settings
     loadSettingsFromLocalStorage();
   }, []);
 
   // When user authentication state changes, handle backend sync
   useEffect(() => {
+    console.log('SettingsContext: User auth state changed:', user?.email || 'No user');
     if (user) {
       // User just signed in - load from backend and merge with current settings
       loadSettingsFromBackend();
@@ -93,7 +98,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   }, [user]);
 
   const loadSettingsFromLocalStorage = () => {
-    console.log('Loading settings from localStorage...');
+    console.log('🔄 Loading settings from localStorage...');
     const savedClockPosition = getStorageString('clockPosition', 'left') as 'left' | 'center' | 'right';
     const savedShowHeaderTitle = getStorageItem('showHeaderTitle', true);
     const savedCustomHeaderTitle = getStorageString('customHeaderTitle', 'Premium Dashboard');
@@ -106,6 +111,14 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const savedShowYear = getStorageItem('showYear', true);
     const savedUse24HourFormat = getStorageItem('use24HourFormat', false);
 
+    console.log('📋 About to set clock settings:', {
+      showSeconds: savedShowSeconds,
+      showDate: savedShowDate,
+      showYear: savedShowYear,
+      use24HourFormat: savedUse24HourFormat,
+      clockPosition: savedClockPosition
+    });
+
     setClockPosition(savedClockPosition);
     setShowHeaderTitle(savedShowHeaderTitle);
     setCustomHeaderTitle(savedCustomHeaderTitle);
@@ -116,16 +129,19 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setShowYear(savedShowYear);
     setUse24HourFormat(savedUse24HourFormat);
     
-    console.log('Settings loaded from localStorage:', {
-      showSeconds: savedShowSeconds,
-      showDate: savedShowDate,
-      showYear: savedShowYear,
-      use24HourFormat: savedUse24HourFormat
-    });
+    console.log('✅ Settings loaded from localStorage');
   };
 
   const saveCurrentSettingsToLocalStorage = () => {
-    console.log('Saving current settings to localStorage...');
+    console.log('💾 Saving current settings to localStorage...');
+    console.log('Current state values:', {
+      showSeconds,
+      showDate,
+      showYear,
+      use24HourFormat,
+      clockPosition
+    });
+    
     try {
       if (typeof window !== 'undefined') {
         localStorage.setItem('clockPosition', clockPosition);
@@ -138,17 +154,28 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('showYear', JSON.stringify(showYear));
         localStorage.setItem('use24HourFormat', JSON.stringify(use24HourFormat));
         
-        console.log('Current settings saved to localStorage for offline access');
+        console.log('✅ Current settings saved to localStorage for offline access');
       }
     } catch (error) {
-      console.warn('Error saving current settings to localStorage:', error);
+      console.warn('❌ Error saving current settings to localStorage:', error);
     }
   };
 
   const loadSettingsFromBackend = async () => {
     if (!user) return;
     
-    console.log('Loading settings from backend for user:', user.email);
+    console.log('📡 Loading settings from backend for user:', user.email);
+    
+    // Get current localStorage values to compare
+    const currentLocalSettings = {
+      clockPosition,
+      showSeconds,
+      showDate,
+      showYear,
+      use24HourFormat
+    };
+    console.log('📋 Current localStorage settings:', currentLocalSettings);
+    
     try {
       const { data, error } = await supabase
         .from('user_settings')
@@ -157,41 +184,60 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         .maybeSingle();
 
       if (error && error.code !== 'PGRST116') {
-        console.error('Error loading settings:', error);
-        console.log('Falling back to localStorage settings');
+        console.error('❌ Error loading settings:', error);
+        console.log('🔄 Keeping current localStorage settings');
         return; // Keep current localStorage settings
       }
 
       if (data) {
-        console.log('Loading clock settings from backend:', data.dashboard_layout);
+        console.log('📡 Backend data received:', data.dashboard_layout);
+        
+        // Only override if backend has newer/different settings
+        const layout = (data.dashboard_layout as any) || {};
+        
+        console.log('🔄 Applying backend settings...');
         setCustomHeaderTitle(data.dashboard_title || 'Premium Dashboard');
         setCustomSidebarTitle(data.sidebar_title || 'Premium Dashboard');
-        // Load other settings from dashboard_layout JSON if stored there
-        const layout = (data.dashboard_layout as any) || {};
-        if (layout.clockPosition) setClockPosition(layout.clockPosition);
+        
+        // Apply layout settings only if they exist in backend
+        if (layout.clockPosition !== undefined) {
+          console.log('📍 Setting clock position from backend:', layout.clockPosition);
+          setClockPosition(layout.clockPosition);
+        }
         if (layout.showHeaderTitle !== undefined) setShowHeaderTitle(layout.showHeaderTitle);
         if (layout.showSidebarCrown !== undefined) setShowSidebarCrown(layout.showSidebarCrown);
-        if (layout.showSeconds !== undefined) setShowSeconds(layout.showSeconds);
-        if (layout.showDate !== undefined) setShowDate(layout.showDate);
-        if (layout.showYear !== undefined) setShowYear(layout.showYear);
-        if (layout.use24HourFormat !== undefined) setUse24HourFormat(layout.use24HourFormat);
-        console.log('Clock settings loaded:', {
-          showSeconds: layout.showSeconds,
-          showDate: layout.showDate,
-          showYear: layout.showYear,
-          use24HourFormat: layout.use24HourFormat
-        });
+        if (layout.showSeconds !== undefined) {
+          console.log('⏰ Setting showSeconds from backend:', layout.showSeconds);
+          setShowSeconds(layout.showSeconds);
+        }
+        if (layout.showDate !== undefined) {
+          console.log('📅 Setting showDate from backend:', layout.showDate);
+          setShowDate(layout.showDate);
+        }
+        if (layout.showYear !== undefined) {
+          console.log('📆 Setting showYear from backend:', layout.showYear);
+          setShowYear(layout.showYear);
+        }
+        if (layout.use24HourFormat !== undefined) {
+          console.log('🕐 Setting use24HourFormat from backend:', layout.use24HourFormat);
+          setUse24HourFormat(layout.use24HourFormat);
+        }
         
-        // After loading from backend, also save to localStorage as backup
-        setTimeout(() => saveCurrentSettingsToLocalStorage(), 100);
+        console.log('✅ Backend settings applied successfully');
+        
+        // Save updated settings to localStorage as backup (after a short delay)
+        setTimeout(() => {
+          console.log('💾 Backing up backend settings to localStorage...');
+          saveCurrentSettingsToLocalStorage();
+        }, 500);
       } else {
-        console.log('No backend settings found, creating initial record with current settings');
+        console.log('📝 No backend settings found, saving current localStorage settings to backend');
         // No settings found, save current localStorage settings to backend
         await saveSettingsToBackend();
       }
     } catch (error) {
-      console.error('Error loading settings from backend:', error);
-      console.log('Keeping current localStorage settings');
+      console.error('❌ Error loading settings from backend:', error);
+      console.log('🔄 Keeping current localStorage settings');
     }
   };
 
@@ -241,23 +287,37 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Enhanced save logic with better error handling and localStorage backup
+  // Enhanced save logic with immediate localStorage backup
   useEffect(() => {
-    const saveSettings = () => {
-      if (user) {
-        // User is authenticated - save to backend with localStorage backup
-        const timer = setTimeout(() => {
-          saveSettingsToBackend();
-        }, 1000);
-        return () => clearTimeout(timer);
-      } else {
-        // User not authenticated - save to localStorage immediately
-        saveCurrentSettingsToLocalStorage();
-      }
-    };
+    // Skip the first render to avoid saving default values
+    if (
+      clockPosition === 'left' && 
+      showHeaderTitle === true && 
+      customHeaderTitle === 'Premium Dashboard' && 
+      showSidebarCrown === true && 
+      customSidebarTitle === 'Premium Dashboard' && 
+      showSeconds === true && 
+      showDate === true && 
+      showYear === true && 
+      use24HourFormat === false
+    ) {
+      console.log('⏭️ Skipping save of initial default values');
+      return;
+    }
 
-    const cleanup = saveSettings();
-    return cleanup;
+    console.log('🔄 Settings changed, preparing to save...');
+    
+    // ALWAYS save to localStorage immediately when settings change
+    saveCurrentSettingsToLocalStorage();
+    
+    // Then save to backend if authenticated (debounced)
+    if (user) {
+      const timer = setTimeout(() => {
+        console.log('⏰ Debounced backend save triggered');
+        saveSettingsToBackend();
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
   }, [
     clockPosition,
     showHeaderTitle,
