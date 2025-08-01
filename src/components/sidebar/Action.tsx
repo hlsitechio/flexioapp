@@ -3,11 +3,18 @@ import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
 import { useNavigate } from 'react-router-dom';
+import { useSettings } from '@/contexts/SettingsContext';
 
 export function Action() {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
   const navigate = useNavigate();
+  const { editMode } = useSettings();
+
+  // Only show when in edit mode
+  if (!editMode) {
+    return null;
+  }
 
   return (
     <div className="space-y-3">
