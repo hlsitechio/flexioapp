@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSidebar } from '@/components/ui/sidebar';
 import { Wrench } from 'lucide-react';
 import { SidebarCompactCalendar } from '@/components/calendar';
+import { CountdownTimer, TaskCounter, QuickNote, RandomQuote } from './tools';
 
 export function Tools() {
   const { state } = useSidebar();
@@ -40,6 +41,54 @@ export function Tools() {
                 transition={{ duration: 0.2, delay: 0.2 }}
               >
                 <SidebarCompactCalendar />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Countdown Timer */}
+            <AnimatePresence>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.2, delay: 0.25 }}
+              >
+                <CountdownTimer />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Task Counter */}
+            <AnimatePresence>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.2, delay: 0.3 }}
+              >
+                <TaskCounter />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Quick Note */}
+            <AnimatePresence>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.2, delay: 0.35 }}
+              >
+                <QuickNote />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Random Quote */}
+            <AnimatePresence>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.2, delay: 0.4 }}
+              >
+                <RandomQuote />
               </motion.div>
             </AnimatePresence>
           </div>
