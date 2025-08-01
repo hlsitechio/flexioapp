@@ -10,8 +10,12 @@ const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-      <App />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <TooltipProvider>
+          <App />
+        </TooltipProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   </StrictMode>,
 );
