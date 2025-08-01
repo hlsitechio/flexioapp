@@ -30,9 +30,10 @@ export function Action() {
           <Button 
             className={`${
               isCollapsed 
-                ? 'w-10 h-10 p-0 mx-auto button-premium text-primary-foreground hover:shadow-lg transition-all duration-300 flex items-center justify-center' 
-                : 'w-full justify-start button-premium text-primary-foreground hover:shadow-lg transition-all duration-300'
+                ? 'w-10 h-10 p-0 mx-auto hover:bg-sidebar-accent text-sidebar-foreground hover:text-sidebar-accent-foreground transition-all duration-300 flex items-center justify-center' 
+                : 'w-full justify-start hover:bg-sidebar-accent text-sidebar-foreground hover:text-sidebar-accent-foreground transition-all duration-300'
             }`}
+            variant="ghost"
             size={isCollapsed ? 'sm' : 'default'}
           >
             <Plus className={isCollapsed ? "h-4 w-4" : "h-4 w-4"} />
