@@ -7,7 +7,7 @@ const Index = () => {
 
   return (
     <DashboardLayout title="Dashboard">
-      <div className="p-6">
+      <div className="m-0 p-0">
         <DashboardGrid editMode={editMode} />
       </div>
     </DashboardLayout>
