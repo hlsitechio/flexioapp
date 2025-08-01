@@ -20,13 +20,8 @@ export function DashboardSidebar() {
       {/* Collapsed state expand button */}
       {isCollapsed && (
         <div className="absolute -right-3 top-4 z-50">
-          <SidebarTrigger asChild>
-            <Button
-              size="sm"
-              className="h-6 w-6 rounded-full bg-sidebar-primary hover:bg-sidebar-primary/80 text-sidebar-primary-foreground shadow-lg border border-sidebar-border/50"
-            >
-              <ChevronRight className="h-3 w-3" />
-            </Button>
+          <SidebarTrigger className="h-6 w-6 rounded-full bg-sidebar-primary hover:bg-sidebar-primary/80 text-sidebar-primary-foreground shadow-lg border border-sidebar-border/50 p-0">
+            <ChevronRight className="h-3 w-3" />
           </SidebarTrigger>
         </div>
       )}
