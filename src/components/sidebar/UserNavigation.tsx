@@ -3,7 +3,6 @@ import { Profile } from './settings/Profile';
 import { UserSettings } from './settings/UserSettings';
 import { SignInOut } from './settings/SignInOut';
 import { SidebarDarkModeToggle } from './SidebarDarkModeToggle';
-import { User } from 'lucide-react';
 
 export function UserNavigation() {
   const { state } = useSidebar();
@@ -11,13 +10,11 @@ export function UserNavigation() {
 
   if (isCollapsed) {
     return (
-      <div className="flex justify-center">
-        <button 
-          className="p-2 rounded-md hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors"
-          title="User Menu"
-        >
-          <User className="h-4 w-4" />
-        </button>
+      <div className="flex flex-col items-center space-y-2">
+        <SidebarDarkModeToggle />
+        <Profile />
+        <UserSettings />
+        <SignInOut />
       </div>
     );
   }
