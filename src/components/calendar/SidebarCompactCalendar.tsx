@@ -24,9 +24,12 @@ export function SidebarCompactCalendar() {
   return (
     <Card className="border-0 bg-muted/30">
       <CardContent className="p-3">
-        <div className="flex items-center gap-2">
-          <CalendarIcon className="h-4 w-4 text-primary" />
-          <span className="text-sm font-medium text-foreground">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <CalendarIcon className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium text-foreground">Mini Calendar</span>
+          </div>
+          <span className="text-sm text-muted-foreground">
             {formatDate(currentTime)}
           </span>
         </div>

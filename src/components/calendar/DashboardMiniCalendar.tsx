@@ -78,7 +78,7 @@ export function DashboardMiniCalendar({ className }: DashboardMiniCalendarProps)
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-base">
             <CalendarIcon className="h-4 w-4" />
-            Mini Calendar
+            Calendar
           </CardTitle>
           <div className="flex items-center gap-1">
             <Button
