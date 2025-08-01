@@ -41,35 +41,13 @@ export function Dashboard() {
       <div className="min-h-screen flex w-full bg-background">
         <DashboardSidebar />
         
-        <div className="flex-1 flex flex-col">
-          <TopNavigation />
-          
-          {/* Edit Mode Toggle */}
-          <div className="px-6 pt-4 pb-2 border-b border-border/50">
-            <Button
-              onClick={() => setEditMode(!editMode)}
-              variant={editMode ? "default" : "outline"}
-              size="sm"
-              className="transition-all duration-200"
-            >
-              {editMode ? (
-                <>
-                  <Eye className="h-4 w-4 mr-2" />
-                  View Mode
-                </>
-              ) : (
-                <>
-                  <Edit3 className="h-4 w-4 mr-2" />
-                  Edit Mode
-                </>
-              )}
-            </Button>
-          </div>
-          
-          <main className="flex-1 p-6">
-            <DashboardGrid editMode={editMode} />
-          </main>
-        </div>
+      <div className="flex-1 flex flex-col">
+        <TopNavigation />
+        
+        <main className="flex-1 p-6">
+          <DashboardGrid editMode={editMode} setEditMode={setEditMode} />
+        </main>
+      </div>
       </div>
       
       <DragOverlay>

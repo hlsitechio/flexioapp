@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, RotateCcw, Settings } from 'lucide-react';
+import { Plus, RotateCcw, Settings, Edit3, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { KanbanBoard } from '@/components/kanban';
 import { KanbanColumn, KanbanItem } from '@/types/kanban';
@@ -8,9 +8,10 @@ import { KanbanColumn, KanbanItem } from '@/types/kanban';
 
 interface DashboardGridProps {
   editMode: boolean;
+  setEditMode: (editMode: boolean) => void;
 }
 
-export function DashboardGrid({ editMode }: DashboardGridProps) {
+export function DashboardGrid({ editMode, setEditMode }: DashboardGridProps) {
   const [columns, setColumns] = useState<KanbanColumn[]>([
     {
       id: 'dashboard',
@@ -91,6 +92,20 @@ export function DashboardGrid({ editMode }: DashboardGridProps) {
 
   return (
     <div className="h-full w-full relative">
+      {/* Floating Edit Toggle */}
+      <Button
+        onClick={() => setEditMode(!editMode)}
+        variant={editMode ? "default" : "outline"}
+        size="sm"
+        className="absolute top-4 left-4 z-20 transition-all duration-200 shadow-lg"
+      >
+        {editMode ? (
+          <Eye className="h-4 w-4" />
+        ) : (
+          <Edit3 className="h-4 w-4" />
+        )}
+      </Button>
+      
       {/* Header with Controls */}
       <div className="flex items-center justify-end mb-6">
         
