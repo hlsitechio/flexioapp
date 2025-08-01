@@ -1,6 +1,12 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { LayoutDashboard } from 'lucide-react';
 import { DashboardMiniCalendar } from '@/components/calendar';
+import { 
+  DashboardTaskCounter, 
+  DashboardQuickNote, 
+  DashboardRandomQuote, 
+  DashboardCountdownTimer 
+} from '@/components/dashboard';
 
 export function DashboardWidgets() {
   return (
@@ -11,16 +17,20 @@ export function DashboardWidgets() {
       </div>
       <p className="text-muted-foreground text-sm">Components designed for the main dashboard area</p>
       
-      {/* Dashboard Calendar Widget */}
-      <div className="grid gap-6">
+      {/* Dashboard Widgets Grid */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <DashboardMiniCalendar />
+        <DashboardTaskCounter />
+        <DashboardQuickNote />
+        <DashboardRandomQuote />
+        <DashboardCountdownTimer />
         
-        {/* Additional Dashboard Widgets */}
+        {/* Placeholder for Future Widgets */}
         <Card className="animate-fade-in">
           <CardContent className="min-h-[200px] flex items-center justify-center">
             <div className="text-center text-muted-foreground">
               <LayoutDashboard className="h-8 w-8 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">More dashboard widgets will be added here</p>
+              <p className="text-sm">More widgets coming soon...</p>
             </div>
           </CardContent>
         </Card>
