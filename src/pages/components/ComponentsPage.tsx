@@ -30,12 +30,6 @@ export function ComponentsPage() {
                   <p className="text-muted-foreground text-sm">Components designed for the main dashboard area</p>
                   
                   <Card className="animate-fade-in">
-                    <CardHeader>
-                      <CardTitle>Dashboard Components</CardTitle>
-                      <CardDescription>
-                        Create and manage widgets for the main dashboard grid
-                      </CardDescription>
-                    </CardHeader>
                     <CardContent className="min-h-[300px] flex items-center justify-center">
                       <div className="text-center text-muted-foreground">
                         <LayoutDashboard className="h-12 w-12 mx-auto mb-4 opacity-50" />
@@ -54,12 +48,6 @@ export function ComponentsPage() {
                   <p className="text-muted-foreground text-sm">Components designed for the sidebar area</p>
                   
                   <Card className="animate-fade-in">
-                    <CardHeader>
-                      <CardTitle>Sidebar Components</CardTitle>
-                      <CardDescription>
-                        Create and manage components for the sidebar panel
-                      </CardDescription>
-                    </CardHeader>
                     <CardContent className="min-h-[300px] flex items-center justify-center">
                       <div className="text-center text-muted-foreground">
                         <PanelLeftOpen className="h-12 w-12 mx-auto mb-4 opacity-50" />
