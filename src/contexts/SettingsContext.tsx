@@ -245,7 +245,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const saveSettingsToBackend = async () => {
-    if (!user) return;
+    if (!user) {
+      console.log('❌ Cannot save to backend: No user authenticated');
+      return;
+    }
+
+    console.log('🚀 Starting save to backend...', { userId: user.id });
 
     try {
       const layoutSettings = {
@@ -258,35 +263,39 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         use24HourFormat,
       };
 
-      console.log('Saving clock settings to backend:', {
-        showSeconds,
-        showDate,
-        showYear,
-        use24HourFormat,
-        clockPosition
+      console.log('💾 Saving settings to backend:', {
+        user_id: user.id,
+        dashboard_title: customHeaderTitle,
+        sidebar_title: customSidebarTitle,
+        layout: layoutSettings
       });
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('user_settings')
         .upsert({
           user_id: user.id,
           dashboard_title: customHeaderTitle,
           sidebar_title: customSidebarTitle,
-          sidebar_collapsed: false, // You can add this to state if needed
+          sidebar_collapsed: false,
           dashboard_layout: layoutSettings,
-        });
+        }, {
+          onConflict: 'user_id'
+        })
+        .select();
 
       if (error) {
-        console.error('Error saving settings to backend:', error);
+        console.error('❌ Supabase error saving settings:', error);
+        throw error;
       } else {
-        console.log('Clock settings saved successfully to backend');
+        console.log('✅ Settings saved successfully to Supabase backend!', data);
         // Also save to localStorage as backup
         saveCurrentSettingsToLocalStorage();
       }
     } catch (error) {
-      console.error('Error saving settings to backend:', error);
+      console.error('❌ Fatal error saving settings to backend:', error);
       // Always save to localStorage as backup
       saveCurrentSettingsToLocalStorage();
+      throw error; // Re-throw so the UI can handle it
     }
   };
 
