@@ -47,24 +47,18 @@ export function Settings({ editMode = false, setEditMode }: SettingsProps) {
                 transition={{ duration: 0.2, delay: 0.25 }}
                 className="px-2 space-y-3"
               >
-                {/* Edit Mode Toggle */}
-                <div className="flex items-center justify-between p-3 rounded-lg bg-sidebar-accent/30 border border-sidebar-border">
-                  <div className="flex items-center space-x-2">
-                    {editMode ? <Eye className="h-4 w-4 text-sidebar-foreground/70" /> : <Edit3 className="h-4 w-4 text-sidebar-foreground/70" />}
-                    <div className="space-y-0.5">
-                      <div className="text-sm font-medium text-sidebar-foreground">
-                        {editMode ? 'Edit Mode' : 'View Mode'}
-                      </div>
-                      <div className="text-xs text-sidebar-foreground/60">
-                        {editMode ? 'Customize dashboard' : 'Read-only mode'}
-                      </div>
+                {/* Edit Mode */}
+                <button
+                  onClick={() => setEditMode && setEditMode(!editMode)}
+                  className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-sidebar-accent transition-all cursor-pointer text-left"
+                >
+                  {editMode ? <Eye className="h-4 w-4 text-sidebar-foreground/70" /> : <Edit3 className="h-4 w-4 text-sidebar-foreground/70" />}
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-sidebar-foreground">
+                      Edit Mode
                     </div>
                   </div>
-                  <Switch
-                    checked={editMode}
-                    onCheckedChange={(checked) => setEditMode && setEditMode(checked)}
-                  />
-                </div>
+                </button>
               </motion.div>
             </AnimatePresence>
           </div>
