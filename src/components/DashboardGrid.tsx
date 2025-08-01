@@ -69,18 +69,16 @@ export function DashboardGrid({ editMode }: DashboardGridProps) {
   };
 
   return (
-    <div className="h-full w-full relative m-0 p-0">
+    <div className="h-full w-full relative">
       {/* Grid Background */}
       <div 
         className={`
-          dashboard-grid w-full h-full transition-all duration-300 m-0 p-0
+          dashboard-grid w-full h-full rounded-xl transition-all duration-300
           ${editMode ? 'opacity-100' : 'opacity-50'}
         `}
         style={{
           minHeight: '600px',
           backgroundPosition: editMode ? '0 0' : '-1000px -1000px',
-          margin: '0',
-          padding: '0',
         }}
       >
         {/* Edit Mode Controls */}

@@ -1,36 +1,17 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
 
 export function Action() {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
-  const navigate = useNavigate();
 
-  console.log('Action component render - isCollapsed:', isCollapsed);
-
-  if (isCollapsed) {
-    return (
-      <div className="flex justify-center w-full">
-        <Button 
-          className="w-10 h-10 p-0 button-premium text-primary-foreground hover:shadow-lg transition-all duration-300"
-          onClick={() => navigate('/components')}
-          title="Add Component"
-        >
-          <Plus className="h-4 w-4" />
-        </Button>
-      </div>
-    );
-  }
-  
   return (
     <div className="space-y-3">
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {!isCollapsed && (
           <motion.h3
-            key="action-title"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -51,13 +32,11 @@ export function Action() {
               isCollapsed ? 'px-3' : 'justify-start'
             } button-premium text-primary-foreground hover:shadow-lg transition-all duration-300`}
             size={isCollapsed ? 'sm' : 'default'}
-            onClick={() => navigate('/components')}
           >
             <Plus className="h-4 w-4" />
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               {!isCollapsed && (
                 <motion.span
-                  key="action-text"
                   initial={{ opacity: 0, width: 0 }}
                   animate={{ opacity: 1, width: 'auto' }}
                   exit={{ opacity: 0, width: 0 }}

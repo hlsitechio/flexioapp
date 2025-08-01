@@ -24,7 +24,7 @@ export function TimeDisplay() {
   };
 
   return (
-    <div className="text-sm text-white font-mono bg-white/10 px-3 py-1 rounded-lg border border-white/20">
+    <div className="text-sm text-muted-foreground font-mono bg-muted/50 px-3 py-1 rounded-lg border border-border/50">
       {formatTime(currentTime)}
     </div>
   );

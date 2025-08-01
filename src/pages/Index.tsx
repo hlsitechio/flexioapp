@@ -1,17 +1,7 @@
-import { DashboardLayout } from '@/components/layout';
-import { DashboardGrid } from '@/components/DashboardGrid';
-import { useState } from 'react';
+import { Dashboard } from '@/components/Dashboard';
 
 const Index = () => {
-  const [editMode, setEditMode] = useState(false);
-
-  return (
-    <DashboardLayout title="Dashboard">
-      <div className="m-0 p-0">
-        <DashboardGrid editMode={editMode} />
-      </div>
-    </DashboardLayout>
-  );
+  return <Dashboard />;
 };
 
 export default Index;

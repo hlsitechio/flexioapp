@@ -22,8 +22,13 @@ export function SidebarDarkModeToggle() {
           } hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all duration-200 rounded-lg`}
           onClick={toggleDarkMode}
         >
-          {/* Icon Animation */}
-          <AnimatePresence mode="wait">
+          <motion.div
+            key={isDark ? 'dark' : 'light'}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.2 }}
+          >
+            <AnimatePresence mode="wait">
               {isDark ? (
                 <motion.div
                   key="moon"
@@ -45,27 +50,19 @@ export function SidebarDarkModeToggle() {
                   <Sun className="h-4 w-4" />
                 </motion.div>
               )}
-          </AnimatePresence>
-          
-          {/* Text with smoother transition */}
+            </AnimatePresence>
+          </motion.div>
           <AnimatePresence>
             {!isCollapsed && (
               <motion.span
+                key={isDark ? 'dark-text' : 'light-text'}
                 initial={{ opacity: 0, width: 0 }}
                 animate={{ opacity: 1, width: 'auto' }}
                 exit={{ opacity: 0, width: 0 }}
                 transition={{ duration: 0.2 }}
                 className="ml-2 overflow-hidden"
               >
-                <motion.span
-                  key={isDark ? 'dark-text' : 'light-text'}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
-                >
-                  {isDark ? 'Light Mode' : 'Dark Mode'}
-                </motion.span>
+                {isDark ? 'Light Mode' : 'Dark Mode'}
               </motion.span>
             )}
           </AnimatePresence>

@@ -16,32 +16,20 @@ import { UserNavigation } from './UserNavigation';
 export function DashboardSidebar() {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
-  
-  console.log('DashboardSidebar render - state:', state, 'isCollapsed:', isCollapsed);
 
   return (
     <motion.div
       initial={false}
       animate={{
-        width: isCollapsed ? 60 : 300,
+        width: isCollapsed ? 60 : 280,
       }}
       transition={{
         duration: 0.3,
         ease: [0.4, 0, 0.2, 1],
       }}
       className="relative"
-      style={{
-        border: 'none', 
-        margin: '0', 
-        padding: '0', 
-        borderRight: 'none', 
-        gap: '0'
-      }}
     >
-      <Sidebar 
-        className="border-r-0 bg-sidebar-background backdrop-blur-xl h-full m-0 p-0 transition-all duration-300" 
-        style={{border: 'none', margin: '0', padding: '0'}}
-      >
+      <Sidebar className="border-r border-sidebar-border bg-sidebar-background backdrop-blur-xl h-full">
         {/* Collapsed state expand button */}
         <AnimatePresence>
           {isCollapsed && (
@@ -59,42 +47,28 @@ export function DashboardSidebar() {
           )}
         </AnimatePresence>
 
+        <SidebarHeader className="p-4 border-b border-sidebar-border">
+          <DashboardTitle />
+        </SidebarHeader>
+
         <SidebarContent className="flex flex-col h-full">
-          {/* Header - only when expanded */}
-          {!isCollapsed && (
-            <SidebarHeader className="p-4 border-b border-sidebar-border">
-              <DashboardTitle />
-            </SidebarHeader>
-          )}
-
-          {/* Main Content Area */}
-          <div className={`flex-1 ${isCollapsed ? 'py-4' : 'px-6 py-4'} space-y-${isCollapsed ? '3' : '8'}`}>
-            {/* Action Section */}
-            <div className={`${isCollapsed ? 'flex justify-center' : 'space-y-3'}`}>
-              <Action />
-            </div>
+          {/* Main Content Area with Panels */}
+          <div className="flex-1 p-4 space-y-6">
+            <Action />
             
-            {/* Divider - only when expanded */}
-            {!isCollapsed && <div className="border-t border-sidebar-border/50" />}
+            {/* Divider */}
+            <div className="h-px bg-white/10" />
             
-            {/* Tools Section */}
-            <div className={`${isCollapsed ? 'flex justify-center' : 'space-y-3'}`}>
-              <Tools />
-            </div>
+            <Tools />
             
-            {/* Divider - only when expanded */}
-            {!isCollapsed && <div className="border-t border-sidebar-border/50" />}
+            {/* Divider */}
+            <div className="h-px bg-white/10" />
             
-            {/* Settings Section */}
-            <div className={`${isCollapsed ? 'flex justify-center' : 'space-y-3'}`}>
-              <Settings />
-            </div>
+            <Settings />
           </div>
 
-          {/* Bottom Section */}
-          <div className={`${!isCollapsed ? 'border-t border-sidebar-border/50' : ''} mt-auto ${isCollapsed ? 'flex justify-center py-2' : ''}`}>
-            <UserNavigation />
-          </div>
+          {/* Bottom Section - Profile, Settings, Sign In */}
+          <UserNavigation />
         </SidebarContent>
       </Sidebar>
     </motion.div>
