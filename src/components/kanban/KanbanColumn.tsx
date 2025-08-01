@@ -27,7 +27,7 @@ export function KanbanColumn({ column }: KanbanColumnProps) {
     <Card
       ref={setNodeRef}
       className={`
-        w-80 flex-shrink-0 flex flex-col bg-card/50 backdrop-blur-sm
+        flex-1 min-w-0 flex flex-col bg-card/50 backdrop-blur-sm
         transition-all duration-200 border-2
         ${isOver ? 'border-primary/50 bg-primary/5' : 'border-border/50'}
       `}
