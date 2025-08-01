@@ -16,7 +16,7 @@ export function DashboardTitle() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           onClick={() => navigate('/')}
-          className="p-2 rounded-lg text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent transition-all cursor-pointer mx-auto"
+          className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent transition-all cursor-pointer mx-auto flex items-center justify-center"
         >
           <Crown className="h-5 w-5" />
         </motion.button>
