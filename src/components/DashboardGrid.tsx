@@ -97,7 +97,7 @@ export function DashboardGrid({ editMode, setEditMode }: DashboardGridProps) {
         onClick={() => setEditMode(!editMode)}
         variant={editMode ? "default" : "outline"}
         size="sm"
-        className="absolute top-4 left-4 z-20 transition-all duration-200 shadow-lg"
+        className="absolute top-4 right-4 z-20 transition-all duration-200 shadow-lg"
       >
         {editMode ? (
           <Eye className="h-4 w-4" />
