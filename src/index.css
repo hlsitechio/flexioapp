@@ -145,10 +145,26 @@
 @layer base {
   * {
     @apply border-border;
+    /* Smooth theme transitions - prevent jarring color flashes */
+    transition: 
+      background-color var(--transition-smooth),
+      border-color var(--transition-smooth),
+      color var(--transition-smooth),
+      fill var(--transition-smooth),
+      stroke var(--transition-smooth),
+      box-shadow var(--transition-smooth);
+  }
+
+  /* Apply transitions to common elements that change with theme */
+  html {
+    transition: background-color var(--transition-smooth);
   }
 
   body {
     @apply bg-gradient-to-br from-background to-muted/20 text-foreground font-sans antialiased;
+    transition: 
+      background var(--transition-smooth),
+      color var(--transition-smooth);
   }
 
   /* Premium scrollbars */
