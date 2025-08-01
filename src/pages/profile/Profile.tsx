@@ -5,19 +5,15 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User, Camera } from 'lucide-react';
-import { DarkModeToggle } from '@/components/appearance';
 
 export function Profile() {
   return (
     <Card className="animate-fade-in">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center space-x-2">
-            <User className="h-5 w-5" />
-            <span>Profile Information</span>
-          </CardTitle>
-          <DarkModeToggle />
-        </div>
+        <CardTitle className="flex items-center space-x-2">
+          <User className="h-5 w-5" />
+          <span>Profile Information</span>
+        </CardTitle>
         <CardDescription>
           Update your profile information and preferences
         </CardDescription>

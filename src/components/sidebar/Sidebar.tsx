@@ -8,6 +8,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { DashboardTitle } from './DashboardTitle';
+import { SidebarDarkModeToggle } from './SidebarDarkModeToggle';
 import { Action } from './Action';
 import { Tools } from './Tools';
 import { Settings } from './Settings';
@@ -50,6 +51,8 @@ export function DashboardSidebar() {
         <SidebarHeader className="p-4 border-b border-sidebar-border">
           <DashboardTitle />
         </SidebarHeader>
+
+        <SidebarDarkModeToggle />
 
         <SidebarContent className="flex flex-col h-full">
           {/* Main Content Area with Panels */}

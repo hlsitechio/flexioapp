@@ -1,5 +1,6 @@
 export { DashboardSidebar } from './Sidebar';
 export { DashboardTitle } from './DashboardTitle';
+export { SidebarDarkModeToggle } from './SidebarDarkModeToggle';
 export { Action } from './Action';
 export { Tools } from './Tools';
 export { Settings } from './Settings';
