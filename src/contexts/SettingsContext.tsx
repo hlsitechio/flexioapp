@@ -30,6 +30,9 @@ interface SettingsContextType {
   // Edit mode
   editMode: boolean;
   setEditMode: (mode: boolean) => void;
+  
+  // Manual save function
+  saveSettingsToBackend: () => Promise<void>;
 }
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -352,6 +355,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setCustomSidebarTitle,
     editMode,
     setEditMode,
+    saveSettingsToBackend,
   };
 
   return (

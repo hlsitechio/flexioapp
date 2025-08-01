@@ -14,7 +14,8 @@ export function ClockSettingsDebug() {
     showDate, 
     showYear, 
     use24HourFormat,
-    clockPosition 
+    clockPosition,
+    saveSettingsToBackend 
   } = useSettings();
 
   const testBackendSave = async () => {
@@ -43,6 +44,32 @@ export function ClockSettingsDebug() {
       title: "Settings Test Complete ✅",
       description: `Clock settings logged to console. Auto-save: ${user ? 'Backend' : 'localStorage'}`,
     });
+  };
+
+  const handleManualSave = async () => {
+    if (!user) {
+      toast({
+        title: "No Authentication",
+        description: "Please sign in to save settings to backend.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      await saveSettingsToBackend();
+      toast({
+        title: "Settings Saved! ✅",
+        description: "Clock settings have been saved to Supabase backend.",
+      });
+    } catch (error) {
+      console.error('Manual save failed:', error);
+      toast({
+        title: "Save Failed ❌",
+        description: "Failed to save settings to backend. Check console for details.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
@@ -93,9 +120,15 @@ export function ClockSettingsDebug() {
           </div>
         </div>
 
-        <Button onClick={testBackendSave} variant="outline" className="w-full">
-          Test Backend Save & Show Toast
-        </Button>
+        <div className="space-y-2">
+          <Button onClick={testBackendSave} variant="outline" className="w-full">
+            Test Backend Save & Show Toast
+          </Button>
+          
+          <Button onClick={handleManualSave} variant="default" className="w-full" disabled={!user}>
+            {user ? 'Save to Backend Now' : 'Sign In Required for Backend Save'}
+          </Button>
+        </div>
         
         <div className="text-xs text-muted-foreground bg-muted p-3 rounded">
           <strong>🔧 Persistence Strategy:</strong><br/>
