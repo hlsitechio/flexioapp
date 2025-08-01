@@ -19,17 +19,38 @@ export function DashboardGrid({ editMode, setEditMode }: DashboardGridProps) {
       items: [
         {
           id: '1',
-          title: 'Welcome Card',
+          title: 'Mini Calendar',
           content: '',
           type: 'widget',
-          data: { size: 'large', priority: 'high' }
+          data: { component: 'DashboardMiniCalendar' }
         },
         {
-          id: '2', 
-          title: 'Statistics',
+          id: '2',
+          title: 'Task Counter',
           content: '',
           type: 'widget',
-          data: { size: 'medium', charts: ['line', 'bar'] }
+          data: { component: 'DashboardTaskCounter' }
+        },
+        {
+          id: '3',
+          title: 'Quick Note',
+          content: '',
+          type: 'widget',
+          data: { component: 'DashboardQuickNote' }
+        },
+        {
+          id: '4',
+          title: 'Random Quote',
+          content: '',
+          type: 'widget',
+          data: { component: 'DashboardRandomQuote' }
+        },
+        {
+          id: '5',
+          title: 'Countdown Timer',
+          content: '',
+          type: 'widget',
+          data: { component: 'DashboardCountdownTimer' }
         },
       ]
     },
@@ -38,31 +59,11 @@ export function DashboardGrid({ editMode, setEditMode }: DashboardGridProps) {
       title: 'Sidebar Components',
       items: [
         {
-          id: '3',
-          title: 'Quick Actions',
+          id: '6',
+          title: 'Compact Calendar',
           content: '',
           type: 'component',
-          data: { position: 'top', actions: 3 }
-        },
-      ]
-    },
-    {
-      id: 'tools',
-      title: 'Available Tools',
-      items: [
-        {
-          id: '4',
-          title: 'Data Export',
-          content: '',
-          type: 'tool',
-          data: { formats: ['csv', 'json', 'pdf'] }
-        },
-        {
-          id: '5',
-          title: 'Theme Editor',
-          content: '',
-          type: 'tool',
-          data: { themes: 5, presets: 12 }
+          data: { component: 'SidebarCompactCalendar' }
         },
       ]
     }
