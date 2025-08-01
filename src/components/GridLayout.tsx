@@ -45,7 +45,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
 
   const handleAddComponent = (slotIndex: number) => {
     if (editMode) {
-      navigate('/components');
+      navigate(`/components?slot=${slotIndex}&gridSize=${gridSize}`);
     }
   };
 

@@ -4,6 +4,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { LayoutDashboard, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 import { Calendar } from '@/components/calendar';
 import { 
   DashboardTaskCounter, 
@@ -13,15 +14,36 @@ import {
 } from '@/components/dashboard';
 
 // Dashboard component wrapper with hover add button
-function DashboardComponentShowcase({ children, componentName }: { children: React.ReactNode; componentName: string }) {
+function DashboardComponentShowcase({ 
+  children, 
+  componentName, 
+  targetSlot, 
+  gridSize 
+}: { 
+  children: React.ReactNode; 
+  componentName: string; 
+  targetSlot?: string | null; 
+  gridSize?: string | null; 
+}) {
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleAddToDashboard = () => {
-    toast({
-      title: "Added to Dashboard",
-      description: `${componentName} has been added to your dashboard.`,
-    });
-    console.log(`Adding ${componentName} to dashboard`);
+    if (targetSlot) {
+      toast({
+        title: "Component Added",
+        description: `${componentName} has been added to Slot ${parseInt(targetSlot) + 1}.`,
+      });
+      console.log(`Adding ${componentName} to slot ${targetSlot} in ${gridSize} grid`);
+      // Navigate back to dashboard
+      navigate('/');
+    } else {
+      toast({
+        title: "Added to Dashboard",
+        description: `${componentName} has been added to your dashboard.`,
+      });
+      console.log(`Adding ${componentName} to dashboard`);
+    }
     // TODO: Implement actual functionality to add to dashboard
   };
 
@@ -34,7 +56,7 @@ function DashboardComponentShowcase({ children, componentName }: { children: Rea
           onClick={handleAddToDashboard}
           size="lg" 
           className="h-12 w-12 rounded-full shadow-lg transform scale-0 group-hover:scale-100 transition-transform duration-300"
-          title={`Add ${componentName} to Dashboard`}
+          title={targetSlot ? `Add ${componentName} to Slot ${parseInt(targetSlot) + 1}` : `Add ${componentName} to Dashboard`}
         >
           <Plus className="h-6 w-6" />
         </Button>
@@ -74,14 +96,21 @@ function SidebarComponentShowcase({ children, componentName }: { children: React
   );
 }
 
-export function DashboardWidgets() {
+export function DashboardWidgets({ targetSlot, gridSize }: { targetSlot?: string | null; gridSize?: string | null }) {
   return (
     <div className="space-y-6">
       <div className="flex items-center space-x-2">
         <LayoutDashboard className="h-6 w-6 text-primary" />
-        <h2 className="text-xl font-semibold text-foreground">Dashboard Widgets</h2>
+        <h2 className="text-xl font-semibold text-foreground">
+          {targetSlot ? `Select Component for Slot ${parseInt(targetSlot) + 1}` : 'Dashboard Widgets'}
+        </h2>
       </div>
-      <p className="text-muted-foreground text-sm">Components designed for the main dashboard area</p>
+      <p className="text-muted-foreground text-sm">
+        {targetSlot 
+          ? `Choose a component to add to Slot ${parseInt(targetSlot) + 1} in your ${gridSize} dashboard grid`
+          : 'Components designed for the main dashboard area'
+        }
+      </p>
       
       {/* Dashboard Widgets Carousel */}
       <Carousel
@@ -93,27 +122,27 @@ export function DashboardWidgets() {
       >
         <CarouselContent className="-ml-2 md:-ml-4">
           <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Calendar">
+            <DashboardComponentShowcase componentName="Calendar" targetSlot={targetSlot} gridSize={gridSize}>
               <Calendar />
             </DashboardComponentShowcase>
           </CarouselItem>
           <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Task Counter">
+            <DashboardComponentShowcase componentName="Task Counter" targetSlot={targetSlot} gridSize={gridSize}>
               <DashboardTaskCounter />
             </DashboardComponentShowcase>
           </CarouselItem>
           <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Quick Note">
+            <DashboardComponentShowcase componentName="Quick Note" targetSlot={targetSlot} gridSize={gridSize}>
               <DashboardQuickNote />
             </DashboardComponentShowcase>
           </CarouselItem>
           <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Random Quote">
+            <DashboardComponentShowcase componentName="Random Quote" targetSlot={targetSlot} gridSize={gridSize}>
               <DashboardRandomQuote />
             </DashboardComponentShowcase>
           </CarouselItem>
           <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Countdown Timer">
+            <DashboardComponentShowcase componentName="Countdown Timer" targetSlot={targetSlot} gridSize={gridSize}>
               <DashboardCountdownTimer />
             </DashboardComponentShowcase>
           </CarouselItem>
