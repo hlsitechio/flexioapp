@@ -1,10 +1,12 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Bell, CheckCircle, AlertCircle, Info } from 'lucide-react';
+import { X, Bell, CheckCircle, AlertCircle, Info, Trash2 } from 'lucide-react';
 import { useNotification } from '@/contexts/NotificationContext';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+
+import { useState } from 'react';
 
 interface Notification {
   id: string;
@@ -15,8 +17,8 @@ interface Notification {
   read: boolean;
 }
 
-// Mock notifications data
-const mockNotifications: Notification[] = [
+// Mock notifications data - using state to allow clearing
+const initialNotifications: Notification[] = [
   {
     id: '1',
     title: 'Welcome!',
@@ -46,6 +48,7 @@ const mockNotifications: Notification[] = [
 export function NotificationSidebar() {
   const { isNotificationOpen, setIsNotificationOpen } = useNotification();
   const { toast } = useToast();
+  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -80,7 +83,23 @@ export function NotificationSidebar() {
     });
   };
 
-  const unreadCount = mockNotifications.filter(n => !n.read).length;
+  const handleClearAll = () => {
+    setNotifications([]);
+    toast({
+      title: "Notifications cleared",
+      description: "All notifications have been removed.",
+    });
+  };
+
+  const handleMarkAllRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    toast({
+      title: "Marked as read",
+      description: "All notifications have been marked as read.",
+    });
+  };
+
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
     <AnimatePresence>
@@ -114,26 +133,37 @@ export function NotificationSidebar() {
                   </Badge>
                 )}
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsNotificationOpen(false)}
-                className="h-8 w-8"
-              >
-                <X className="h-4 w-4" />
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleClearAll}
+                  className="h-8 w-8"
+                  title="Clear all notifications"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsNotificationOpen(false)}
+                  className="h-8 w-8"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
 
             {/* Notifications List */}
             <ScrollArea className="flex-1 h-[calc(100vh-80px)]">
               <div className="p-4 space-y-3">
-                {mockNotifications.length === 0 ? (
+                {notifications.length === 0 ? (
                   <div className="text-center py-8 text-muted-foreground">
                     <Bell className="h-12 w-12 mx-auto mb-4 opacity-50" />
                     <p>No notifications yet</p>
                   </div>
-                ) : (
-                  mockNotifications.map((notification) => (
+                  ) : (
+                  notifications.map((notification) => (
                     <div
                       key={notification.id}
                       onClick={() => handleNotificationClick(notification)}
@@ -167,17 +197,12 @@ export function NotificationSidebar() {
             </ScrollArea>
 
             {/* Footer */}
-            {mockNotifications.length > 0 && (
+            {notifications.length > 0 && (
               <div className="p-4 border-t border-border">
                 <Button 
                   variant="outline" 
                   className="w-full"
-                  onClick={() => {
-                    toast({
-                      title: "Marked as read",
-                      description: "All notifications have been marked as read.",
-                    });
-                  }}
+                  onClick={handleMarkAllRead}
                 >
                   Mark all as read
                 </Button>
