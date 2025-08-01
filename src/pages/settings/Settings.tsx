@@ -2,7 +2,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { DashboardSidebar } from '@/components/sidebar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Profile } from './Profile';
+import { Profile } from '../profile';
 import { Appearance } from './Appearance';
 
 export function Settings() {
