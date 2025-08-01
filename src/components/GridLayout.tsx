@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Grid3X3, Grid2X2, LayoutGrid } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Grid3X3, Grid2X2, LayoutGrid, Plus } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 interface GridLayoutProps {
   editMode: boolean;
@@ -11,6 +13,7 @@ type GridSize = '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12';
 
 export function GridLayout({ editMode }: GridLayoutProps) {
   const [gridSize, setGridSize] = useState<GridSize>('4x4');
+  const navigate = useNavigate();
 
   const getGridDimensions = (size: GridSize) => {
     const dimensions = {
@@ -39,6 +42,12 @@ export function GridLayout({ editMode }: GridLayoutProps) {
 
   const { rows, cols } = getGridDimensions(gridSize);
   const totalCells = rows * cols;
+
+  const handleAddComponent = (slotIndex: number) => {
+    if (editMode) {
+      navigate('/components');
+    }
+  };
 
   return (
     <div className="h-full w-full space-y-6">
@@ -91,21 +100,36 @@ export function GridLayout({ editMode }: GridLayoutProps) {
               key={index}
               className={`
                 border-2 border-dashed border-border/50 
-                flex items-center justify-center
+                relative group
                 transition-all duration-200
                 ${editMode 
                   ? 'hover:border-primary/50 hover:bg-accent/20 cursor-pointer' 
                   : 'opacity-60'
                 }
               `}
+              onClick={() => handleAddComponent(index)}
             >
-              <CardContent className="p-4 flex items-center justify-center h-full">
+              <CardContent className="p-4 flex items-center justify-center h-full relative">
                 <div className="text-center space-y-2">
                   <div className="text-2xl text-muted-foreground/30">📦</div>
                   <p className="text-xs text-muted-foreground">
                     Slot {index + 1}
                   </p>
                 </div>
+                
+                {/* Plus Button - Only visible on hover and in edit mode */}
+                {editMode && (
+                  <Button
+                    size="sm"
+                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 h-8 w-8 p-0 bg-primary hover:bg-primary/90"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddComponent(index);
+                    }}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                )}
               </CardContent>
             </Card>
           ))}
@@ -119,7 +143,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
         </h3>
         <p className="text-sm text-muted-foreground/70 max-w-md mx-auto">
           {editMode 
-            ? 'Click on any grid slot to add components to your dashboard layout.'
+            ? 'Click on any grid slot or the + button to browse components and add them to your dashboard layout.'
             : 'Enable edit mode to start building your dashboard with the grid layout system.'
           }
         </p>
