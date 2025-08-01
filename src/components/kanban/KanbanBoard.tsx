@@ -71,8 +71,9 @@ export function KanbanBoard({ columns, onColumnsChange, className = '' }: Kanban
 
     // Moving between different columns
     if (activeColumn.id !== overColumn.id) {
-      const activeItems = activeColumn.items;
-      const overItems = overColumn.items;
+      // Create copies of the arrays to avoid mutation
+      const activeItems = [...activeColumn.items];
+      const overItems = [...overColumn.items];
 
       const activeIndex = activeItems.findIndex(item => item.id === activeId);
       const overIndex = overItems.findIndex(item => item.id === overId);
