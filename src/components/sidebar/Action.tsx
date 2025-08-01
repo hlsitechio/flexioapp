@@ -10,6 +10,20 @@ export function Action() {
   const navigate = useNavigate();
 
   console.log('Action component render - isCollapsed:', isCollapsed);
+
+  if (isCollapsed) {
+    return (
+      <div className="flex justify-center w-full">
+        <Button 
+          className="w-10 h-10 p-0 button-premium text-primary-foreground hover:shadow-lg transition-all duration-300"
+          onClick={() => navigate('/components')}
+          title="Add Component"
+        >
+          <Plus className="h-4 w-4" />
+        </Button>
+      </div>
+    );
+  }
   
   return (
     <div className="space-y-3">

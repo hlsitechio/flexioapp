@@ -16,6 +16,8 @@ import { UserNavigation } from './UserNavigation';
 export function DashboardSidebar() {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
+  
+  console.log('DashboardSidebar render - state:', state, 'isCollapsed:', isCollapsed);
 
   return (
     <motion.div
@@ -88,14 +90,14 @@ export function DashboardSidebar() {
         {isCollapsed && (
           <SidebarContent className="flex flex-col h-full py-4">
             {/* Collapsed Content - Icons Only */}
-            <div className="flex flex-col items-center space-y-4 flex-1">
+            <div className="flex flex-col items-center space-y-3 flex-1 px-2">
               <Action />
               <Tools />
               <Settings />
             </div>
             
             {/* Bottom Section for collapsed state */}
-            <div className="flex flex-col items-center space-y-2 mt-auto">
+            <div className="flex flex-col items-center space-y-2 mt-auto px-2">
               <UserNavigation />
             </div>
           </SidebarContent>
