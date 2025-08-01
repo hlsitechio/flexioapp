@@ -15,12 +15,6 @@ export function ComponentsPage() {
           
           <main className="flex-1 p-6">
             <div className="max-w-4xl mx-auto space-y-6">
-              {/* Header */}
-              <div className="mb-8">
-                <h1 className="text-3xl font-bold text-foreground">Components</h1>
-                <p className="text-muted-foreground">Manage and create widgets for your sidebar and dashboard</p>
-              </div>
-
               {/* Content Area - Split vertically into two sections */}
               <div className="grid md:grid-cols-2 gap-8">
                 {/* Dashboard Widgets Section */}

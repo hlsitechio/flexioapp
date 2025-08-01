@@ -14,12 +14,6 @@ export function ProfilePage() {
           
           <main className="flex-1 p-6">
             <div className="max-w-4xl mx-auto space-y-6">
-              {/* Header */}
-              <div className="mb-8">
-                <h1 className="text-3xl font-bold text-foreground">Profile</h1>
-                <p className="text-muted-foreground">Update your profile information and preferences</p>
-              </div>
-
               <div className="grid gap-6 md:grid-cols-1 max-w-2xl">
                 <Profile />
               </div>
