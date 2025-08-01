@@ -9,7 +9,7 @@ export function UserNavigation() {
   const isCollapsed = state === 'collapsed';
 
   return (
-    <div className={`border-t border-white/10 ${isCollapsed ? 'p-2' : 'p-4'}`}>
+    <div className={`border-t border-sidebar-border ${isCollapsed ? 'p-2' : 'p-4'}`}>
       <SidebarMenu className={isCollapsed ? 'space-y-2 items-center' : 'space-y-1'}>
         <SidebarDarkModeToggle />
         <Profile />

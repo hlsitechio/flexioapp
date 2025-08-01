@@ -60,12 +60,12 @@ export function DashboardSidebar() {
             <Action />
             
             {/* Divider */}
-            <div className="h-px bg-white/10" />
+            <div className="h-px bg-sidebar-border" />
             
             <Tools />
             
             {/* Divider */}
-            <div className="h-px bg-white/10" />
+            <div className="h-px bg-sidebar-border" />
             
             <Settings />
           </div>
