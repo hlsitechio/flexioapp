@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useSidebar, SidebarTrigger } from '@/components/ui/sidebar';
 import { Crown } from 'lucide-react';
@@ -12,6 +12,7 @@ export function DashboardTitle() {
     <div className="flex items-center justify-between">
       {isCollapsed ? (
         <motion.button
+          key="collapsed-button"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           onClick={() => navigate('/')}
@@ -22,10 +23,9 @@ export function DashboardTitle() {
       ) : (
         <>
           <motion.button
-            key="title-button"
+            key="expanded-button"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.2 }}
             onClick={() => navigate('/')}
             className="text-lg font-semibold text-sidebar-foreground hover:text-sidebar-primary transition-colors cursor-pointer flex items-center space-x-2"
@@ -34,10 +34,9 @@ export function DashboardTitle() {
             <span>Premium Dashboard</span>
           </motion.button>
           <motion.div
-            key="sidebar-trigger"
+            key="expanded-trigger"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.2 }}
           >
             <SidebarTrigger className="ml-auto text-sidebar-foreground hover:text-sidebar-primary transition-colors" />
