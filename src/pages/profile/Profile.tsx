@@ -5,18 +5,14 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { User, Camera } from 'lucide-react';
-
 export function Profile() {
-  return (
-    <Card className="animate-fade-in">
+  return <Card className="animate-fade-in">
       <CardHeader>
         <CardTitle className="flex items-center space-x-2">
-          <User className="h-5 w-5" />
-          <span>Profile Information</span>
+          
+          
         </CardTitle>
-        <CardDescription>
-          Update your profile information and preferences
-        </CardDescription>
+        
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Avatar Section */}
@@ -26,11 +22,7 @@ export function Profile() {
               <AvatarImage src="/placeholder.svg" alt="Profile picture" />
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
-            <Button
-              size="sm"
-              variant="outline"
-              className="absolute -bottom-1 -right-1 h-8 w-8 rounded-full p-0"
-            >
+            <Button size="sm" variant="outline" className="absolute -bottom-1 -right-1 h-8 w-8 rounded-full p-0">
               <Camera className="h-4 w-4" />
             </Button>
           </div>
@@ -67,11 +59,7 @@ export function Profile() {
           
           <div className="space-y-2">
             <Label htmlFor="bio">Bio</Label>
-            <Textarea 
-              id="bio" 
-              placeholder="Tell us about yourself..." 
-              className="min-h-[100px]"
-            />
+            <Textarea id="bio" placeholder="Tell us about yourself..." className="min-h-[100px]" />
           </div>
           
           <div className="space-y-2">
@@ -91,6 +79,5 @@ export function Profile() {
           <Button variant="outline">Cancel</Button>
         </div>
       </CardContent>
-    </Card>
-  );
+    </Card>;
 }
