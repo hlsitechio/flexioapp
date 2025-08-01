@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSidebar } from '@/components/ui/sidebar';
 import { Wrench } from 'lucide-react';
+import { SidebarCompactCalendar } from '@/components/calendar';
 
 export function Tools() {
   const { state } = useSidebar();
@@ -28,16 +29,27 @@ export function Tools() {
               <span>Tools</span>
             </motion.h3>
           </AnimatePresence>
-          <div className="space-y-2">
+          <div className="space-y-3">
             <AnimatePresence>
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ duration: 0.2, delay: 0.2 }}
+              >
+                <SidebarCompactCalendar />
+              </motion.div>
+            </AnimatePresence>
+            
+            <AnimatePresence>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ duration: 0.2, delay: 0.25 }}
                 className="text-xs text-sidebar-foreground/50 px-2"
               >
-                No tools available yet
+                More tools coming soon...
               </motion.div>
             </AnimatePresence>
           </div>
