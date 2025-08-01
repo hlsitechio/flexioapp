@@ -19,15 +19,15 @@ export function ComponentsPage() {
                 <p className="text-muted-foreground">Manage and create widgets for your sidebar and dashboard</p>
               </div>
 
-              {/* Content Area - Split into two sections */}
-              <div className="space-y-8">
+              {/* Content Area - Split vertically into two sections */}
+              <div className="grid md:grid-cols-2 gap-8">
                 {/* Dashboard Widgets Section */}
                 <div className="space-y-4">
                   <div className="flex items-center space-x-2">
                     <LayoutDashboard className="h-6 w-6 text-primary" />
-                    <h2 className="text-2xl font-semibold text-foreground">Dashboard Widgets</h2>
+                    <h2 className="text-xl font-semibold text-foreground">Dashboard Widgets</h2>
                   </div>
-                  <p className="text-muted-foreground">Components designed for the main dashboard area</p>
+                  <p className="text-muted-foreground text-sm">Components designed for the main dashboard area</p>
                   
                   <Card className="animate-fade-in">
                     <CardHeader>
@@ -36,7 +36,7 @@ export function ComponentsPage() {
                         Create and manage widgets for the main dashboard grid
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className="min-h-[200px] flex items-center justify-center">
+                    <CardContent className="min-h-[300px] flex items-center justify-center">
                       <div className="text-center text-muted-foreground">
                         <LayoutDashboard className="h-12 w-12 mx-auto mb-4 opacity-50" />
                         <p>Dashboard widgets will be created here</p>
@@ -45,15 +45,13 @@ export function ComponentsPage() {
                   </Card>
                 </div>
 
-                <Separator className="my-8" />
-
                 {/* Sidebar Components Section */}
                 <div className="space-y-4">
                   <div className="flex items-center space-x-2">
                     <PanelLeftOpen className="h-6 w-6 text-primary" />
-                    <h2 className="text-2xl font-semibold text-foreground">Sidebar Components</h2>
+                    <h2 className="text-xl font-semibold text-foreground">Sidebar Components</h2>
                   </div>
-                  <p className="text-muted-foreground">Components designed for the sidebar area</p>
+                  <p className="text-muted-foreground text-sm">Components designed for the sidebar area</p>
                   
                   <Card className="animate-fade-in">
                     <CardHeader>
@@ -62,7 +60,7 @@ export function ComponentsPage() {
                         Create and manage components for the sidebar panel
                       </CardDescription>
                     </CardHeader>
-                    <CardContent className="min-h-[200px] flex items-center justify-center">
+                    <CardContent className="min-h-[300px] flex items-center justify-center">
                       <div className="text-center text-muted-foreground">
                         <PanelLeftOpen className="h-12 w-12 mx-auto mb-4 opacity-50" />
                         <p>Sidebar components will be created here</p>
