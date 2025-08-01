@@ -27,8 +27,8 @@ export function DashboardSidebar() {
         duration: 0.3,
         ease: [0.4, 0, 0.2, 1],
       }}
-      className="relative border-r-0 m-0 p-0"
-      style={{border: 'none', margin: '0', padding: '0', borderRight: 'none'}}
+      className="relative"
+      style={{border: 'none', margin: '0', padding: '0', borderRight: 'none', gap: '0'}}
     >
       <Sidebar className="border-r-0 bg-sidebar-background backdrop-blur-xl h-full m-0 p-0" style={{border: 'none', margin: '0', padding: '0'}}>
         {/* Collapsed state expand button */}
