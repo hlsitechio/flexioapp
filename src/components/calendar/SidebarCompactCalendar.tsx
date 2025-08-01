@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { useSidebar } from '@/components/ui/sidebar';
+import { SidebarCompactCalendarCollapsed } from './SidebarCompactCalendarCollapsed';
 
 export function SidebarCompactCalendar() {
   const { state } = useSidebar();
@@ -25,16 +26,7 @@ export function SidebarCompactCalendar() {
   };
 
   if (isCollapsed) {
-    return (
-      <div className="flex justify-center">
-        <button 
-          className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center mx-auto"
-          title={formatDate(currentTime)}
-        >
-          <CalendarIcon className="h-4 w-4" />
-        </button>
-      </div>
-    );
+    return <SidebarCompactCalendarCollapsed currentTime={currentTime} />;
   }
 
   return (
