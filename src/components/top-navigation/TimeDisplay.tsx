@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useSettings } from '@/contexts/SettingsContext';
 
 export function TimeDisplay() {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const { showSeconds, showDate, showYear, use24HourFormat } = useSettings();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -12,15 +14,35 @@ export function TimeDisplay() {
   }, []);
 
   const formatTime = (date: Date) => {
-    return date.toLocaleString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    });
+    const options: Intl.DateTimeFormatOptions = {};
+    
+    // Add date components if enabled
+    if (showDate) {
+      options.weekday = 'long';
+      options.month = 'long';
+      options.day = 'numeric';
+    }
+    
+    if (showYear && showDate) {
+      options.year = 'numeric';
+    }
+    
+    // Add time components
+    options.hour = '2-digit';
+    options.minute = '2-digit';
+    
+    if (showSeconds) {
+      options.second = '2-digit';
+    }
+    
+    // Set 12/24 hour format
+    if (use24HourFormat) {
+      options.hour12 = false;
+    } else {
+      options.hour12 = true;
+    }
+    
+    return date.toLocaleString('en-US', options);
   };
 
   return (

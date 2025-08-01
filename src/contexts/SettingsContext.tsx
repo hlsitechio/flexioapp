@@ -9,6 +9,16 @@ interface SettingsContextType {
   customHeaderTitle: string;
   setCustomHeaderTitle: (title: string) => void;
   
+  // Clock display settings
+  showSeconds: boolean;
+  setShowSeconds: (show: boolean) => void;
+  showDate: boolean;
+  setShowDate: (show: boolean) => void;
+  showYear: boolean;
+  setShowYear: (show: boolean) => void;
+  use24HourFormat: boolean;
+  setUse24HourFormat: (use24Hour: boolean) => void;
+  
   // Sidebar settings
   showSidebarCrown: boolean;
   setShowSidebarCrown: (show: boolean) => void;
@@ -54,6 +64,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [showSidebarCrown, setShowSidebarCrown] = useState<boolean>(true);
   const [customSidebarTitle, setCustomSidebarTitle] = useState<string>('Premium Dashboard');
   const [editMode, setEditMode] = useState<boolean>(false);
+  
+  // Clock display settings
+  const [showSeconds, setShowSeconds] = useState<boolean>(true);
+  const [showDate, setShowDate] = useState<boolean>(true);
+  const [showYear, setShowYear] = useState<boolean>(true);
+  const [use24HourFormat, setUse24HourFormat] = useState<boolean>(false);
 
   // Load from localStorage after component mounts
   useEffect(() => {
@@ -62,12 +78,22 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const savedCustomHeaderTitle = getStorageString('customHeaderTitle', 'Premium Dashboard');
     const savedShowSidebarCrown = getStorageItem('showSidebarCrown', true);
     const savedCustomSidebarTitle = getStorageString('customSidebarTitle', 'Premium Dashboard');
+    
+    // Clock settings
+    const savedShowSeconds = getStorageItem('showSeconds', true);
+    const savedShowDate = getStorageItem('showDate', true);
+    const savedShowYear = getStorageItem('showYear', true);
+    const savedUse24HourFormat = getStorageItem('use24HourFormat', false);
 
     setClockPosition(savedClockPosition);
     setShowHeaderTitle(savedShowHeaderTitle);
     setCustomHeaderTitle(savedCustomHeaderTitle);
     setShowSidebarCrown(savedShowSidebarCrown);
     setCustomSidebarTitle(savedCustomSidebarTitle);
+    setShowSeconds(savedShowSeconds);
+    setShowDate(savedShowDate);
+    setShowYear(savedShowYear);
+    setUse24HourFormat(savedUse24HourFormat);
   }, []);
 
   // Save to localStorage whenever settings change
@@ -121,6 +147,47 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     }
   }, [customSidebarTitle]);
 
+  // Save clock settings to localStorage
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('showSeconds', JSON.stringify(showSeconds));
+      }
+    } catch (error) {
+      console.warn('Error saving showSeconds to localStorage:', error);
+    }
+  }, [showSeconds]);
+
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('showDate', JSON.stringify(showDate));
+      }
+    } catch (error) {
+      console.warn('Error saving showDate to localStorage:', error);
+    }
+  }, [showDate]);
+
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('showYear', JSON.stringify(showYear));
+      }
+    } catch (error) {
+      console.warn('Error saving showYear to localStorage:', error);
+    }
+  }, [showYear]);
+
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('use24HourFormat', JSON.stringify(use24HourFormat));
+      }
+    } catch (error) {
+      console.warn('Error saving use24HourFormat to localStorage:', error);
+    }
+  }, [use24HourFormat]);
+
   const value: SettingsContextType = {
     clockPosition,
     setClockPosition,
@@ -128,6 +195,14 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setShowHeaderTitle,
     customHeaderTitle,
     setCustomHeaderTitle,
+    showSeconds,
+    setShowSeconds,
+    showDate,
+    setShowDate,
+    showYear,
+    setShowYear,
+    use24HourFormat,
+    setUse24HourFormat,
     showSidebarCrown,
     setShowSidebarCrown,
     customSidebarTitle,
