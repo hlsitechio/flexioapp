@@ -15,9 +15,9 @@ export function ComponentsPage() {
         <TopNavigation editMode={editMode} />
         
         <main className="flex-1 p-6">
-          <div className="max-w-4xl mx-auto space-y-6">
-            {/* Content Area - Split vertically into two sections */}
-            <div className="grid md:grid-cols-2 gap-8">
+          <div className="max-w-7xl mx-auto space-y-8">
+            {/* Content Area - Horizontal Layout */}
+            <div className="space-y-8">
               {/* Dashboard Widgets Section */}
               <DashboardWidgets />
 
