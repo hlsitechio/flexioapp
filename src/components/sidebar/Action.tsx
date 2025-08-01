@@ -40,7 +40,7 @@ export function Action() {
           >
             <Plus className={isCollapsed ? "h-4 w-4" : "h-4 w-4"} />
             {!isCollapsed && (
-              <span className="ml-2">Add Component</span>
+              <span className="ml-2">Add Widget</span>
             )}
           </Button>
         </motion.div>
