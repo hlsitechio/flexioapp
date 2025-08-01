@@ -3,6 +3,7 @@ export { DashboardTitle } from './DashboardTitle';
 export { SidebarDarkModeToggle } from './SidebarDarkModeToggle';
 export { Action } from './Action';
 export { Tools } from './Tools';
+export { KanbanToolbox } from './KanbanToolbox';
 export { Settings } from './Settings';
 export { UserNavigation } from './UserNavigation';
 export { Profile } from './settings/Profile';

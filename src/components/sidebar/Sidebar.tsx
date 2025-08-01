@@ -8,6 +8,7 @@ import {
 import { DashboardTitle } from './DashboardTitle';
 import { Action } from './Action';
 import { Tools } from './Tools';
+import { KanbanToolbox } from './KanbanToolbox';
 import { Settings } from './Settings';
 import { UserNavigation } from './UserNavigation';
 
@@ -45,6 +46,11 @@ export function DashboardSidebar() {
             <div className="h-px bg-sidebar-border" />
             
             <Tools />
+            
+            {/* Divider */}
+            <div className="h-px bg-sidebar-border" />
+            
+            <KanbanToolbox />
             
             {/* Divider */}
             <div className="h-px bg-sidebar-border" />
