@@ -1,6 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { SettingsProvider } from "@/contexts/SettingsContext";
 import Index from "./pages/Index";
 import { Settings } from "./pages/settings";
 import { ProfilePage } from "./pages/profile";
@@ -8,7 +9,7 @@ import { ComponentsPage } from "./pages/components";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
-  <>
+  <SettingsProvider>
     <Toaster />
     <Sonner />
     <BrowserRouter>
@@ -21,7 +22,7 @@ const App = () => (
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
-  </>
+  </SettingsProvider>
 );
 
 export default App;

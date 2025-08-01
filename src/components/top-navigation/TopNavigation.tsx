@@ -8,15 +8,21 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { useSettings } from '@/contexts/SettingsContext';
 
 interface TopNavigationProps {
   editMode?: boolean;
 }
 
 export function TopNavigation({ editMode = false }: TopNavigationProps) {
-  const [clockPosition, setClockPosition] = useState<'left' | 'center' | 'right'>('left');
-  const [showTitle, setShowTitle] = useState(true);
-  const [customTitle, setCustomTitle] = useState('Premium Dashboard');
+  const { 
+    clockPosition, 
+    setClockPosition, 
+    showHeaderTitle, 
+    setShowHeaderTitle, 
+    customHeaderTitle, 
+    setCustomHeaderTitle 
+  } = useSettings();
   const [isCustomizing, setIsCustomizing] = useState(false);
 
   return (
@@ -25,7 +31,7 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
         <SidebarTrigger className="h-9 w-9 rounded-lg bg-sidebar-accent hover:bg-sidebar-accent/80 text-sidebar-foreground shadow-sm border border-sidebar-border">
           <Menu className="h-4 w-4" />
         </SidebarTrigger>
-        {showTitle && <DashboardTitle customTitle={customTitle} />}
+        {showHeaderTitle && <DashboardTitle customTitle={customHeaderTitle} />}
         {clockPosition === 'left' && <TimeDisplay />}
       </div>
 
@@ -85,18 +91,18 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
                   <div className="flex items-center justify-between">
                     <Label className="text-sm font-medium">Show Title</Label>
                     <Switch
-                      checked={showTitle}
-                      onCheckedChange={setShowTitle}
+                      checked={showHeaderTitle}
+                      onCheckedChange={setShowHeaderTitle}
                     />
                   </div>
                 </div>
 
-                {showTitle && (
+                {showHeaderTitle && (
                   <div className="space-y-2">
                     <Label className="text-sm font-medium">Dashboard Title</Label>
                     <Input
-                      value={customTitle}
-                      onChange={(e) => setCustomTitle(e.target.value)}
+                      value={customHeaderTitle}
+                      onChange={(e) => setCustomHeaderTitle(e.target.value)}
                       placeholder="Enter custom title"
                     />
                   </div>

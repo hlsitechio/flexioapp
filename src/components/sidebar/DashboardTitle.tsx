@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useState } from 'react';
+import { useSettings } from '@/contexts/SettingsContext';
 
 interface DashboardTitleProps {
   editMode?: boolean;
@@ -17,8 +18,12 @@ export function DashboardTitle({ editMode = false }: DashboardTitleProps) {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
   const navigate = useNavigate();
-  const [showCrown, setShowCrown] = useState(true);
-  const [customTitle, setCustomTitle] = useState('Premium Dashboard');
+  const { 
+    showSidebarCrown, 
+    setShowSidebarCrown, 
+    customSidebarTitle, 
+    setCustomSidebarTitle 
+  } = useSettings();
   const [isCustomizing, setIsCustomizing] = useState(false);
 
   return (
@@ -30,7 +35,7 @@ export function DashboardTitle({ editMode = false }: DashboardTitleProps) {
           onClick={() => navigate('/')} 
           className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center"
         >
-          {showCrown && <Crown className="h-4 w-4" />}
+          {showSidebarCrown && <Crown className="h-4 w-4" />}
         </motion.button>
       ) : (
         <div className="w-full space-y-2">
@@ -41,8 +46,8 @@ export function DashboardTitle({ editMode = false }: DashboardTitleProps) {
             onClick={() => navigate('/')} 
             className="text-lg font-semibold text-sidebar-foreground hover:text-sidebar-primary transition-colors cursor-pointer flex items-center space-x-2"
           >
-            {showCrown && <Crown className="h-5 w-5" />}
-            <span>{customTitle}</span>
+            {showSidebarCrown && <Crown className="h-5 w-5" />}
+            <span>{customSidebarTitle}</span>
           </motion.button>
           
           {editMode && (
@@ -63,8 +68,8 @@ export function DashboardTitle({ editMode = false }: DashboardTitleProps) {
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Sidebar Title</Label>
                       <Input
-                        value={customTitle}
-                        onChange={(e) => setCustomTitle(e.target.value)}
+                        value={customSidebarTitle}
+                        onChange={(e) => setCustomSidebarTitle(e.target.value)}
                         placeholder="Enter custom title"
                       />
                     </div>
@@ -73,8 +78,8 @@ export function DashboardTitle({ editMode = false }: DashboardTitleProps) {
                       <div className="flex items-center justify-between">
                         <Label className="text-sm font-medium">Show Crown Icon</Label>
                         <Switch
-                          checked={showCrown}
-                          onCheckedChange={setShowCrown}
+                          checked={showSidebarCrown}
+                          onCheckedChange={setShowSidebarCrown}
                         />
                       </div>
                     </div>

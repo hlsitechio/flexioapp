@@ -3,13 +3,12 @@ import { useSidebar } from '@/components/ui/sidebar';
 import { Settings as SettingsIcon, Edit3, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
+import { useSettings } from '@/contexts/SettingsContext';
 
-interface SettingsProps {
-  editMode?: boolean;
-  setEditMode?: (editMode: boolean) => void;
-}
+interface SettingsProps {}
 
-export function Settings({ editMode = false, setEditMode }: SettingsProps) {
+export function Settings({}: SettingsProps) {
+  const { editMode, setEditMode } = useSettings();
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
 
@@ -19,7 +18,7 @@ export function Settings({ editMode = false, setEditMode }: SettingsProps) {
         <div className="flex justify-center">
           <button 
             className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center mx-auto"
-            onClick={() => setEditMode && setEditMode(!editMode)}
+            onClick={() => setEditMode(!editMode)}
           >
             {editMode ? <Eye className="h-4 w-4" /> : <Edit3 className="h-4 w-4" />}
           </button>
@@ -49,7 +48,7 @@ export function Settings({ editMode = false, setEditMode }: SettingsProps) {
               >
                 {/* Edit Mode */}
                 <button
-                  onClick={() => setEditMode && setEditMode(!editMode)}
+                  onClick={() => setEditMode(!editMode)}
                   className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-sidebar-accent transition-all cursor-pointer text-left"
                 >
                   {editMode ? <Eye className="h-4 w-4 text-sidebar-foreground/70" /> : <Edit3 className="h-4 w-4 text-sidebar-foreground/70" />}

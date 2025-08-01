@@ -11,13 +11,10 @@ import { Tools } from './Tools';
 import { KanbanToolbox } from './KanbanToolbox';
 import { Settings } from './Settings';
 import { UserNavigation } from './UserNavigation';
+import { useSettings } from '@/contexts/SettingsContext';
 
-interface DashboardSidebarProps {
-  editMode?: boolean;
-  setEditMode?: (editMode: boolean) => void;
-}
-
-export function DashboardSidebar({ editMode = false, setEditMode }: DashboardSidebarProps) {
+export function DashboardSidebar() {
+  const { editMode } = useSettings();
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
 
@@ -60,7 +57,7 @@ export function DashboardSidebar({ editMode = false, setEditMode }: DashboardSid
             {/* Divider */}
             <div className="h-px bg-sidebar-border" />
             
-            <Settings editMode={editMode} setEditMode={setEditMode} />
+            <Settings />
           </div>
 
           {/* Bottom Section - Profile, Settings, Sign In */}
