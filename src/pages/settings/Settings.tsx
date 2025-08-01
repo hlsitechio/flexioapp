@@ -2,7 +2,6 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { DashboardSidebar } from '@/components/sidebar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Profile } from '../profile';
 import { Appearance } from './Appearance';
 
 export function Settings() {
@@ -20,10 +19,7 @@ export function Settings() {
                 <p className="text-muted-foreground">Manage your account and preferences</p>
               </div>
 
-              <div className="grid gap-6 md:grid-cols-2">
-                {/* Profile Settings */}
-                <Profile />
-
+              <div className="grid gap-6 md:grid-cols-1 max-w-2xl">
                 {/* Appearance */}
                 <Appearance />
               </div>
