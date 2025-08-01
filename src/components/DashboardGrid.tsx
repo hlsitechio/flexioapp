@@ -19,14 +19,14 @@ export function DashboardGrid({ editMode }: DashboardGridProps) {
         {
           id: '1',
           title: 'Welcome Card',
-          content: 'This is a sample dashboard component. Drag to reposition components.',
+          content: '',
           type: 'widget',
           data: { size: 'large', priority: 'high' }
         },
         {
           id: '2', 
           title: 'Statistics',
-          content: 'Your dashboard statistics will appear here.',
+          content: '',
           type: 'widget',
           data: { size: 'medium', charts: ['line', 'bar'] }
         },
@@ -39,7 +39,7 @@ export function DashboardGrid({ editMode }: DashboardGridProps) {
         {
           id: '3',
           title: 'Quick Actions',
-          content: 'Quick action buttons and shortcuts.',
+          content: '',
           type: 'component',
           data: { position: 'top', actions: 3 }
         },
@@ -52,14 +52,14 @@ export function DashboardGrid({ editMode }: DashboardGridProps) {
         {
           id: '4',
           title: 'Data Export',
-          content: 'Export your dashboard data in various formats.',
+          content: '',
           type: 'tool',
           data: { formats: ['csv', 'json', 'pdf'] }
         },
         {
           id: '5',
           title: 'Theme Editor',
-          content: 'Customize the appearance of your dashboard.',
+          content: '',
           type: 'tool',
           data: { themes: 5, presets: 12 }
         },
@@ -71,7 +71,7 @@ export function DashboardGrid({ editMode }: DashboardGridProps) {
     const newItem: KanbanItem = {
       id: `item-${Date.now()}`,
       title: 'New Component',
-      content: 'This is a new dashboard component.',
+      content: '',
       type: 'widget',
       data: { created: new Date().toISOString() }
     };

@@ -87,10 +87,12 @@ export function KanbanCard({ item, isDragging = false }: KanbanCardProps) {
         </div>
       </div>
 
-      {/* Card Content */}
-      <p className="text-xs text-muted-foreground line-clamp-2">
-        {item.content}
-      </p>
+      {/* Card Content - Hidden when content is empty */}
+      {item.content && (
+        <p className="text-xs text-muted-foreground line-clamp-2">
+          {item.content}
+        </p>
+      )}
 
       {/* Card Data Preview */}
       {item.data && Object.keys(item.data).length > 0 && (

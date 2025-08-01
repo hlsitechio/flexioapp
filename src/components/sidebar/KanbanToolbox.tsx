@@ -18,7 +18,7 @@ const toolboxItems: ToolboxItem[] = [
   {
     id: 'analytics-widget',
     title: 'Analytics Widget',
-    description: 'Display key metrics and analytics',
+    description: '',
     icon: <BarChart3 className="h-4 w-4" />,
     type: 'widget',
     category: 'Data'
@@ -26,7 +26,7 @@ const toolboxItems: ToolboxItem[] = [
   {
     id: 'user-list',
     title: 'User List',
-    description: 'Show user management interface',
+    description: '',
     icon: <Users className="h-4 w-4" />,
     type: 'component',
     category: 'Users'
@@ -34,7 +34,7 @@ const toolboxItems: ToolboxItem[] = [
   {
     id: 'calendar-view',
     title: 'Calendar',
-    description: 'Interactive calendar component',
+    description: '',
     icon: <Calendar className="h-4 w-4" />,
     type: 'widget',
     category: 'Time'
@@ -42,7 +42,7 @@ const toolboxItems: ToolboxItem[] = [
   {
     id: 'settings-panel',
     title: 'Settings Panel',
-    description: 'Configuration and preferences',
+    description: '',
     icon: <Settings className="h-4 w-4" />,
     type: 'tool',
     category: 'Config'
@@ -124,9 +124,11 @@ function DraggableTool({ item, isCollapsed }: DraggableToolProps) {
               {item.type}
             </Badge>
           </div>
-          <p className="text-xs text-sidebar-foreground/60 line-clamp-2 mt-1">
-            {item.description}
-          </p>
+          {item.description && (
+            <p className="text-xs text-sidebar-foreground/60 line-clamp-2 mt-1">
+              {item.description}
+            </p>
+          )}
         </div>
       </div>
     </Card>
