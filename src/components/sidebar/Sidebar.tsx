@@ -1,10 +1,8 @@
-import { ChevronRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
-  SidebarTrigger,
   useSidebar,
 } from '@/components/ui/sidebar';
 import { DashboardTitle } from './DashboardTitle';
@@ -33,22 +31,6 @@ export function DashboardSidebar() {
         className="border-r border-sidebar-border bg-sidebar-background backdrop-blur-xl h-full"
         collapsible="icon"
       >
-        {/* Collapsed state expand button */}
-        <AnimatePresence>
-          {isCollapsed && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.2 }}
-              className="absolute -right-3 top-4 z-50"
-            >
-              <SidebarTrigger className="h-6 w-6 rounded-full bg-sidebar-primary hover:bg-sidebar-primary/80 text-sidebar-primary-foreground shadow-lg border border-sidebar-border/50 p-0">
-                <ChevronRight className="h-3 w-3" />
-              </SidebarTrigger>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         <SidebarHeader className="p-4 border-b border-sidebar-border">
           <DashboardTitle />
