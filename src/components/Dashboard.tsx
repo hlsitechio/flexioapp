@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { DashboardSidebar } from './DashboardSidebar';
+import { DashboardSidebar } from './sidebar';
 import { TopNavigation } from './top-navigation';
 import { DashboardGrid } from './DashboardGrid';
 
