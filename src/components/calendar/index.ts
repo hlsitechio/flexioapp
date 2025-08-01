@@ -1,6 +1,10 @@
 export { Calendar } from './Calendar';
-export type { CalendarEvent, CalendarProps } from './Calendar';
+export { DatePicker } from './DatePicker';
+export { CalendarEvent } from './CalendarEvent';
+export { MiniCalendar } from './MiniCalendar';
+export type { CalendarEvent as CalendarEventType, CalendarProps } from './Calendar';
+export type { DatePickerProps } from './DatePicker';
 
 // Export additional calendar-related components as they're created
-// export { CalendarEvent } from './CalendarEvent';
-// export { CalendarHeader } from './CalendarHeader';
+// export { CalendarEventForm } from './CalendarEventForm';
+// export { CalendarWeekView } from './CalendarWeekView';
