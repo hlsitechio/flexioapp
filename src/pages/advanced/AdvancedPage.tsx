@@ -1,5 +1,6 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { DashboardSidebar } from '@/components/sidebar';
+import { PageTitleBar } from '@/components/ui/page-title-bar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,17 +14,18 @@ export function AdvancedPage() {
         <DashboardSidebar />
         
         <div className="flex-1 flex flex-col">
+          <PageTitleBar 
+            title="Advanced Settings" 
+            description="Advanced workspace configuration and premium features"
+          />
+          
           <main className="flex-1 p-6">
             <div className="max-w-4xl mx-auto space-y-6">
-              {/* Header */}
-              <div className="mb-8">
-                <div className="flex items-center space-x-2">
-                  <h1 className="text-3xl font-bold text-foreground">Advanced Settings</h1>
-                  <Badge variant="secondary" className="bg-gradient-to-r from-orange-500 to-red-500 text-white">
-                    Premium
-                  </Badge>
-                </div>
-                <p className="text-muted-foreground">Advanced workspace configuration and premium features</p>
+              {/* Premium Badge */}
+              <div className="flex justify-start">
+                <Badge variant="secondary" className="bg-gradient-to-r from-orange-500 to-red-500 text-white">
+                  Premium
+                </Badge>
               </div>
 
               <div className="grid gap-6 md:grid-cols-2">

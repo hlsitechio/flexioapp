@@ -1,5 +1,6 @@
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { DashboardSidebar } from '@/components/sidebar';
+import { PageTitleBar } from '@/components/ui/page-title-bar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
@@ -14,14 +15,13 @@ export function Settings() {
         <DashboardSidebar />
         
         <div className="flex-1 flex flex-col">
+          <PageTitleBar 
+            title="Settings" 
+            description="Manage your account and preferences"
+          />
+          
           <main className="flex-1 p-6">
             <div className="max-w-4xl mx-auto space-y-6">
-              {/* Header */}
-              <div className="mb-8">
-                <h1 className="text-3xl font-bold text-foreground">Settings</h1>
-                <p className="text-muted-foreground">Manage your account and preferences</p>
-              </div>
-
               <div className="grid gap-6 md:grid-cols-2">
                 {/* Advanced Settings Link */}
                 <Card className="animate-fade-in border-orange-200 dark:border-orange-800 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/advanced')}>
