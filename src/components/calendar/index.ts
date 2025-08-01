@@ -3,6 +3,8 @@ export { DatePicker } from './DatePicker';
 export { CalendarEvent } from './CalendarEvent';
 export { MiniCalendar } from './MiniCalendar';
 export { SidebarMiniCalendar } from './SidebarMiniCalendar';
+export { DashboardMiniCalendar } from './DashboardMiniCalendar';
+export { SidebarCompactCalendar } from './SidebarCompactCalendar';
 export type { CalendarEvent as CalendarEventType, CalendarProps } from './Calendar';
 export type { DatePickerProps } from './DatePicker';
 

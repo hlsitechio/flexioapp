@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PanelLeftOpen } from 'lucide-react';
-import { SidebarMiniCalendar } from '@/components/calendar';
+import { SidebarCompactCalendar } from '@/components/calendar';
 
 export function SidebarComponents() {
   return (
@@ -11,9 +11,9 @@ export function SidebarComponents() {
       </div>
       <p className="text-muted-foreground text-sm">Components designed for the sidebar area</p>
       
-      {/* Sidebar Calendar Toolbox */}
-      <div className="grid gap-6">
-        <SidebarMiniCalendar />
+      {/* Compact Sidebar Tools */}
+      <div className="grid gap-4">
+        <SidebarCompactCalendar />
         
         {/* Additional Sidebar Tools */}
         <Card>
