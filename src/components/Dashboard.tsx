@@ -9,7 +9,7 @@ export function Dashboard() {
 
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="min-h-screen flex w-full bg-gradient-to-br from-background to-muted/20">
+      <div className="min-h-screen flex w-full bg-background">
         <DashboardSidebar />
         
         <div className="flex-1 flex flex-col">

@@ -1,16 +1,15 @@
-import { useState } from 'react';
-
 import { Sun, Moon } from 'lucide-react';
 import { SidebarMenuItem, SidebarMenuButton, useSidebar } from '@/components/ui/sidebar';
+import { useTheme } from 'next-themes';
 
 export function SidebarDarkModeToggle() {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
-  const [isDark, setIsDark] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const isDark = theme === 'dark';
 
   const toggleDarkMode = () => {
-    setIsDark(!isDark);
-    // TODO: Implement actual dark mode functionality
+    setTheme(isDark ? 'light' : 'dark');
   };
 
   return (
