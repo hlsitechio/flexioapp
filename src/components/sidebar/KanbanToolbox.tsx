@@ -85,7 +85,7 @@ function DraggableTool({ item, isCollapsed }: DraggableToolProps) {
         ref={setNodeRef}
         style={style}
         className={`
-          w-10 h-10 flex items-center justify-center rounded-lg
+          w-10 h-10 flex items-center justify-center rounded-lg mx-auto
           cursor-grab active:cursor-grabbing
           transition-all duration-200
           ${isDragging ? 'opacity-50 scale-110' : 'hover:bg-sidebar-accent'}
@@ -156,7 +156,7 @@ export function KanbanToolbox() {
         )}
       </AnimatePresence>
       
-      <div className={isCollapsed ? 'space-y-2' : 'space-y-3'}>
+      <div className={isCollapsed ? 'space-y-2 flex flex-col items-center' : 'space-y-3'}>
         <AnimatePresence>
           {toolboxItems.map((item, index) => (
             <motion.div
