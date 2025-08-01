@@ -3,7 +3,7 @@ import { DndContext, DragOverlay, closestCorners, PointerSensor, useSensor, useS
 import { DashboardSidebar } from './sidebar';
 import { NotificationSidebar } from './sidebar/notifications';
 import { TopNavigation } from './top-navigation';
-import { DashboardGrid } from './DashboardGrid';
+import { GridLayout } from './GridLayout';
 import { KanbanCard } from './kanban/KanbanCard';
 import { Button } from '@/components/ui/button';
 import { Edit3, Eye } from 'lucide-react';
@@ -47,7 +47,7 @@ export function Dashboard() {
         <TopNavigation editMode={editMode} />
         
         <main className="flex-1 p-6">
-          <DashboardGrid editMode={editMode} setEditMode={setEditMode} />
+          <GridLayout editMode={editMode} />
         </main>
       </div>
       </div>
