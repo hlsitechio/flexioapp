@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { ThemeProvider } from "next-themes";
 import App from "./App.tsx";
 import "./index.css";
@@ -13,7 +14,9 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         <TooltipProvider>
-          <App />
+          <SidebarProvider defaultOpen={true}>
+            <App />
+          </SidebarProvider>
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
