@@ -1,4 +1,4 @@
-import { Plus, User, Settings, LogIn } from 'lucide-react';
+import { Plus, User, Settings, LogIn, ChevronRight } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -17,6 +17,20 @@ export function DashboardSidebar() {
 
   return (
     <Sidebar className="border-r border-sidebar-border bg-sidebar-background backdrop-blur-xl">
+      {/* Collapsed state expand button */}
+      {isCollapsed && (
+        <div className="absolute -right-3 top-4 z-50">
+          <SidebarTrigger asChild>
+            <Button
+              size="sm"
+              className="h-6 w-6 rounded-full bg-sidebar-primary hover:bg-sidebar-primary/80 text-sidebar-primary-foreground shadow-lg border border-sidebar-border/50"
+            >
+              <ChevronRight className="h-3 w-3" />
+            </Button>
+          </SidebarTrigger>
+        </div>
+      )}
+
       <SidebarHeader className="p-4 border-b border-sidebar-border">
         <div className="flex items-center justify-between">
           {!isCollapsed && (
@@ -24,7 +38,9 @@ export function DashboardSidebar() {
               Dashboard
             </h2>
           )}
-          <SidebarTrigger className="ml-auto text-sidebar-foreground hover:text-sidebar-primary transition-colors" />
+          {!isCollapsed && (
+            <SidebarTrigger className="ml-auto text-sidebar-foreground hover:text-sidebar-primary transition-colors" />
+          )}
         </div>
       </SidebarHeader>
 
