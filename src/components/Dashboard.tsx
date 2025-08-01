@@ -7,9 +7,10 @@ import { KanbanCard } from './kanban/KanbanCard';
 import { Button } from '@/components/ui/button';
 import { Edit3, Eye } from 'lucide-react';
 import { KanbanItem } from '@/types/kanban';
+import { useSettings } from '@/contexts/SettingsContext';
 
 export function Dashboard() {
-  const [editMode, setEditMode] = useState(false);
+  const { editMode, setEditMode } = useSettings();
   const [draggedItem, setDraggedItem] = useState<KanbanItem | null>(null);
   
   const sensors = useSensors(
