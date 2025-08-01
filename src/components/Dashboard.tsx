@@ -42,7 +42,7 @@ export function Dashboard() {
         <DashboardSidebar />
         
       <div className="flex-1 flex flex-col">
-        <TopNavigation />
+        <TopNavigation editMode={editMode} />
         
         <main className="flex-1 p-6">
           <DashboardGrid editMode={editMode} setEditMode={setEditMode} />

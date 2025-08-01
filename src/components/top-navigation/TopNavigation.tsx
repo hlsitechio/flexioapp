@@ -1,22 +1,99 @@
+import { useState } from 'react';
 import { DashboardTitle } from './DashboardTitle';
 import { TimeDisplay } from './TimeDisplay';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { Menu } from 'lucide-react';
+import { Menu, Settings, AlignLeft, AlignCenter, Eye, EyeOff } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 
-interface TopNavigationProps {}
+interface TopNavigationProps {
+  editMode?: boolean;
+}
 
-export function TopNavigation({}: TopNavigationProps) {
+export function TopNavigation({ editMode = false }: TopNavigationProps) {
+  const [clockPosition, setClockPosition] = useState<'left' | 'center'>('left');
+  const [showTitle, setShowTitle] = useState(true);
+  const [customTitle, setCustomTitle] = useState('Premium Dashboard');
+  const [isCustomizing, setIsCustomizing] = useState(false);
+
   return (
-    <header className="h-16 bg-background backdrop-blur-xl border-b border-border/50 flex items-center justify-between px-6 animate-fade-in">
+    <header className="h-16 bg-background backdrop-blur-xl border-b border-border/50 flex items-center justify-between px-6 animate-fade-in relative">
       <div className="flex items-center space-x-4">
         <SidebarTrigger className="h-9 w-9 rounded-lg bg-sidebar-accent hover:bg-sidebar-accent/80 text-sidebar-foreground shadow-sm border border-sidebar-border">
           <Menu className="h-4 w-4" />
         </SidebarTrigger>
-        <DashboardTitle />
+        {showTitle && <DashboardTitle customTitle={customTitle} />}
+        {clockPosition === 'left' && <TimeDisplay />}
       </div>
 
       <div className="flex items-center space-x-6">
-        <TimeDisplay />
+        {clockPosition === 'center' && (
+          <div className="absolute left-1/2 transform -translate-x-1/2">
+            <TimeDisplay />
+          </div>
+        )}
+        
+        {editMode && (
+          <Popover open={isCustomizing} onOpenChange={setIsCustomizing}>
+            <PopoverTrigger asChild>
+              <Button variant="outline" size="sm" className="text-xs">
+                <Settings className="h-3 w-3 mr-1" />
+                Customize Header
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80" align="end">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Clock Position</Label>
+                  <div className="flex space-x-2">
+                    <Button
+                      variant={clockPosition === 'left' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setClockPosition('left')}
+                      className="flex-1"
+                    >
+                      <AlignLeft className="h-3 w-3 mr-1" />
+                      Left
+                    </Button>
+                    <Button
+                      variant={clockPosition === 'center' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setClockPosition('center')}
+                      className="flex-1"
+                    >
+                      <AlignCenter className="h-3 w-3 mr-1" />
+                      Center
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-sm font-medium">Show Title</Label>
+                    <Switch
+                      checked={showTitle}
+                      onCheckedChange={setShowTitle}
+                    />
+                  </div>
+                </div>
+
+                {showTitle && (
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Dashboard Title</Label>
+                    <Input
+                      value={customTitle}
+                      onChange={(e) => setCustomTitle(e.target.value)}
+                      placeholder="Enter custom title"
+                    />
+                  </div>
+                )}
+              </div>
+            </PopoverContent>
+          </Popover>
+        )}
       </div>
     </header>
   );

@@ -1,9 +1,17 @@
 import { useLocation } from 'react-router-dom';
 
-export function DashboardTitle() {
+interface DashboardTitleProps {
+  customTitle?: string;
+}
+
+export function DashboardTitle({ customTitle }: DashboardTitleProps) {
   const location = useLocation();
   
   const getPageTitle = () => {
+    if (customTitle && location.pathname === '/') {
+      return customTitle;
+    }
+    
     switch (location.pathname) {
       case '/':
         return 'Premium Dashboard';
