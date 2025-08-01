@@ -4,9 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, XCircle, Database } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 export function ClockSettingsDebug() {
   const { user } = useAuth();
+  const { toast } = useToast();
   const { 
     showSeconds, 
     showDate, 
@@ -16,18 +18,30 @@ export function ClockSettingsDebug() {
   } = useSettings();
 
   const testBackendSave = async () => {
-    if (!user) {
-      console.log('No user authenticated - settings will save to localStorage only');
-      return;
-    }
-
-    console.log('Current clock settings state:', {
+    const currentSettings = {
       showSeconds,
       showDate,
       showYear,
       use24HourFormat,
       clockPosition,
-      userId: user.id
+      userId: user?.id || 'Not authenticated'
+    };
+
+    if (!user) {
+      console.log('No user authenticated - settings will save to localStorage only');
+      toast({
+        title: "No Authentication",
+        description: "Settings will save to localStorage only. Sign in for cloud sync.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    console.log('Current clock settings state:', currentSettings);
+    
+    toast({
+      title: "Settings Test Complete ✅",
+      description: `Clock settings logged to console. Auto-save: ${user ? 'Backend' : 'localStorage'}`,
     });
   };
 
@@ -80,7 +94,7 @@ export function ClockSettingsDebug() {
         </div>
 
         <Button onClick={testBackendSave} variant="outline" className="w-full">
-          Test Backend Save (Check Console)
+          Test Backend Save & Show Toast
         </Button>
         
         <div className="text-xs text-muted-foreground bg-muted p-3 rounded">
