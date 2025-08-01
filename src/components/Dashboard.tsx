@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { DashboardSidebar } from './DashboardSidebar';
-import { TopNavigation } from './TopNavigation';
+import { TopNavigation } from './top-navigation';
 import { DashboardGrid } from './DashboardGrid';
 
 export function Dashboard() {
