@@ -21,7 +21,7 @@ export function DashboardSidebar() {
     <motion.div
       initial={false}
       animate={{
-        width: isCollapsed ? 60 : 280,
+        width: isCollapsed ? 64 : 280,
       }}
       transition={{
         duration: 0.3,
