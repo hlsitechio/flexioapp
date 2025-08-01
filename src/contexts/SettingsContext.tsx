@@ -318,17 +318,38 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     }
 
     console.log('🔄 Settings changed, preparing to save...');
+    console.log('📊 Current settings state:', {
+      clockPosition,
+      showSeconds,
+      showDate,
+      showYear,
+      use24HourFormat,
+      customHeaderTitle,
+      customSidebarTitle,
+      userId: user?.id || 'No user'
+    });
     
     // ALWAYS save to localStorage immediately when settings change
     saveCurrentSettingsToLocalStorage();
     
     // Then save to backend if authenticated (debounced)
     if (user) {
-      const timer = setTimeout(() => {
-        console.log('⏰ Debounced backend save triggered');
-        saveSettingsToBackend();
+      console.log('⏰ Scheduling backend save in 1 second...');
+      const timer = setTimeout(async () => {
+        console.log('🚀 Executing scheduled backend save...');
+        try {
+          await saveSettingsToBackend();
+          console.log('✅ Scheduled backend save completed successfully');
+        } catch (error) {
+          console.error('❌ Scheduled backend save failed:', error);
+        }
       }, 1000);
-      return () => clearTimeout(timer);
+      return () => {
+        console.log('🗑️ Clearing scheduled backend save timer');
+        clearTimeout(timer);
+      };
+    } else {
+      console.log('👤 No user authenticated - skipping backend save');
     }
   }, [
     clockPosition,
