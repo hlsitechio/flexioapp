@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Calendar as CalendarIcon } from 'lucide-react';
+import { useSidebar } from '@/components/ui/sidebar';
 
 export function SidebarCompactCalendar() {
+  const { state } = useSidebar();
+  const isCollapsed = state === 'collapsed';
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -20,6 +23,19 @@ export function SidebarCompactCalendar() {
       day: 'numeric'
     });
   };
+
+  if (isCollapsed) {
+    return (
+      <div className="flex justify-center">
+        <button 
+          className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center mx-auto"
+          title={formatDate(currentTime)}
+        >
+          <CalendarIcon className="h-4 w-4" />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <Card className="border-0 bg-muted/30">

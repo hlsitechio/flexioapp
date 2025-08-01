@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Timer, Plus, Minus } from 'lucide-react';
+import { useSidebar } from '@/components/ui/sidebar';
 
 export function CountdownTimer() {
+  const { state } = useSidebar();
+  const isCollapsed = state === 'collapsed';
   const [initialTime, setInitialTime] = useState(25 * 60); // 25 minutes in seconds
   const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 minutes in seconds
   const [isActive, setIsActive] = useState(false);
@@ -53,6 +56,20 @@ export function CountdownTimer() {
     setIsActive(false);
     setTimeLeft(initialTime);
   };
+
+  if (isCollapsed) {
+    return (
+      <div className="flex justify-center">
+        <button 
+          onClick={toggleTimer} 
+          className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center mx-auto"
+          title={`Timer: ${formatTime(timeLeft)}`}
+        >
+          <Timer className={`h-4 w-4 ${isActive ? 'text-green-500' : ''}`} />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <Card className="border-0 bg-muted/30">

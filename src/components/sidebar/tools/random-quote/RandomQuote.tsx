@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Quote, RefreshCw } from 'lucide-react';
+import { useSidebar } from '@/components/ui/sidebar';
 
 const quotes = [
   "The only way to do great work is to love what you do. - Steve Jobs",
@@ -11,6 +12,8 @@ const quotes = [
 ];
 
 export function RandomQuote() {
+  const { state } = useSidebar();
+  const isCollapsed = state === 'collapsed';
   const [currentQuote, setCurrentQuote] = useState('');
 
   const getRandomQuote = () => {
@@ -25,6 +28,20 @@ export function RandomQuote() {
   const displayQuote = currentQuote.length > 40 
     ? currentQuote.substring(0, 37) + '...' 
     : currentQuote;
+
+  if (isCollapsed) {
+    return (
+      <div className="flex justify-center">
+        <button 
+          onClick={getRandomQuote}
+          className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center mx-auto"
+          title={currentQuote}
+        >
+          <Quote className="h-4 w-4" />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <Card className="border-0 bg-muted/30">

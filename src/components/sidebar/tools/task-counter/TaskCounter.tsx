@@ -1,12 +1,28 @@
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { CheckSquare, Plus, Minus } from 'lucide-react';
+import { useSidebar } from '@/components/ui/sidebar';
 
 export function TaskCounter() {
+  const { state } = useSidebar();
+  const isCollapsed = state === 'collapsed';
   const [count, setCount] = useState(0);
 
   const increment = () => setCount(prev => prev + 1);
   const decrement = () => setCount(prev => Math.max(0, prev - 1));
+
+  if (isCollapsed) {
+    return (
+      <div className="flex justify-center">
+        <button 
+          className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center mx-auto"
+          title={`${count} tasks`}
+        >
+          <CheckSquare className="h-4 w-4" />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <Card className="border-0 bg-muted/30">
