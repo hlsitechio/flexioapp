@@ -18,7 +18,7 @@ export function DashboardTitle() {
     }} onClick={() => navigate('/')} className="p-2 rounded-lg text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent transition-all cursor-pointer mx-auto">
           <Crown className="h-5 w-5" />
         </motion.button> : <AnimatePresence>
-          <motion.button initial={{
+          <motion.button key="dashboard-title" initial={{
         opacity: 0,
         x: -20
       }} animate={{
@@ -33,7 +33,7 @@ export function DashboardTitle() {
             <Crown className="h-5 w-5" />
             
           </motion.button>
-          <motion.div initial={{
+          <motion.div key="sidebar-trigger" initial={{
         opacity: 0,
         scale: 0.8
       }} animate={{
