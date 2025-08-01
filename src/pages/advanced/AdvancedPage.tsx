@@ -7,10 +7,7 @@ import { Building2, Zap } from 'lucide-react';
 
 export function AdvancedPage() {
   return (
-    <DashboardLayout 
-      title="Advanced Settings" 
-      description="Advanced workspace configuration and premium features"
-    >
+    <DashboardLayout title="Advanced Settings">
       <div className="p-6">
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Premium Badge */}

@@ -9,10 +9,7 @@ export function Settings() {
   const navigate = useNavigate();
 
   return (
-    <DashboardLayout 
-      title="Settings" 
-      description="Manage your account and preferences"
-    >
+    <DashboardLayout title="Settings">
       <div className="p-6">
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="grid gap-6 md:grid-cols-2">

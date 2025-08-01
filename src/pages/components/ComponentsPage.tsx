@@ -4,10 +4,7 @@ import { SidebarComponents } from './sidebar-components';
 
 export function ComponentsPage() {
   return (
-    <DashboardLayout 
-      title="Components" 
-      description="Manage and create widgets for your sidebar and dashboard"
-    >
+    <DashboardLayout title="Components">
       <div className="p-6">
         <div className="max-w-4xl mx-auto space-y-6">
           {/* Content Area - Split vertically into two sections */}

@@ -6,20 +6,16 @@ import { PageTitleBar } from '@/components/ui/page-title-bar';
 interface DashboardLayoutProps {
   children: ReactNode;
   title: string;
-  description?: string;
 }
 
-export function DashboardLayout({ children, title, description }: DashboardLayoutProps) {
+export function DashboardLayout({ children, title }: DashboardLayoutProps) {
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-gradient-to-br from-background to-muted/20">
         <DashboardSidebar />
         
         <div className="flex-1 flex flex-col min-w-0">
-          <PageTitleBar 
-            title={title} 
-            description={description}
-          />
+          <PageTitleBar title={title} />
           
           <main className="flex-1">
             {children}
