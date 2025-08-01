@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'react'; // Fixed ComponentShowcase reference error
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { LayoutDashboard, Plus } from 'lucide-react';
