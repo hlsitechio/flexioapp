@@ -86,9 +86,19 @@ export function DashboardSidebar() {
         )}
 
         {isCollapsed && (
-          <div className="flex flex-col items-center py-4 h-full">
-            <Action />
-          </div>
+          <SidebarContent className="flex flex-col h-full py-4">
+            {/* Collapsed Content - Icons Only */}
+            <div className="flex flex-col items-center space-y-4 flex-1">
+              <Action />
+              <Tools />
+              <Settings />
+            </div>
+            
+            {/* Bottom Section for collapsed state */}
+            <div className="flex flex-col items-center space-y-2 mt-auto">
+              <UserNavigation />
+            </div>
+          </SidebarContent>
         )}
       </Sidebar>
     </motion.div>
