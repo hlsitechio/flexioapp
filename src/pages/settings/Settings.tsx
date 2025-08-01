@@ -14,7 +14,7 @@ export function Settings() {
       <div className="min-h-screen flex w-full bg-gradient-to-br from-background to-muted/20">
         <DashboardSidebar />
         
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-w-0">
           <PageTitleBar 
             title="Settings" 
             description="Manage your account and preferences"
