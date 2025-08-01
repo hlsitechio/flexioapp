@@ -92,16 +92,7 @@ export function DashboardGrid({ editMode }: DashboardGridProps) {
   return (
     <div className="h-full w-full relative">
       {/* Header with Controls */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-bold text-foreground">Dashboard Builder</h2>
-          <p className="text-sm text-muted-foreground">
-            {editMode 
-              ? 'Drag and drop components between columns to organize your dashboard'
-              : 'Enable edit mode to rearrange components'
-            }
-          </p>
-        </div>
+      <div className="flex items-center justify-end mb-6">
         
         {editMode && (
           <div className="flex space-x-2">
