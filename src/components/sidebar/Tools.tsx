@@ -33,14 +33,6 @@ const toolboxItems: ToolboxItem[] = [
     category: 'Users'
   },
   {
-    id: 'calendar-view',
-    title: 'Calendar',
-    description: '',
-    icon: <Calendar className="h-4 w-4" />,
-    type: 'widget',
-    category: 'Time'
-  },
-  {
     id: 'settings-panel',
     title: 'Settings Panel',
     description: '',
