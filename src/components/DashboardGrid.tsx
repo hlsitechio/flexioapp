@@ -122,27 +122,7 @@ export function DashboardGrid({ editMode, setEditMode }: DashboardGridProps) {
               <Settings className="h-4 w-4 mr-2" />
               Settings
             </Button>
-            <Button
-              onClick={() => setEditMode(!editMode)}
-              variant="outline"
-              size="sm"
-              className="hover:shadow-md"
-            >
-              <Eye className="h-4 w-4" />
-            </Button>
           </div>
-        )}
-        
-        {/* Always visible edit toggle when not in edit mode */}
-        {!editMode && (
-          <Button
-            onClick={() => setEditMode(!editMode)}
-            variant="outline"
-            size="sm"
-            className="hover:shadow-md"
-          >
-            <Edit3 className="h-4 w-4" />
-          </Button>
         )}
       </div>
 

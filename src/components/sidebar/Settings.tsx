@@ -1,8 +1,15 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSidebar } from '@/components/ui/sidebar';
-import { Settings as SettingsIcon } from 'lucide-react';
+import { Settings as SettingsIcon, Edit3, Eye } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 
-export function Settings() {
+interface SettingsProps {
+  editMode?: boolean;
+  setEditMode?: (editMode: boolean) => void;
+}
+
+export function Settings({ editMode = false, setEditMode }: SettingsProps) {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
 
@@ -10,8 +17,11 @@ export function Settings() {
     <div className="space-y-3">
       {isCollapsed ? (
         <div className="flex justify-center">
-          <button className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center mx-auto">
-            <SettingsIcon className="h-4 w-4" />
+          <button 
+            className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center mx-auto"
+            onClick={() => setEditMode && setEditMode(!editMode)}
+          >
+            {editMode ? <Eye className="h-4 w-4" /> : <Edit3 className="h-4 w-4" />}
           </button>
         </div>
       ) : (
@@ -35,9 +45,26 @@ export function Settings() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
                 transition={{ duration: 0.2, delay: 0.25 }}
-                className="text-xs text-sidebar-foreground/50 px-2"
+                className="px-2 space-y-3"
               >
-                No settings available yet
+                {/* Edit Mode Toggle */}
+                <div className="flex items-center justify-between p-3 rounded-lg bg-sidebar-accent/30 border border-sidebar-border">
+                  <div className="flex items-center space-x-2">
+                    {editMode ? <Eye className="h-4 w-4 text-sidebar-foreground/70" /> : <Edit3 className="h-4 w-4 text-sidebar-foreground/70" />}
+                    <div className="space-y-0.5">
+                      <div className="text-sm font-medium text-sidebar-foreground">
+                        {editMode ? 'Edit Mode' : 'View Mode'}
+                      </div>
+                      <div className="text-xs text-sidebar-foreground/60">
+                        {editMode ? 'Customize dashboard' : 'Read-only mode'}
+                      </div>
+                    </div>
+                  </div>
+                  <Switch
+                    checked={editMode}
+                    onCheckedChange={(checked) => setEditMode && setEditMode(checked)}
+                  />
+                </div>
               </motion.div>
             </AnimatePresence>
           </div>

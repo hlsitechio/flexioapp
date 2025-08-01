@@ -14,9 +14,10 @@ import { UserNavigation } from './UserNavigation';
 
 interface DashboardSidebarProps {
   editMode?: boolean;
+  setEditMode?: (editMode: boolean) => void;
 }
 
-export function DashboardSidebar({ editMode = false }: DashboardSidebarProps) {
+export function DashboardSidebar({ editMode = false, setEditMode }: DashboardSidebarProps) {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
 
@@ -59,7 +60,7 @@ export function DashboardSidebar({ editMode = false }: DashboardSidebarProps) {
             {/* Divider */}
             <div className="h-px bg-sidebar-border" />
             
-            <Settings />
+            <Settings editMode={editMode} setEditMode={setEditMode} />
           </div>
 
           {/* Bottom Section - Profile, Settings, Sign In */}
