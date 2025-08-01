@@ -18,7 +18,7 @@ export function DashboardWidgets() {
       <p className="text-muted-foreground text-sm">Components designed for the main dashboard area</p>
       
       {/* Dashboard Widgets Grid */}
-      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 2xl:grid-cols-4">
+      <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
         <DashboardMiniCalendar />
         <DashboardTaskCounter />
         <DashboardQuickNote />
