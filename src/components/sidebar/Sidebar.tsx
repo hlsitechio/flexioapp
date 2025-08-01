@@ -66,23 +66,34 @@ export function DashboardSidebar() {
             </SidebarHeader>
 
             <SidebarContent className="flex flex-col h-full">
-              {/* Main Content Area with Panels */}
-              <div className="flex-1 p-4 space-y-6">
-                <Action />
+              {/* Main Content Area with Clean Layout */}
+              <div className="flex-1 px-6 py-4 space-y-8">
+                {/* Action Section */}
+                <div className="space-y-3">
+                  <Action />
+                </div>
                 
                 {/* Divider */}
-                <div className="h-px bg-white/10" />
+                <div className="border-t border-sidebar-border/50" />
                 
-                <Tools />
+                {/* Tools Section */}
+                <div className="space-y-3">
+                  <Tools />
+                </div>
                 
                 {/* Divider */}
-                <div className="h-px bg-white/10" />
+                <div className="border-t border-sidebar-border/50" />
                 
-                <Settings />
+                {/* Settings Section */}
+                <div className="space-y-3">
+                  <Settings />
+                </div>
               </div>
 
-              {/* Bottom Section - Profile, Settings, Sign In */}
-              <UserNavigation />
+              {/* Bottom Section with Clean Separation */}
+              <div className="border-t border-sidebar-border/50 mt-auto">
+                <UserNavigation />
+              </div>
             </SidebarContent>
           </>
         )}
