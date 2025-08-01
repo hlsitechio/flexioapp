@@ -8,18 +8,16 @@ export function DashboardTitle() {
   } = useSidebar();
   const isCollapsed = state === 'collapsed';
   const navigate = useNavigate();
-  return <div className="flex items-center justify-between">
+  return <div className="flex items-center justify-center w-full">
       {isCollapsed ? (
-        <div className="flex justify-center">
-          <motion.button 
-            initial={{ opacity: 0, scale: 0.8 }} 
-            animate={{ opacity: 1, scale: 1 }} 
-            onClick={() => navigate('/')} 
-            className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center mx-auto"
-          >
-            <Crown className="h-4 w-4" />
-          </motion.button>
-        </div>
+        <motion.button 
+          initial={{ opacity: 0, scale: 0.8 }} 
+          animate={{ opacity: 1, scale: 1 }} 
+          onClick={() => navigate('/')} 
+          className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center"
+        >
+          <Crown className="h-4 w-4" />
+        </motion.button>
       ) : (
         <motion.button 
           initial={{ opacity: 0, x: -20 }}
