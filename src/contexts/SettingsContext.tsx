@@ -26,6 +26,8 @@ interface SettingsContextType {
   setShowSidebarCrown: (show: boolean) => void;
   customSidebarTitle: string;
   setCustomSidebarTitle: (title: string) => void;
+  sidebarCollapsed: boolean;
+  setSidebarCollapsed: (collapsed: boolean) => void;
   
   // Edit mode
   editMode: boolean;
@@ -73,6 +75,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [customHeaderTitle, setCustomHeaderTitle] = useState<string>('Premium Dashboard');
   const [showSidebarCrown, setShowSidebarCrown] = useState<boolean>(true);
   const [customSidebarTitle, setCustomSidebarTitle] = useState<string>('Premium Dashboard');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   
   // Clock display settings
@@ -107,6 +110,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const savedCustomHeaderTitle = getStorageString('customHeaderTitle', 'Premium Dashboard');
     const savedShowSidebarCrown = getStorageItem('showSidebarCrown', true);
     const savedCustomSidebarTitle = getStorageString('customSidebarTitle', 'Premium Dashboard');
+    const savedSidebarCollapsed = getStorageItem('sidebarCollapsed', false);
     
     // Clock settings
     const savedShowSeconds = getStorageItem('showSeconds', true);
@@ -114,12 +118,13 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const savedShowYear = getStorageItem('showYear', true);
     const savedUse24HourFormat = getStorageItem('use24HourFormat', false);
 
-    console.log('📋 About to set clock settings:', {
+    console.log('📋 About to set all settings:', {
       showSeconds: savedShowSeconds,
       showDate: savedShowDate,
       showYear: savedShowYear,
       use24HourFormat: savedUse24HourFormat,
-      clockPosition: savedClockPosition
+      clockPosition: savedClockPosition,
+      sidebarCollapsed: savedSidebarCollapsed
     });
 
     setClockPosition(savedClockPosition);
@@ -127,6 +132,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setCustomHeaderTitle(savedCustomHeaderTitle);
     setShowSidebarCrown(savedShowSidebarCrown);
     setCustomSidebarTitle(savedCustomSidebarTitle);
+    setSidebarCollapsed(savedSidebarCollapsed);
     setShowSeconds(savedShowSeconds);
     setShowDate(savedShowDate);
     setShowYear(savedShowYear);
@@ -142,7 +148,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       showDate,
       showYear,
       use24HourFormat,
-      clockPosition
+      clockPosition,
+      sidebarCollapsed,
+      customHeaderTitle,
+      customSidebarTitle
     });
     
     try {
@@ -152,6 +161,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('customHeaderTitle', customHeaderTitle);
         localStorage.setItem('showSidebarCrown', JSON.stringify(showSidebarCrown));
         localStorage.setItem('customSidebarTitle', customSidebarTitle);
+        localStorage.setItem('sidebarCollapsed', JSON.stringify(sidebarCollapsed));
         localStorage.setItem('showSeconds', JSON.stringify(showSeconds));
         localStorage.setItem('showDate', JSON.stringify(showDate));
         localStorage.setItem('showYear', JSON.stringify(showYear));
@@ -201,6 +211,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         console.log('🔄 Applying backend settings...');
         setCustomHeaderTitle(data.dashboard_title || 'Premium Dashboard');
         setCustomSidebarTitle(data.sidebar_title || 'Premium Dashboard');
+        
+        // Apply sidebar collapsed state if it exists
+        if (data.sidebar_collapsed !== undefined) {
+          console.log('📱 Setting sidebar collapsed from backend:', data.sidebar_collapsed);
+          setSidebarCollapsed(data.sidebar_collapsed);
+        }
         
         // Apply layout settings only if they exist in backend
         if (layout.clockPosition !== undefined) {
@@ -276,7 +292,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           user_id: user.id,
           dashboard_title: customHeaderTitle,
           sidebar_title: customSidebarTitle,
-          sidebar_collapsed: false,
+          sidebar_collapsed: sidebarCollapsed,
           dashboard_layout: layoutSettings,
         }, {
           onConflict: 'user_id'
@@ -357,6 +373,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     customHeaderTitle,
     showSidebarCrown,
     customSidebarTitle,
+    sidebarCollapsed,
     showSeconds,
     showDate,
     showYear,
@@ -383,6 +400,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setShowSidebarCrown,
     customSidebarTitle,
     setCustomSidebarTitle,
+    sidebarCollapsed,
+    setSidebarCollapsed,
     editMode,
     setEditMode,
     saveSettingsToBackend,
