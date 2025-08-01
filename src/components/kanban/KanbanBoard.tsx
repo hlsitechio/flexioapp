@@ -61,7 +61,7 @@ export function KanbanBoard({ columns, onColumnsChange, className = '' }: Kanban
 
     // Find the columns
     const activeColumn = columns.find(col => 
-      col.items.some(item => item.id === activeId) || col.id === activeId
+      col.items.some(item => item.id === activeId)
     );
     const overColumn = columns.find(col => 
       col.items.some(item => item.id === overId) || col.id === overId
@@ -84,8 +84,10 @@ export function KanbanBoard({ columns, onColumnsChange, className = '' }: Kanban
         // If dropping on a column, add to end; if on item, insert at position
         if (overColumn.id === overId) {
           overItems.push(removedItem);
-        } else {
+        } else if (overIndex !== -1) {
           overItems.splice(overIndex, 0, removedItem);
+        } else {
+          overItems.push(removedItem);
         }
 
         const newColumns = columns.map(col => {
