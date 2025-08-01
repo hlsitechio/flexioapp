@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { DashboardTitle } from './DashboardTitle';
 import { TimeDisplay } from './TimeDisplay';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { Menu, Settings, AlignLeft, AlignCenter, Eye, EyeOff } from 'lucide-react';
+import { Menu, Settings, AlignLeft, AlignCenter, AlignRight, Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
@@ -14,7 +14,7 @@ interface TopNavigationProps {
 }
 
 export function TopNavigation({ editMode = false }: TopNavigationProps) {
-  const [clockPosition, setClockPosition] = useState<'left' | 'center'>('left');
+  const [clockPosition, setClockPosition] = useState<'left' | 'center' | 'right'>('left');
   const [showTitle, setShowTitle] = useState(true);
   const [customTitle, setCustomTitle] = useState('Premium Dashboard');
   const [isCustomizing, setIsCustomizing] = useState(false);
@@ -35,6 +35,8 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
             <TimeDisplay />
           </div>
         )}
+        
+        {clockPosition === 'right' && <TimeDisplay />}
         
         {editMode && (
           <Popover open={isCustomizing} onOpenChange={setIsCustomizing}>
@@ -66,6 +68,15 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
                     >
                       <AlignCenter className="h-3 w-3 mr-1" />
                       Center
+                    </Button>
+                    <Button
+                      variant={clockPosition === 'right' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setClockPosition('right')}
+                      className="flex-1"
+                    >
+                      <AlignRight className="h-3 w-3 mr-1" />
+                      Right
                     </Button>
                   </div>
                 </div>
