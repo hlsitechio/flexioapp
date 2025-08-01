@@ -2,6 +2,7 @@ export { Calendar } from './Calendar';
 export { DatePicker } from './DatePicker';
 export { CalendarEvent } from './CalendarEvent';
 export { MiniCalendar } from './MiniCalendar';
+export { SidebarMiniCalendar } from './SidebarMiniCalendar';
 export type { CalendarEvent as CalendarEventType, CalendarProps } from './Calendar';
 export type { DatePickerProps } from './DatePicker';
 

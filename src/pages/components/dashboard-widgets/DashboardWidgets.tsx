@@ -45,13 +45,8 @@ export function DashboardWidgets() {
           className="w-full"
         />
         
-        {/* Mini Calendar and Date Picker Row */}
+        {/* Date Picker Component */}
         <div className="grid md:grid-cols-2 gap-6">
-          <MiniCalendar 
-            events={sampleEvents}
-            onDateSelect={setSelectedDate}
-          />
-          
           <Card>
             <CardHeader>
               <CardTitle className="text-base">Date Picker Component</CardTitle>
@@ -70,6 +65,11 @@ export function DashboardWidgets() {
               )}
             </CardContent>
           </Card>
+          
+          <MiniCalendar 
+            events={sampleEvents}
+            onDateSelect={setSelectedDate}
+          />
         </div>
         
         {/* Calendar Events */}
