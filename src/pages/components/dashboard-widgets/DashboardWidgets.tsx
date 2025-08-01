@@ -4,7 +4,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { LayoutDashboard, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { DashboardMiniCalendar } from '@/components/calendar';
+import { Calendar } from '@/components/calendar';
 import { 
   DashboardTaskCounter, 
   DashboardQuickNote, 
@@ -93,8 +93,8 @@ export function DashboardWidgets() {
       >
         <CarouselContent className="-ml-2 md:-ml-4">
           <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Mini Calendar">
-              <DashboardMiniCalendar />
+            <DashboardComponentShowcase componentName="Calendar">
+              <Calendar />
             </DashboardComponentShowcase>
           </CarouselItem>
           <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
