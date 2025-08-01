@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { Edit3, Eye, Palette } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { DarkModeToggle } from '@/components/appearance';
 
 export function Appearance() {
   const [editMode, setEditMode] = useState(false);
@@ -50,13 +50,8 @@ export function Appearance() {
         {/* Theme Selection */}
         <div className="space-y-3">
           <Label className="text-base font-medium">Theme</Label>
-          <div className="grid grid-cols-2 gap-2">
-            <Button variant="outline" size="sm">
-              Light
-            </Button>
-            <Button variant="outline" size="sm">
-              Dark
-            </Button>
+          <div className="flex justify-start">
+            <DarkModeToggle />
           </div>
         </div>
       </CardContent>

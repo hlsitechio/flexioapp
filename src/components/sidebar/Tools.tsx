@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSidebar } from '@/components/ui/sidebar';
+import { Wrench } from 'lucide-react';
 
 export function Tools() {
   const { state } = useSidebar();
@@ -14,9 +15,10 @@ export function Tools() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2, delay: 0.15 }}
-            className="text-xs font-semibold text-sidebar-foreground/70 uppercase tracking-wider px-2"
+            className="text-xs font-semibold text-sidebar-foreground/70 uppercase tracking-wider px-2 flex items-center space-x-1"
           >
-            Tools
+            <Wrench className="h-3 w-3" />
+            <span>Tools</span>
           </motion.h3>
         )}
       </AnimatePresence>
