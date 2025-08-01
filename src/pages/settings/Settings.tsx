@@ -2,6 +2,9 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { DashboardSidebar } from '@/components/sidebar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Building2 } from 'lucide-react';
 import { Appearance } from './Appearance';
 
 export function Settings() {
@@ -19,7 +22,34 @@ export function Settings() {
                 <p className="text-muted-foreground">Manage your account and preferences</p>
               </div>
 
-              <div className="grid gap-6 md:grid-cols-1 max-w-2xl">
+              <div className="grid gap-6 md:grid-cols-2">
+                {/* Workspace Information */}
+                <Card className="animate-fade-in">
+                  <CardHeader>
+                    <CardTitle className="flex items-center space-x-2">
+                      <Building2 className="h-5 w-5" />
+                      <span>Workspace</span>
+                    </CardTitle>
+                    <CardDescription>
+                      Your workspace identification and settings
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="workspaceId">Workspace ID</Label>
+                      <Input 
+                        id="workspaceId" 
+                        value="WK-000000001" 
+                        readOnly 
+                        className="bg-muted font-mono text-sm"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        This ID is used for backend integration and cannot be modified.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+
                 {/* Appearance */}
                 <Appearance />
               </div>
