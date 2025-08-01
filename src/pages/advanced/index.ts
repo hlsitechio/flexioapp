@@ -1,0 +1,1 @@
+export { AdvancedPage } from './AdvancedPage';

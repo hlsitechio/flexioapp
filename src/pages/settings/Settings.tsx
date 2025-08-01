@@ -2,12 +2,12 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { DashboardSidebar } from '@/components/sidebar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Building2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Settings as SettingsIcon, ArrowRight } from 'lucide-react';
 import { Appearance } from './Appearance';
 
 export function Settings() {
+  const navigate = useNavigate();
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-gradient-to-br from-background to-muted/20">
@@ -23,30 +23,31 @@ export function Settings() {
               </div>
 
               <div className="grid gap-6 md:grid-cols-2">
-                {/* Workspace Information */}
-                <Card className="animate-fade-in">
+                {/* Advanced Settings Link */}
+                <Card className="animate-fade-in border-orange-200 dark:border-orange-800 cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/advanced')}>
                   <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <Building2 className="h-5 w-5" />
-                      <span>Workspace</span>
+                    <CardTitle className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <SettingsIcon className="h-5 w-5 text-orange-500" />
+                        <span>Advanced Settings</span>
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-muted-foreground" />
                     </CardTitle>
                     <CardDescription>
-                      Your workspace identification and settings
+                      Access premium features and advanced workspace configuration
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="workspaceId">Workspace ID</Label>
-                      <Input 
-                        id="workspaceId" 
-                        value="WK-000000001" 
-                        readOnly 
-                        className="bg-muted font-mono text-sm"
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        This ID is used for backend integration and cannot be modified.
-                      </p>
-                    </div>
+                  <CardContent>
+                    <Button 
+                      variant="outline" 
+                      className="w-full" 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate('/advanced');
+                      }}
+                    >
+                      Open Advanced Settings
+                    </Button>
                   </CardContent>
                 </Card>
 
