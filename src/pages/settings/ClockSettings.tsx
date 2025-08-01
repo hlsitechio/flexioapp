@@ -3,6 +3,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Clock } from 'lucide-react';
 import { useSettings } from '@/contexts/SettingsContext';
+import { ClockSettingsDebug } from '@/components/debug/ClockSettingsDebug';
 
 export function ClockSettings() {
   const { 
@@ -17,7 +18,8 @@ export function ClockSettings() {
   } = useSettings();
 
   return (
-    <Card className="animate-fade-in">
+    <div className="space-y-6">
+      <Card className="animate-fade-in">
       <CardHeader>
         <div className="flex items-center space-x-2">
           <Clock className="h-5 w-5 text-primary" />
@@ -86,5 +88,9 @@ export function ClockSettings() {
         </div>
       </CardContent>
     </Card>
+    
+    {/* Debug Component */}
+    <ClockSettingsDebug />
+    </div>
   );
 }

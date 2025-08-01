@@ -125,6 +125,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (data) {
+        console.log('Loading clock settings from backend:', data.dashboard_layout);
         setCustomHeaderTitle(data.dashboard_title || 'Premium Dashboard');
         setCustomSidebarTitle(data.sidebar_title || 'Premium Dashboard');
         // Load other settings from dashboard_layout JSON if stored there
@@ -136,6 +137,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         if (layout.showDate !== undefined) setShowDate(layout.showDate);
         if (layout.showYear !== undefined) setShowYear(layout.showYear);
         if (layout.use24HourFormat !== undefined) setUse24HourFormat(layout.use24HourFormat);
+        console.log('Clock settings loaded:', {
+          showSeconds: layout.showSeconds,
+          showDate: layout.showDate,
+          showYear: layout.showYear,
+          use24HourFormat: layout.use24HourFormat
+        });
       } else {
         // No settings found, use defaults and create initial record
         await saveSettingsToBackend();
@@ -160,6 +167,14 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         use24HourFormat,
       };
 
+      console.log('Saving clock settings to backend:', {
+        showSeconds,
+        showDate,
+        showYear,
+        use24HourFormat,
+        clockPosition
+      });
+
       const { error } = await supabase
         .from('user_settings')
         .upsert({
@@ -172,6 +187,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         console.error('Error saving settings:', error);
+      } else {
+        console.log('Clock settings saved successfully to backend');
       }
     } catch (error) {
       console.error('Error saving settings:', error);
