@@ -23,51 +23,102 @@ interface SettingsContextType {
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
-  // Load settings from localStorage on init
-  const [clockPosition, setClockPosition] = useState<'left' | 'center' | 'right'>(() => {
-    const saved = localStorage.getItem('clockPosition');
-    return (saved as 'left' | 'center' | 'right') || 'left';
-  });
-  
-  const [showHeaderTitle, setShowHeaderTitle] = useState<boolean>(() => {
-    const saved = localStorage.getItem('showHeaderTitle');
-    return saved !== null ? JSON.parse(saved) : true;
-  });
-  
-  const [customHeaderTitle, setCustomHeaderTitle] = useState<string>(() => {
-    return localStorage.getItem('customHeaderTitle') || 'Premium Dashboard';
-  });
-  
-  const [showSidebarCrown, setShowSidebarCrown] = useState<boolean>(() => {
-    const saved = localStorage.getItem('showSidebarCrown');
-    return saved !== null ? JSON.parse(saved) : true;
-  });
-  
-  const [customSidebarTitle, setCustomSidebarTitle] = useState<string>(() => {
-    return localStorage.getItem('customSidebarTitle') || 'Premium Dashboard';
-  });
-  
+  // Helper function to safely access localStorage
+  const getStorageItem = (key: string, defaultValue: any) => {
+    try {
+      if (typeof window !== 'undefined') {
+        const item = localStorage.getItem(key);
+        return item !== null ? JSON.parse(item) : defaultValue;
+      }
+    } catch (error) {
+      console.warn(`Error reading ${key} from localStorage:`, error);
+    }
+    return defaultValue;
+  };
+
+  const getStorageString = (key: string, defaultValue: string) => {
+    try {
+      if (typeof window !== 'undefined') {
+        return localStorage.getItem(key) || defaultValue;
+      }
+    } catch (error) {
+      console.warn(`Error reading ${key} from localStorage:`, error);
+    }
+    return defaultValue;
+  };
+
+  // Load settings from localStorage on init - using safe access
+  const [clockPosition, setClockPosition] = useState<'left' | 'center' | 'right'>('left');
+  const [showHeaderTitle, setShowHeaderTitle] = useState<boolean>(true);
+  const [customHeaderTitle, setCustomHeaderTitle] = useState<string>('Premium Dashboard');
+  const [showSidebarCrown, setShowSidebarCrown] = useState<boolean>(true);
+  const [customSidebarTitle, setCustomSidebarTitle] = useState<string>('Premium Dashboard');
   const [editMode, setEditMode] = useState<boolean>(false);
+
+  // Load from localStorage after component mounts
+  useEffect(() => {
+    const savedClockPosition = getStorageString('clockPosition', 'left') as 'left' | 'center' | 'right';
+    const savedShowHeaderTitle = getStorageItem('showHeaderTitle', true);
+    const savedCustomHeaderTitle = getStorageString('customHeaderTitle', 'Premium Dashboard');
+    const savedShowSidebarCrown = getStorageItem('showSidebarCrown', true);
+    const savedCustomSidebarTitle = getStorageString('customSidebarTitle', 'Premium Dashboard');
+
+    setClockPosition(savedClockPosition);
+    setShowHeaderTitle(savedShowHeaderTitle);
+    setCustomHeaderTitle(savedCustomHeaderTitle);
+    setShowSidebarCrown(savedShowSidebarCrown);
+    setCustomSidebarTitle(savedCustomSidebarTitle);
+  }, []);
 
   // Save to localStorage whenever settings change
   useEffect(() => {
-    localStorage.setItem('clockPosition', clockPosition);
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('clockPosition', clockPosition);
+      }
+    } catch (error) {
+      console.warn('Error saving clockPosition to localStorage:', error);
+    }
   }, [clockPosition]);
   
   useEffect(() => {
-    localStorage.setItem('showHeaderTitle', JSON.stringify(showHeaderTitle));
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('showHeaderTitle', JSON.stringify(showHeaderTitle));
+      }
+    } catch (error) {
+      console.warn('Error saving showHeaderTitle to localStorage:', error);
+    }
   }, [showHeaderTitle]);
   
   useEffect(() => {
-    localStorage.setItem('customHeaderTitle', customHeaderTitle);
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('customHeaderTitle', customHeaderTitle);
+      }
+    } catch (error) {
+      console.warn('Error saving customHeaderTitle to localStorage:', error);
+    }
   }, [customHeaderTitle]);
   
   useEffect(() => {
-    localStorage.setItem('showSidebarCrown', JSON.stringify(showSidebarCrown));
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('showSidebarCrown', JSON.stringify(showSidebarCrown));
+      }
+    } catch (error) {
+      console.warn('Error saving showSidebarCrown to localStorage:', error);
+    }
   }, [showSidebarCrown]);
   
   useEffect(() => {
-    localStorage.setItem('customSidebarTitle', customSidebarTitle);
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('customSidebarTitle', customSidebarTitle);
+      }
+    } catch (error) {
+      console.warn('Error saving customSidebarTitle to localStorage:', error);
+    }
   }, [customSidebarTitle]);
 
   const value: SettingsContextType = {
