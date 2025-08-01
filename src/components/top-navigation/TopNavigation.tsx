@@ -99,7 +99,7 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
 
                 {showHeaderTitle && (
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium">Dashboard Title</Label>
+                    <Label className="text-sm font-medium">Navigation Title</Label>
                     <Input
                       value={customHeaderTitle}
                       onChange={(e) => setCustomHeaderTitle(e.target.value)}
