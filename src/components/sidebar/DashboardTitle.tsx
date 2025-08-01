@@ -10,8 +10,17 @@ export function DashboardTitle() {
 
   return (
     <div className="flex items-center justify-between">
-      <AnimatePresence>
-        {!isCollapsed && (
+      {isCollapsed ? (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          onClick={() => navigate('/')}
+          className="p-2 rounded-lg text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent transition-all cursor-pointer mx-auto"
+        >
+          <Crown className="h-5 w-5" />
+        </motion.button>
+      ) : (
+        <AnimatePresence>
           <motion.button
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -23,10 +32,6 @@ export function DashboardTitle() {
             <Crown className="h-5 w-5" />
             <span>Premium Dashboard</span>
           </motion.button>
-        )}
-      </AnimatePresence>
-      <AnimatePresence>
-        {!isCollapsed && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -35,8 +40,8 @@ export function DashboardTitle() {
           >
             <SidebarTrigger className="ml-auto text-sidebar-foreground hover:text-sidebar-primary transition-colors" />
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>
+      )}
     </div>
   );
 }

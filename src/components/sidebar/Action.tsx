@@ -28,9 +28,11 @@ export function Action() {
           whileTap={{ scale: 0.98 }}
         >
           <Button 
-            className={`w-full ${
-              isCollapsed ? 'px-3' : 'justify-start'
-            } button-premium text-primary-foreground hover:shadow-lg transition-all duration-300`}
+            className={`${
+              isCollapsed 
+                ? 'w-10 h-10 p-0 mx-auto button-premium text-primary-foreground hover:shadow-lg transition-all duration-300' 
+                : 'w-full justify-start button-premium text-primary-foreground hover:shadow-lg transition-all duration-300'
+            }`}
             size={isCollapsed ? 'sm' : 'default'}
           >
             <Plus className="h-4 w-4" />
