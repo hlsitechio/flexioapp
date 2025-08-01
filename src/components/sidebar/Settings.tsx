@@ -6,11 +6,14 @@ export function Settings() {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
 
+  console.log('Settings component render - isCollapsed:', isCollapsed);
+  
   return (
     <div className="space-y-3">
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {!isCollapsed && (
           <motion.h3
+            key="settings-title"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -23,9 +26,10 @@ export function Settings() {
         )}
       </AnimatePresence>
       <div className="space-y-2">
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {!isCollapsed && (
             <motion.div
+              key="settings-content"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}

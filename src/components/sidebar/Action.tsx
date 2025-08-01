@@ -9,11 +9,14 @@ export function Action() {
   const isCollapsed = state === 'collapsed';
   const navigate = useNavigate();
 
+  console.log('Action component render - isCollapsed:', isCollapsed);
+  
   return (
     <div className="space-y-3">
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {!isCollapsed && (
           <motion.h3
+            key="action-title"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -37,9 +40,10 @@ export function Action() {
             onClick={() => navigate('/components')}
           >
             <Plus className="h-4 w-4" />
-            <AnimatePresence>
+            <AnimatePresence mode="wait">
               {!isCollapsed && (
                 <motion.span
+                  key="action-text"
                   initial={{ opacity: 0, width: 0 }}
                   animate={{ opacity: 1, width: 'auto' }}
                   exit={{ opacity: 0, width: 0 }}
