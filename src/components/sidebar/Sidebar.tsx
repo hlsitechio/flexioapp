@@ -27,9 +27,9 @@ export function DashboardSidebar() {
         duration: 0.3,
         ease: [0.4, 0, 0.2, 1],
       }}
-      className="relative"
+      className="relative border-r-0"
     >
-      <Sidebar className="border-r border-sidebar-border bg-sidebar-background backdrop-blur-xl h-full">
+      <Sidebar className="border-r-0 bg-sidebar-background backdrop-blur-xl h-full">
         {/* Collapsed state expand button */}
         <AnimatePresence>
           {isCollapsed && (
