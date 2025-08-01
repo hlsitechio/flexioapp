@@ -28,55 +28,103 @@ export function DashboardSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="p-4 space-y-4">
-        {/* Add Component Button */}
-        <div className="space-y-2">
-          <Button 
-            className={`w-full ${
-              isCollapsed ? 'px-3' : 'justify-start'
-            } button-premium text-primary-foreground hover:shadow-lg transition-all duration-300`}
-            size={isCollapsed ? 'sm' : 'default'}
-          >
-            <Plus className="h-4 w-4" />
-            {!isCollapsed && <span className="ml-2">Add Component</span>}
-          </Button>
+      <SidebarContent className="flex flex-col h-full">
+        {/* Main Content Area with Panels */}
+        <div className="flex-1 p-4 space-y-6">
+          {/* Action Panel */}
+          <div className="space-y-3">
+            {!isCollapsed && (
+              <h3 className="text-xs font-semibold text-sidebar-foreground/70 uppercase tracking-wider px-2">
+                Action
+              </h3>
+            )}
+            <div className="space-y-2">
+              <Button 
+                className={`w-full ${
+                  isCollapsed ? 'px-3' : 'justify-start'
+                } button-premium text-primary-foreground hover:shadow-lg transition-all duration-300`}
+                size={isCollapsed ? 'sm' : 'default'}
+              >
+                <Plus className="h-4 w-4" />
+                {!isCollapsed && <span className="ml-2">Add Component</span>}
+              </Button>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-white/10" />
+
+          {/* Tools Panel */}
+          <div className="space-y-3">
+            {!isCollapsed && (
+              <h3 className="text-xs font-semibold text-sidebar-foreground/70 uppercase tracking-wider px-2">
+                Tools
+              </h3>
+            )}
+            <div className="space-y-2">
+              {/* Add tool items here later */}
+              <div className="text-xs text-sidebar-foreground/50 px-2">
+                {!isCollapsed ? 'No tools available yet' : ''}
+              </div>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-white/10" />
+
+          {/* Settings Panel */}
+          <div className="space-y-3">
+            {!isCollapsed && (
+              <h3 className="text-xs font-semibold text-sidebar-foreground/70 uppercase tracking-wider px-2">
+                Settings
+              </h3>
+            )}
+            <div className="space-y-2">
+              {/* Add settings items here later */}
+              <div className="text-xs text-sidebar-foreground/50 px-2">
+                {!isCollapsed ? 'No settings available yet' : ''}
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Navigation Menu */}
-        <SidebarMenu className="space-y-2">
-          <SidebarMenuItem>
-            <SidebarMenuButton 
-              className={`w-full ${
-                isCollapsed ? 'justify-center px-3' : 'justify-start'
-              } hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all duration-200 rounded-lg`}
-            >
-              <User className="h-4 w-4" />
-              {!isCollapsed && <span className="ml-2">Profile</span>}
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+        {/* Bottom Section - Profile, Settings, Sign In */}
+        <div className="border-t border-white/10 p-4">
+          <SidebarMenu className="space-y-1">
+            <SidebarMenuItem>
+              <SidebarMenuButton 
+                className={`w-full ${
+                  isCollapsed ? 'justify-center px-3' : 'justify-start'
+                } hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all duration-200 rounded-lg`}
+              >
+                <User className="h-4 w-4" />
+                {!isCollapsed && <span className="ml-2">Profile</span>}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
 
-          <SidebarMenuItem>
-            <SidebarMenuButton 
-              className={`w-full ${
-                isCollapsed ? 'justify-center px-3' : 'justify-start'
-              } hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all duration-200 rounded-lg`}
-            >
-              <Settings className="h-4 w-4" />
-              {!isCollapsed && <span className="ml-2">Settings</span>}
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton 
+                className={`w-full ${
+                  isCollapsed ? 'justify-center px-3' : 'justify-start'
+                } hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all duration-200 rounded-lg`}
+              >
+                <Settings className="h-4 w-4" />
+                {!isCollapsed && <span className="ml-2">Settings</span>}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
 
-          <SidebarMenuItem>
-            <SidebarMenuButton 
-              className={`w-full ${
-                isCollapsed ? 'justify-center px-3' : 'justify-start'
-              } hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all duration-200 rounded-lg`}
-            >
-              <LogIn className="h-4 w-4" />
-              {!isCollapsed && <span className="ml-2">Sign In</span>}
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton 
+                className={`w-full ${
+                  isCollapsed ? 'justify-center px-3' : 'justify-start'
+                } hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-all duration-200 rounded-lg`}
+              >
+                <LogIn className="h-4 w-4" />
+                {!isCollapsed && <span className="ml-2">Sign In</span>}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </div>
       </SidebarContent>
     </Sidebar>
   );
