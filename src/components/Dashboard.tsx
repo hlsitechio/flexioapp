@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { DndContext, DragOverlay, closestCorners, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { DashboardSidebar } from './sidebar';
+import { NotificationSidebar } from './sidebar/notifications';
 import { TopNavigation } from './top-navigation';
 import { DashboardGrid } from './DashboardGrid';
 import { KanbanCard } from './kanban/KanbanCard';
@@ -50,6 +51,9 @@ export function Dashboard() {
         </main>
       </div>
       </div>
+      
+      {/* Notification Sidebar */}
+      <NotificationSidebar />
       
       <DragOverlay>
         {draggedItem ? (

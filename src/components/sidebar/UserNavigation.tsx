@@ -1,6 +1,7 @@
 import { SidebarMenu, useSidebar } from '@/components/ui/sidebar';
 import { Profile } from './settings/Profile';
 import { UserSettings } from './settings/UserSettings';
+import { NotificationButton } from './notifications';
 import { SignInOut } from './settings/SignInOut';
 import { SidebarDarkModeToggle } from './SidebarDarkModeToggle';
 
@@ -13,6 +14,7 @@ export function UserNavigation() {
       <SidebarMenu className={isCollapsed ? 'space-y-2 items-center' : 'space-y-1'}>
         <SidebarDarkModeToggle />
         <Profile />
+        <NotificationButton />
         <UserSettings />
         <SignInOut />
       </SidebarMenu>

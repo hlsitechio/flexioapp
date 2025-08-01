@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { NotificationProvider } from "@/contexts/NotificationContext";
 import { SettingsProvider } from "@/contexts/SettingsContext";
 import App from "./App.tsx";
 import "./index.css";
@@ -15,15 +16,17 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <SettingsProvider>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-            <TooltipProvider>
-              <SidebarProvider defaultOpen={true}>
-                <App />
-              </SidebarProvider>
-            </TooltipProvider>
-          </ThemeProvider>
-        </SettingsProvider>
+        <NotificationProvider>
+          <SettingsProvider>
+            <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+              <TooltipProvider>
+                <SidebarProvider defaultOpen={true}>
+                  <App />
+                </SidebarProvider>
+              </TooltipProvider>
+            </ThemeProvider>
+          </SettingsProvider>
+        </NotificationProvider>
       </AuthProvider>
     </QueryClientProvider>
   </StrictMode>,
