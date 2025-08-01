@@ -49,6 +49,19 @@ export function GridLayout({ editMode }: GridLayoutProps) {
     }
   };
 
+  const placeholderImages = [
+    'photo-1461749280684-dccba630e2f6', // monitor showing Java programming
+    'photo-1485827404703-89b55fcc595e', // white robot near brown wall
+    'photo-1487058792275-0ad4aaf24ca7', // Colorful software or web code on a computer monitor
+    'photo-1498050108023-c5249f4df085', // A MacBook with lines of code on its screen on a busy desk
+    'photo-1483058712412-4245e9b90334', // silver iMac with keyboard and trackpad inside room
+  ];
+
+  const getPlaceholderImage = (index: number) => {
+    const imageIndex = index % placeholderImages.length;
+    return `https://images.unsplash.com/${placeholderImages[imageIndex]}?w=400&h=300&fit=crop`;
+  };
+
   return (
     <div className="h-full w-full space-y-6">
       {/* Header with Grid Size Selector */}
@@ -109,12 +122,18 @@ export function GridLayout({ editMode }: GridLayoutProps) {
               `}
               onClick={() => handleAddComponent(index)}
             >
-              <CardContent className="p-4 flex items-center justify-center h-full relative">
-                <div className="text-center space-y-2">
-                  <div className="text-2xl text-muted-foreground/30">📦</div>
-                  <p className="text-xs text-muted-foreground">
+              <CardContent className="p-0 flex items-center justify-center h-full relative overflow-hidden">
+                {/* Placeholder Image */}
+                <div className="w-full h-full relative">
+                  <img 
+                    src={getPlaceholderImage(index)}
+                    alt={`Dashboard component placeholder ${index + 1}`}
+                    className="w-full h-full object-cover opacity-50"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+                  <div className="absolute bottom-2 left-2 text-xs text-foreground font-medium">
                     Slot {index + 1}
-                  </p>
+                  </div>
                 </div>
                 
                 {/* Plus Button - Only visible on hover and in edit mode */}
