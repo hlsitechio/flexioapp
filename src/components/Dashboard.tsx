@@ -39,7 +39,7 @@ export function Dashboard() {
       onDragEnd={handleDragEnd}
     >
       <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar />
+        <DashboardSidebar editMode={editMode} />
         
       <div className="flex-1 flex flex-col">
         <TopNavigation editMode={editMode} />

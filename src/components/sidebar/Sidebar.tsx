@@ -12,7 +12,11 @@ import { KanbanToolbox } from './KanbanToolbox';
 import { Settings } from './Settings';
 import { UserNavigation } from './UserNavigation';
 
-export function DashboardSidebar() {
+interface DashboardSidebarProps {
+  editMode?: boolean;
+}
+
+export function DashboardSidebar({ editMode = false }: DashboardSidebarProps) {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
 
@@ -34,7 +38,7 @@ export function DashboardSidebar() {
       >
 
         <SidebarHeader className="p-4 border-b border-sidebar-border">
-          <DashboardTitle />
+          <DashboardTitle editMode={editMode} />
         </SidebarHeader>
 
         <SidebarContent className="flex flex-col h-full">
