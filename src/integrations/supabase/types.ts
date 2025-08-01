@@ -14,7 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      user_settings: {
+        Row: {
+          created_at: string
+          dashboard_layout: Json | null
+          dashboard_title: string | null
+          id: string
+          sidebar_collapsed: boolean | null
+          sidebar_title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          dashboard_layout?: Json | null
+          dashboard_title?: string | null
+          id?: string
+          sidebar_collapsed?: boolean | null
+          sidebar_title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          dashboard_layout?: Json | null
+          dashboard_title?: string | null
+          id?: string
+          sidebar_collapsed?: boolean | null
+          sidebar_title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

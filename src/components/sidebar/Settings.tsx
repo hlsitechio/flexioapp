@@ -4,6 +4,7 @@ import { Settings as SettingsIcon, Edit3, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { useSettings } from '@/contexts/SettingsContext';
+import { AuthButton } from '@/components/ui/auth-button';
 
 interface SettingsProps {}
 
@@ -58,6 +59,11 @@ export function Settings({}: SettingsProps) {
                     </div>
                   </div>
                 </button>
+
+                {/* Sign Out */}
+                <div className="pt-2 border-t border-sidebar-border">
+                  <AuthButton />
+                </div>
               </motion.div>
             </AnimatePresence>
           </div>

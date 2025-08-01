@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './AuthContext';
 
 interface SettingsContextType {
   // Header settings
@@ -33,6 +35,8 @@ interface SettingsContextType {
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  
   // Helper function to safely access localStorage
   const getStorageItem = (key: string, defaultValue: any) => {
     try {
@@ -71,8 +75,16 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [showYear, setShowYear] = useState<boolean>(true);
   const [use24HourFormat, setUse24HourFormat] = useState<boolean>(false);
 
-  // Load from localStorage after component mounts
+  // Load settings from backend if user is authenticated, otherwise localStorage
   useEffect(() => {
+    if (user) {
+      loadSettingsFromBackend();
+    } else {
+      loadSettingsFromLocalStorage();
+    }
+  }, [user]);
+
+  const loadSettingsFromLocalStorage = () => {
     const savedClockPosition = getStorageString('clockPosition', 'left') as 'left' | 'center' | 'right';
     const savedShowHeaderTitle = getStorageItem('showHeaderTitle', true);
     const savedCustomHeaderTitle = getStorageString('customHeaderTitle', 'Premium Dashboard');
@@ -94,99 +106,119 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setShowDate(savedShowDate);
     setShowYear(savedShowYear);
     setUse24HourFormat(savedUse24HourFormat);
-  }, []);
+  };
 
-  // Save to localStorage whenever settings change
-  useEffect(() => {
+  const loadSettingsFromBackend = async () => {
+    if (!user) return;
+    
     try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('clockPosition', clockPosition);
-      }
-    } catch (error) {
-      console.warn('Error saving clockPosition to localStorage:', error);
-    }
-  }, [clockPosition]);
-  
-  useEffect(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('showHeaderTitle', JSON.stringify(showHeaderTitle));
-      }
-    } catch (error) {
-      console.warn('Error saving showHeaderTitle to localStorage:', error);
-    }
-  }, [showHeaderTitle]);
-  
-  useEffect(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('customHeaderTitle', customHeaderTitle);
-      }
-    } catch (error) {
-      console.warn('Error saving customHeaderTitle to localStorage:', error);
-    }
-  }, [customHeaderTitle]);
-  
-  useEffect(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('showSidebarCrown', JSON.stringify(showSidebarCrown));
-      }
-    } catch (error) {
-      console.warn('Error saving showSidebarCrown to localStorage:', error);
-    }
-  }, [showSidebarCrown]);
-  
-  useEffect(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('customSidebarTitle', customSidebarTitle);
-      }
-    } catch (error) {
-      console.warn('Error saving customSidebarTitle to localStorage:', error);
-    }
-  }, [customSidebarTitle]);
+      const { data, error } = await supabase
+        .from('user_settings')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
 
-  // Save clock settings to localStorage
-  useEffect(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('showSeconds', JSON.stringify(showSeconds));
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error loading settings:', error);
+        loadSettingsFromLocalStorage(); // Fallback to localStorage
+        return;
       }
-    } catch (error) {
-      console.warn('Error saving showSeconds to localStorage:', error);
-    }
-  }, [showSeconds]);
 
-  useEffect(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('showDate', JSON.stringify(showDate));
+      if (data) {
+        setCustomHeaderTitle(data.dashboard_title || 'Premium Dashboard');
+        setCustomSidebarTitle(data.sidebar_title || 'Premium Dashboard');
+        // Load other settings from dashboard_layout JSON if stored there
+        const layout = (data.dashboard_layout as any) || {};
+        if (layout.clockPosition) setClockPosition(layout.clockPosition);
+        if (layout.showHeaderTitle !== undefined) setShowHeaderTitle(layout.showHeaderTitle);
+        if (layout.showSidebarCrown !== undefined) setShowSidebarCrown(layout.showSidebarCrown);
+        if (layout.showSeconds !== undefined) setShowSeconds(layout.showSeconds);
+        if (layout.showDate !== undefined) setShowDate(layout.showDate);
+        if (layout.showYear !== undefined) setShowYear(layout.showYear);
+        if (layout.use24HourFormat !== undefined) setUse24HourFormat(layout.use24HourFormat);
+      } else {
+        // No settings found, use defaults and create initial record
+        await saveSettingsToBackend();
       }
     } catch (error) {
-      console.warn('Error saving showDate to localStorage:', error);
+      console.error('Error loading settings:', error);
+      loadSettingsFromLocalStorage(); // Fallback to localStorage
     }
-  }, [showDate]);
+  };
 
-  useEffect(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('showYear', JSON.stringify(showYear));
-      }
-    } catch (error) {
-      console.warn('Error saving showYear to localStorage:', error);
-    }
-  }, [showYear]);
+  const saveSettingsToBackend = async () => {
+    if (!user) return;
 
-  useEffect(() => {
     try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('use24HourFormat', JSON.stringify(use24HourFormat));
+      const layoutSettings = {
+        clockPosition,
+        showHeaderTitle,
+        showSidebarCrown,
+        showSeconds,
+        showDate,
+        showYear,
+        use24HourFormat,
+      };
+
+      const { error } = await supabase
+        .from('user_settings')
+        .upsert({
+          user_id: user.id,
+          dashboard_title: customHeaderTitle,
+          sidebar_title: customSidebarTitle,
+          sidebar_collapsed: false, // You can add this to state if needed
+          dashboard_layout: layoutSettings,
+        });
+
+      if (error) {
+        console.error('Error saving settings:', error);
       }
     } catch (error) {
-      console.warn('Error saving use24HourFormat to localStorage:', error);
+      console.error('Error saving settings:', error);
     }
-  }, [use24HourFormat]);
+  };
+
+  // Save settings (to backend if authenticated, otherwise localStorage)
+  useEffect(() => {
+    const saveSettings = () => {
+      if (user) {
+        // Debounce backend saves
+        const timer = setTimeout(saveSettingsToBackend, 1000);
+        return () => clearTimeout(timer);
+      } else {
+        // Save to localStorage immediately
+        try {
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('clockPosition', clockPosition);
+            localStorage.setItem('showHeaderTitle', JSON.stringify(showHeaderTitle));
+            localStorage.setItem('customHeaderTitle', customHeaderTitle);
+            localStorage.setItem('showSidebarCrown', JSON.stringify(showSidebarCrown));
+            localStorage.setItem('customSidebarTitle', customSidebarTitle);
+            localStorage.setItem('showSeconds', JSON.stringify(showSeconds));
+            localStorage.setItem('showDate', JSON.stringify(showDate));
+            localStorage.setItem('showYear', JSON.stringify(showYear));
+            localStorage.setItem('use24HourFormat', JSON.stringify(use24HourFormat));
+          }
+        } catch (error) {
+          console.warn('Error saving settings to localStorage:', error);
+        }
+      }
+    };
+
+    const cleanup = saveSettings();
+    return cleanup;
+  }, [
+    clockPosition,
+    showHeaderTitle,
+    customHeaderTitle,
+    showSidebarCrown,
+    customSidebarTitle,
+    showSeconds,
+    showDate,
+    showYear,
+    use24HourFormat,
+    user,
+  ]);
 
   const value: SettingsContextType = {
     clockPosition,
