@@ -75,16 +75,25 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [showYear, setShowYear] = useState<boolean>(true);
   const [use24HourFormat, setUse24HourFormat] = useState<boolean>(false);
 
-  // Load settings from backend if user is authenticated, otherwise localStorage
+  // Initialize settings from localStorage first, then override with backend if authenticated
+  useEffect(() => {
+    // Always load localStorage first to have immediate settings
+    loadSettingsFromLocalStorage();
+  }, []);
+
+  // When user authentication state changes, handle backend sync
   useEffect(() => {
     if (user) {
+      // User just signed in - load from backend and merge with current settings
       loadSettingsFromBackend();
     } else {
-      loadSettingsFromLocalStorage();
+      // User signed out - ensure current settings are saved to localStorage
+      saveCurrentSettingsToLocalStorage();
     }
   }, [user]);
 
   const loadSettingsFromLocalStorage = () => {
+    console.log('Loading settings from localStorage...');
     const savedClockPosition = getStorageString('clockPosition', 'left') as 'left' | 'center' | 'right';
     const savedShowHeaderTitle = getStorageItem('showHeaderTitle', true);
     const savedCustomHeaderTitle = getStorageString('customHeaderTitle', 'Premium Dashboard');
@@ -106,11 +115,40 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setShowDate(savedShowDate);
     setShowYear(savedShowYear);
     setUse24HourFormat(savedUse24HourFormat);
+    
+    console.log('Settings loaded from localStorage:', {
+      showSeconds: savedShowSeconds,
+      showDate: savedShowDate,
+      showYear: savedShowYear,
+      use24HourFormat: savedUse24HourFormat
+    });
+  };
+
+  const saveCurrentSettingsToLocalStorage = () => {
+    console.log('Saving current settings to localStorage...');
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('clockPosition', clockPosition);
+        localStorage.setItem('showHeaderTitle', JSON.stringify(showHeaderTitle));
+        localStorage.setItem('customHeaderTitle', customHeaderTitle);
+        localStorage.setItem('showSidebarCrown', JSON.stringify(showSidebarCrown));
+        localStorage.setItem('customSidebarTitle', customSidebarTitle);
+        localStorage.setItem('showSeconds', JSON.stringify(showSeconds));
+        localStorage.setItem('showDate', JSON.stringify(showDate));
+        localStorage.setItem('showYear', JSON.stringify(showYear));
+        localStorage.setItem('use24HourFormat', JSON.stringify(use24HourFormat));
+        
+        console.log('Current settings saved to localStorage for offline access');
+      }
+    } catch (error) {
+      console.warn('Error saving current settings to localStorage:', error);
+    }
   };
 
   const loadSettingsFromBackend = async () => {
     if (!user) return;
     
+    console.log('Loading settings from backend for user:', user.email);
     try {
       const { data, error } = await supabase
         .from('user_settings')
@@ -120,8 +158,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
       if (error && error.code !== 'PGRST116') {
         console.error('Error loading settings:', error);
-        loadSettingsFromLocalStorage(); // Fallback to localStorage
-        return;
+        console.log('Falling back to localStorage settings');
+        return; // Keep current localStorage settings
       }
 
       if (data) {
@@ -143,13 +181,17 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           showYear: layout.showYear,
           use24HourFormat: layout.use24HourFormat
         });
+        
+        // After loading from backend, also save to localStorage as backup
+        setTimeout(() => saveCurrentSettingsToLocalStorage(), 100);
       } else {
-        // No settings found, use defaults and create initial record
+        console.log('No backend settings found, creating initial record with current settings');
+        // No settings found, save current localStorage settings to backend
         await saveSettingsToBackend();
       }
     } catch (error) {
-      console.error('Error loading settings:', error);
-      loadSettingsFromLocalStorage(); // Fallback to localStorage
+      console.error('Error loading settings from backend:', error);
+      console.log('Keeping current localStorage settings');
     }
   };
 
@@ -186,39 +228,31 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         });
 
       if (error) {
-        console.error('Error saving settings:', error);
+        console.error('Error saving settings to backend:', error);
       } else {
         console.log('Clock settings saved successfully to backend');
+        // Also save to localStorage as backup
+        saveCurrentSettingsToLocalStorage();
       }
     } catch (error) {
-      console.error('Error saving settings:', error);
+      console.error('Error saving settings to backend:', error);
+      // Always save to localStorage as backup
+      saveCurrentSettingsToLocalStorage();
     }
   };
 
-  // Save settings (to backend if authenticated, otherwise localStorage)
+  // Enhanced save logic with better error handling and localStorage backup
   useEffect(() => {
     const saveSettings = () => {
       if (user) {
-        // Debounce backend saves
-        const timer = setTimeout(saveSettingsToBackend, 1000);
+        // User is authenticated - save to backend with localStorage backup
+        const timer = setTimeout(() => {
+          saveSettingsToBackend();
+        }, 1000);
         return () => clearTimeout(timer);
       } else {
-        // Save to localStorage immediately
-        try {
-          if (typeof window !== 'undefined') {
-            localStorage.setItem('clockPosition', clockPosition);
-            localStorage.setItem('showHeaderTitle', JSON.stringify(showHeaderTitle));
-            localStorage.setItem('customHeaderTitle', customHeaderTitle);
-            localStorage.setItem('showSidebarCrown', JSON.stringify(showSidebarCrown));
-            localStorage.setItem('customSidebarTitle', customSidebarTitle);
-            localStorage.setItem('showSeconds', JSON.stringify(showSeconds));
-            localStorage.setItem('showDate', JSON.stringify(showDate));
-            localStorage.setItem('showYear', JSON.stringify(showYear));
-            localStorage.setItem('use24HourFormat', JSON.stringify(use24HourFormat));
-          }
-        } catch (error) {
-          console.warn('Error saving settings to localStorage:', error);
-        }
+        // User not authenticated - save to localStorage immediately
+        saveCurrentSettingsToLocalStorage();
       }
     };
 
