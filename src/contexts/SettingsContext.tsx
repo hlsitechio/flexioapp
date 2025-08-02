@@ -136,21 +136,21 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   // Initialize settings from localStorage first, then override with backend if authenticated
   useEffect(() => {
     console.log('SettingsContext: Initializing settings...');
-    // Always load localStorage first to have immediate settings
-    loadSettingsFromLocalStorage();
-  }, []);
-
-  // When user authentication state changes, handle backend sync ONLY for new users
-  useEffect(() => {
     const currentUserId = user?.id || null;
-    console.log('SettingsContext: User auth state changed:', user?.email || 'No user');
     
-    // Only load from backend if this is a NEW user session (not re-renders)
+    // Always load localStorage first for immediate UI
+    loadSettingsFromLocalStorage();
+    
+    // If user exists and we haven't loaded from backend yet for this user
     if (user && currentUserId !== lastUserIdRef.current && !hasLoadedFromBackendRef.current) {
-      console.log('🔄 New user session detected, loading from backend...');
+      console.log('🔄 New user session detected, will sync with backend...');
       lastUserIdRef.current = currentUserId;
       hasLoadedFromBackendRef.current = true;
-      loadSettingsFromBackend();
+      
+      // Delay backend sync to avoid double render on page reload
+      setTimeout(() => {
+        loadSettingsFromBackend();
+      }, 200);
     } else if (!user) {
       // User signed out - reset flags and save current settings
       console.log('👋 User signed out, resetting state...');
@@ -368,11 +368,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         
         console.log('✅ Backend settings applied successfully');
         
-        // Save updated settings to localStorage as backup (after a short delay)
-        setTimeout(() => {
-          console.log('💾 Backing up backend settings to localStorage...');
-          saveCurrentSettingsToLocalStorage();
-        }, 500);
+        // Note: Settings will be saved to localStorage automatically by the save effect
       } else {
         console.log('📝 No backend settings found, saving current localStorage settings to backend');
         // No settings found, save current localStorage settings to backend
