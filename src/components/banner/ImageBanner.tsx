@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Upload, X, Eye, EyeOff } from 'lucide-react';
+import { Upload, X, Eye, EyeOff, Move } from 'lucide-react';
 import { useSettings } from '@/contexts/SettingsContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
@@ -10,6 +10,7 @@ import { useToast } from '@/components/ui/use-toast';
 export function ImageBanner() {
   const { bannerImage, setBannerImage, showBanner, setShowBanner } = useSettings();
   const [isUploading, setIsUploading] = useState(false);
+  const [bannerHeight, setBannerHeight] = useState(192); // 48 * 4 = 192px (h-48)
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -120,72 +121,84 @@ export function ImageBanner() {
     );
   }
 
+  // Show the banner with image and resize functionality
   return (
     <div className="px-6 pt-6">
       <Card className="relative overflow-hidden group">
-        {bannerImage ? (
-          <>
-            <div 
-              className="h-48 bg-cover bg-center bg-no-repeat rounded-lg"
-              style={{ backgroundImage: `url(${bannerImage})` }}
-            />
-            <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-              <div className="flex gap-2">
-                <Button
-                  onClick={toggleBannerVisibility}
-                  variant="secondary"
-                  size="sm"
-                  className="bg-background/80 backdrop-blur-sm"
-                >
-                  <EyeOff className="h-4 w-4" />
-                </Button>
-                <Button
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={isUploading}
-                  variant="secondary"
-                  size="sm"
-                  className="bg-background/80 backdrop-blur-sm"
-                >
-                  <Upload className="h-4 w-4" />
-                </Button>
-                <Button
-                  onClick={removeBanner}
-                  variant="secondary"
-                  size="sm"
-                  className="bg-background/80 backdrop-blur-sm"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
+        <div 
+          className="bg-cover bg-center bg-no-repeat rounded-lg relative"
+          style={{ 
+            backgroundImage: `url(${bannerImage})`,
+            height: `${bannerHeight}px`,
+            minHeight: '100px',
+            resize: 'vertical',
+            overflow: 'hidden'
+          }}
+        >
+          {/* Control buttons */}
+          <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="flex gap-2">
+              <Button
+                onClick={toggleBannerVisibility}
+                variant="secondary"
+                size="sm"
+                className="bg-background/80 backdrop-blur-sm"
+              >
+                <EyeOff className="h-4 w-4" />
+              </Button>
+              <Button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading}
+                variant="secondary"
+                size="sm"
+                className="bg-background/80 backdrop-blur-sm"
+              >
+                <Upload className="h-4 w-4" />
+              </Button>
+              <Button
+                onClick={removeBanner}
+                variant="secondary"
+                size="sm"
+                className="bg-background/80 backdrop-blur-sm"
+              >
+                <X className="h-4 w-4" />
+              </Button>
             </div>
-            <Input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileSelect}
-              className="hidden"
-            />
-          </>
-        ) : (
-          <div className="h-48 flex items-center justify-center border-dashed border-2 border-muted-foreground/25 rounded-lg">
-            <Button
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isUploading}
-              variant="ghost"
-              className="flex items-center gap-2"
-            >
-              <Upload className="h-4 w-4" />
-              {isUploading ? 'Uploading...' : 'Upload Banner Image'}
-            </Button>
-            <Input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileSelect}
-              className="hidden"
-            />
           </div>
-        )}
+
+          {/* Resize handle */}
+          <div 
+            className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-16 h-4 bg-background/60 backdrop-blur-sm rounded-t-lg cursor-ns-resize opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+            onMouseDown={(e) => {
+              const startY = e.clientY;
+              const startHeight = bannerHeight;
+              
+              const handleMouseMove = (e: MouseEvent) => {
+                const deltaY = e.clientY - startY;
+                const newHeight = Math.max(100, Math.min(600, startHeight + deltaY));
+                setBannerHeight(newHeight);
+              };
+              
+              const handleMouseUp = () => {
+                document.removeEventListener('mousemove', handleMouseMove);
+                document.removeEventListener('mouseup', handleMouseUp);
+              };
+              
+              document.addEventListener('mousemove', handleMouseMove);
+              document.addEventListener('mouseup', handleMouseUp);
+            }}
+          >
+            <Move className="h-3 w-3 text-muted-foreground rotate-90" />
+          </div>
+
+          <Input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileSelect}
+            className="hidden"
+          />
+        </div>
       </Card>
     </div>
   );
