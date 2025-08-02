@@ -120,7 +120,6 @@ export function PromptsGallery() {
     filterPrompts();
   }, [prompts, searchTerm, selectedCategory]);
 
-
   const loadPrompts = async () => {
     if (!user) return;
 
