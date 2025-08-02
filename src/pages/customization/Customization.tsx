@@ -2,6 +2,7 @@ import { DashboardSidebar } from '@/components/sidebar';
 import { TopNavigation } from '@/components/top-navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Appearance } from './Appearance';
+import { GalleryGradient } from './gallery-gradient';
 import { useSettings } from '@/contexts/SettingsContext';
 
 export function Customization() {
@@ -19,6 +20,9 @@ export function Customization() {
             <div className="grid gap-6 md:grid-cols-1 max-w-2xl">
               {/* Appearance Settings */}
               <Appearance />
+              
+              {/* Gallery Gradient */}
+              <GalleryGradient />
             </div>
           </div>
         </main>

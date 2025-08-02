@@ -1,0 +1,1 @@
+export { GalleryGradient } from './GalleryGradient';

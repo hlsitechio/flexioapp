@@ -12,7 +12,7 @@ import { KanbanItem } from '@/types/kanban';
 import { useSettings } from '@/contexts/SettingsContext';
 
 export function Dashboard() {
-  const { editMode, setEditMode } = useSettings();
+  const { editMode, setEditMode, dashboardBackground } = useSettings();
   const [draggedItem, setDraggedItem] = useState<KanbanItem | null>(null);
   
   const sensors = useSensors(
@@ -41,7 +41,7 @@ export function Dashboard() {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="min-h-screen flex w-full bg-background">
+      <div className={`min-h-screen flex w-full ${dashboardBackground}`}>
         <DashboardSidebar />
         
       <div className="flex-1 flex flex-col">

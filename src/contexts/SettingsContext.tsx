@@ -60,6 +60,10 @@ interface SettingsContextType {
   bannerHeight: number;
   setBannerHeight: (height: number) => void;
   
+  // Dashboard background
+  dashboardBackground: string;
+  setDashboardBackground: (background: string) => void;
+  
   // Manual save function
   saveSettingsToBackend: () => Promise<void>;
 }
@@ -132,6 +136,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [bannerImage, setBannerImage] = useState<string>('');
   const [showBanner, setShowBanner] = useState<boolean>(false);
   const [bannerHeight, setBannerHeight] = useState<number>(192);
+  
+  // Dashboard background
+  const [dashboardBackground, setDashboardBackground] = useState<string>('bg-gradient-to-br from-background to-muted/20');
 
   // Initialize settings from localStorage first, then override with backend if authenticated
   useEffect(() => {
@@ -204,6 +211,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const savedBannerImage = getStorageString('bannerImage', '');
     const savedShowBanner = getStorageItem('showBanner', false);
     const savedBannerHeight = getStorageItem('bannerHeight', 192);
+    
+    // Dashboard background
+    const savedDashboardBackground = getStorageString('dashboardBackground', 'bg-gradient-to-br from-background to-muted/20');
 
     console.log('📋 About to set all settings:', {
       showSeconds: savedShowSeconds,
@@ -231,6 +241,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setBannerImage(savedBannerImage);
     setShowBanner(savedShowBanner);
     setBannerHeight(savedBannerHeight);
+    setDashboardBackground(savedDashboardBackground);
     
     console.log('✅ Settings loaded from localStorage');
   };
@@ -267,6 +278,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('bannerImage', bannerImage);
         localStorage.setItem('showBanner', JSON.stringify(showBanner));
         localStorage.setItem('bannerHeight', JSON.stringify(bannerHeight));
+        localStorage.setItem('dashboardBackground', dashboardBackground);
         
         console.log('✅ Current settings saved to localStorage for offline access');
       }
@@ -378,6 +390,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           console.log('📏 Setting bannerHeight from backend:', layout.bannerHeight);
           setBannerHeight(layout.bannerHeight);
         }
+        if (layout.dashboardBackground !== undefined) {
+          console.log('🎨 Setting dashboardBackground from backend:', layout.dashboardBackground);
+          setDashboardBackground(layout.dashboardBackground);
+        }
         
         console.log('✅ Backend settings applied successfully');
         
@@ -420,6 +436,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         bannerImage,
         showBanner,
         bannerHeight,
+        dashboardBackground,
       };
 
       console.log('💾 Saving settings to backend:', {
@@ -500,7 +517,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         }
       }, 2000); // Increased debounce time to reduce frequency
     }
-  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote, bannerImage, showBanner, bannerHeight]);
+  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote, bannerImage, showBanner, bannerHeight, dashboardBackground]);
 
   // Only trigger save when settings actually change (with debouncing)
   useEffect(() => {
@@ -571,6 +588,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setShowBanner,
     bannerHeight,
     setBannerHeight,
+    dashboardBackground,
+    setDashboardBackground,
     saveSettingsToBackend,
   }), [
     clockPosition,
@@ -591,6 +610,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     bannerImage,
     showBanner,
     bannerHeight,
+    dashboardBackground,
     addComponentToSlot,
     removeComponentFromSlot,
     saveSettingsToBackend,
@@ -647,6 +667,8 @@ export function useSettings() {
       setShowBanner: () => {},
       bannerHeight: 192,
       setBannerHeight: () => {},
+      dashboardBackground: 'bg-gradient-to-br from-background to-muted/20',
+      setDashboardBackground: () => {},
       saveSettingsToBackend: async () => {},
     };
   }
