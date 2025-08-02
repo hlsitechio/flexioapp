@@ -14,6 +14,87 @@ export type Database = {
   }
   public: {
     Tables: {
+      pinned_notes: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          pinned_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          pinned_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          pinned_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      recent_activity: {
+        Row: {
+          action_type: string
+          created_at: string
+          description: string
+          id: string
+          metadata: Json | null
+          user_id: string
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          description: string
+          id?: string
+          metadata?: Json | null
+          user_id: string
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          description?: string
+          id?: string
+          metadata?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      starred_items: {
+        Row: {
+          id: string
+          item_id: string
+          item_title: string
+          item_type: string
+          starred_at: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          item_id: string
+          item_title: string
+          item_type: string
+          starred_at?: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          item_id?: string
+          item_title?: string
+          item_type?: string
+          starred_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_settings: {
         Row: {
           created_at: string

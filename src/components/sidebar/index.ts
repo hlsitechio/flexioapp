@@ -4,7 +4,7 @@ export { SidebarDarkModeToggle } from './SidebarDarkModeToggle';
 export { Action } from './Action';
 export { Tools } from './Tools';
 export { KanbanToolbox } from './KanbanToolbox';
-export { Settings } from './Settings';
+export { FavoritesRecent } from './favorites-recent';
 export { UserNavigation } from './UserNavigation';
 export { Profile } from './settings/Profile';
 export { UserSettings } from './settings/UserSettings';

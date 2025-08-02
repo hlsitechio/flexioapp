@@ -9,7 +9,7 @@ import { Edit3, Eye } from 'lucide-react';
 import { DashboardTitle } from './DashboardTitle';
 import { Action } from './Action';
 import { Tools } from './Tools';
-import { Settings } from './Settings';
+import { FavoritesRecent } from './favorites-recent';
 import { UserNavigation } from './UserNavigation';
 import { useSettings } from '@/contexts/SettingsContext';
 
@@ -78,7 +78,7 @@ export function DashboardSidebar() {
             {/* Divider */}
             <div className="h-px bg-sidebar-border" />
             
-            <Settings />
+            <FavoritesRecent />
           </div>
 
           {/* Bottom Section - Profile, Settings, Sign In */}
