@@ -52,6 +52,8 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
   const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const isLoadingRef = useRef(false);
+  const isSavingRef = useRef(false);
   
   // Helper function to safely access localStorage
   const getStorageItem = (key: string, defaultValue: any) => {
@@ -202,8 +204,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const loadSettingsFromBackend = async () => {
-    if (!user) return;
+    if (!user || isLoadingRef.current || isSavingRef.current) return;
     
+    isLoadingRef.current = true;
     console.log('📡 Loading settings from backend for user:', user.email);
     
     // Get current localStorage values to compare
@@ -292,14 +295,18 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error('❌ Error loading settings from backend:', error);
       console.log('🔄 Keeping current localStorage settings');
+    } finally {
+      isLoadingRef.current = false;
     }
   };
 
   const saveSettingsToBackend = async () => {
-    if (!user) {
-      console.log('❌ Cannot save to backend: No user authenticated');
+    if (!user || isLoadingRef.current) {
+      console.log('❌ Cannot save to backend: No user or currently loading');
       return;
     }
+
+    isSavingRef.current = true;
 
     console.log('🚀 Starting save to backend...', { userId: user.id });
 
@@ -349,6 +356,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       // Always save to localStorage as backup
       saveCurrentSettingsToLocalStorage();
       throw error; // Re-throw so the UI can handle it
+    } finally {
+      isSavingRef.current = false;
     }
   };
 
