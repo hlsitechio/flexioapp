@@ -39,6 +39,10 @@ interface SettingsContextType {
   addComponentToSlot: (slotIndex: number, componentName: string, gridSize: string) => void;
   removeComponentFromSlot: (slotIndex: number) => void;
   
+  // Grid settings
+  gridSize: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12';
+  setGridSize: (size: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12') => void;
+  
   // Manual save function
   saveSettingsToBackend: () => Promise<void>;
 }
@@ -92,6 +96,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   
   // Dashboard layout settings
   const [dashboardLayout, setDashboardLayout] = useState<Record<string, { component: string; gridSize: string } | null>>({});
+  
+  // Grid settings
+  const [gridSize, setGridSize] = useState<'2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12'>('4x4');
 
   // Initialize settings from localStorage first, then override with backend if authenticated
   useEffect(() => {
@@ -129,6 +136,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     
     // Dashboard layout
     const savedDashboardLayout = getStorageItem('dashboardLayout', {});
+    
+    // Grid settings
+    const savedGridSize = getStorageString('gridSize', '4x4') as '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12';
 
     console.log('📋 About to set all settings:', {
       showSeconds: savedShowSeconds,
@@ -150,6 +160,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setShowYear(savedShowYear);
     setUse24HourFormat(savedUse24HourFormat);
     setDashboardLayout(savedDashboardLayout);
+    setGridSize(savedGridSize);
     
     console.log('✅ Settings loaded from localStorage');
   };
@@ -180,6 +191,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('showYear', JSON.stringify(showYear));
         localStorage.setItem('use24HourFormat', JSON.stringify(use24HourFormat));
         localStorage.setItem('dashboardLayout', JSON.stringify(dashboardLayout));
+        localStorage.setItem('gridSize', gridSize);
         
         console.log('✅ Current settings saved to localStorage for offline access');
       }
@@ -259,6 +271,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           console.log('🎯 Setting dashboardLayout from backend:', layout.dashboardLayout);
           setDashboardLayout(layout.dashboardLayout);
         }
+        if (layout.gridSize !== undefined) {
+          console.log('📏 Setting gridSize from backend:', layout.gridSize);
+          setGridSize(layout.gridSize);
+        }
         
         console.log('✅ Backend settings applied successfully');
         
@@ -296,6 +312,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         showYear,
         use24HourFormat,
         dashboardLayout,
+        gridSize,
       };
 
       console.log('💾 Saving settings to backend:', {
@@ -344,14 +361,11 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const removeComponentFromSlot = (slotIndex: number) => {
-    // Remove from all grid sizes for this slot
+    // Remove from current grid size only
+    const slotKey = `${gridSize}-${slotIndex}`;
     setDashboardLayout(prev => {
       const newLayout = { ...prev };
-      Object.keys(newLayout).forEach(key => {
-        if (key.endsWith(`-${slotIndex}`)) {
-          delete newLayout[key];
-        }
-      });
+      delete newLayout[slotKey];
       return newLayout;
     });
   };
@@ -421,6 +435,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     showYear,
     use24HourFormat,
     dashboardLayout,
+    gridSize,
     user,
   ]);
 
@@ -451,6 +466,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setDashboardLayout,
     addComponentToSlot,
     removeComponentFromSlot,
+    gridSize,
+    setGridSize,
     saveSettingsToBackend,
   };
 
@@ -493,6 +510,8 @@ export function useSettings() {
       setDashboardLayout: () => {},
       addComponentToSlot: () => {},
       removeComponentFromSlot: () => {},
+      gridSize: '4x4' as const,
+      setGridSize: () => {},
       saveSettingsToBackend: async () => {},
     };
   }

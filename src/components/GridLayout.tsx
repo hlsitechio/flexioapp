@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Grid3X3, Grid2X2, LayoutGrid, Plus, X } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -12,17 +12,15 @@ import {
   DashboardRandomQuote, 
   DashboardCountdownTimer 
 } from '@/components/dashboard';
+
 interface GridLayoutProps {
   editMode: boolean;
 }
-type GridSize = '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12';
-export function GridLayout({
-  editMode
-}: GridLayoutProps) {
-  const [gridSize, setGridSize] = useState<GridSize>('4x4');
+
+export function GridLayout({ editMode }: GridLayoutProps) {
   const navigate = useNavigate();
-  const { dashboardLayout, removeComponentFromSlot } = useSettings();
-  const getGridDimensions = (size: GridSize) => {
+  const { dashboardLayout, removeComponentFromSlot, gridSize, setGridSize } = useSettings();
+  const getGridDimensions = (size: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12') => {
     const dimensions = {
       '2x2': {
         rows: 2,
@@ -51,7 +49,7 @@ export function GridLayout({
     };
     return dimensions[size];
   };
-  const getGridIcon = (size: GridSize) => {
+  const getGridIcon = (size: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12') => {
     switch (size) {
       case '2x2':
       case '3x3':
@@ -125,7 +123,7 @@ export function GridLayout({
               {getGridIcon(gridSize)}
               <span className="text-sm font-medium text-foreground">Grid Size</span>
             </div>
-            <Select value={gridSize} onValueChange={(value: GridSize) => setGridSize(value)}>
+            <Select value={gridSize} onValueChange={setGridSize}>
               <SelectTrigger className="w-32">
                 <SelectValue />
               </SelectTrigger>

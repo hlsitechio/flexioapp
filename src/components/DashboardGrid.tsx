@@ -4,16 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { KanbanBoard } from '@/components/kanban';
 import { KanbanColumn, KanbanItem } from '@/types/kanban';
+import { useSettings } from '@/contexts/SettingsContext';
 
 interface DashboardGridProps {
   editMode: boolean;
   setEditMode: (editMode: boolean) => void;
 }
 
-type GridSize = '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12';
-
 export function DashboardGrid({ editMode, setEditMode }: DashboardGridProps) {
-  const [gridSize, setGridSize] = useState<GridSize>('4x4');
+  const { gridSize, setGridSize } = useSettings();
   const [columns, setColumns] = useState<KanbanColumn[]>([
     {
       id: 'widgets',
@@ -64,7 +63,7 @@ export function DashboardGrid({ editMode, setEditMode }: DashboardGridProps) {
     }
   ]);
 
-  function getMaxItems(size: GridSize): number {
+  function getMaxItems(size: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12'): number {
     const gridSizes = {
       '2x2': 4,
       '3x3': 9, 
@@ -76,7 +75,7 @@ export function DashboardGrid({ editMode, setEditMode }: DashboardGridProps) {
     return gridSizes[size];
   }
 
-  const handleGridSizeChange = (newSize: GridSize) => {
+  const handleGridSizeChange = (newSize: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12') => {
     setGridSize(newSize);
     setColumns(prev => prev.map(col => 
       col.id === 'dashboard' 
@@ -109,7 +108,7 @@ export function DashboardGrid({ editMode, setEditMode }: DashboardGridProps) {
     ));
   };
 
-  const getGridIcon = (size: GridSize) => {
+  const getGridIcon = (size: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12') => {
     switch (size) {
       case '2x2':
       case '3x3':
