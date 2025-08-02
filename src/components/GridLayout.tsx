@@ -88,10 +88,11 @@ export function GridLayout({
     return `https://images.unsplash.com/${placeholderImages[imageIndex]}?w=400&h=300&fit=crop`;
   };
 
-  const renderComponent = (componentName: string) => {
+  const renderComponent = (componentName: string, componentGridSize?: string) => {
+    const size = componentGridSize || gridSize;
     switch (componentName) {
       case 'Calendar':
-        return <Calendar />;
+        return <Calendar gridSize={size as '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12'} />;
       case 'Task Counter':
         return <DashboardTaskCounter />;
       case 'Quick Note':
@@ -179,7 +180,7 @@ export function GridLayout({
                     )}
                     {/* Render the actual component */}
                     <div className="w-full h-full">
-                      {renderComponent(slotComponent.component)}
+                      {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
                     </div>
                   </>
                 ) : editMode ? (
