@@ -81,6 +81,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const isSavingRef = useRef(false);
   const hasLoadedFromBackendRef = useRef(false);
   const lastUserIdRef = useRef<string | null>(null);
+  const realtimeChannelRef = useRef<any>(null);
   
   // Helper function to safely access localStorage
   const getStorageItem = (key: string, defaultValue: any) => {
@@ -168,6 +169,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       lastUserIdRef.current = currentUserId;
       hasLoadedFromBackendRef.current = true;
       
+      // Setup realtime subscription
+      setupRealtimeSubscription();
+      
       // Delay backend sync to avoid double render on page reload
       setTimeout(() => {
         if (isLoadingRef.current) {
@@ -180,6 +184,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       hasLoadedFromBackendRef.current = false;
       lastUserIdRef.current = null;
       saveCurrentSettingsToLocalStorage();
+      cleanupRealtimeSubscription();
       isLoadingRef.current = false;
     } else {
       // Same user, no backend sync needed
@@ -298,6 +303,123 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       console.warn('❌ Error saving current settings to localStorage:', error);
     }
   };
+
+  // Realtime subscription setup
+  const setupRealtimeSubscription = () => {
+    if (!user || realtimeChannelRef.current) {
+      return;
+    }
+
+    console.log('🔄 Setting up realtime subscription for user settings...');
+    
+    const channel = supabase
+      .channel('settings-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'user_settings',
+          filter: `user_id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('📡 Realtime settings update received:', payload);
+          
+          if (payload.eventType === 'UPDATE' && payload.new && !isSavingRef.current) {
+            console.log('🔄 Applying realtime settings update...');
+            applySettingsFromPayload(payload.new);
+          }
+        }
+      )
+      .subscribe((status) => {
+        console.log('📡 Realtime subscription status:', status);
+      });
+
+    realtimeChannelRef.current = channel;
+  };
+
+  const cleanupRealtimeSubscription = () => {
+    if (realtimeChannelRef.current) {
+      console.log('🧹 Cleaning up realtime subscription...');
+      supabase.removeChannel(realtimeChannelRef.current);
+      realtimeChannelRef.current = null;
+    }
+  };
+
+  const applySettingsFromPayload = (data: any) => {
+    console.log('🔄 Applying settings from realtime payload:', data);
+    
+    if (data.clock_position !== undefined) {
+      setClockPosition(data.clock_position as 'left' | 'center' | 'right');
+    }
+    if (data.show_header_title !== undefined) {
+      setShowHeaderTitle(data.show_header_title);
+    }
+    if (data.custom_header_title !== undefined) {
+      setCustomHeaderTitle(data.custom_header_title);
+    }
+    if (data.show_sidebar_crown !== undefined) {
+      setShowSidebarCrown(data.show_sidebar_crown);
+    }
+    if (data.custom_sidebar_title !== undefined) {
+      setCustomSidebarTitle(data.custom_sidebar_title);
+    }
+    if (data.sidebar_collapsed !== undefined) {
+      setSidebarCollapsed(data.sidebar_collapsed);
+    }
+    if (data.show_seconds !== undefined) {
+      setShowSeconds(data.show_seconds);
+    }
+    if (data.show_date !== undefined) {
+      setShowDate(data.show_date);
+    }
+    if (data.show_year !== undefined) {
+      setShowYear(data.show_year);
+    }
+    if (data.use_24_hour_format !== undefined) {
+      setUse24HourFormat(data.use_24_hour_format);
+    }
+    if (data.grid_size !== undefined) {
+      setGridSize(data.grid_size as GridSize);
+    }
+    if (data.top_navigation_widgets !== undefined) {
+      setTopNavigationWidgets(data.top_navigation_widgets as string[]);
+    }
+    if (data.quick_note !== undefined) {
+      setQuickNote(data.quick_note);
+    }
+    if (data.banner_image !== undefined) {
+      setBannerImage(data.banner_image);
+    }
+    if (data.show_banner !== undefined) {
+      setShowBanner(data.show_banner);
+    }
+    if (data.banner_height !== undefined) {
+      setBannerHeight(data.banner_height);
+    }
+    if (data.dashboard_background !== undefined) {
+      setDashboardBackground(data.dashboard_background);
+    }
+    if (data.hide_dividers !== undefined) {
+      setHideDividers(data.hide_dividers);
+    }
+    if (data.edit_mode !== undefined) {
+      setEditMode(data.edit_mode);
+    }
+    if (data.dashboard_layout !== undefined) {
+      setDashboardLayout(data.dashboard_layout as Record<string, { component: string; gridSize: string } | null>);
+    }
+    
+    // Save updated settings to localStorage
+    saveCurrentSettingsToLocalStorage();
+  };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      cleanupRealtimeSubscription();
+    };
+  }, []);
 
   const loadSettingsFromBackend = async () => {
     if (!user || isLoadingRef.current || isSavingRef.current) {
