@@ -2,6 +2,8 @@ import { DashboardSidebar } from '@/components/sidebar';
 import { TopNavigation } from '@/components/top-navigation';
 import { DashboardWidgets } from './dashboard-widgets';
 import { SidebarComponents } from './sidebar-components';
+import { PromptsGallery } from './prompts-gallery';
+import { CodeBlock } from './code-block';
 import { useSettings } from '@/contexts/SettingsContext';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Target } from 'lucide-react';
@@ -57,6 +59,12 @@ export function ComponentsPage() {
 
               {/* Sidebar Components Section - Only show if not targeting a specific slot */}
               {!targetSlot && <SidebarComponents />}
+
+              {/* Prompts Gallery Section - Only show if not targeting a specific slot */}
+              {!targetSlot && <PromptsGallery />}
+
+              {/* Code Block Section - Only show if not targeting a specific slot */}
+              {!targetSlot && <CodeBlock />}
             </div>
           </div>
         </main>
