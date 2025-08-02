@@ -377,17 +377,39 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           console.log('📝 Setting quickNote from backend:', data.quick_note);
           setQuickNote(data.quick_note);
         }
-        if (data.banner_image !== undefined) {
-          console.log('🖼️ Setting bannerImage from backend:', data.banner_image);
-          setBannerImage(data.banner_image);
+        // Handle banner settings with legacy data migration
+        let finalBannerImage = data.banner_image;
+        let finalShowBanner = data.show_banner;
+        let finalBannerHeight = data.banner_height;
+        
+        // Check for legacy banner data in dashboard_layout field
+        if (data.dashboard_layout && typeof data.dashboard_layout === 'object') {
+          const legacy = data.dashboard_layout as any;
+          if (legacy.bannerImage && !finalBannerImage) {
+            console.log('🔄 Migrating banner image from legacy data:', legacy.bannerImage);
+            finalBannerImage = legacy.bannerImage;
+          }
+          if (legacy.showBanner !== undefined && finalShowBanner === undefined) {
+            console.log('🔄 Migrating show banner from legacy data:', legacy.showBanner);
+            finalShowBanner = legacy.showBanner;
+          }
+          if (legacy.bannerHeight && !finalBannerHeight) {
+            console.log('🔄 Migrating banner height from legacy data:', legacy.bannerHeight);
+            finalBannerHeight = legacy.bannerHeight;
+          }
         }
-        if (data.show_banner !== undefined) {
-          console.log('👁️ Setting showBanner from backend:', data.show_banner);
-          setShowBanner(data.show_banner);
+        
+        if (finalBannerImage !== undefined) {
+          console.log('🖼️ Setting bannerImage from backend:', finalBannerImage);
+          setBannerImage(finalBannerImage);
         }
-        if (data.banner_height !== undefined) {
-          console.log('📏 Setting bannerHeight from backend:', data.banner_height);
-          setBannerHeight(data.banner_height);
+        if (finalShowBanner !== undefined) {
+          console.log('👁️ Setting showBanner from backend:', finalShowBanner);
+          setShowBanner(finalShowBanner);
+        }
+        if (finalBannerHeight !== undefined) {
+          console.log('📏 Setting bannerHeight from backend:', finalBannerHeight);
+          setBannerHeight(finalBannerHeight);
         }
         if (data.dashboard_background !== undefined) {
           console.log('🎨 Setting dashboardBackground from backend:', data.dashboard_background);
@@ -566,7 +588,11 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       showYear === true && 
       use24HourFormat === false &&
       Object.keys(dashboardLayout).length === 0 &&
-      quickNote === ''
+      quickNote === '' &&
+      bannerImage === '' &&
+      showBanner === false &&
+      bannerHeight === 192 &&
+      dashboardBackground === 'bg-gradient-to-br from-background to-muted/20'
     ) {
       return;
     }
