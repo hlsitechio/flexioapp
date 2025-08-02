@@ -8,9 +8,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
 
 export function ImageBanner() {
-  const { bannerImage, setBannerImage, showBanner, setShowBanner } = useSettings();
+  const { bannerImage, setBannerImage, showBanner, setShowBanner, bannerHeight, setBannerHeight } = useSettings();
   const [isUploading, setIsUploading] = useState(false);
-  const [bannerHeight, setBannerHeight] = useState(192); // 48 * 4 = 192px (h-48)
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 

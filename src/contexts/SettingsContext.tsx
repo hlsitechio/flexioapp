@@ -57,6 +57,8 @@ interface SettingsContextType {
   setBannerImage: (image: string) => void;
   showBanner: boolean;
   setShowBanner: (show: boolean) => void;
+  bannerHeight: number;
+  setBannerHeight: (height: number) => void;
   
   // Manual save function
   saveSettingsToBackend: () => Promise<void>;
@@ -129,6 +131,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   // Banner settings
   const [bannerImage, setBannerImage] = useState<string>('');
   const [showBanner, setShowBanner] = useState<boolean>(false);
+  const [bannerHeight, setBannerHeight] = useState<number>(192);
 
   // Initialize settings from localStorage first, then override with backend if authenticated
   useEffect(() => {
@@ -187,6 +190,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     // Banner settings
     const savedBannerImage = getStorageString('bannerImage', '');
     const savedShowBanner = getStorageItem('showBanner', false);
+    const savedBannerHeight = getStorageItem('bannerHeight', 192);
 
     console.log('📋 About to set all settings:', {
       showSeconds: savedShowSeconds,
@@ -213,6 +217,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setQuickNote(savedQuickNote);
     setBannerImage(savedBannerImage);
     setShowBanner(savedShowBanner);
+    setBannerHeight(savedBannerHeight);
     
     console.log('✅ Settings loaded from localStorage');
   };
@@ -248,6 +253,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('quickNote', quickNote);
         localStorage.setItem('bannerImage', bannerImage);
         localStorage.setItem('showBanner', JSON.stringify(showBanner));
+        localStorage.setItem('bannerHeight', JSON.stringify(bannerHeight));
         
         console.log('✅ Current settings saved to localStorage for offline access');
       }
@@ -355,6 +361,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           console.log('👁️ Setting showBanner from backend:', layout.showBanner);
           setShowBanner(layout.showBanner);
         }
+        if (layout.bannerHeight !== undefined) {
+          console.log('📏 Setting bannerHeight from backend:', layout.bannerHeight);
+          setBannerHeight(layout.bannerHeight);
+        }
         
         console.log('✅ Backend settings applied successfully');
         
@@ -400,6 +410,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         topNavigationWidgets,
         bannerImage,
         showBanner,
+        bannerHeight,
       };
 
       console.log('💾 Saving settings to backend:', {
@@ -480,7 +491,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         }
       }, 2000); // Increased debounce time to reduce frequency
     }
-  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote, bannerImage, showBanner]);
+  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote, bannerImage, showBanner, bannerHeight]);
 
   // Only trigger save when settings actually change (with debouncing)
   useEffect(() => {
@@ -549,6 +560,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setBannerImage,
     showBanner,
     setShowBanner,
+    bannerHeight,
+    setBannerHeight,
     saveSettingsToBackend,
   }), [
     clockPosition,
@@ -568,6 +581,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     quickNote,
     bannerImage,
     showBanner,
+    bannerHeight,
     addComponentToSlot,
     removeComponentFromSlot,
     saveSettingsToBackend,
@@ -622,6 +636,8 @@ export function useSettings() {
       setBannerImage: () => {},
       showBanner: false,
       setShowBanner: () => {},
+      bannerHeight: 192,
+      setBannerHeight: () => {},
       saveSettingsToBackend: async () => {},
     };
   }
