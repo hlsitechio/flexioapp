@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from '@/components/ui/carousel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -181,6 +182,8 @@ export function CodeBlock() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState('all');
   const [showDialog, setShowDialog] = useState(false);
+  const [api, setApi] = useState<CarouselApi>();
+  const carouselRef = useRef<HTMLDivElement>(null);
   const [newSnippet, setNewSnippet] = useState({
     title: '',
     description: '',
@@ -206,6 +209,31 @@ export function CodeBlock() {
   useEffect(() => {
     filterSnippets();
   }, [snippets, searchTerm, selectedLanguage]);
+
+  // Mouse wheel functionality for carousel
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      
+      if (!api) return;
+
+      // Scroll to next/previous based on wheel direction
+      if (e.deltaY > 0) {
+        api.scrollNext();
+      } else {
+        api.scrollPrev();
+      }
+    };
+
+    const carousel = carouselRef.current;
+    if (carousel && api) {
+      carousel.addEventListener('wheel', handleWheel, { passive: false });
+      
+      return () => {
+        carousel.removeEventListener('wheel', handleWheel);
+      };
+    }
+  }, [api]);
 
   const loadSnippets = async () => {
     if (!user) return;
@@ -466,83 +494,103 @@ export function CodeBlock() {
         </Select>
       </div>
 
-      {/* Snippets Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {filteredSnippets.map((snippet) => (
-          <Card key={snippet.id} className="hover:shadow-md transition-shadow">
-            <CardHeader className="pb-3">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-2 flex-1">
-                  <Code2 className="h-4 w-4 text-primary" />
-                  <CardTitle className="text-sm font-medium">{snippet.title}</CardTitle>
-                  <div className={`w-2 h-2 rounded-full ${getLanguageColor(snippet.language)}`} />
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-8 w-8 p-0"
-                  onClick={() => copyCode(snippet.code)}
-                >
-                  <Copy className="h-3 w-3" />
-                </Button>
-              </div>
-              {snippet.description && (
-                <p className="text-xs text-muted-foreground">{snippet.description}</p>
-              )}
-            </CardHeader>
+      {/* Snippets Carousel */}
+      <div ref={carouselRef}>
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full max-w-7xl mx-auto"
+          setApi={setApi}
+        >
+          <CarouselContent className="-ml-2 md:-ml-4">
+            {filteredSnippets.map((snippet) => (
+              <CarouselItem key={snippet.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/2 xl:basis-1/3">
+                <Card className="hover:shadow-md transition-shadow h-full">
+                  <CardHeader className="pb-2">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <Code2 className="h-3 w-3 text-primary flex-shrink-0" />
+                        <CardTitle className="text-sm font-medium truncate">{snippet.title}</CardTitle>
+                        <div className={`w-2 h-2 rounded-full ${getLanguageColor(snippet.language)} flex-shrink-0`} />
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 w-6 p-0 flex-shrink-0"
+                        onClick={() => copyCode(snippet.code)}
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    </div>
+                    {snippet.description && (
+                      <p className="text-xs text-muted-foreground line-clamp-2">{snippet.description}</p>
+                    )}
+                  </CardHeader>
+                  
+                  <CardContent className="pt-0 flex-1">
+                    <div className="space-y-2">
+                      <div className="bg-muted/50 rounded p-2 overflow-x-auto h-20">
+                        <pre className="text-xs font-mono whitespace-pre-wrap line-clamp-4">
+                          {snippet.code.length > 180 
+                            ? `${snippet.code.substring(0, 180)}...` 
+                            : snippet.code
+                          }
+                        </pre>
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-1">
+                        <Badge variant="secondary" className="text-xs py-0 px-1 h-4">
+                          {languages.find(lang => lang.value === snippet.language)?.label || snippet.language}
+                        </Badge>
+                        {snippet.tags.slice(0, 2).map((tag, index) => (
+                          <Badge key={index} variant="outline" className="text-xs py-0 px-1 h-4">
+                            {tag}
+                          </Badge>
+                        ))}
+                        {snippet.tags.length > 2 && (
+                          <Badge variant="outline" className="text-xs py-0 px-1 h-4">
+                            +{snippet.tags.length - 2}
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      <div className="flex justify-between items-center text-xs text-muted-foreground">
+                        <span>{snippet.code.split('\n').length} lines</span>
+                        {snippet.usage_count > 0 && (
+                          <span>{snippet.usage_count}</span>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
             
-            <CardContent className="pt-0">
-              <div className="space-y-3">
-                <div className="bg-muted/50 rounded p-3 overflow-x-auto">
-                  <pre className="text-xs font-mono whitespace-pre-wrap">
-                    {snippet.code.length > 300 
-                      ? `${snippet.code.substring(0, 300)}...` 
-                      : snippet.code
-                    }
-                  </pre>
-                </div>
-                
-                <div className="flex flex-wrap gap-1">
-                  <Badge variant="secondary" className="text-xs">
-                    {languages.find(lang => lang.value === snippet.language)?.label || snippet.language}
-                  </Badge>
-                  {snippet.tags.slice(0, 3).map((tag, index) => (
-                    <Badge key={index} variant="outline" className="text-xs">
-                      <Tag className="h-2 w-2 mr-1" />
-                      {tag}
-                    </Badge>
-                  ))}
-                  {snippet.tags.length > 3 && (
-                    <Badge variant="outline" className="text-xs">
-                      +{snippet.tags.length - 3}
-                    </Badge>
-                  )}
-                </div>
-                
-                <div className="flex justify-between items-center text-xs text-muted-foreground">
-                  <span>{snippet.code.split('\n').length} lines</span>
-                  {snippet.usage_count > 0 && (
-                    <span>{snippet.usage_count} uses</span>
-                  )}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+            {filteredSnippets.length === 0 && (
+              <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                <Card className="h-full">
+                  <CardContent className="flex items-center justify-center h-48">
+                    <div className="text-center">
+                      <Code2 className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                      <h3 className="text-sm font-medium text-foreground mb-1">No snippets found</h3>
+                      <p className="text-xs text-muted-foreground">
+                        {searchTerm || selectedLanguage !== 'all'
+                          ? 'Try adjusting filters'
+                          : 'Create your first snippet'
+                        }
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            )}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
       </div>
-
-      {filteredSnippets.length === 0 && (
-        <div className="text-center py-12">
-          <Code2 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-foreground mb-2">No code snippets found</h3>
-          <p className="text-muted-foreground">
-            {searchTerm || selectedLanguage !== 'all'
-              ? 'Try adjusting your search or filters'
-              : 'Create your first code snippet to get started'
-            }
-          </p>
-        </div>
-      )}
     </div>
   );
 }
