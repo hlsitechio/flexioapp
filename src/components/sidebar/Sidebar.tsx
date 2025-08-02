@@ -68,9 +68,6 @@ export function DashboardSidebar() {
               )}
             </div>
             
-            {/* Divider */}
-            <div className="h-px bg-sidebar-border" />
-            
             <Action />
             
             {/* Divider */}
