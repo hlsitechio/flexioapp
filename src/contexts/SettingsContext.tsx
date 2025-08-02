@@ -54,6 +54,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
   const isLoadingRef = useRef(false);
   const isSavingRef = useRef(false);
+  const hasLoadedFromBackendRef = useRef(false);
+  const lastUserIdRef = useRef<string | null>(null);
   
   // Helper function to safely access localStorage
   const getStorageItem = (key: string, defaultValue: any) => {
@@ -110,17 +112,25 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     loadSettingsFromLocalStorage();
   }, []);
 
-  // When user authentication state changes, handle backend sync
+  // When user authentication state changes, handle backend sync ONLY for new users
   useEffect(() => {
+    const currentUserId = user?.id || null;
     console.log('SettingsContext: User auth state changed:', user?.email || 'No user');
-    if (user) {
-      // User just signed in - load from backend and merge with current settings
+    
+    // Only load from backend if this is a NEW user session (not re-renders)
+    if (user && currentUserId !== lastUserIdRef.current && !hasLoadedFromBackendRef.current) {
+      console.log('🔄 New user session detected, loading from backend...');
+      lastUserIdRef.current = currentUserId;
+      hasLoadedFromBackendRef.current = true;
       loadSettingsFromBackend();
-    } else {
-      // User signed out - ensure current settings are saved to localStorage
+    } else if (!user) {
+      // User signed out - reset flags and save current settings
+      console.log('👋 User signed out, resetting state...');
+      hasLoadedFromBackendRef.current = false;
+      lastUserIdRef.current = null;
       saveCurrentSettingsToLocalStorage();
     }
-  }, [user]);
+  }, [user?.id]); // Only depend on user.id, not the entire user object
 
   const loadSettingsFromLocalStorage = () => {
     console.log('🔄 Loading settings from localStorage...');
@@ -204,7 +214,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const loadSettingsFromBackend = async () => {
-    if (!user || isLoadingRef.current || isSavingRef.current) return;
+    if (!user || isLoadingRef.current || isSavingRef.current) {
+      console.log('🚫 Skipping backend load: user, loading, or saving state prevents it');
+      return;
+    }
     
     isLoadingRef.current = true;
     console.log('📡 Loading settings from backend for user:', user.email);
