@@ -266,7 +266,7 @@ export function PromptsGallery() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 h-full p-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-semibold text-foreground">Prompts Gallery</h2>
@@ -393,7 +393,7 @@ export function PromptsGallery() {
             align: "start",
             loop: true,
           }}
-          className="w-full max-w-7xl mx-auto"
+          className="w-full"
           setApi={setApi}
         >
           <CarouselContent className="-ml-2 md:-ml-4">
