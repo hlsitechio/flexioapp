@@ -2,6 +2,7 @@ import { CodeBlock } from '@/pages/components/code-block';
 import { DashboardSidebar } from '@/components/sidebar';
 import { TopNavigation } from '@/components/top-navigation';
 import { NotificationSidebar } from '@/components/sidebar/notifications';
+import { ImageBanner } from '@/components/banner';
 import { useSettings } from '@/contexts/SettingsContext';
 
 export function CodeSnippetsPage() {
@@ -13,6 +14,8 @@ export function CodeSnippetsPage() {
       
       <div className="flex-1 flex flex-col">
         <TopNavigation editMode={editMode} />
+        
+        <ImageBanner />
         
         <main className="flex-1 p-6">
           <div className="max-w-7xl mx-auto">

@@ -52,6 +52,12 @@ interface SettingsContextType {
   gridSize: GridSize;
   setGridSize: (size: GridSize) => void;
   
+  // Banner settings
+  bannerImage: string;
+  setBannerImage: (image: string) => void;
+  showBanner: boolean;
+  setShowBanner: (show: boolean) => void;
+  
   // Manual save function
   saveSettingsToBackend: () => Promise<void>;
 }
@@ -119,6 +125,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   
   // Quick note
   const [quickNote, setQuickNote] = useState<string>('');
+  
+  // Banner settings
+  const [bannerImage, setBannerImage] = useState<string>('');
+  const [showBanner, setShowBanner] = useState<boolean>(false);
 
   // Initialize settings from localStorage first, then override with backend if authenticated
   useEffect(() => {
@@ -173,6 +183,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     
     // Quick note
     const savedQuickNote = getStorageString('quickNote', '');
+    
+    // Banner settings
+    const savedBannerImage = getStorageString('bannerImage', '');
+    const savedShowBanner = getStorageItem('showBanner', false);
 
     console.log('📋 About to set all settings:', {
       showSeconds: savedShowSeconds,
@@ -197,6 +211,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setGridSize(savedGridSize);
     setTopNavigationWidgets(savedTopNavigationWidgets);
     setQuickNote(savedQuickNote);
+    setBannerImage(savedBannerImage);
+    setShowBanner(savedShowBanner);
     
     console.log('✅ Settings loaded from localStorage');
   };
@@ -230,6 +246,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('gridSize', gridSize);
         localStorage.setItem('topNavigationWidgets', JSON.stringify(topNavigationWidgets));
         localStorage.setItem('quickNote', quickNote);
+        localStorage.setItem('bannerImage', bannerImage);
+        localStorage.setItem('showBanner', JSON.stringify(showBanner));
         
         console.log('✅ Current settings saved to localStorage for offline access');
       }
@@ -328,6 +346,16 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           setQuickNote(data.quick_note);
         }
         
+        // Set banner settings from backend if they exist
+        if (layout.bannerImage !== undefined) {
+          console.log('🖼️ Setting bannerImage from backend:', layout.bannerImage);
+          setBannerImage(layout.bannerImage);
+        }
+        if (layout.showBanner !== undefined) {
+          console.log('👁️ Setting showBanner from backend:', layout.showBanner);
+          setShowBanner(layout.showBanner);
+        }
+        
         console.log('✅ Backend settings applied successfully');
         
         // Save updated settings to localStorage as backup (after a short delay)
@@ -370,6 +398,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         dashboardLayout,
         gridSize,
         topNavigationWidgets,
+        bannerImage,
+        showBanner,
       };
 
       console.log('💾 Saving settings to backend:', {
@@ -450,7 +480,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         }
       }, 2000); // Increased debounce time to reduce frequency
     }
-  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote]);
+  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote, bannerImage, showBanner]);
 
   // Only trigger save when settings actually change (with debouncing)
   useEffect(() => {
@@ -515,6 +545,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setTopNavigationWidgets,
     quickNote,
     setQuickNote,
+    bannerImage,
+    setBannerImage,
+    showBanner,
+    setShowBanner,
     saveSettingsToBackend,
   }), [
     clockPosition,
@@ -532,6 +566,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     gridSize,
     topNavigationWidgets,
     quickNote,
+    bannerImage,
+    showBanner,
     addComponentToSlot,
     removeComponentFromSlot,
     saveSettingsToBackend,
@@ -582,6 +618,10 @@ export function useSettings() {
       setTopNavigationWidgets: () => {},
       quickNote: '',
       setQuickNote: () => {},
+      bannerImage: '',
+      setBannerImage: () => {},
+      showBanner: false,
+      setShowBanner: () => {},
       saveSettingsToBackend: async () => {},
     };
   }

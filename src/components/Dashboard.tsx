@@ -4,6 +4,7 @@ import { DashboardSidebar } from './sidebar';
 import { NotificationSidebar } from './sidebar/notifications';
 import { TopNavigation } from './top-navigation';
 import { GridLayout } from './GridLayout';
+import { ImageBanner } from './banner';
 import { KanbanCard } from './kanban/KanbanCard';
 import { Button } from '@/components/ui/button';
 import { Edit3, Eye } from 'lucide-react';
@@ -45,6 +46,8 @@ export function Dashboard() {
         
       <div className="flex-1 flex flex-col">
         <TopNavigation editMode={editMode} />
+        
+        <ImageBanner />
         
         <main className="flex-1 p-6">
           <GridLayout editMode={editMode} />
