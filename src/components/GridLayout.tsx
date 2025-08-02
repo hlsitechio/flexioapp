@@ -78,5 +78,71 @@ export function GridLayout({
     const imageIndex = index % placeholderImages.length;
     return `https://images.unsplash.com/${placeholderImages[imageIndex]}?w=400&h=300&fit=crop`;
   };
-  return;
+  return (
+    <div className="w-full">
+      {/* Grid Size Selector */}
+      {editMode && (
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2">
+              {getGridIcon(gridSize)}
+              <span className="text-sm font-medium text-foreground">Grid Size</span>
+            </div>
+            <Select value={gridSize} onValueChange={(value: GridSize) => setGridSize(value)}>
+              <SelectTrigger className="w-32">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="2x2">2×2</SelectItem>
+                <SelectItem value="3x3">3×3</SelectItem>
+                <SelectItem value="4x4">4×4</SelectItem>
+                <SelectItem value="6x6">6×6</SelectItem>
+                <SelectItem value="9x9">9×9</SelectItem>
+                <SelectItem value="12x12">12×12</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      )}
+
+      {/* Dashboard Grid */}
+      <div 
+        className="grid gap-4 w-full"
+        style={{
+          gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+          gridTemplateRows: `repeat(${rows}, minmax(200px, 1fr))`
+        }}
+      >
+        {Array.from({ length: totalCells }, (_, index) => (
+          <Card 
+            key={index}
+            className={`
+              relative group transition-all duration-200 
+              ${editMode ? 'hover:border-primary/50 cursor-pointer' : ''}
+              bg-card/50 backdrop-blur-sm
+            `}
+            onClick={() => handleAddComponent(index)}
+          >
+            <CardContent className="p-6 h-full flex flex-col items-center justify-center">
+              {editMode ? (
+                <div className="flex flex-col items-center space-y-3 text-muted-foreground group-hover:text-primary transition-colors">
+                  <Plus className="h-8 w-8" />
+                  <span className="text-sm font-medium">Add Component</span>
+                  <span className="text-xs opacity-70">Slot {index + 1}</span>
+                </div>
+              ) : (
+                <div className="w-full h-full rounded-lg bg-gradient-to-br from-muted/20 to-muted/40 flex items-center justify-center">
+                  <img 
+                    src={getPlaceholderImage(index)}
+                    alt={`Placeholder ${index + 1}`}
+                    className="w-full h-full object-cover rounded-lg opacity-60"
+                  />
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
 }
