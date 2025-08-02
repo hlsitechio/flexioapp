@@ -464,7 +464,37 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 export function useSettings() {
   const context = useContext(SettingsContext);
   if (context === undefined) {
-    throw new Error('useSettings must be used within a SettingsProvider');
+    console.error('useSettings must be used within a SettingsProvider. Current component tree may not have SettingsProvider as ancestor.');
+    // Return default values to prevent app crash
+    return {
+      clockPosition: 'left' as const,
+      setClockPosition: () => {},
+      showHeaderTitle: true,
+      setShowHeaderTitle: () => {},
+      customHeaderTitle: 'Premium Dashboard',
+      setCustomHeaderTitle: () => {},
+      showSeconds: true,
+      setShowSeconds: () => {},
+      showDate: true,
+      setShowDate: () => {},
+      showYear: true,
+      setShowYear: () => {},
+      use24HourFormat: false,
+      setUse24HourFormat: () => {},
+      showSidebarCrown: true,
+      setShowSidebarCrown: () => {},
+      customSidebarTitle: 'Premium Dashboard',
+      setCustomSidebarTitle: () => {},
+      sidebarCollapsed: false,
+      setSidebarCollapsed: () => {},
+      editMode: false,
+      setEditMode: () => {},
+      dashboardLayout: {},
+      setDashboardLayout: () => {},
+      addComponentToSlot: () => {},
+      removeComponentFromSlot: () => {},
+      saveSettingsToBackend: async () => {},
+    };
   }
   return context;
 }
