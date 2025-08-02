@@ -112,32 +112,55 @@ export function GridLayout({ editMode }: GridLayoutProps) {
       {/* Grid Size Selector */}
       {editMode && (
         <div className="mb-6 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2">
               {getGridIcon(gridSize)}
               <span className="text-sm font-medium text-foreground">Grid Size</span>
             </div>
-            <Select value={gridSize} onValueChange={setGridSize}>
-              <SelectTrigger className="w-32">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">Vertical Grids</div>
-                <SelectItem value="1x2">1×2</SelectItem>
-                <SelectItem value="1x3">1×3</SelectItem>
-                <SelectItem value="1x4">1×4</SelectItem>
-                <SelectItem value="1x6">1×6</SelectItem>
-                <SelectItem value="1x8">1×8</SelectItem>
-                <SelectItem value="1x12">1×12</SelectItem>
-                <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground border-t mt-1 pt-2">Square Grids</div>
-                <SelectItem value="2x2">2×2</SelectItem>
-                <SelectItem value="3x3">3×3</SelectItem>
-                <SelectItem value="4x4">4×4</SelectItem>
-                <SelectItem value="6x6">6×6</SelectItem>
-                <SelectItem value="9x9">9×9</SelectItem>
-                <SelectItem value="12x12">12×12</SelectItem>
-              </SelectContent>
-            </Select>
+            
+            {/* Vertical Grids Dropdown */}
+            <div className="flex items-center space-x-2">
+              <MoreVertical className="h-4 w-4 text-muted-foreground" />
+              <span className="text-xs font-medium text-muted-foreground">Vertical</span>
+              <Select 
+                value={gridSize.startsWith('1x') ? gridSize : ''} 
+                onValueChange={setGridSize}
+              >
+                <SelectTrigger className="w-24 bg-background border-border z-50">
+                  <SelectValue placeholder="1x" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border-border shadow-lg z-50">
+                  <SelectItem value="1x2">1×2</SelectItem>
+                  <SelectItem value="1x3">1×3</SelectItem>
+                  <SelectItem value="1x4">1×4</SelectItem>
+                  <SelectItem value="1x6">1×6</SelectItem>
+                  <SelectItem value="1x8">1×8</SelectItem>
+                  <SelectItem value="1x12">1×12</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Square Grids Dropdown */}
+            <div className="flex items-center space-x-2">
+              <Grid3X3 className="h-4 w-4 text-muted-foreground" />
+              <span className="text-xs font-medium text-muted-foreground">Square</span>
+              <Select 
+                value={!gridSize.startsWith('1x') ? gridSize : ''} 
+                onValueChange={setGridSize}
+              >
+                <SelectTrigger className="w-24 bg-background border-border z-50">
+                  <SelectValue placeholder="NxN" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border-border shadow-lg z-50">
+                  <SelectItem value="2x2">2×2</SelectItem>
+                  <SelectItem value="3x3">3×3</SelectItem>
+                  <SelectItem value="4x4">4×4</SelectItem>
+                  <SelectItem value="6x6">6×6</SelectItem>
+                  <SelectItem value="9x9">9×9</SelectItem>
+                  <SelectItem value="12x12">12×12</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
       )}
