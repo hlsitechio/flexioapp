@@ -4,6 +4,7 @@ import { StickyNote, Edit3, Save, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 
+// Quick Note component with multiple notes support
 export function DashboardQuickNote() {
   const [notes, setNotes] = useState<string[]>([]);
   const [currentNote, setCurrentNote] = useState('');
