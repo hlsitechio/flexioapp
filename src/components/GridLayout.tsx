@@ -18,8 +18,7 @@ import {
   VerticalGridSize,
   SquareGridSize,
   getVerticalGridDimensions,
-  getSquareGridDimensions,
-  IntelligentGridCalculator
+  getSquareGridDimensions
 } from '@/components/grid-layouts';
 
 interface GridLayoutProps {
@@ -29,14 +28,6 @@ interface GridLayoutProps {
 export function GridLayout({ editMode }: GridLayoutProps) {
   const navigate = useNavigate();
   const { dashboardLayout, removeComponentFromSlot, gridSize, setGridSize } = useSettings();
-
-  // Calculate intelligent layout with enhanced responsiveness
-  const intelligentLayout = new IntelligentGridCalculator(
-    gridSize,
-    dashboardLayout,
-    typeof window !== 'undefined' ? window.innerWidth : 1200,
-    typeof window !== 'undefined' ? window.innerHeight : 800
-  ).calculateIntelligentLayout();
   const getGridDimensions = (size: GridSize) => {
     // Check if it's a vertical grid
     if (size.startsWith('1x')) {
@@ -175,186 +166,78 @@ export function GridLayout({ editMode }: GridLayoutProps) {
       )}
 
       {/* Dashboard Grid */}
-      <div className="w-full">
+      <div 
+        className={`grid gap-4 w-full ${editMode ? '' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'}`}
+        style={editMode ? {
+          gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+          gridTemplateRows: `repeat(${rows}, minmax(200px, 1fr))`
+        } : undefined}
+      >
         {editMode ? (
-          // Edit mode - show add slots and existing components
-          gridSize.startsWith('1x') ? (
-            // Mixed layout for vertical grids: 1 horizontal + remaining as squares
-            <div className="space-y-4">
-              {/* First slot - full width */}
-              {(() => {
-                const slotComponent = getSlotComponent(0);
-                const hasComponent = slotComponent && slotComponent.component;
-                
-                return (
-                  <Card 
-                    key={0}
-                    className={`
-                      relative group transition-all duration-200 
-                      ${!hasComponent ? 'hover:border-primary/50 cursor-pointer' : ''}
-                      bg-card/50 backdrop-blur-sm h-48
-                    `}
-                    onClick={() => !hasComponent && handleAddComponent(0)}
-                  >
-                    <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
-                      {hasComponent ? (
-                        <>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            className="absolute top-2 right-2 z-10 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                            onClick={(e) => handleRemoveComponent(0, e)}
-                          >
-                            <X className="h-3 w-3" />
-                          </Button>
-                          <div className="w-full h-full">
-                            {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
-                          </div>
-                        </>
-                      ) : (
-                        <div className="flex flex-col items-center space-y-3 text-muted-foreground group-hover:text-primary transition-colors">
-                          <Plus className="h-8 w-8" />
-                          <span className="text-sm font-medium">Add Component</span>
-                          <span className="text-xs opacity-70">Slot 1 (Full Width)</span>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                );
-              })()}
-              
-              {/* Remaining slots - arranged as squares */}
-              {totalCells > 1 && (
-                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {Array.from({ length: totalCells - 1 }, (_, index) => {
-                    const slotIndex = index + 1;
-                    const slotComponent = getSlotComponent(slotIndex);
-                    const hasComponent = slotComponent && slotComponent.component;
-                    
-                    return (
-                      <Card 
-                        key={slotIndex}
-                        className={`
-                          relative group transition-all duration-200 
-                          ${!hasComponent ? 'hover:border-primary/50 cursor-pointer' : ''}
-                          bg-card/50 backdrop-blur-sm h-48
-                        `}
-                        onClick={() => !hasComponent && handleAddComponent(slotIndex)}
+          // Show all slots in edit mode
+          Array.from({ length: totalCells }, (_, index) => {
+            const slotComponent = getSlotComponent(index);
+            const hasComponent = slotComponent && slotComponent.component;
+            
+            return (
+              <Card 
+                key={index}
+                className={`
+                  relative group transition-all duration-200 
+                  ${!hasComponent ? 'hover:border-primary/50 cursor-pointer' : ''}
+                  bg-card/50 backdrop-blur-sm
+                `}
+                onClick={() => !hasComponent && handleAddComponent(index)}
+              >
+                <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
+                  {hasComponent ? (
+                    <>
+                      {/* Remove button for edit mode */}
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="absolute top-2 right-2 z-10 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={(e) => handleRemoveComponent(index, e)}
                       >
-                        <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
-                          {hasComponent ? (
-                            <>
-                              <Button
-                                variant="destructive"
-                                size="sm"
-                                className="absolute top-2 right-2 z-10 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                                onClick={(e) => handleRemoveComponent(slotIndex, e)}
-                              >
-                                <X className="h-3 w-3" />
-                              </Button>
-                              <div className="w-full h-full">
-                                {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
-                              </div>
-                            </>
-                          ) : (
-                            <div className="flex flex-col items-center space-y-3 text-muted-foreground group-hover:text-primary transition-colors">
-                              <Plus className="h-8 w-8" />
-                              <span className="text-sm font-medium">Add Component</span>
-                              <span className="text-xs opacity-70">Slot {slotIndex + 1}</span>
-                            </div>
-                          )}
-                        </CardContent>
-                      </Card>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          ) : (
-            // Regular square grid layout for edit mode
-            <div 
-              className="grid gap-4 w-full"
-              style={{
-                gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-                gridTemplateRows: `repeat(${rows}, minmax(200px, 1fr))`
-              }}
-            >
-              {Array.from({ length: totalCells }, (_, index) => {
-                const slotComponent = getSlotComponent(index);
-                const hasComponent = slotComponent && slotComponent.component;
-                
-                return (
-                  <Card 
-                    key={index}
-                    className={`
-                      relative group transition-all duration-200 
-                      ${!hasComponent ? 'hover:border-primary/50 cursor-pointer' : ''}
-                      bg-card/50 backdrop-blur-sm
-                    `}
-                    onClick={() => !hasComponent && handleAddComponent(index)}
-                  >
-                    <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
-                      {hasComponent ? (
-                        <>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            className="absolute top-2 right-2 z-10 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                            onClick={(e) => handleRemoveComponent(index, e)}
-                          >
-                            <X className="h-3 w-3" />
-                          </Button>
-                          <div className="w-full h-full">
-                            {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
-                          </div>
-                        </>
-                      ) : (
-                        <div className="flex flex-col items-center space-y-3 text-muted-foreground group-hover:text-primary transition-colors">
-                          <Plus className="h-8 w-8" />
-                          <span className="text-sm font-medium">Add Component</span>
-                          <span className="text-xs opacity-70">Slot {index + 1}</span>
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          )
-        ) : (
-          // View mode - use intelligent layout
-          <div 
-            className="grid gap-4 w-full"
-            style={{
-              gridTemplateColumns: intelligentLayout.gridTemplate.columns,
-              gridTemplateRows: intelligentLayout.gridTemplate.rows
-            }}
-          >
-            {intelligentLayout.slots.map((slot) => {
-              const slotComponent = getSlotComponent(slot.index);
-              if (!slotComponent || !slotComponent.component) return null;
-              
-              return (
-                <Card 
-                  key={slot.index}
-                  className="relative group transition-all duration-200 bg-card/50 backdrop-blur-sm"
-                  style={{
-                    gridColumn: slot.calculatedSize?.gridColumn,
-                    gridRow: slot.calculatedSize?.gridRow,
-                    height: slot.calculatedSize?.height,
-                    minHeight: slot.calculatedSize?.minHeight,
-                    maxHeight: slot.calculatedSize?.maxHeight
-                  }}
-                >
-                  <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
-                    <div className="w-full h-full">
-                      {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
+                        <X className="h-3 w-3" />
+                      </Button>
+                      {/* Render the actual component */}
+                      <div className="w-full h-full">
+                        {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
+                      </div>
+                    </>
+                  ) : (
+                    <div className="flex flex-col items-center space-y-3 text-muted-foreground group-hover:text-primary transition-colors">
+                      <Plus className="h-8 w-8" />
+                      <span className="text-sm font-medium">Add Component</span>
+                      <span className="text-xs opacity-70">Slot {index + 1}</span>
                     </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                  )}
+                </CardContent>
+              </Card>
+            );
+          })
+        ) : (
+          // Show only components with content in view mode
+          Array.from({ length: totalCells }, (_, index) => {
+            const slotComponent = getSlotComponent(index);
+            const hasComponent = slotComponent && slotComponent.component;
+            
+            if (!hasComponent) return null;
+            
+            return (
+              <Card 
+                key={index}
+                className="relative group transition-all duration-200 bg-card/50 backdrop-blur-sm"
+              >
+                <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
+                  <div className="w-full h-full">
+                    {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          }).filter(Boolean)
         )}
       </div>
     </div>
