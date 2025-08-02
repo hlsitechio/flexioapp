@@ -191,7 +191,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const applySettingsFromPayload = (data: any) => {
-    console.log('🔄 Applying settings from realtime payload:', data);
+    console.log('🔄 Applying settings from realtime payload (NO SAVE):', data);
     
     if (data.clock_position !== undefined) {
       setClockPosition(data.clock_position as 'left' | 'center' | 'right');
@@ -254,8 +254,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       setDashboardLayout(data.dashboard_layout as Record<string, { component: string; gridSize: string } | null>);
     }
     
-    // Save updated settings to localStorage
-    saveCurrentSettingsToLocalStorage();
+    // DON'T save to localStorage from realtime updates - this creates feedback loops!
+    // The realtime update means the backend already has the correct data
+    console.log('✅ Realtime settings applied (without triggering saves)');
   };
 
   // Initialize settings from localStorage first, then override with backend if authenticated
