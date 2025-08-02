@@ -153,8 +153,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     if (!user || realtimeChannelRef.current) {
       return;
     }
-
-    console.log('🔄 Setting up realtime subscription for user settings...');
     
     const channel = supabase
       .channel('settings-changes')
@@ -167,32 +165,24 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           filter: `user_id=eq.${user.id}`
         },
         (payload) => {
-          console.log('📡 Realtime settings update received:', payload);
-          
           if (payload.eventType === 'UPDATE' && payload.new && !isSavingRef.current) {
-            console.log('🔄 Applying realtime settings update...');
             applySettingsFromPayload(payload.new);
           }
         }
       )
-      .subscribe((status) => {
-        console.log('📡 Realtime subscription status:', status);
-      });
+      .subscribe();
 
     realtimeChannelRef.current = channel;
   };
 
   const cleanupRealtimeSubscription = () => {
     if (realtimeChannelRef.current) {
-      console.log('🧹 Cleaning up realtime subscription...');
       supabase.removeChannel(realtimeChannelRef.current);
       realtimeChannelRef.current = null;
     }
   };
 
   const applySettingsFromPayload = (data: any) => {
-    console.log('🔄 Applying settings from realtime payload (NO SAVE):', data);
-    
     if (data.clock_position !== undefined) {
       setClockPosition(data.clock_position as 'left' | 'center' | 'right');
     }
@@ -255,8 +245,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     }
     
     // DON'T save to localStorage from realtime updates - this creates feedback loops!
-    // The realtime update means the backend already has the correct data
-    console.log('✅ Realtime settings applied (without triggering saves)');
   };
 
   // Initialize settings from localStorage first, then override with backend if authenticated
@@ -311,7 +299,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const loadSettingsFromLocalStorage = () => {
-    console.log('🔄 Loading settings from localStorage...');
     const savedClockPosition = getStorageString('clockPosition', 'left') as 'left' | 'center' | 'right';
     const savedShowHeaderTitle = getStorageItem('showHeaderTitle', true);
     const savedCustomHeaderTitle = getStorageString('customHeaderTitle', 'Premium Dashboard');
@@ -348,15 +335,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     // Divider visibility
     const savedHideDividers = getStorageItem('hideDividers', false);
 
-    console.log('📋 About to set all settings:', {
-      showSeconds: savedShowSeconds,
-      showDate: savedShowDate,
-      showYear: savedShowYear,
-      use24HourFormat: savedUse24HourFormat,
-      clockPosition: savedClockPosition,
-      sidebarCollapsed: savedSidebarCollapsed
-    });
-
     setClockPosition(savedClockPosition);
     setShowHeaderTitle(savedShowHeaderTitle);
     setCustomHeaderTitle(savedCustomHeaderTitle);
@@ -376,23 +354,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setBannerHeight(savedBannerHeight);
     setDashboardBackground(savedDashboardBackground);
     setHideDividers(savedHideDividers);
-    
-    console.log('✅ Settings loaded from localStorage');
   };
 
   const saveCurrentSettingsToLocalStorage = () => {
-    console.log('💾 Saving current settings to localStorage...');
-    console.log('Current state values:', {
-      showSeconds,
-      showDate,
-      showYear,
-      use24HourFormat,
-      clockPosition,
-      sidebarCollapsed,
-      customHeaderTitle,
-      customSidebarTitle
-    });
-    
     try {
       if (typeof window !== 'undefined') {
         localStorage.setItem('clockPosition', clockPosition);
@@ -414,8 +378,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('bannerHeight', JSON.stringify(bannerHeight));
         localStorage.setItem('dashboardBackground', dashboardBackground);
         localStorage.setItem('hideDividers', JSON.stringify(hideDividers));
-        
-        console.log('✅ Current settings saved to localStorage for offline access');
       }
     } catch (error) {
       console.warn('❌ Error saving current settings to localStorage:', error);
