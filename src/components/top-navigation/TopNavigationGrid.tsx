@@ -1,0 +1,114 @@
+import { useState } from 'react';
+import { CountdownTimer } from '@/components/sidebar/tools/countdown-timer';
+import { TaskCounter } from '@/components/sidebar/tools/task-counter';
+import { QuickNote } from '@/components/sidebar/tools/quick-note';
+import { RandomQuote } from '@/components/sidebar/tools/random-quote';
+import { SidebarCompactCalendar } from '@/components/calendar';
+import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Plus, X, Grid3x3 } from 'lucide-react';
+import { useSettings } from '@/contexts/SettingsContext';
+
+const AVAILABLE_WIDGETS = [
+  { id: 'countdown-timer', name: 'Countdown Timer', component: CountdownTimer },
+  { id: 'task-counter', name: 'Task Counter', component: TaskCounter },
+  { id: 'quick-note', name: 'Quick Note', component: QuickNote },
+  { id: 'random-quote', name: 'Random Quote', component: RandomQuote },
+  { id: 'compact-calendar', name: 'Calendar', component: SidebarCompactCalendar },
+];
+
+interface TopNavigationGridProps {
+  editMode?: boolean;
+}
+
+export function TopNavigationGrid({ editMode = false }: TopNavigationGridProps) {
+  const { topNavigationWidgets, setTopNavigationWidgets } = useSettings();
+  const [isAddingWidget, setIsAddingWidget] = useState(false);
+
+  const addWidget = (widgetId: string) => {
+    if (!topNavigationWidgets.includes(widgetId)) {
+      setTopNavigationWidgets([...topNavigationWidgets, widgetId]);
+    }
+    setIsAddingWidget(false);
+  };
+
+  const removeWidget = (widgetId: string) => {
+    setTopNavigationWidgets(topNavigationWidgets.filter(id => id !== widgetId));
+  };
+
+  const availableWidgets = AVAILABLE_WIDGETS.filter(
+    widget => !topNavigationWidgets.includes(widget.id)
+  );
+
+  if (topNavigationWidgets.length === 0 && !editMode) {
+    return null;
+  }
+
+  return (
+    <div className="flex items-center space-x-2">
+      {/* Render active widgets */}
+      {topNavigationWidgets.map(widgetId => {
+        const widget = AVAILABLE_WIDGETS.find(w => w.id === widgetId);
+        if (!widget) return null;
+
+        const WidgetComponent = widget.component;
+        return (
+          <div key={widgetId} className="relative group">
+            <div className="scale-90 origin-center">
+              <WidgetComponent />
+            </div>
+            {editMode && (
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => removeWidget(widgetId)}
+                className="absolute -top-2 -right-2 h-5 w-5 p-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <X className="h-3 w-3" />
+              </Button>
+            )}
+          </div>
+        );
+      })}
+
+      {/* Add widget button in edit mode */}
+      {editMode && (
+        <Popover open={isAddingWidget} onOpenChange={setIsAddingWidget}>
+          <PopoverTrigger asChild>
+            <Button variant="outline" size="sm" className="text-xs">
+              <Plus className="h-3 w-3 mr-1" />
+              Add Widget
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-64" align="end">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 mb-3">
+                <Grid3x3 className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium">Available Widgets</span>
+              </div>
+              {availableWidgets.length > 0 ? (
+                <div className="space-y-1">
+                  {availableWidgets.map(widget => (
+                    <Button
+                      key={widget.id}
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => addWidget(widget.id)}
+                      className="w-full justify-start text-xs"
+                    >
+                      {widget.name}
+                    </Button>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  All widgets are already added to the navigation.
+                </p>
+              )}
+            </div>
+          </PopoverContent>
+        </Popover>
+      )}
+    </div>
+  );
+}

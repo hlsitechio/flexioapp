@@ -29,6 +29,10 @@ interface SettingsContextType {
   sidebarCollapsed: boolean;
   setSidebarCollapsed: (collapsed: boolean) => void;
   
+  // Top navigation grid settings
+  topNavigationWidgets: string[];
+  setTopNavigationWidgets: (widgets: string[]) => void;
+  
   // Edit mode
   editMode: boolean;
   setEditMode: (mode: boolean) => void;
@@ -104,6 +108,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   
   // Grid settings
   const [gridSize, setGridSize] = useState<'2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12'>('4x4');
+  
+  // Top navigation widgets
+  const [topNavigationWidgets, setTopNavigationWidgets] = useState<string[]>([]);
 
   // Initialize settings from localStorage first, then override with backend if authenticated
   useEffect(() => {
@@ -152,6 +159,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     
     // Grid settings
     const savedGridSize = getStorageString('gridSize', '4x4') as '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12';
+    
+    // Top navigation widgets
+    const savedTopNavigationWidgets = getStorageItem('topNavigationWidgets', []);
 
     console.log('📋 About to set all settings:', {
       showSeconds: savedShowSeconds,
@@ -174,6 +184,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setUse24HourFormat(savedUse24HourFormat);
     setDashboardLayout(savedDashboardLayout);
     setGridSize(savedGridSize);
+    setTopNavigationWidgets(savedTopNavigationWidgets);
     
     console.log('✅ Settings loaded from localStorage');
   };
@@ -205,6 +216,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('use24HourFormat', JSON.stringify(use24HourFormat));
         localStorage.setItem('dashboardLayout', JSON.stringify(dashboardLayout));
         localStorage.setItem('gridSize', gridSize);
+        localStorage.setItem('topNavigationWidgets', JSON.stringify(topNavigationWidgets));
         
         console.log('✅ Current settings saved to localStorage for offline access');
       }
@@ -292,6 +304,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           console.log('📏 Setting gridSize from backend:', layout.gridSize);
           setGridSize(layout.gridSize);
         }
+        if (layout.topNavigationWidgets !== undefined) {
+          console.log('🔝 Setting topNavigationWidgets from backend:', layout.topNavigationWidgets);
+          setTopNavigationWidgets(layout.topNavigationWidgets);
+        }
         
         console.log('✅ Backend settings applied successfully');
         
@@ -334,6 +350,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         use24HourFormat,
         dashboardLayout,
         gridSize,
+        topNavigationWidgets,
       };
 
       console.log('💾 Saving settings to backend:', {
@@ -413,7 +430,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         }
       }, 2000); // Increased debounce time to reduce frequency
     }
-  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize]);
+  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets]);
 
   // Only trigger save when settings actually change (with debouncing)
   useEffect(() => {
@@ -473,6 +490,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     removeComponentFromSlot,
     gridSize,
     setGridSize,
+    topNavigationWidgets,
+    setTopNavigationWidgets,
     saveSettingsToBackend,
   }), [
     clockPosition,
@@ -488,6 +507,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     editMode,
     dashboardLayout,
     gridSize,
+    topNavigationWidgets,
     addComponentToSlot,
     removeComponentFromSlot,
     saveSettingsToBackend,
@@ -534,6 +554,8 @@ export function useSettings() {
       removeComponentFromSlot: () => {},
       gridSize: '4x4' as const,
       setGridSize: () => {},
+      topNavigationWidgets: [],
+      setTopNavigationWidgets: () => {},
       saveSettingsToBackend: async () => {},
     };
   }
