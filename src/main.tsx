@@ -15,19 +15,19 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <NotificationProvider>
-          <SettingsProvider>
-            <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <AuthProvider>
+          <NotificationProvider>
+            <SettingsProvider>
               <TooltipProvider>
                 <SidebarProvider defaultOpen={true}>
                   <App />
                 </SidebarProvider>
               </TooltipProvider>
-            </ThemeProvider>
-          </SettingsProvider>
-        </NotificationProvider>
-      </AuthProvider>
+            </SettingsProvider>
+          </NotificationProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>,
 );

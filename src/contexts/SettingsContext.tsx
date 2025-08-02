@@ -135,8 +135,15 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize settings from localStorage first, then override with backend if authenticated
   useEffect(() => {
+    if (isLoadingRef.current) {
+      console.log('⏸️ Settings already loading, skipping...');
+      return;
+    }
+    
     console.log('SettingsContext: Initializing settings...');
     const currentUserId = user?.id || null;
+    
+    isLoadingRef.current = true;
     
     // Always load localStorage first for immediate UI
     loadSettingsFromLocalStorage();
@@ -149,14 +156,20 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       
       // Delay backend sync to avoid double render on page reload
       setTimeout(() => {
-        loadSettingsFromBackend();
-      }, 200);
+        if (isLoadingRef.current) {
+          loadSettingsFromBackend();
+        }
+      }, 300);
     } else if (!user) {
       // User signed out - reset flags and save current settings
       console.log('👋 User signed out, resetting state...');
       hasLoadedFromBackendRef.current = false;
       lastUserIdRef.current = null;
       saveCurrentSettingsToLocalStorage();
+      isLoadingRef.current = false;
+    } else {
+      // Same user, no backend sync needed
+      isLoadingRef.current = false;
     }
   }, [user?.id]); // Only depend on user.id, not the entire user object
 
