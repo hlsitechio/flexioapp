@@ -18,7 +18,8 @@ import {
   VerticalGridSize,
   SquareGridSize,
   getVerticalGridDimensions,
-  getSquareGridDimensions
+  getSquareGridDimensions,
+  IntelligentGridCalculator
 } from '@/components/grid-layouts';
 
 interface GridLayoutProps {
@@ -28,6 +29,13 @@ interface GridLayoutProps {
 export function GridLayout({ editMode }: GridLayoutProps) {
   const navigate = useNavigate();
   const { dashboardLayout, removeComponentFromSlot, gridSize, setGridSize } = useSettings();
+
+  // Calculate intelligent layout
+  const intelligentLayout = new IntelligentGridCalculator(
+    gridSize,
+    dashboardLayout,
+    typeof window !== 'undefined' ? window.innerWidth : 1200
+  ).calculateIntelligentLayout();
   const getGridDimensions = (size: GridSize) => {
     // Check if it's a vertical grid
     if (size.startsWith('1x')) {
@@ -166,9 +174,9 @@ export function GridLayout({ editMode }: GridLayoutProps) {
       )}
 
       {/* Dashboard Grid */}
-      <div className="grid gap-4 w-full">
+      <div className="w-full">
         {editMode ? (
-          // Show all slots in edit mode
+          // Edit mode - show add slots and existing components
           gridSize.startsWith('1x') ? (
             // Mixed layout for vertical grids: 1 horizontal + remaining as squares
             <div className="space-y-4">
@@ -262,7 +270,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
               )}
             </div>
           ) : (
-            // Regular square grid layout
+            // Regular square grid layout for edit mode
             <div 
               className="grid gap-4 w-full"
               style={{
@@ -313,87 +321,37 @@ export function GridLayout({ editMode }: GridLayoutProps) {
             </div>
           )
         ) : (
-          // Show only components with content in view mode
-          gridSize.startsWith('1x') ? (
-            // Mixed layout for view mode
-            <div className="space-y-4">
-              {/* First slot - full width */}
-              {(() => {
-                const slotComponent = getSlotComponent(0);
-                const hasComponent = slotComponent && slotComponent.component;
-                
-                if (!hasComponent) return null;
-                
-                return (
-                  <Card 
-                    key={0}
-                    className="relative group transition-all duration-200 bg-card/50 backdrop-blur-sm h-48"
-                  >
-                    <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
-                      <div className="w-full h-full">
-                        {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })()}
+          // View mode - use intelligent layout
+          <div 
+            className="grid gap-4 w-full"
+            style={{
+              gridTemplateColumns: intelligentLayout.gridTemplate.columns,
+              gridTemplateRows: intelligentLayout.gridTemplate.rows
+            }}
+          >
+            {intelligentLayout.slots.map((slot) => {
+              const slotComponent = getSlotComponent(slot.index);
+              if (!slotComponent || !slotComponent.component) return null;
               
-              {/* Remaining slots with components */}
-              {(() => {
-                const remainingComponents = Array.from({ length: totalCells - 1 }, (_, index) => {
-                  const slotIndex = index + 1;
-                  const slotComponent = getSlotComponent(slotIndex);
-                  const hasComponent = slotComponent && slotComponent.component;
-                  
-                  if (!hasComponent) return null;
-                  
-                  return (
-                    <Card 
-                      key={slotIndex}
-                      className="relative group transition-all duration-200 bg-card/50 backdrop-blur-sm h-48"
-                    >
-                      <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
-                        <div className="w-full h-full">
-                          {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                }).filter(Boolean);
-                
-                if (remainingComponents.length === 0) return null;
-                
-                return (
-                  <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {remainingComponents}
-                  </div>
-                );
-              })()}
-            </div>
-          ) : (
-            // Regular responsive grid for view mode
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {Array.from({ length: totalCells }, (_, index) => {
-                const slotComponent = getSlotComponent(index);
-                const hasComponent = slotComponent && slotComponent.component;
-                
-                if (!hasComponent) return null;
-                
-                return (
-                  <Card 
-                    key={index}
-                    className="relative group transition-all duration-200 bg-card/50 backdrop-blur-sm"
-                  >
-                    <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
-                      <div className="w-full h-full">
-                        {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              }).filter(Boolean)}
-            </div>
-          )
+              return (
+                <Card 
+                  key={slot.index}
+                  className="relative group transition-all duration-200 bg-card/50 backdrop-blur-sm"
+                  style={{
+                    gridColumn: slot.calculatedSize?.gridColumn,
+                    gridRow: slot.calculatedSize?.gridRow,
+                    height: slot.calculatedSize?.height
+                  }}
+                >
+                  <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
+                    <div className="w-full h-full">
+                      {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
         )}
       </div>
     </div>
