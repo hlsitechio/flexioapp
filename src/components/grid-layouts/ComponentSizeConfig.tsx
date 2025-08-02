@@ -13,14 +13,14 @@ export interface ComponentSize {
 
 export const componentSizeConfig: Record<string, ComponentSize> = {
   'Calendar': {
-    minWidth: 300,
-    minHeight: 400,
+    minWidth: 250,
+    minHeight: 300,
     preferredWidth: 'auto',
-    preferredHeight: 'tall',
+    preferredHeight: 'medium',
     aspectRatio: 'auto',
     gridSpan: {
-      cols: 2,
-      rows: 3
+      cols: 1,
+      rows: 2
     }
   },
   'Task Counter': {
@@ -46,13 +46,13 @@ export const componentSizeConfig: Record<string, ComponentSize> = {
     }
   },
   'Random Quote': {
-    minWidth: 300,
+    minWidth: 250,
     minHeight: 120,
-    preferredWidth: 'full',
+    preferredWidth: 'auto',
     preferredHeight: 'compact',
-    aspectRatio: 'wide',
+    aspectRatio: 'auto',
     gridSpan: {
-      cols: 3,
+      cols: 1,
       rows: 1
     }
   },
