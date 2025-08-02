@@ -10,7 +10,8 @@ import {
   DashboardTaskCounter, 
   DashboardQuickNote, 
   DashboardRandomQuote, 
-  DashboardCountdownTimer 
+  DashboardCountdownTimer,
+  ImageGallery
 } from '@/components/dashboard';
 
 interface GridLayoutProps {
@@ -99,6 +100,8 @@ export function GridLayout({ editMode }: GridLayoutProps) {
         return <DashboardRandomQuote />;
       case 'Countdown Timer':
         return <DashboardCountdownTimer />;
+      case 'Image Gallery':
+        return <ImageGallery />;
       default:
         return null;
     }
