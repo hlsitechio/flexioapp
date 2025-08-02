@@ -73,7 +73,8 @@ export function ImageBanner() {
     setShowBanner(!showBanner);
   };
 
-  if (!showBanner && !bannerImage) {
+  // Show upload interface when no banner image exists
+  if (!bannerImage) {
     return (
       <div className="px-6 pt-6">
         <Card className="p-4 border-dashed border-2 hover:border-primary/50 transition-colors">
@@ -100,6 +101,7 @@ export function ImageBanner() {
     );
   }
 
+  // Show toggle button when banner exists but is hidden
   if (!showBanner) {
     return (
       <div className="px-6 pt-6">
