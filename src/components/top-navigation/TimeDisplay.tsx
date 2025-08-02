@@ -3,7 +3,22 @@ import { useSettings } from '@/contexts/SettingsContext';
 
 export function TimeDisplay() {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const { showSeconds, showDate, showYear, use24HourFormat } = useSettings();
+  
+  // Safely get settings with fallback defaults
+  let settings;
+  try {
+    settings = useSettings();
+  } catch (error) {
+    // Fallback to default settings if context is not available
+    settings = {
+      showSeconds: true,
+      showDate: true,
+      showYear: true,
+      use24HourFormat: false
+    };
+  }
+  
+  const { showSeconds, showDate, showYear, use24HourFormat } = settings;
 
   useEffect(() => {
     const timer = setInterval(() => {
