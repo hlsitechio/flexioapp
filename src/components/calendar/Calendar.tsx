@@ -3,6 +3,7 @@ import { Calendar as CalendarPrimitive } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CalendarDays, Clock } from 'lucide-react';
+import { GridSize } from '@/components/grid-layouts';
 
 export interface CalendarEvent {
   id: string;
@@ -15,7 +16,7 @@ export interface CalendarProps {
   events?: CalendarEvent[];
   onDateSelect?: (date: Date | undefined) => void;
   className?: string;
-  gridSize?: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12';
+  gridSize?: GridSize;
 }
 
 export function Calendar({ events = [], onDateSelect, className, gridSize = '4x4' }: CalendarProps) {
@@ -35,8 +36,8 @@ export function Calendar({ events = [], onDateSelect, className, gridSize = '4x4
   const selectedDateEvents = selectedDate ? getEventsForDate(selectedDate) : [];
 
   // Determine layout based on grid size
-  const isCompact = gridSize === '2x2';
-  const isSmall = gridSize === '3x3' || gridSize === '2x2';
+  const isCompact = gridSize === '2x2' || gridSize?.startsWith('1x');
+  const isSmall = gridSize === '3x3' || gridSize === '2x2' || gridSize?.startsWith('1x');
   const shouldHideEvents = isCompact;
   const shouldCompactHeader = isSmall;
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Grid3X3, Grid2X2, LayoutGrid, Plus, X } from 'lucide-react';
+import { Grid3X3, Grid2X2, LayoutGrid, Plus, X, MoreVertical } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,13 @@ import {
   DashboardCountdownTimer,
   ImageGallery
 } from '@/components/dashboard';
+import { 
+  GridSize,
+  VerticalGridSize,
+  SquareGridSize,
+  getVerticalGridDimensions,
+  getSquareGridDimensions
+} from '@/components/grid-layouts';
 
 interface GridLayoutProps {
   editMode: boolean;
@@ -21,36 +28,20 @@ interface GridLayoutProps {
 export function GridLayout({ editMode }: GridLayoutProps) {
   const navigate = useNavigate();
   const { dashboardLayout, removeComponentFromSlot, gridSize, setGridSize } = useSettings();
-  const getGridDimensions = (size: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12') => {
-    const dimensions = {
-      '2x2': {
-        rows: 2,
-        cols: 2
-      },
-      '3x3': {
-        rows: 3,
-        cols: 3
-      },
-      '4x4': {
-        rows: 4,
-        cols: 4
-      },
-      '6x6': {
-        rows: 6,
-        cols: 6
-      },
-      '9x9': {
-        rows: 9,
-        cols: 9
-      },
-      '12x12': {
-        rows: 12,
-        cols: 12
-      }
-    };
-    return dimensions[size];
+  const getGridDimensions = (size: GridSize) => {
+    // Check if it's a vertical grid
+    if (size.startsWith('1x')) {
+      return getVerticalGridDimensions(size as VerticalGridSize);
+    }
+    // Otherwise it's a square grid
+    return getSquareGridDimensions(size as SquareGridSize);
   };
-  const getGridIcon = (size: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12') => {
+
+  const getGridIcon = (size: GridSize) => {
+    if (size.startsWith('1x')) {
+      return <MoreVertical className="h-4 w-4" />;
+    }
+    
     switch (size) {
       case '2x2':
       case '3x3':
@@ -91,7 +82,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
     const size = componentGridSize || gridSize;
     switch (componentName) {
       case 'Calendar':
-        return <Calendar gridSize={size as '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12'} />;
+        return <Calendar gridSize={size as GridSize} />;
       case 'Task Counter':
         return <DashboardTaskCounter />;
       case 'Quick Note':
@@ -131,6 +122,14 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
+                <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">Vertical Grids</div>
+                <SelectItem value="1x2">1×2</SelectItem>
+                <SelectItem value="1x3">1×3</SelectItem>
+                <SelectItem value="1x4">1×4</SelectItem>
+                <SelectItem value="1x6">1×6</SelectItem>
+                <SelectItem value="1x8">1×8</SelectItem>
+                <SelectItem value="1x12">1×12</SelectItem>
+                <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground border-t mt-1 pt-2">Square Grids</div>
                 <SelectItem value="2x2">2×2</SelectItem>
                 <SelectItem value="3x3">3×3</SelectItem>
                 <SelectItem value="4x4">4×4</SelectItem>

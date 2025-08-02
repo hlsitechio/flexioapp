@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
+import { GridSize } from '@/components/grid-layouts';
 
 interface SettingsContextType {
   // Header settings
@@ -48,8 +49,8 @@ interface SettingsContextType {
   removeComponentFromSlot: (slotIndex: number) => void;
   
   // Grid settings
-  gridSize: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12';
-  setGridSize: (size: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12') => void;
+  gridSize: GridSize;
+  setGridSize: (size: GridSize) => void;
   
   // Manual save function
   saveSettingsToBackend: () => Promise<void>;
@@ -111,7 +112,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [dashboardLayout, setDashboardLayout] = useState<Record<string, { component: string; gridSize: string } | null>>({});
   
   // Grid settings
-  const [gridSize, setGridSize] = useState<'2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12'>('4x4');
+  const [gridSize, setGridSize] = useState<GridSize>('4x4');
   
   // Top navigation widgets
   const [topNavigationWidgets, setTopNavigationWidgets] = useState<string[]>([]);
@@ -165,7 +166,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const savedDashboardLayout = getStorageItem('dashboardLayout', {});
     
     // Grid settings
-    const savedGridSize = getStorageString('gridSize', '4x4') as '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12';
+    const savedGridSize = getStorageString('gridSize', '4x4') as GridSize;
     
     // Top navigation widgets
     const savedTopNavigationWidgets = getStorageItem('topNavigationWidgets', []);

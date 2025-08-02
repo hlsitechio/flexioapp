@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Plus, RotateCcw, Settings, Grid3X3, Grid2X2, LayoutGrid } from 'lucide-react';
+import { Plus, RotateCcw, Settings, Grid3X3, Grid2X2, LayoutGrid, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { KanbanBoard } from '@/components/kanban';
 import { KanbanColumn, KanbanItem } from '@/types/kanban';
 import { useSettings } from '@/contexts/SettingsContext';
+import { GridSize, getVerticalGridDimensions, getSquareGridDimensions } from '@/components/grid-layouts';
 
 interface DashboardGridProps {
   editMode: boolean;
@@ -63,19 +64,17 @@ export function DashboardGrid({ editMode, setEditMode }: DashboardGridProps) {
     }
   ]);
 
-  function getMaxItems(size: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12'): number {
-    const gridSizes = {
-      '2x2': 4,
-      '3x3': 9, 
-      '4x4': 16,
-      '6x6': 36,
-      '9x9': 81,
-      '12x12': 144
-    };
-    return gridSizes[size];
+  function getMaxItems(size: GridSize): number {
+    if (size.startsWith('1x')) {
+      const dims = getVerticalGridDimensions(size as any);
+      return dims.rows * dims.cols;
+    } else {
+      const dims = getSquareGridDimensions(size as any);
+      return dims.rows * dims.cols;
+    }
   }
 
-  const handleGridSizeChange = (newSize: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12') => {
+  const handleGridSizeChange = (newSize: GridSize) => {
     setGridSize(newSize);
     setColumns(prev => prev.map(col => 
       col.id === 'dashboard' 
@@ -108,7 +107,11 @@ export function DashboardGrid({ editMode, setEditMode }: DashboardGridProps) {
     ));
   };
 
-  const getGridIcon = (size: '2x2' | '3x3' | '4x4' | '6x6' | '9x9' | '12x12') => {
+  const getGridIcon = (size: GridSize) => {
+    if (size.startsWith('1x')) {
+      return <MoreVertical className="h-4 w-4" />;
+    }
+    
     switch (size) {
       case '2x2':
       case '3x3':
@@ -139,6 +142,14 @@ export function DashboardGrid({ editMode, setEditMode }: DashboardGridProps) {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
+                <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">Vertical Grids</div>
+                <SelectItem value="1x2">1×2 Grid</SelectItem>
+                <SelectItem value="1x3">1×3 Grid</SelectItem>
+                <SelectItem value="1x4">1×4 Grid</SelectItem>
+                <SelectItem value="1x6">1×6 Grid</SelectItem>
+                <SelectItem value="1x8">1×8 Grid</SelectItem>
+                <SelectItem value="1x12">1×12 Grid</SelectItem>
+                <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground border-t mt-1 pt-2">Square Grids</div>
                 <SelectItem value="2x2">2×2 Grid</SelectItem>
                 <SelectItem value="3x3">3×3 Grid</SelectItem>
                 <SelectItem value="4x4">4×4 Grid</SelectItem>
