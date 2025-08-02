@@ -10,10 +10,22 @@ import { Button } from '@/components/ui/button';
 import { Edit3, Eye } from 'lucide-react';
 import { KanbanItem } from '@/types/kanban';
 import { useSettings } from '@/contexts/SettingsContext';
+import { useEffect } from 'react';
+import { gradients } from '@/pages/customization/gallery-gradient/gradients';
 
 export function Dashboard() {
   const { editMode, setEditMode, dashboardBackground } = useSettings();
   const [draggedItem, setDraggedItem] = useState<KanbanItem | null>(null);
+  
+  // Apply mesh gradient styles when dashboardBackground changes
+  useEffect(() => {
+    const gradient = gradients.find(g => g.id === dashboardBackground);
+    const dashboardElement = document.querySelector('.dashboard-background') as HTMLElement;
+    
+    if (gradient && 'style' in gradient && gradient.style && dashboardElement) {
+      Object.assign(dashboardElement.style, gradient.style);
+    }
+  }, [dashboardBackground]);
   
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -41,7 +53,7 @@ export function Dashboard() {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className={`min-h-screen flex w-full ${dashboardBackground}`}>
+      <div className={`min-h-screen flex w-full dashboard-background ${typeof dashboardBackground === 'string' && dashboardBackground.startsWith('bg-') ? dashboardBackground : ''}`}>
         <DashboardSidebar />
         
       <div className="flex-1 flex flex-col">

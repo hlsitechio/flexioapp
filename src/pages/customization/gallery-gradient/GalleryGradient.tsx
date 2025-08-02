@@ -18,19 +18,30 @@ export function GalleryGradient() {
           {gradients.map((gradient) => (
             <button
               key={gradient.id}
-              onClick={() => setDashboardBackground(gradient.class)}
+              onClick={() => {
+                if ('style' in gradient && gradient.style) {
+                  // For mesh gradients, apply the style directly to the dashboard
+                  const dashboardElement = document.querySelector('.dashboard-background') as HTMLElement;
+                  if (dashboardElement && gradient.style) {
+                    Object.assign(dashboardElement.style, gradient.style);
+                  }
+                  setDashboardBackground(gradient.id);
+                } else {
+                  setDashboardBackground(gradient.class);
+                }
+              }}
               className={`relative p-4 rounded-lg border-2 transition-all duration-200 hover:scale-105 ${
-                dashboardBackground === gradient.class
+                dashboardBackground === gradient.class || dashboardBackground === gradient.id
                   ? 'border-primary ring-2 ring-primary/20'
                   : 'border-muted hover:border-muted-foreground/30'
               }`}
             >
               <div
-                className="w-full h-16 rounded-md mb-2"
+                className="w-full h-16 rounded-md mb-2 relative overflow-hidden"
                 style={{ background: gradient.preview }}
               />
               <p className="text-sm font-medium text-center">{gradient.name}</p>
-              {dashboardBackground === gradient.class && (
+              {(dashboardBackground === gradient.class || dashboardBackground === gradient.id) && (
                 <div className="absolute top-2 right-2 w-3 h-3 bg-primary rounded-full" />
               )}
             </button>
