@@ -86,6 +86,7 @@ export function AuthPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
+                    autoComplete="email"
                     required
                   />
                 </div>
@@ -97,6 +98,7 @@ export function AuthPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
+                    autoComplete="current-password"
                     required
                   />
                 </div>
@@ -117,6 +119,7 @@ export function AuthPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
+                    autoComplete="email"
                     required
                   />
                 </div>
@@ -128,6 +131,7 @@ export function AuthPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Create a password"
+                    autoComplete="new-password"
                     required
                   />
                 </div>
