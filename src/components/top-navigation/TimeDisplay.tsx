@@ -29,35 +29,34 @@ export function TimeDisplay() {
   }, []);
 
   const formatTime = (date: Date) => {
-    const options: Intl.DateTimeFormatOptions = {};
-    
-    // Add date components if enabled
-    if (showDate) {
-      options.weekday = 'long';
-      options.month = 'long';
-      options.day = 'numeric';
-    }
-    
-    if (showYear && showDate) {
-      options.year = 'numeric';
-    }
-    
-    // Add time components
-    options.hour = '2-digit';
-    options.minute = '2-digit';
+    // Optimize by avoiding object creation on every render
+    const timeOptions: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: !use24HourFormat
+    };
     
     if (showSeconds) {
-      options.second = '2-digit';
+      timeOptions.second = '2-digit';
     }
     
-    // Set 12/24 hour format
-    if (use24HourFormat) {
-      options.hour12 = false;
-    } else {
-      options.hour12 = true;
+    const dateOptions: Intl.DateTimeFormatOptions = {};
+    
+    if (showDate) {
+      dateOptions.weekday = 'long';
+      dateOptions.month = 'long';
+      dateOptions.day = 'numeric';
+      
+      if (showYear) {
+        dateOptions.year = 'numeric';
+      }
     }
     
-    return date.toLocaleString('en-US', options);
+    // Format time and date separately for better performance
+    const timeString = date.toLocaleTimeString('en-US', timeOptions);
+    const dateString = showDate ? date.toLocaleDateString('en-US', dateOptions) : '';
+    
+    return showDate ? `${dateString}, ${timeString}` : timeString;
   };
 
   return (
