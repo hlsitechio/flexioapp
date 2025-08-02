@@ -2,10 +2,22 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
 
+interface Notification {
+  id: string;
+  type: 'success' | 'error' | 'info' | 'warning';
+  title: string;
+  message: string;
+  timestamp: Date;
+}
+
 interface NotificationContextType {
   isNotificationOpen: boolean;
   setIsNotificationOpen: (open: boolean) => void;
   toggleNotification: () => void;
+  notifications: Notification[];
+  addNotification: (notification: Omit<Notification, 'id' | 'timestamp'>) => void;
+  removeNotification: (id: string) => void;
+  clearAllNotifications: () => void;
 }
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
@@ -13,6 +25,7 @@ const NotificationContext = createContext<NotificationContextType | undefined>(u
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
   // Helper function to safely access localStorage
   const getStorageItem = (key: string, defaultValue: boolean) => {
@@ -62,10 +75,42 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     });
   };
 
+  const addNotification = (notification: Omit<Notification, 'id' | 'timestamp'>) => {
+    const newNotification: Notification = {
+      ...notification,
+      id: crypto.randomUUID(),
+      timestamp: new Date(),
+    };
+    
+    setNotifications(prev => [newNotification, ...prev]);
+    
+    // Auto-open notification panel when a new notification is added
+    setIsNotificationOpen(true);
+    
+    // Auto-remove after 5 seconds for success notifications
+    if (notification.type === 'success') {
+      setTimeout(() => {
+        removeNotification(newNotification.id);
+      }, 5000);
+    }
+  };
+
+  const removeNotification = (id: string) => {
+    setNotifications(prev => prev.filter(notification => notification.id !== id));
+  };
+
+  const clearAllNotifications = () => {
+    setNotifications([]);
+  };
+
   const value = {
     isNotificationOpen,
     setIsNotificationOpen,
     toggleNotification,
+    notifications,
+    addNotification,
+    removeNotification,
+    clearAllNotifications,
   };
 
   return (

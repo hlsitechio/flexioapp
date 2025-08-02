@@ -5,20 +5,20 @@ import { Input } from '@/components/ui/input';
 import { Upload, X, Eye, EyeOff, Move } from 'lucide-react';
 import { useSettings } from '@/contexts/SettingsContext';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/components/ui/use-toast';
+import { useNotification } from '@/contexts/NotificationContext';
 
 export function ImageBanner() {
   const { bannerImage, setBannerImage, showBanner, setShowBanner, bannerHeight, setBannerHeight } = useSettings();
   const [isUploading, setIsUploading] = useState(false);
+  const { addNotification } = useNotification();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { toast } = useToast();
 
   const handleImageUpload = async (file: File) => {
     if (!file.type.startsWith('image/')) {
-      toast({
-        title: "Invalid file type",
-        description: "Please upload an image file.",
-        variant: "destructive",
+      addNotification({
+        type: 'error',
+        title: 'Invalid file type',
+        message: 'Please upload an image file.',
       });
       return;
     }
@@ -41,16 +41,17 @@ export function ImageBanner() {
       setBannerImage(publicUrl);
       setShowBanner(true);
       
-      toast({
-        title: "Success",
-        description: "Banner image uploaded successfully!",
+      addNotification({
+        type: 'success',
+        title: 'Success',
+        message: 'Banner image uploaded successfully!',
       });
     } catch (error) {
       console.error('Error uploading image:', error);
-      toast({
-        title: "Upload failed",
-        description: "Failed to upload banner image.",
-        variant: "destructive",
+      addNotification({
+        type: 'error',
+        title: 'Upload failed',
+        message: 'Failed to upload banner image.',
       });
     } finally {
       setIsUploading(false);

@@ -4,51 +4,15 @@ import { useNotification } from '@/contexts/NotificationContext';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-
-import { useState } from 'react';
-
-interface Notification {
-  id: string;
-  title: string;
-  message: string;
-  type: 'success' | 'error' | 'info' | 'warning';
-  timestamp: Date;
-  read: boolean;
-}
-
-// Mock notifications data - using state to allow clearing
-const initialNotifications: Notification[] = [
-  {
-    id: '1',
-    title: 'Welcome!',
-    message: 'Your dashboard is ready to use.',
-    type: 'success',
-    timestamp: new Date(Date.now() - 5 * 60 * 1000), // 5 minutes ago
-    read: false,
-  },
-  {
-    id: '2',
-    title: 'Settings Saved',
-    message: 'Your preferences have been updated successfully.',
-    type: 'success',
-    timestamp: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
-    read: true,
-  },
-  {
-    id: '3',
-    title: 'New Feature Available',
-    message: 'Check out the new countdown timer tool in your sidebar.',
-    type: 'info',
-    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
-    read: false,
-  },
-];
 
 export function NotificationSidebar() {
-  const { isNotificationOpen, setIsNotificationOpen } = useNotification();
-  const { toast } = useToast();
-  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
+  const { 
+    isNotificationOpen, 
+    setIsNotificationOpen, 
+    notifications, 
+    removeNotification, 
+    clearAllNotifications 
+  } = useNotification();
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
@@ -76,30 +40,16 @@ export function NotificationSidebar() {
     return 'Just now';
   };
 
-  const handleNotificationClick = (notification: Notification) => {
-    toast({
-      title: notification.title,
-      description: notification.message,
-    });
+  const handleNotificationClick = (notification: any) => {
+    // Mark as handled by removing from the list
+    removeNotification(notification.id);
   };
 
   const handleClearAll = () => {
-    setNotifications([]);
-    toast({
-      title: "Notifications cleared",
-      description: "All notifications have been removed.",
-    });
+    clearAllNotifications();
   };
 
-  const handleMarkAllRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-    toast({
-      title: "Marked as read",
-      description: "All notifications have been marked as read.",
-    });
-  };
-
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const unreadCount = notifications.length;
 
   return (
     <AnimatePresence>
@@ -164,33 +114,40 @@ export function NotificationSidebar() {
                   </div>
                   ) : (
                   notifications.map((notification) => (
-                    <div
-                      key={notification.id}
-                      onClick={() => handleNotificationClick(notification)}
-                      className={`p-3 rounded-lg border cursor-pointer transition-colors hover:bg-accent ${
-                        !notification.read ? 'bg-muted/30' : ''
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        {getNotificationIcon(notification.type)}
-                        <div className="flex-1 space-y-1">
-                          <div className="flex items-center justify-between">
-                            <h4 className="text-sm font-medium">
-                              {notification.title}
-                            </h4>
-                            {!notification.read && (
-                              <div className="w-2 h-2 bg-primary rounded-full" />
-                            )}
-                          </div>
-                          <p className="text-sm text-muted-foreground">
-                            {notification.message}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {formatTime(notification.timestamp)}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+                     <div
+                       key={notification.id}
+                       onClick={() => handleNotificationClick(notification)}
+                       className="p-3 rounded-lg border cursor-pointer transition-colors hover:bg-accent bg-muted/30"
+                     >
+                       <div className="flex items-start gap-3">
+                         {getNotificationIcon(notification.type)}
+                         <div className="flex-1 space-y-1">
+                           <div className="flex items-center justify-between">
+                             <h4 className="text-sm font-medium">
+                               {notification.title}
+                             </h4>
+                             <div className="w-2 h-2 bg-primary rounded-full" />
+                           </div>
+                           <p className="text-sm text-muted-foreground">
+                             {notification.message}
+                           </p>
+                           <p className="text-xs text-muted-foreground">
+                             {formatTime(notification.timestamp)}
+                           </p>
+                         </div>
+                         <Button
+                           variant="ghost"
+                           size="sm"
+                           onClick={(e) => {
+                             e.stopPropagation();
+                             removeNotification(notification.id);
+                           }}
+                           className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                         >
+                           <X className="h-3 w-3" />
+                         </Button>
+                       </div>
+                     </div>
                   ))
                 )}
               </div>
@@ -202,9 +159,9 @@ export function NotificationSidebar() {
                 <Button 
                   variant="outline" 
                   className="w-full"
-                  onClick={handleMarkAllRead}
+                  onClick={handleClearAll}
                 >
-                  Mark all as read
+                  Clear all notifications
                 </Button>
               </div>
             )}
