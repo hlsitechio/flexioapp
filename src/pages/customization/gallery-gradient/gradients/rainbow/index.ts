@@ -1,19 +1,24 @@
 export const rainbowGradient = {
   id: 'rainbow',
   name: 'Rainbow Spectrum',
-  class: 'relative overflow-hidden',
+  class: 'relative overflow-hidden glassmorphic-rainbow',
   style: {
     background: `
-      conic-gradient(from 0deg at 50% 50%, hsl(0 100% 60%) 0deg, hsl(60 100% 60%) 60deg, hsl(120 100% 60%) 120deg, hsl(180 100% 60%) 180deg, hsl(240 100% 60%) 240deg, hsl(300 100% 60%) 300deg, hsl(0 100% 60%) 360deg),
-      radial-gradient(ellipse 70% 70% at 30% 30%, hsl(0 100% 70% / 0.3) 0%, transparent 50%),
-      radial-gradient(ellipse 80% 60% at 70% 70%, hsl(240 100% 70% / 0.3) 0%, transparent 50%),
-      linear-gradient(45deg, hsl(0 100% 50% / 0.8) 0%, hsl(120 100% 50% / 0.8) 50%, hsl(240 100% 50% / 0.8) 100%)
+      conic-gradient(from 0deg at 50% 50%, hsl(0 40% 85% / 0.15) 0deg, hsl(60 50% 85% / 0.2) 60deg, hsl(120 45% 85% / 0.15) 120deg, hsl(180 50% 85% / 0.1) 180deg, hsl(240 45% 85% / 0.15) 240deg, hsl(300 50% 85% / 0.2) 300deg, hsl(0 40% 85% / 0.15) 360deg),
+      radial-gradient(ellipse 70% 70% at 30% 30%, hsl(0 30% 90% / 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse 80% 60% at 70% 70%, hsl(240 35% 90% / 0.1) 0%, transparent 50%),
+      linear-gradient(45deg, hsl(0 20% 95% / 0.05) 0%, hsl(120 25% 90% / 0.08) 50%, hsl(240 20% 95% / 0.05) 100%)
+    `,
+    backdropFilter: 'blur(25px) saturate(200%)',
+    border: '1px solid hsl(300 50% 90% / 0.3)',
+    boxShadow: `
+      0 8px 32px hsl(300 40% 30% / 0.1),
+      inset 0 1px 0 hsl(0 60% 98% / 0.3),
+      inset 0 -1px 0 hsl(240 30% 80% / 0.1)
     `
   },
   preview: `
-    conic-gradient(from 0deg at 50% 50%, #f87171 0deg, #facc15 60deg, #4ade80 120deg, #60a5fa 180deg, #818cf8 240deg, #a855f7 300deg, #f87171 360deg),
-    radial-gradient(ellipse 70% 70% at 30% 30%, rgba(248, 113, 113, 0.3) 0%, transparent 50%),
-    radial-gradient(ellipse 80% 60% at 70% 70%, rgba(129, 140, 248, 0.3) 0%, transparent 50%),
-    linear-gradient(45deg, rgba(220, 38, 38, 0.8) 0%, rgba(34, 197, 94, 0.8) 50%, rgba(79, 70, 229, 0.8) 100%)
+    conic-gradient(from 0deg at 50% 50%, rgba(254, 226, 226, 0.15) 0deg, rgba(254, 240, 138, 0.2) 60deg, rgba(187, 247, 208, 0.15) 120deg, rgba(186, 230, 253, 0.1) 180deg, rgba(196, 181, 253, 0.15) 240deg, rgba(253, 244, 255, 0.2) 300deg, rgba(254, 226, 226, 0.15) 360deg),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0%, rgba(240, 253, 244, 0.08) 50%, rgba(248, 250, 252, 0.05) 100%)
   `
 };

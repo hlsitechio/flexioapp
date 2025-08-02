@@ -250,4 +250,49 @@
   .animate-glow {
     animation: glow 2s ease-in-out infinite;
   }
+
+  /* Glassmorphism Effects */
+  .glassmorphic-ocean,
+  .glassmorphic-fire,
+  .glassmorphic-cosmic,
+  .glassmorphic-aurora,
+  .glassmorphic-neon,
+  .glassmorphic-forest,
+  .glassmorphic-sunset,
+  .glassmorphic-rainbow {
+    position: relative;
+  }
+
+  .glassmorphic-ocean::before,
+  .glassmorphic-fire::before,
+  .glassmorphic-cosmic::before,
+  .glassmorphic-aurora::before,
+  .glassmorphic-neon::before,
+  .glassmorphic-forest::before,
+  .glassmorphic-sunset::before,
+  .glassmorphic-rainbow::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: inherit;
+    z-index: -1;
+  }
+
+  .dark .glassmorphic-ocean::before,
+  .dark .glassmorphic-fire::before,
+  .dark .glassmorphic-cosmic::before,
+  .dark .glassmorphic-aurora::before,
+  .dark .glassmorphic-neon::before,
+  .dark .glassmorphic-forest::before,
+  .dark .glassmorphic-sunset::before,
+  .dark .glassmorphic-rainbow::before {
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
 }
