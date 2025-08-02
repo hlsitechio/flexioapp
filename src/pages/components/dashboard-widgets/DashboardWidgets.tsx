@@ -1,4 +1,4 @@
-import { useState } from 'react'; // Fixed ComponentShowcase reference error
+import { useState, useEffect, useRef } from 'react'; // Fixed ComponentShowcase reference error
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { LayoutDashboard, Plus } from 'lucide-react';
@@ -101,6 +101,40 @@ function SidebarComponentShowcase({ children, componentName }: { children: React
 }
 
 export function DashboardWidgets({ targetSlot, gridSize }: { targetSlot?: string | null; gridSize?: string | null }) {
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      
+      // Get the carousel container and content
+      const carousel = carouselRef.current;
+      if (!carousel) return;
+
+      // Find the carousel content element
+      const carouselContent = carousel.querySelector('[data-carousel-content]') as HTMLElement;
+      if (!carouselContent) return;
+
+      // Calculate scroll amount based on wheel delta
+      const scrollAmount = e.deltaY > 0 ? 300 : -300;
+      
+      // Smooth scroll horizontally
+      carouselContent.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+      });
+    };
+
+    const carousel = carouselRef.current;
+    if (carousel) {
+      carousel.addEventListener('wheel', handleWheel, { passive: false });
+      
+      return () => {
+        carousel.removeEventListener('wheel', handleWheel);
+      };
+    }
+  }, []);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center space-x-2">
@@ -117,14 +151,15 @@ export function DashboardWidgets({ targetSlot, gridSize }: { targetSlot?: string
       </p>
       
       {/* Dashboard Widgets Carousel */}
-      <Carousel
-        opts={{
-          align: "start",
-          loop: true,
-        }}
-        className="w-full max-w-6xl mx-auto"
-      >
-        <CarouselContent className="-ml-2 md:-ml-4">
+      <div ref={carouselRef}>
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full max-w-6xl mx-auto"
+        >
+          <CarouselContent className="-ml-2 md:-ml-4" data-carousel-content>
           <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
             <DashboardComponentShowcase componentName="Calendar" targetSlot={targetSlot} gridSize={gridSize}>
               <Calendar />
@@ -162,10 +197,11 @@ export function DashboardWidgets({ targetSlot, gridSize }: { targetSlot?: string
               </CardContent>
             </Card>
           </CarouselItem>
-        </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
-      </Carousel>
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+      </div>
     </div>
   );
 }
