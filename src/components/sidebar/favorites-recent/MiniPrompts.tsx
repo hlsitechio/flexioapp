@@ -97,49 +97,35 @@ export function MiniPrompts({ isCollapsed }: MiniPromptsProps) {
   }
 
   return (
-    <div className="space-y-2 px-2">
+    <div className="space-y-1 px-2">
       {prompts.map((prompt) => (
-        <Card key={prompt.id} className="border-0 bg-muted/30">
-          <CardContent className="p-2">
-            <div className="flex items-start justify-between gap-2">
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-foreground truncate mb-1">
-                  {prompt.title}
-                </p>
-                <p className="text-xs text-muted-foreground line-clamp-2">
-                  {prompt.content.length > 60 
-                    ? `${prompt.content.substring(0, 60)}...` 
-                    : prompt.content
-                  }
-                </p>
-                <div className="flex gap-1 mt-1">
-                  <Badge variant="secondary" className="text-xs py-0 px-1 h-3">
-                    {prompt.category}
-                  </Badge>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-5 w-5 p-0 opacity-60 hover:opacity-100"
-                onClick={() => copyPrompt(prompt.content)}
-              >
-                <Copy className="h-3 w-3" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        <div key={prompt.id} className="group flex items-center justify-between gap-2 py-1 px-2 rounded hover:bg-muted/50 transition-colors">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <MessageSquare className="h-3 w-3 text-primary flex-shrink-0" />
+            <span className="text-xs text-foreground truncate">{prompt.title}</span>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-4 w-4 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={() => copyPrompt(prompt.content)}
+          >
+            <Copy className="h-2.5 w-2.5" />
+          </Button>
+        </div>
       ))}
       
-      <Button
-        variant="ghost"
-        size="sm"
-        className="w-full h-6 text-xs justify-start"
-        onClick={() => window.open('/components', '_blank')}
-      >
-        <Plus className="h-3 w-3 mr-1" />
-        Add more
-      </Button>
+      <div className="flex items-center gap-2 py-1 px-2">
+        <Plus className="h-3 w-3 text-muted-foreground" />
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-auto p-0 text-xs text-muted-foreground hover:text-foreground justify-start"
+          onClick={() => window.open('/components', '_blank')}
+        >
+          Add more
+        </Button>
+      </div>
     </div>
   );
 }

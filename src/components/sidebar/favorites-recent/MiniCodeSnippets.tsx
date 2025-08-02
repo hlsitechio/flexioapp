@@ -141,52 +141,35 @@ export function MiniCodeSnippets({ isCollapsed }: MiniCodeSnippetsProps) {
   }
 
   return (
-    <div className="space-y-2 px-2">
+    <div className="space-y-1 px-2">
       {snippets.map((snippet) => (
-        <Card key={snippet.id} className="border-0 bg-muted/30">
-          <CardContent className="p-2">
-            <div className="flex items-start justify-between gap-2 mb-2">
-              <div className="flex items-center gap-2 flex-1 min-w-0">
-                <div className={`w-2 h-2 rounded-full ${getLanguageColor(snippet.language)} flex-shrink-0`} />
-                <p className="text-xs font-medium text-foreground truncate">
-                  {snippet.title}
-                </p>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-5 w-5 p-0 opacity-60 hover:opacity-100"
-                onClick={() => copyCode(snippet.code)}
-              >
-                <Copy className="h-3 w-3" />
-              </Button>
-            </div>
-            
-            <div className="bg-muted/50 rounded p-1 mb-1">
-              <pre className="text-xs font-mono whitespace-pre-wrap line-clamp-2">
-                {snippet.code.length > 40 
-                  ? `${snippet.code.substring(0, 40)}...` 
-                  : snippet.code
-                }
-              </pre>
-            </div>
-            
-            <Badge variant="secondary" className="text-xs py-0 px-1 h-3">
-              {languages.find(lang => lang.value === snippet.language)?.label || snippet.language}
-            </Badge>
-          </CardContent>
-        </Card>
+        <div key={snippet.id} className="group flex items-center justify-between gap-2 py-1 px-2 rounded hover:bg-muted/50 transition-colors">
+          <div className="flex items-center gap-2 flex-1 min-w-0">
+            <div className={`w-2 h-2 rounded-full ${getLanguageColor(snippet.language)} flex-shrink-0`} />
+            <span className="text-xs text-foreground truncate">{snippet.title}</span>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-4 w-4 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={() => copyCode(snippet.code)}
+          >
+            <Copy className="h-2.5 w-2.5" />
+          </Button>
+        </div>
       ))}
       
-      <Button
-        variant="ghost"
-        size="sm"
-        className="w-full h-6 text-xs justify-start"
-        onClick={() => window.open('/components', '_blank')}
-      >
-        <Plus className="h-3 w-3 mr-1" />
-        Add more
-      </Button>
+      <div className="flex items-center gap-2 py-1 px-2">
+        <Plus className="h-3 w-3 text-muted-foreground" />
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-auto p-0 text-xs text-muted-foreground hover:text-foreground justify-start"
+          onClick={() => window.open('/components', '_blank')}
+        >
+          Add more
+        </Button>
+      </div>
     </div>
   );
 }
