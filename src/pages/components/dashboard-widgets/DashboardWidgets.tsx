@@ -41,6 +41,7 @@ function DashboardComponentShowcase({
       toast({
         title: "Component Added",
         description: `${componentName} has been added to Slot ${parseInt(targetSlot) + 1}.`,
+        duration: 3000, // Auto-dismiss after 3 seconds
       });
       console.log(`Adding ${componentName} to slot ${targetSlot} in ${gridSize} grid`);
       // Navigate back to dashboard
@@ -49,6 +50,7 @@ function DashboardComponentShowcase({
       toast({
         title: "Added to Dashboard",
         description: `${componentName} has been added to your dashboard.`,
+        duration: 3000, // Auto-dismiss after 3 seconds
       });
       console.log(`Adding ${componentName} to dashboard`);
     }
