@@ -10,7 +10,7 @@ import { useSettings } from '@/contexts/SettingsContext';
 export function UserNavigation() {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
-  const { hideDividers } = useSettings();
+  const { hideDividers = false } = useSettings();
 
   return (
     <div className={`${hideDividers ? '' : 'border-t border-sidebar-border'} ${isCollapsed ? 'p-2' : 'p-4'}`}>

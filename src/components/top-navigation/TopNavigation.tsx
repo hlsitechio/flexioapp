@@ -23,7 +23,7 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
     setShowHeaderTitle, 
     customHeaderTitle, 
     setCustomHeaderTitle,
-    hideDividers
+    hideDividers = false
   } = useSettings();
   const [isCustomizing, setIsCustomizing] = useState(false);
 

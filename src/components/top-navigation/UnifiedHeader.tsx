@@ -24,7 +24,7 @@ export function UnifiedHeader({ editMode = false }: UnifiedHeaderProps) {
     setShowHeaderTitle, 
     customHeaderTitle, 
     setCustomHeaderTitle,
-    hideDividers
+    hideDividers = false
   } = useSettings();
   const [isCustomizing, setIsCustomizing] = useState(false);
 

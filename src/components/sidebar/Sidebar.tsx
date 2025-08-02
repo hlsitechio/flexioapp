@@ -14,7 +14,7 @@ import { UserNavigation } from './UserNavigation';
 import { useSettings } from '@/contexts/SettingsContext';
 
 export function DashboardSidebar() {
-  const { editMode, setEditMode, hideDividers } = useSettings();
+  const { editMode, setEditMode, hideDividers = false } = useSettings();
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
 
