@@ -260,34 +260,36 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize settings from localStorage first, then override with backend if authenticated
   useEffect(() => {
+    console.log('SettingsContext: Initializing settings...', { 
+      isLoading: isLoadingRef.current, 
+      hasUser: !!user, 
+      userId: user?.id,
+      lastUserId: lastUserIdRef.current 
+    });
+    
     if (isLoadingRef.current) {
       console.log('⏸️ Settings already loading, skipping...');
       return;
     }
     
-    console.log('SettingsContext: Initializing settings...');
     const currentUserId = user?.id || null;
-    
-    isLoadingRef.current = true;
     
     // Always load localStorage first for immediate UI
     loadSettingsFromLocalStorage();
     
     // If user exists and we haven't loaded from backend yet for this user
-    if (user && currentUserId !== lastUserIdRef.current && !hasLoadedFromBackendRef.current) {
+    if (user && currentUserId !== lastUserIdRef.current) {
       console.log('🔄 New user session detected, will sync with backend...');
       lastUserIdRef.current = currentUserId;
-      hasLoadedFromBackendRef.current = true;
+      hasLoadedFromBackendRef.current = false; // Reset for new user
       
       // Setup realtime subscription
       setupRealtimeSubscription();
       
-      // Delay backend sync to avoid double render on page reload
+      // Load from backend after a small delay to avoid race conditions
       setTimeout(() => {
-        if (isLoadingRef.current) {
-          loadSettingsFromBackend();
-        }
-      }, 300);
+        loadSettingsFromBackend();
+      }, 500);
     } else if (!user) {
       // User signed out - reset flags and save current settings
       console.log('👋 User signed out, resetting state...');
@@ -295,10 +297,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       lastUserIdRef.current = null;
       saveCurrentSettingsToLocalStorage();
       cleanupRealtimeSubscription();
-      isLoadingRef.current = false;
     } else {
-      // Same user, no backend sync needed
-      isLoadingRef.current = false;
+      console.log('✅ Same user, no backend sync needed');
     }
   }, [user?.id]); // Only depend on user.id, not the entire user object
 
@@ -422,8 +422,24 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const loadSettingsFromBackend = async () => {
-    if (!user || isLoadingRef.current || isSavingRef.current) {
-      console.log('🚫 Skipping backend load: user, loading, or saving state prevents it');
+    console.log('📡 Attempting to load settings from backend...', { 
+      hasUser: !!user, 
+      isLoading: isLoadingRef.current, 
+      isSaving: isSavingRef.current 
+    });
+    
+    if (!user) {
+      console.log('🚫 No user - skipping backend load');
+      return;
+    }
+    
+    if (isLoadingRef.current) {
+      console.log('🚫 Already loading - skipping backend load');
+      return;
+    }
+    
+    if (isSavingRef.current) {
+      console.log('🚫 Currently saving - skipping backend load');
       return;
     }
     
@@ -585,12 +601,30 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       console.log('🔄 Keeping current localStorage settings');
     } finally {
       isLoadingRef.current = false;
+      hasLoadedFromBackendRef.current = true;
+      console.log('✅ Backend loading completed');
     }
   };
 
   const saveSettingsToBackend = async () => {
-    if (!user || isLoadingRef.current) {
-      console.log('❌ Cannot save to backend: No user or currently loading');
+    console.log('💾 Attempting to save settings to backend...', { 
+      hasUser: !!user, 
+      isLoading: isLoadingRef.current,
+      isSaving: isSavingRef.current 
+    });
+    
+    if (!user) {
+      console.log('❌ Cannot save to backend: No user authenticated');
+      return;
+    }
+    
+    if (isLoadingRef.current) {
+      console.log('❌ Cannot save to backend: Currently loading settings');
+      return;
+    }
+    
+    if (isSavingRef.current) {
+      console.log('❌ Cannot save to backend: Already saving');
       return;
     }
 
