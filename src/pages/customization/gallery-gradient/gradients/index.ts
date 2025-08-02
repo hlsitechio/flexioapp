@@ -8,6 +8,12 @@ import { roseGradient } from './rose';
 import { skyGradient } from './sky';
 import { stoneGradient } from './stone';
 import { cosmicGradient } from './cosmic';
+import { auroraGradient } from './aurora';
+import { fireGradient } from './fire';
+import { neonGradient } from './neon';
+import { tropicalGradient } from './tropical';
+import { midnightGradient } from './midnight';
+import { rainbowGradient } from './rainbow';
 
 export const gradients = [
   defaultGradient,
@@ -19,7 +25,13 @@ export const gradients = [
   roseGradient,
   skyGradient,
   stoneGradient,
-  cosmicGradient
+  cosmicGradient,
+  auroraGradient,
+  fireGradient,
+  neonGradient,
+  tropicalGradient,
+  midnightGradient,
+  rainbowGradient
 ];
 
 export {
@@ -32,5 +44,11 @@ export {
   roseGradient,
   skyGradient,
   stoneGradient,
-  cosmicGradient
+  cosmicGradient,
+  auroraGradient,
+  fireGradient,
+  neonGradient,
+  tropicalGradient,
+  midnightGradient,
+  rainbowGradient
 };
