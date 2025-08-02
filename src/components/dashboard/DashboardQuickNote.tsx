@@ -1,18 +1,27 @@
 import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { StickyNote, Edit3, Save } from 'lucide-react';
+import { StickyNote, Edit3, Save, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 
 export function DashboardQuickNote() {
-  const [note, setNote] = useState('');
+  const [notes, setNotes] = useState<string[]>([]);
+  const [currentNote, setCurrentNote] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
   const handleSave = () => {
+    if (currentNote.trim()) {
+      setNotes([...notes, currentNote.trim()]);
+      setCurrentNote('');
+    }
     setIsEditing(false);
   };
 
   const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleAddNote = () => {
     setIsEditing(true);
   };
 
@@ -33,27 +42,49 @@ export function DashboardQuickNote() {
         </CardTitle>
       </CardHeader>
       <CardContent>
+        {/* Display existing notes */}
+        {notes.length > 0 && (
+          <div className="space-y-2 mb-4">
+            {notes.map((note, index) => (
+              <div key={index} className="flex items-start gap-2 text-sm">
+                <span className="text-muted-foreground font-mono">{index + 1}.</span>
+                <span className="text-foreground">{note}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        
+        {/* Input area for new note */}
         {isEditing ? (
           <Textarea
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
+            value={currentNote}
+            onChange={(e) => setCurrentNote(e.target.value)}
             placeholder="Write your quick note here..."
-            className="min-h-[100px] resize-none"
+            className="min-h-[80px] resize-none"
             autoFocus
           />
         ) : (
           <div 
-            className="min-h-[100px] p-3 rounded-md border border-input bg-background cursor-pointer hover:bg-accent/50 transition-colors"
+            className="min-h-[80px] p-3 rounded-md border border-input bg-background cursor-pointer hover:bg-accent/50 transition-colors"
             onClick={handleEdit}
           >
-            {note ? (
-              <p className="text-sm text-foreground whitespace-pre-wrap">{note}</p>
-            ) : (
-              <p className="text-sm text-muted-foreground italic">
-                Click to add a note...
-              </p>
-            )}
+            <p className="text-sm text-muted-foreground italic">
+              Click to add a note...
+            </p>
           </div>
+        )}
+        
+        {/* Plus button to add more notes */}
+        {notes.length > 0 && !isEditing && (
+          <Button
+            onClick={handleAddNote}
+            variant="ghost"
+            size="sm"
+            className="w-full mt-2 text-muted-foreground hover:text-foreground"
+          >
+            <Plus className="h-4 w-4 mr-1" />
+            Add another note
+          </Button>
         )}
       </CardContent>
     </Card>
