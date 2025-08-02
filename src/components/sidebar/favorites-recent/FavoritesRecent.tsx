@@ -1,11 +1,13 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSidebar } from '@/components/ui/sidebar';
-import { Heart, Star, Pin, Activity } from 'lucide-react';
+import { Heart, Star, Pin, Activity, MessageSquare, Code2 } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useState } from 'react';
 import { StarredTasks } from './StarredTasks';
 import { PinnedNotes } from './PinnedNotes';
 import { RecentActivity } from './RecentActivity';
+import { MiniPrompts } from './MiniPrompts';
+import { MiniCodeSnippets } from './MiniCodeSnippets';
 
 interface FavoritesRecentProps {}
 
@@ -15,6 +17,8 @@ export function FavoritesRecent({}: FavoritesRecentProps) {
   const [openSections, setOpenSections] = useState({
     starred: true,
     pinned: true,
+    prompts: true,
+    snippets: true,
     recent: true
   });
 
@@ -41,6 +45,8 @@ export function FavoritesRecent({}: FavoritesRecentProps) {
             </div>
             <StarredTasks isCollapsed={true} />
             <PinnedNotes isCollapsed={true} />
+            <MiniPrompts isCollapsed={true} />
+            <MiniCodeSnippets isCollapsed={true} />
             <RecentActivity isCollapsed={true} />
           </motion.div>
         </AnimatePresence>
@@ -101,6 +107,38 @@ export function FavoritesRecent({}: FavoritesRecentProps) {
               </CollapsibleTrigger>
               <CollapsibleContent className="space-y-1">
                 <PinnedNotes isCollapsed={false} />
+              </CollapsibleContent>
+            </Collapsible>
+
+            {/* Mini Prompts */}
+            <Collapsible 
+              open={openSections.prompts} 
+              onOpenChange={() => toggleSection('prompts')}
+            >
+              <CollapsibleTrigger className="flex items-center justify-between w-full px-2 py-1 text-xs font-medium text-sidebar-foreground/80 hover:text-sidebar-foreground transition-colors">
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="h-3 w-3" />
+                  <span>Quick Prompts</span>
+                </div>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="space-y-1">
+                <MiniPrompts isCollapsed={false} />
+              </CollapsibleContent>
+            </Collapsible>
+
+            {/* Mini Code Snippets */}
+            <Collapsible 
+              open={openSections.snippets} 
+              onOpenChange={() => toggleSection('snippets')}
+            >
+              <CollapsibleTrigger className="flex items-center justify-between w-full px-2 py-1 text-xs font-medium text-sidebar-foreground/80 hover:text-sidebar-foreground transition-colors">
+                <div className="flex items-center gap-2">
+                  <Code2 className="h-3 w-3" />
+                  <span>Code Snippets</span>
+                </div>
+              </CollapsibleTrigger>
+              <CollapsibleContent className="space-y-1">
+                <MiniCodeSnippets isCollapsed={false} />
               </CollapsibleContent>
             </Collapsible>
 
