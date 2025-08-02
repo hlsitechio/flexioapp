@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'; // Fixed ComponentShowcase reference error
 import { Card, CardContent } from '@/components/ui/card';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from '@/components/ui/carousel';
 import { LayoutDashboard, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -101,39 +101,32 @@ function SidebarComponentShowcase({ children, componentName }: { children: React
 }
 
 export function DashboardWidgets({ targetSlot, gridSize }: { targetSlot?: string | null; gridSize?: string | null }) {
+  const [api, setApi] = useState<CarouselApi>();
   const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
       
-      // Get the carousel container and content
-      const carousel = carouselRef.current;
-      if (!carousel) return;
+      if (!api) return;
 
-      // Find the carousel content element
-      const carouselContent = carousel.querySelector('[data-carousel-content]') as HTMLElement;
-      if (!carouselContent) return;
-
-      // Calculate scroll amount based on wheel delta
-      const scrollAmount = e.deltaY > 0 ? 300 : -300;
-      
-      // Smooth scroll horizontally
-      carouselContent.scrollBy({
-        left: scrollAmount,
-        behavior: 'smooth'
-      });
+      // Scroll to next/previous based on wheel direction
+      if (e.deltaY > 0) {
+        api.scrollNext();
+      } else {
+        api.scrollPrev();
+      }
     };
 
     const carousel = carouselRef.current;
-    if (carousel) {
+    if (carousel && api) {
       carousel.addEventListener('wheel', handleWheel, { passive: false });
       
       return () => {
         carousel.removeEventListener('wheel', handleWheel);
       };
     }
-  }, []);
+  }, [api]);
 
   return (
     <div className="space-y-6">
@@ -158,8 +151,9 @@ export function DashboardWidgets({ targetSlot, gridSize }: { targetSlot?: string
             loop: true,
           }}
           className="w-full max-w-6xl mx-auto"
+          setApi={setApi}
         >
-          <CarouselContent className="-ml-2 md:-ml-4" data-carousel-content>
+          <CarouselContent className="-ml-2 md:-ml-4">
           <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
             <DashboardComponentShowcase componentName="Calendar" targetSlot={targetSlot} gridSize={gridSize}>
               <Calendar />
