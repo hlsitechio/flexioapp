@@ -8,6 +8,8 @@ import { Settings } from "./pages/settings";
 import { ProfilePage } from "./pages/profile";
 import { ComponentsPage } from "./pages/components";
 import { CustomizationPage } from "./pages/customization";
+import { PromptsGalleryPage } from "./pages/prompts-gallery";
+import { CodeSnippetsPage } from "./pages/code-snippets";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
@@ -33,6 +35,8 @@ const App = () => {
           <Route path="/components" element={user ? <ComponentsPage /> : <Navigate to="/auth" replace />} />
           <Route path="/settings" element={user ? <Settings /> : <Navigate to="/auth" replace />} />
           <Route path="/customization" element={user ? <CustomizationPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/prompts-gallery" element={user ? <PromptsGalleryPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/code-snippets" element={user ? <CodeSnippetsPage /> : <Navigate to="/auth" replace />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
