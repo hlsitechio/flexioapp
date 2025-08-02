@@ -320,79 +320,96 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (data) {
-        console.log('📡 Backend data received:', data.dashboard_layout);
-        
-        // Only override if backend has newer/different settings
-        const layout = (data.dashboard_layout as any) || {};
+        console.log('📡 Backend data received:', data);
         
         console.log('🔄 Applying backend settings...');
-        setCustomHeaderTitle(data.dashboard_title || 'Premium Dashboard');
-        setCustomSidebarTitle(data.sidebar_title || 'Premium Dashboard');
         
-        // Apply sidebar collapsed state if it exists
+        // Apply settings from individual database columns
+        if (data.clock_position !== undefined) {
+          console.log('📍 Setting clock position from backend:', data.clock_position);
+          setClockPosition(data.clock_position as 'left' | 'center' | 'right');
+        }
+        if (data.show_header_title !== undefined) {
+          console.log('🏷️ Setting showHeaderTitle from backend:', data.show_header_title);
+          setShowHeaderTitle(data.show_header_title);
+        }
+        if (data.custom_header_title !== undefined) {
+          console.log('📝 Setting customHeaderTitle from backend:', data.custom_header_title);
+          setCustomHeaderTitle(data.custom_header_title);
+        }
+        if (data.show_sidebar_crown !== undefined) {
+          console.log('👑 Setting showSidebarCrown from backend:', data.show_sidebar_crown);
+          setShowSidebarCrown(data.show_sidebar_crown);
+        }
+        if (data.custom_sidebar_title !== undefined) {
+          console.log('📝 Setting customSidebarTitle from backend:', data.custom_sidebar_title);
+          setCustomSidebarTitle(data.custom_sidebar_title);
+        }
         if (data.sidebar_collapsed !== undefined) {
           console.log('📱 Setting sidebar collapsed from backend:', data.sidebar_collapsed);
           setSidebarCollapsed(data.sidebar_collapsed);
         }
-        
-        // Apply layout settings only if they exist in backend
-        if (layout.clockPosition !== undefined) {
-          console.log('📍 Setting clock position from backend:', layout.clockPosition);
-          setClockPosition(layout.clockPosition);
+        if (data.show_seconds !== undefined) {
+          console.log('⏰ Setting showSeconds from backend:', data.show_seconds);
+          setShowSeconds(data.show_seconds);
         }
-        if (layout.showHeaderTitle !== undefined) setShowHeaderTitle(layout.showHeaderTitle);
-        if (layout.showSidebarCrown !== undefined) setShowSidebarCrown(layout.showSidebarCrown);
-        if (layout.showSeconds !== undefined) {
-          console.log('⏰ Setting showSeconds from backend:', layout.showSeconds);
-          setShowSeconds(layout.showSeconds);
+        if (data.show_date !== undefined) {
+          console.log('📅 Setting showDate from backend:', data.show_date);
+          setShowDate(data.show_date);
         }
-        if (layout.showDate !== undefined) {
-          console.log('📅 Setting showDate from backend:', layout.showDate);
-          setShowDate(layout.showDate);
+        if (data.show_year !== undefined) {
+          console.log('📆 Setting showYear from backend:', data.show_year);
+          setShowYear(data.show_year);
         }
-        if (layout.showYear !== undefined) {
-          console.log('📆 Setting showYear from backend:', layout.showYear);
-          setShowYear(layout.showYear);
+        if (data.use_24_hour_format !== undefined) {
+          console.log('🕐 Setting use24HourFormat from backend:', data.use_24_hour_format);
+          setUse24HourFormat(data.use_24_hour_format);
         }
-        if (layout.use24HourFormat !== undefined) {
-          console.log('🕐 Setting use24HourFormat from backend:', layout.use24HourFormat);
-          setUse24HourFormat(layout.use24HourFormat);
+        if (data.grid_size !== undefined) {
+          console.log('📏 Setting gridSize from backend:', data.grid_size);
+          setGridSize(data.grid_size as GridSize);
         }
-        if (layout.dashboardLayout !== undefined) {
-          console.log('🎯 Setting dashboardLayout from backend:', layout.dashboardLayout);
-          setDashboardLayout(layout.dashboardLayout);
+        if (data.top_navigation_widgets !== undefined) {
+          console.log('🔝 Setting topNavigationWidgets from backend:', data.top_navigation_widgets);
+          setTopNavigationWidgets(data.top_navigation_widgets as string[]);
         }
-        if (layout.gridSize !== undefined) {
-          console.log('📏 Setting gridSize from backend:', layout.gridSize);
-          setGridSize(layout.gridSize);
-        }
-        if (layout.topNavigationWidgets !== undefined) {
-          console.log('🔝 Setting topNavigationWidgets from backend:', layout.topNavigationWidgets);
-          setTopNavigationWidgets(layout.topNavigationWidgets);
-        }
-        
-        // Set quick note from backend if it exists
         if (data.quick_note !== undefined) {
           console.log('📝 Setting quickNote from backend:', data.quick_note);
           setQuickNote(data.quick_note);
         }
+        if (data.banner_image !== undefined) {
+          console.log('🖼️ Setting bannerImage from backend:', data.banner_image);
+          setBannerImage(data.banner_image);
+        }
+        if (data.show_banner !== undefined) {
+          console.log('👁️ Setting showBanner from backend:', data.show_banner);
+          setShowBanner(data.show_banner);
+        }
+        if (data.banner_height !== undefined) {
+          console.log('📏 Setting bannerHeight from backend:', data.banner_height);
+          setBannerHeight(data.banner_height);
+        }
+        if (data.dashboard_background !== undefined) {
+          console.log('🎨 Setting dashboardBackground from backend:', data.dashboard_background);
+          setDashboardBackground(data.dashboard_background);
+        }
+        if (data.edit_mode !== undefined) {
+          console.log('✏️ Setting editMode from backend:', data.edit_mode);
+          setEditMode(data.edit_mode);
+        }
+        if (data.dashboard_layout !== undefined) {
+          console.log('🎯 Setting dashboardLayout from backend:', data.dashboard_layout);
+          setDashboardLayout(data.dashboard_layout as Record<string, { component: string; gridSize: string } | null>);
+        }
         
-        // Set banner settings from backend if they exist
-        if (layout.bannerImage !== undefined) {
-          console.log('🖼️ Setting bannerImage from backend:', layout.bannerImage);
-          setBannerImage(layout.bannerImage);
+        // Also apply legacy fields for backward compatibility
+        if (data.dashboard_title !== undefined) {
+          console.log('🏷️ Setting customHeaderTitle from legacy field:', data.dashboard_title);
+          setCustomHeaderTitle(data.dashboard_title);
         }
-        if (layout.showBanner !== undefined) {
-          console.log('👁️ Setting showBanner from backend:', layout.showBanner);
-          setShowBanner(layout.showBanner);
-        }
-        if (layout.bannerHeight !== undefined) {
-          console.log('📏 Setting bannerHeight from backend:', layout.bannerHeight);
-          setBannerHeight(layout.bannerHeight);
-        }
-        if (layout.dashboardBackground !== undefined) {
-          console.log('🎨 Setting dashboardBackground from backend:', layout.dashboardBackground);
-          setDashboardBackground(layout.dashboardBackground);
+        if (data.sidebar_title !== undefined) {
+          console.log('🏷️ Setting customSidebarTitle from legacy field:', data.sidebar_title);
+          setCustomSidebarTitle(data.sidebar_title);
         }
         
         console.log('✅ Backend settings applied successfully');
@@ -422,39 +439,55 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     console.log('🚀 Starting save to backend...', { userId: user.id });
 
     try {
-      const layoutSettings = {
-        clockPosition,
-        showHeaderTitle,
-        showSidebarCrown,
-        showSeconds,
-        showDate,
-        showYear,
-        use24HourFormat,
-        dashboardLayout,
-        gridSize,
-        topNavigationWidgets,
-        bannerImage,
-        showBanner,
-        bannerHeight,
-        dashboardBackground,
-      };
-
-      console.log('💾 Saving settings to backend:', {
+      console.log('💾 Saving all settings to backend:', {
         user_id: user.id,
-        dashboard_title: customHeaderTitle,
-        sidebar_title: customSidebarTitle,
-        layout: layoutSettings
+        clock_position: clockPosition,
+        show_header_title: showHeaderTitle,
+        custom_header_title: customHeaderTitle,
+        show_sidebar_crown: showSidebarCrown,
+        custom_sidebar_title: customSidebarTitle,
+        sidebar_collapsed: sidebarCollapsed,
+        show_seconds: showSeconds,
+        show_date: showDate,
+        show_year: showYear,
+        use_24_hour_format: use24HourFormat,
+        dashboard_layout: dashboardLayout,
+        grid_size: gridSize,
+        top_navigation_widgets: topNavigationWidgets,
+        quick_note: quickNote,
+        banner_image: bannerImage,
+        show_banner: showBanner,
+        banner_height: bannerHeight,
+        dashboard_background: dashboardBackground,
+        edit_mode: editMode,
       });
 
       const { data, error } = await supabase
         .from('user_settings')
         .upsert({
           user_id: user.id,
+          clock_position: clockPosition,
+          show_header_title: showHeaderTitle,
+          custom_header_title: customHeaderTitle,
+          show_sidebar_crown: showSidebarCrown,
+          custom_sidebar_title: customSidebarTitle,
+          sidebar_collapsed: sidebarCollapsed,
+          show_seconds: showSeconds,
+          show_date: showDate,
+          show_year: showYear,
+          use_24_hour_format: use24HourFormat,
+          dashboard_layout: dashboardLayout,
+          grid_size: gridSize,
+          top_navigation_widgets: topNavigationWidgets,
+          quick_note: quickNote,
+          banner_image: bannerImage,
+          show_banner: showBanner,
+          banner_height: bannerHeight,
+          dashboard_background: dashboardBackground,
+          edit_mode: editMode,
+          // Keep legacy fields for backward compatibility
           dashboard_title: customHeaderTitle,
           sidebar_title: customSidebarTitle,
-          sidebar_collapsed: sidebarCollapsed,
-          dashboard_layout: layoutSettings,
-          quick_note: quickNote,
         }, {
           onConflict: 'user_id'
         })

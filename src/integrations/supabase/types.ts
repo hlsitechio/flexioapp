@@ -181,36 +181,84 @@ export type Database = {
       }
       user_settings: {
         Row: {
+          banner_height: number | null
+          banner_image: string | null
+          clock_position: string | null
           created_at: string
+          custom_header_title: string | null
+          custom_sidebar_title: string | null
+          dashboard_background: string | null
           dashboard_layout: Json | null
           dashboard_title: string | null
+          edit_mode: boolean | null
+          grid_size: string | null
           id: string
           quick_note: string | null
+          show_banner: boolean | null
+          show_date: boolean | null
+          show_header_title: boolean | null
+          show_seconds: boolean | null
+          show_sidebar_crown: boolean | null
+          show_year: boolean | null
           sidebar_collapsed: boolean | null
           sidebar_title: string | null
+          top_navigation_widgets: Json | null
           updated_at: string
+          use_24_hour_format: boolean | null
           user_id: string
         }
         Insert: {
+          banner_height?: number | null
+          banner_image?: string | null
+          clock_position?: string | null
           created_at?: string
+          custom_header_title?: string | null
+          custom_sidebar_title?: string | null
+          dashboard_background?: string | null
           dashboard_layout?: Json | null
           dashboard_title?: string | null
+          edit_mode?: boolean | null
+          grid_size?: string | null
           id?: string
           quick_note?: string | null
+          show_banner?: boolean | null
+          show_date?: boolean | null
+          show_header_title?: boolean | null
+          show_seconds?: boolean | null
+          show_sidebar_crown?: boolean | null
+          show_year?: boolean | null
           sidebar_collapsed?: boolean | null
           sidebar_title?: string | null
+          top_navigation_widgets?: Json | null
           updated_at?: string
+          use_24_hour_format?: boolean | null
           user_id: string
         }
         Update: {
+          banner_height?: number | null
+          banner_image?: string | null
+          clock_position?: string | null
           created_at?: string
+          custom_header_title?: string | null
+          custom_sidebar_title?: string | null
+          dashboard_background?: string | null
           dashboard_layout?: Json | null
           dashboard_title?: string | null
+          edit_mode?: boolean | null
+          grid_size?: string | null
           id?: string
           quick_note?: string | null
+          show_banner?: boolean | null
+          show_date?: boolean | null
+          show_header_title?: boolean | null
+          show_seconds?: boolean | null
+          show_sidebar_crown?: boolean | null
+          show_year?: boolean | null
           sidebar_collapsed?: boolean | null
           sidebar_title?: string | null
+          top_navigation_widgets?: Json | null
           updated_at?: string
+          use_24_hour_format?: boolean | null
           user_id?: string
         }
         Relationships: []
