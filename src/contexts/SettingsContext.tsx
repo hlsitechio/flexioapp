@@ -87,7 +87,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     try {
       if (typeof window !== 'undefined') {
         const item = localStorage.getItem(key);
-        console.log(`Getting localStorage ${key}:`, item, 'defaulting to:', defaultValue);
         return item !== null ? JSON.parse(item) : defaultValue;
       }
     } catch (error) {
@@ -100,7 +99,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     try {
       if (typeof window !== 'undefined') {
         const item = localStorage.getItem(key) || defaultValue;
-        console.log(`Getting localStorage string ${key}:`, item);
         return item;
       }
     } catch (error) {

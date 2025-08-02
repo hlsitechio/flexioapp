@@ -32,7 +32,6 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     try {
       if (typeof window !== 'undefined') {
         const item = localStorage.getItem(key);
-        console.log(`Getting localStorage ${key}:`, item, 'defaulting to:', defaultValue);
         return item !== null ? JSON.parse(item) : defaultValue;
       }
     } catch (error) {
@@ -43,36 +42,23 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 
   // Load notification state from localStorage on init
   useEffect(() => {
-    console.log('NotificationContext: Initializing notification state...');
     const savedNotificationOpen = getStorageItem('isNotificationOpen', false);
     setIsNotificationOpen(savedNotificationOpen);
-    console.log('✅ Notification state loaded from localStorage');
   }, []);
 
   // Save to localStorage whenever state changes
   useEffect(() => {
-    console.log('📱 Notification state changed, saving to localStorage:', isNotificationOpen);
     try {
       if (typeof window !== 'undefined') {
         localStorage.setItem('isNotificationOpen', JSON.stringify(isNotificationOpen));
-        console.log('✅ Notification state saved to localStorage');
       }
     } catch (error) {
       console.warn('❌ Error saving notification state to localStorage:', error);
     }
-
-    // If user is authenticated, we could also save to backend (optional for this setting)
-    if (user) {
-      console.log('👤 User authenticated - could sync notification state to backend if needed');
-    }
-  }, [isNotificationOpen, user]);
+  }, [isNotificationOpen]);
 
   const toggleNotification = () => {
-    setIsNotificationOpen(prev => {
-      const newState = !prev;
-      console.log('🔄 Toggling notification panel:', prev, '->', newState);
-      return newState;
-    });
+    setIsNotificationOpen(prev => !prev);
   };
 
   const addNotification = (notification: Omit<Notification, 'id' | 'timestamp'>) => {
