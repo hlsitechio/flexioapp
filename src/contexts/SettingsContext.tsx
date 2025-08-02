@@ -153,8 +153,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
     // Load settings directly from backend once
     await loadSettingsFromBackend();
-    
-    console.log('✅ One-time settings sync completed for user sign-in');
   };
 
   const applySettingsFromPayload = (data: any) => {
@@ -241,7 +239,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     
     // If user exists and we haven't loaded from backend yet for this user
     if (user && currentUserId !== lastUserIdRef.current) {
-      console.log('🔄 New user session detected, performing one-time sync...');
       lastUserIdRef.current = currentUserId;
       hasLoadedFromBackendRef.current = false; // Reset for new user
       
@@ -251,7 +248,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       }, 500);
     } else if (!user) {
       // User signed out - reset flags and save current settings
-      console.log('👋 User signed out, resetting state...');
       hasLoadedFromBackendRef.current = false;
       lastUserIdRef.current = null;
       saveCurrentSettingsToLocalStorage();
@@ -372,8 +368,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (data) {
-        console.log('✅ Backend settings loaded and applied');
-        
         // Apply settings from backend
         applySettingsFromPayload(data);
         
@@ -382,7 +376,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         
         hasLoadedFromBackendRef.current = true;
       } else {
-        console.log('📝 No backend settings found, will use localStorage defaults');
         // No settings found, save current localStorage settings to backend
         await saveSettingsToBackend();
       }
@@ -394,55 +387,21 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   };
 
   const saveSettingsToBackend = async () => {
-    console.log('💾 Attempting to save settings to backend...', { 
-      hasUser: !!user, 
-      isLoading: isLoadingRef.current,
-      isSaving: isSavingRef.current 
-    });
-    
     if (!user) {
-      console.log('❌ Cannot save to backend: No user authenticated');
       return;
     }
     
     if (isLoadingRef.current) {
-      console.log('❌ Cannot save to backend: Currently loading settings');
       return;
     }
     
     if (isSavingRef.current) {
-      console.log('❌ Cannot save to backend: Already saving');
       return;
     }
 
     isSavingRef.current = true;
 
-    console.log('🚀 Starting save to backend...', { userId: user.id });
-
     try {
-      console.log('💾 Saving all settings to backend:', {
-        user_id: user.id,
-        clock_position: clockPosition,
-        show_header_title: showHeaderTitle,
-        custom_header_title: customHeaderTitle,
-        show_sidebar_crown: showSidebarCrown,
-        custom_sidebar_title: customSidebarTitle,
-        sidebar_collapsed: sidebarCollapsed,
-        show_seconds: showSeconds,
-        show_date: showDate,
-        show_year: showYear,
-        use_24_hour_format: use24HourFormat,
-        dashboard_layout: dashboardLayout,
-        grid_size: gridSize,
-        top_navigation_widgets: topNavigationWidgets,
-        quick_note: quickNote,
-        banner_image: bannerImage,
-        show_banner: showBanner,
-        banner_height: bannerHeight,
-        dashboard_background: dashboardBackground,
-        hide_dividers: hideDividers,
-        edit_mode: editMode,
-      });
 
       const { data, error } = await supabase
         .from('user_settings')
@@ -480,7 +439,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         console.error('❌ Supabase error saving settings:', error);
         throw error;
       } else {
-        console.log('✅ Settings saved successfully to Supabase backend!', data);
         // Also save to localStorage as backup
         saveCurrentSettingsToLocalStorage();
       }
