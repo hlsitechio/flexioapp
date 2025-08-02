@@ -33,6 +33,12 @@ interface SettingsContextType {
   editMode: boolean;
   setEditMode: (mode: boolean) => void;
   
+  // Dashboard layout
+  dashboardLayout: Record<string, { component: string; gridSize: string } | null>;
+  setDashboardLayout: (layout: Record<string, { component: string; gridSize: string } | null>) => void;
+  addComponentToSlot: (slotIndex: number, componentName: string, gridSize: string) => void;
+  removeComponentFromSlot: (slotIndex: number) => void;
+  
   // Manual save function
   saveSettingsToBackend: () => Promise<void>;
 }
@@ -83,6 +89,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [showDate, setShowDate] = useState<boolean>(true);
   const [showYear, setShowYear] = useState<boolean>(true);
   const [use24HourFormat, setUse24HourFormat] = useState<boolean>(false);
+  
+  // Dashboard layout settings
+  const [dashboardLayout, setDashboardLayout] = useState<Record<string, { component: string; gridSize: string } | null>>({});
 
   // Initialize settings from localStorage first, then override with backend if authenticated
   useEffect(() => {
@@ -117,6 +126,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     const savedShowDate = getStorageItem('showDate', true);
     const savedShowYear = getStorageItem('showYear', true);
     const savedUse24HourFormat = getStorageItem('use24HourFormat', false);
+    
+    // Dashboard layout
+    const savedDashboardLayout = getStorageItem('dashboardLayout', {});
 
     console.log('📋 About to set all settings:', {
       showSeconds: savedShowSeconds,
@@ -137,6 +149,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setShowDate(savedShowDate);
     setShowYear(savedShowYear);
     setUse24HourFormat(savedUse24HourFormat);
+    setDashboardLayout(savedDashboardLayout);
     
     console.log('✅ Settings loaded from localStorage');
   };
@@ -166,6 +179,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('showDate', JSON.stringify(showDate));
         localStorage.setItem('showYear', JSON.stringify(showYear));
         localStorage.setItem('use24HourFormat', JSON.stringify(use24HourFormat));
+        localStorage.setItem('dashboardLayout', JSON.stringify(dashboardLayout));
         
         console.log('✅ Current settings saved to localStorage for offline access');
       }
@@ -241,6 +255,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           console.log('🕐 Setting use24HourFormat from backend:', layout.use24HourFormat);
           setUse24HourFormat(layout.use24HourFormat);
         }
+        if (layout.dashboardLayout !== undefined) {
+          console.log('🎯 Setting dashboardLayout from backend:', layout.dashboardLayout);
+          setDashboardLayout(layout.dashboardLayout);
+        }
         
         console.log('✅ Backend settings applied successfully');
         
@@ -277,6 +295,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         showDate,
         showYear,
         use24HourFormat,
+        dashboardLayout,
       };
 
       console.log('💾 Saving settings to backend:', {
@@ -315,9 +334,31 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Dashboard layout functions
+  const addComponentToSlot = (slotIndex: number, componentName: string, gridSize: string) => {
+    const slotKey = `${gridSize}-${slotIndex}`;
+    setDashboardLayout(prev => ({
+      ...prev,
+      [slotKey]: { component: componentName, gridSize }
+    }));
+  };
+
+  const removeComponentFromSlot = (slotIndex: number) => {
+    // Remove from all grid sizes for this slot
+    setDashboardLayout(prev => {
+      const newLayout = { ...prev };
+      Object.keys(newLayout).forEach(key => {
+        if (key.endsWith(`-${slotIndex}`)) {
+          delete newLayout[key];
+        }
+      });
+      return newLayout;
+    });
+  };
+
   // Enhanced save logic with immediate localStorage backup
   useEffect(() => {
-    // Skip the first render to avoid saving default values
+    // Skip the first render to avoid saving default values (but allow dashboard layout changes)
     if (
       clockPosition === 'left' && 
       showHeaderTitle === true && 
@@ -327,7 +368,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       showSeconds === true && 
       showDate === true && 
       showYear === true && 
-      use24HourFormat === false
+      use24HourFormat === false &&
+      Object.keys(dashboardLayout).length === 0
     ) {
       console.log('⏭️ Skipping save of initial default values');
       return;
@@ -378,6 +420,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     showDate,
     showYear,
     use24HourFormat,
+    dashboardLayout,
     user,
   ]);
 
@@ -404,6 +447,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setSidebarCollapsed,
     editMode,
     setEditMode,
+    dashboardLayout,
+    setDashboardLayout,
+    addComponentToSlot,
+    removeComponentFromSlot,
     saveSettingsToBackend,
   };
 

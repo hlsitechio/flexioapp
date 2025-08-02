@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Grid3X3, Grid2X2, LayoutGrid, Plus } from 'lucide-react';
+import { Grid3X3, Grid2X2, LayoutGrid, Plus, X } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useSettings } from '@/contexts/SettingsContext';
+import { Calendar } from '@/components/calendar';
+import { 
+  DashboardTaskCounter, 
+  DashboardQuickNote, 
+  DashboardRandomQuote, 
+  DashboardCountdownTimer 
+} from '@/components/dashboard';
 interface GridLayoutProps {
   editMode: boolean;
 }
@@ -13,6 +21,7 @@ export function GridLayout({
 }: GridLayoutProps) {
   const [gridSize, setGridSize] = useState<GridSize>('4x4');
   const navigate = useNavigate();
+  const { dashboardLayout, removeComponentFromSlot } = useSettings();
   const getGridDimensions = (size: GridSize) => {
     const dimensions = {
       '2x2': {
@@ -78,6 +87,33 @@ export function GridLayout({
     const imageIndex = index % placeholderImages.length;
     return `https://images.unsplash.com/${placeholderImages[imageIndex]}?w=400&h=300&fit=crop`;
   };
+
+  const renderComponent = (componentName: string) => {
+    switch (componentName) {
+      case 'Calendar':
+        return <Calendar />;
+      case 'Task Counter':
+        return <DashboardTaskCounter />;
+      case 'Quick Note':
+        return <DashboardQuickNote />;
+      case 'Random Quote':
+        return <DashboardRandomQuote />;
+      case 'Countdown Timer':
+        return <DashboardCountdownTimer />;
+      default:
+        return null;
+    }
+  };
+
+  const getSlotComponent = (slotIndex: number) => {
+    const slotKey = `${gridSize}-${slotIndex}`;
+    return dashboardLayout[slotKey];
+  };
+
+  const handleRemoveComponent = (slotIndex: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    removeComponentFromSlot(slotIndex);
+  };
   return (
     <div className="w-full">
       {/* Grid Size Selector */}
@@ -113,35 +149,58 @@ export function GridLayout({
           gridTemplateRows: `repeat(${rows}, minmax(200px, 1fr))`
         }}
       >
-        {Array.from({ length: totalCells }, (_, index) => (
-          <Card 
-            key={index}
-            className={`
-              relative group transition-all duration-200 
-              ${editMode ? 'hover:border-primary/50 cursor-pointer' : ''}
-              bg-card/50 backdrop-blur-sm
-            `}
-            onClick={() => handleAddComponent(index)}
-          >
-            <CardContent className="p-6 h-full flex flex-col items-center justify-center">
-              {editMode ? (
-                <div className="flex flex-col items-center space-y-3 text-muted-foreground group-hover:text-primary transition-colors">
-                  <Plus className="h-8 w-8" />
-                  <span className="text-sm font-medium">Add Component</span>
-                  <span className="text-xs opacity-70">Slot {index + 1}</span>
-                </div>
-              ) : (
-                <div className="w-full h-full rounded-lg bg-gradient-to-br from-muted/20 to-muted/40 flex items-center justify-center">
-                  <img 
-                    src={getPlaceholderImage(index)}
-                    alt={`Placeholder ${index + 1}`}
-                    className="w-full h-full object-cover rounded-lg opacity-60"
-                  />
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        ))}
+        {Array.from({ length: totalCells }, (_, index) => {
+          const slotComponent = getSlotComponent(index);
+          const hasComponent = slotComponent && slotComponent.component;
+          
+          return (
+            <Card 
+              key={index}
+              className={`
+                relative group transition-all duration-200 
+                ${editMode && !hasComponent ? 'hover:border-primary/50 cursor-pointer' : ''}
+                bg-card/50 backdrop-blur-sm
+              `}
+              onClick={() => !hasComponent && handleAddComponent(index)}
+            >
+              <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
+                {hasComponent ? (
+                  <>
+                    {/* Remove button for edit mode */}
+                    {editMode && (
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="absolute top-2 right-2 z-10 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={(e) => handleRemoveComponent(index, e)}
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    )}
+                    {/* Render the actual component */}
+                    <div className="w-full h-full">
+                      {renderComponent(slotComponent.component)}
+                    </div>
+                  </>
+                ) : editMode ? (
+                  <div className="flex flex-col items-center space-y-3 text-muted-foreground group-hover:text-primary transition-colors">
+                    <Plus className="h-8 w-8" />
+                    <span className="text-sm font-medium">Add Component</span>
+                    <span className="text-xs opacity-70">Slot {index + 1}</span>
+                  </div>
+                ) : (
+                  <div className="w-full h-full rounded-lg bg-gradient-to-br from-muted/20 to-muted/40 flex items-center justify-center">
+                    <img 
+                      src={getPlaceholderImage(index)}
+                      alt={`Placeholder ${index + 1}`}
+                      className="w-full h-full object-cover rounded-lg opacity-60"
+                    />
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { LayoutDashboard, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { useSettings } from '@/contexts/SettingsContext';
 import { Calendar } from '@/components/calendar';
 import { 
   DashboardTaskCounter, 
@@ -27,9 +28,13 @@ function DashboardComponentShowcase({
 }) {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { addComponentToSlot } = useSettings();
 
   const handleAddToDashboard = () => {
     if (targetSlot) {
+      // Add component to the specific slot using SettingsContext
+      addComponentToSlot(parseInt(targetSlot), componentName, gridSize || '4x4');
+      
       toast({
         title: "Component Added",
         description: `${componentName} has been added to Slot ${parseInt(targetSlot) + 1}.`,
@@ -44,7 +49,6 @@ function DashboardComponentShowcase({
       });
       console.log(`Adding ${componentName} to dashboard`);
     }
-    // TODO: Implement actual functionality to add to dashboard
   };
 
   return (
