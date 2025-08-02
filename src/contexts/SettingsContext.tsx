@@ -33,6 +33,10 @@ interface SettingsContextType {
   topNavigationWidgets: string[];
   setTopNavigationWidgets: (widgets: string[]) => void;
   
+  // Quick note
+  quickNote: string;
+  setQuickNote: (note: string) => void;
+  
   // Edit mode
   editMode: boolean;
   setEditMode: (mode: boolean) => void;
@@ -111,6 +115,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   
   // Top navigation widgets
   const [topNavigationWidgets, setTopNavigationWidgets] = useState<string[]>([]);
+  
+  // Quick note
+  const [quickNote, setQuickNote] = useState<string>('');
 
   // Initialize settings from localStorage first, then override with backend if authenticated
   useEffect(() => {
@@ -162,6 +169,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     
     // Top navigation widgets
     const savedTopNavigationWidgets = getStorageItem('topNavigationWidgets', []);
+    
+    // Quick note
+    const savedQuickNote = getStorageString('quickNote', '');
 
     console.log('📋 About to set all settings:', {
       showSeconds: savedShowSeconds,
@@ -185,6 +195,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setDashboardLayout(savedDashboardLayout);
     setGridSize(savedGridSize);
     setTopNavigationWidgets(savedTopNavigationWidgets);
+    setQuickNote(savedQuickNote);
     
     console.log('✅ Settings loaded from localStorage');
   };
@@ -217,6 +228,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('dashboardLayout', JSON.stringify(dashboardLayout));
         localStorage.setItem('gridSize', gridSize);
         localStorage.setItem('topNavigationWidgets', JSON.stringify(topNavigationWidgets));
+        localStorage.setItem('quickNote', quickNote);
         
         console.log('✅ Current settings saved to localStorage for offline access');
       }
@@ -309,6 +321,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           setTopNavigationWidgets(layout.topNavigationWidgets);
         }
         
+        // Set quick note from backend if it exists
+        if (data.quick_note !== undefined) {
+          console.log('📝 Setting quickNote from backend:', data.quick_note);
+          setQuickNote(data.quick_note);
+        }
+        
         console.log('✅ Backend settings applied successfully');
         
         // Save updated settings to localStorage as backup (after a short delay)
@@ -368,6 +386,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           sidebar_title: customSidebarTitle,
           sidebar_collapsed: sidebarCollapsed,
           dashboard_layout: layoutSettings,
+          quick_note: quickNote,
         }, {
           onConflict: 'user_id'
         })
@@ -430,7 +449,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         }
       }, 2000); // Increased debounce time to reduce frequency
     }
-  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets]);
+  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote]);
 
   // Only trigger save when settings actually change (with debouncing)
   useEffect(() => {
@@ -445,7 +464,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       showDate === true && 
       showYear === true && 
       use24HourFormat === false &&
-      Object.keys(dashboardLayout).length === 0
+      Object.keys(dashboardLayout).length === 0 &&
+      quickNote === ''
     ) {
       return;
     }
@@ -492,6 +512,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setGridSize,
     topNavigationWidgets,
     setTopNavigationWidgets,
+    quickNote,
+    setQuickNote,
     saveSettingsToBackend,
   }), [
     clockPosition,
@@ -508,6 +530,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     dashboardLayout,
     gridSize,
     topNavigationWidgets,
+    quickNote,
     addComponentToSlot,
     removeComponentFromSlot,
     saveSettingsToBackend,
@@ -556,6 +579,8 @@ export function useSettings() {
       setGridSize: () => {},
       topNavigationWidgets: [],
       setTopNavigationWidgets: () => {},
+      quickNote: '',
+      setQuickNote: () => {},
       saveSettingsToBackend: async () => {},
     };
   }

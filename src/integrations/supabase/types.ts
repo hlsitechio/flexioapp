@@ -20,6 +20,7 @@ export type Database = {
           dashboard_layout: Json | null
           dashboard_title: string | null
           id: string
+          quick_note: string | null
           sidebar_collapsed: boolean | null
           sidebar_title: string | null
           updated_at: string
@@ -30,6 +31,7 @@ export type Database = {
           dashboard_layout?: Json | null
           dashboard_title?: string | null
           id?: string
+          quick_note?: string | null
           sidebar_collapsed?: boolean | null
           sidebar_title?: string | null
           updated_at?: string
@@ -40,6 +42,7 @@ export type Database = {
           dashboard_layout?: Json | null
           dashboard_title?: string | null
           id?: string
+          quick_note?: string | null
           sidebar_collapsed?: boolean | null
           sidebar_title?: string | null
           updated_at?: string

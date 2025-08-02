@@ -2,12 +2,13 @@ import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { StickyNote, Edit3 } from 'lucide-react';
 import { useSidebar } from '@/components/ui/sidebar';
+import { useSettings } from '@/contexts/SettingsContext';
 import { QuickNoteCollapsed } from './QuickNoteCollapsed';
 
 export function QuickNote() {
   const { state } = useSidebar();
+  const { quickNote, setQuickNote } = useSettings();
   const isCollapsed = state === 'collapsed';
-  const [note, setNote] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
   const handleSave = () => {
@@ -21,7 +22,7 @@ export function QuickNote() {
   if (isCollapsed) {
     return (
       <QuickNoteCollapsed 
-        note={note}
+        note={quickNote}
         onEdit={handleEdit}
       />
     );
@@ -35,8 +36,8 @@ export function QuickNote() {
           {isEditing ? (
             <input
               type="text"
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
+              value={quickNote}
+              onChange={(e) => setQuickNote(e.target.value)}
               onBlur={handleSave}
               onKeyDown={(e) => e.key === 'Enter' && handleSave()}
               placeholder="Quick note..."
@@ -48,7 +49,7 @@ export function QuickNote() {
               className="text-sm text-foreground flex-1 cursor-pointer hover:text-primary transition-colors"
               onClick={handleEdit}
             >
-              {note || 'Add note...'}
+              {quickNote || 'Add note...'}
             </span>
           )}
           <button 
