@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
 
@@ -51,6 +51,7 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 
 export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
+  const saveTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   // Helper function to safely access localStorage
   const getStorageItem = (key: string, defaultValue: any) => {
@@ -370,9 +371,31 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  // Enhanced save logic with immediate localStorage backup
+  // Optimized save logic with debouncing to prevent excessive re-renders
+  const debouncedSave = useCallback(() => {
+    // Clear existing timer
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current);
+    }
+    
+    // Save to localStorage immediately
+    saveCurrentSettingsToLocalStorage();
+    
+    // Save to backend with debouncing if authenticated
+    if (user) {
+      saveTimerRef.current = setTimeout(async () => {
+        try {
+          await saveSettingsToBackend();
+        } catch (error) {
+          console.error('❌ Backend save failed:', error);
+        }
+      }, 2000); // Increased debounce time to reduce frequency
+    }
+  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize]);
+
+  // Only trigger save when settings actually change (with debouncing)
   useEffect(() => {
-    // Skip the first render to avoid saving default values (but allow dashboard layout changes)
+    // Skip the first render to avoid saving default values
     if (
       clockPosition === 'left' && 
       showHeaderTitle === true && 
@@ -385,61 +408,21 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       use24HourFormat === false &&
       Object.keys(dashboardLayout).length === 0
     ) {
-      console.log('⏭️ Skipping save of initial default values');
       return;
     }
 
-    console.log('🔄 Settings changed, preparing to save...');
-    console.log('📊 Current settings state:', {
-      clockPosition,
-      showSeconds,
-      showDate,
-      showYear,
-      use24HourFormat,
-      customHeaderTitle,
-      customSidebarTitle,
-      userId: user?.id || 'No user'
-    });
+    debouncedSave();
     
-    // ALWAYS save to localStorage immediately when settings change
-    saveCurrentSettingsToLocalStorage();
-    
-    // Then save to backend if authenticated (debounced)
-    if (user) {
-      console.log('⏰ Scheduling backend save in 1 second...');
-      const timer = setTimeout(async () => {
-        console.log('🚀 Executing scheduled backend save...');
-        try {
-          await saveSettingsToBackend();
-          console.log('✅ Scheduled backend save completed successfully');
-        } catch (error) {
-          console.error('❌ Scheduled backend save failed:', error);
-        }
-      }, 1000);
-      return () => {
-        console.log('🗑️ Clearing scheduled backend save timer');
-        clearTimeout(timer);
-      };
-    } else {
-      console.log('👤 No user authenticated - skipping backend save');
-    }
-  }, [
-    clockPosition,
-    showHeaderTitle,
-    customHeaderTitle,
-    showSidebarCrown,
-    customSidebarTitle,
-    sidebarCollapsed,
-    showSeconds,
-    showDate,
-    showYear,
-    use24HourFormat,
-    dashboardLayout,
-    gridSize,
-    user,
-  ]);
+    // Cleanup timer on unmount
+    return () => {
+      if (saveTimerRef.current) {
+        clearTimeout(saveTimerRef.current);
+      }
+    };
+  }, [debouncedSave]);
 
-  const value: SettingsContextType = {
+  // Memoize the context value to prevent unnecessary re-renders
+  const value: SettingsContextType = useMemo(() => ({
     clockPosition,
     setClockPosition,
     showHeaderTitle,
@@ -469,7 +452,24 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     gridSize,
     setGridSize,
     saveSettingsToBackend,
-  };
+  }), [
+    clockPosition,
+    showHeaderTitle,
+    customHeaderTitle,
+    showSeconds,
+    showDate,
+    showYear,
+    use24HourFormat,
+    showSidebarCrown,
+    customSidebarTitle,
+    sidebarCollapsed,
+    editMode,
+    dashboardLayout,
+    gridSize,
+    addComponentToSlot,
+    removeComponentFromSlot,
+    saveSettingsToBackend,
+  ]);
 
   return (
     <SettingsContext.Provider value={value}>
