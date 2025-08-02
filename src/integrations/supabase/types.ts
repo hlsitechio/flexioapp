@@ -192,6 +192,7 @@ export type Database = {
           dashboard_title: string | null
           edit_mode: boolean | null
           grid_size: string | null
+          hide_dividers: boolean | null
           id: string
           quick_note: string | null
           show_banner: boolean | null
@@ -219,6 +220,7 @@ export type Database = {
           dashboard_title?: string | null
           edit_mode?: boolean | null
           grid_size?: string | null
+          hide_dividers?: boolean | null
           id?: string
           quick_note?: string | null
           show_banner?: boolean | null
@@ -246,6 +248,7 @@ export type Database = {
           dashboard_title?: string | null
           edit_mode?: boolean | null
           grid_size?: string | null
+          hide_dividers?: boolean | null
           id?: string
           quick_note?: string | null
           show_banner?: boolean | null

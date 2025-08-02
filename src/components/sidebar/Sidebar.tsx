@@ -14,7 +14,7 @@ import { UserNavigation } from './UserNavigation';
 import { useSettings } from '@/contexts/SettingsContext';
 
 export function DashboardSidebar() {
-  const { editMode, setEditMode } = useSettings();
+  const { editMode, setEditMode, hideDividers } = useSettings();
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
 
@@ -31,11 +31,11 @@ export function DashboardSidebar() {
       className="relative"
     >
       <Sidebar 
-        className="border-r border-sidebar-border bg-sidebar-background backdrop-blur-xl h-full"
+        className={`${hideDividers ? '' : 'border-r border-sidebar-border'} bg-sidebar-background backdrop-blur-xl h-full`}
         collapsible="icon"
       >
 
-        <SidebarHeader className="p-4 border-b border-sidebar-border">
+        <SidebarHeader className={`p-4 ${hideDividers ? '' : 'border-b border-sidebar-border'}`}>
           <DashboardTitle editMode={editMode} />
         </SidebarHeader>
 
@@ -71,12 +71,12 @@ export function DashboardSidebar() {
             <Action />
             
             {/* Divider */}
-            <div className="h-px bg-sidebar-border" />
+            {!hideDividers && <div className="h-px bg-sidebar-border" />}
             
             <Tools />
             
             {/* Divider */}
-            <div className="h-px bg-sidebar-border" />
+            {!hideDividers && <div className="h-px bg-sidebar-border" />}
             
             <FavoritesRecent />
           </div>

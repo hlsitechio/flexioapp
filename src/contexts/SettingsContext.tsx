@@ -64,6 +64,10 @@ interface SettingsContextType {
   dashboardBackground: string;
   setDashboardBackground: (background: string) => void;
   
+  // Divider visibility
+  hideDividers: boolean;
+  setHideDividers: (hide: boolean) => void;
+  
   // Manual save function
   saveSettingsToBackend: () => Promise<void>;
 }
@@ -139,6 +143,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   
   // Dashboard background
   const [dashboardBackground, setDashboardBackground] = useState<string>('bg-gradient-to-br from-background to-muted/20');
+  
+  // Divider visibility
+  const [hideDividers, setHideDividers] = useState<boolean>(false);
 
   // Initialize settings from localStorage first, then override with backend if authenticated
   useEffect(() => {
@@ -214,6 +221,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     
     // Dashboard background
     const savedDashboardBackground = getStorageString('dashboardBackground', 'bg-gradient-to-br from-background to-muted/20');
+    
+    // Divider visibility
+    const savedHideDividers = getStorageItem('hideDividers', false);
 
     console.log('📋 About to set all settings:', {
       showSeconds: savedShowSeconds,
@@ -242,6 +252,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setShowBanner(savedShowBanner);
     setBannerHeight(savedBannerHeight);
     setDashboardBackground(savedDashboardBackground);
+    setHideDividers(savedHideDividers);
     
     console.log('✅ Settings loaded from localStorage');
   };
@@ -279,6 +290,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('showBanner', JSON.stringify(showBanner));
         localStorage.setItem('bannerHeight', JSON.stringify(bannerHeight));
         localStorage.setItem('dashboardBackground', dashboardBackground);
+        localStorage.setItem('hideDividers', JSON.stringify(hideDividers));
         
         console.log('✅ Current settings saved to localStorage for offline access');
       }
@@ -415,6 +427,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           console.log('🎨 Setting dashboardBackground from backend:', data.dashboard_background);
           setDashboardBackground(data.dashboard_background);
         }
+        if (data.hide_dividers !== undefined) {
+          console.log('🔳 Setting hideDividers from backend:', data.hide_dividers);
+          setHideDividers(data.hide_dividers);
+        }
         if (data.edit_mode !== undefined) {
           console.log('✏️ Setting editMode from backend:', data.edit_mode);
           setEditMode(data.edit_mode);
@@ -479,9 +495,10 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         quick_note: quickNote,
         banner_image: bannerImage,
         show_banner: showBanner,
-        banner_height: bannerHeight,
-        dashboard_background: dashboardBackground,
-        edit_mode: editMode,
+          banner_height: bannerHeight,
+          dashboard_background: dashboardBackground,
+          hide_dividers: hideDividers,
+          edit_mode: editMode,
       });
 
       const { data, error } = await supabase
@@ -506,6 +523,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           show_banner: showBanner,
           banner_height: bannerHeight,
           dashboard_background: dashboardBackground,
+          hide_dividers: hideDividers,
           edit_mode: editMode,
           // Keep legacy fields for backward compatibility
           dashboard_title: customHeaderTitle,
@@ -572,7 +590,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         }
       }, 2000); // Increased debounce time to reduce frequency
     }
-  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote, bannerImage, showBanner, bannerHeight, dashboardBackground]);
+  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote, bannerImage, showBanner, bannerHeight, dashboardBackground, hideDividers]);
 
   // Only trigger save when settings actually change (with debouncing)
   useEffect(() => {
@@ -592,7 +610,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       bannerImage === '' &&
       showBanner === false &&
       bannerHeight === 192 &&
-      dashboardBackground === 'bg-gradient-to-br from-background to-muted/20'
+      dashboardBackground === 'bg-gradient-to-br from-background to-muted/20' &&
+      hideDividers === false
     ) {
       return;
     }
@@ -649,6 +668,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setBannerHeight,
     dashboardBackground,
     setDashboardBackground,
+    hideDividers,
+    setHideDividers,
     saveSettingsToBackend,
   }), [
     clockPosition,
@@ -670,6 +691,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     showBanner,
     bannerHeight,
     dashboardBackground,
+    hideDividers,
     addComponentToSlot,
     removeComponentFromSlot,
     saveSettingsToBackend,
@@ -728,6 +750,8 @@ export function useSettings() {
       setBannerHeight: () => {},
       dashboardBackground: 'bg-gradient-to-br from-background to-muted/20',
       setDashboardBackground: () => {},
+      hideDividers: false,
+      setHideDividers: () => {},
       saveSettingsToBackend: async () => {},
     };
   }

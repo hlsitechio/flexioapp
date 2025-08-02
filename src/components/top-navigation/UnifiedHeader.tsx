@@ -23,7 +23,8 @@ export function UnifiedHeader({ editMode = false }: UnifiedHeaderProps) {
     showHeaderTitle, 
     setShowHeaderTitle, 
     customHeaderTitle, 
-    setCustomHeaderTitle 
+    setCustomHeaderTitle,
+    hideDividers
   } = useSettings();
   const [isCustomizing, setIsCustomizing] = useState(false);
 
@@ -47,7 +48,7 @@ export function UnifiedHeader({ editMode = false }: UnifiedHeaderProps) {
   };
 
   return (
-    <header className="h-20 bg-background/95 backdrop-blur-xl border-b border-border/50 flex flex-col justify-center px-6 animate-fade-in relative">
+    <header className={`h-20 bg-background/95 backdrop-blur-xl ${hideDividers ? '' : 'border-b border-border/50'} flex flex-col justify-center px-6 animate-fade-in relative`}>
       {/* Top Section - Title and Clock */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-4">

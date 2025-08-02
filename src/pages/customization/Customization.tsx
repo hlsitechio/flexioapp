@@ -3,6 +3,7 @@ import { TopNavigation } from '@/components/top-navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Appearance } from './Appearance';
 import { GalleryGradient } from './gallery-gradient';
+import { DividerControl } from '@/components/customization/DividerControl';
 import { useSettings } from '@/contexts/SettingsContext';
 
 export function Customization() {
@@ -20,6 +21,9 @@ export function Customization() {
             <div className="grid gap-6 md:grid-cols-1 max-w-2xl">
               {/* Appearance Settings */}
               <Appearance />
+              
+              {/* Divider Control */}
+              <DividerControl />
               
               {/* Gallery Gradient */}
               <GalleryGradient />
