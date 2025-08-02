@@ -30,11 +30,12 @@ export function GridLayout({ editMode }: GridLayoutProps) {
   const navigate = useNavigate();
   const { dashboardLayout, removeComponentFromSlot, gridSize, setGridSize } = useSettings();
 
-  // Calculate intelligent layout
+  // Calculate intelligent layout with enhanced responsiveness
   const intelligentLayout = new IntelligentGridCalculator(
     gridSize,
     dashboardLayout,
-    typeof window !== 'undefined' ? window.innerWidth : 1200
+    typeof window !== 'undefined' ? window.innerWidth : 1200,
+    typeof window !== 'undefined' ? window.innerHeight : 800
   ).calculateIntelligentLayout();
   const getGridDimensions = (size: GridSize) => {
     // Check if it's a vertical grid
@@ -340,7 +341,9 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                   style={{
                     gridColumn: slot.calculatedSize?.gridColumn,
                     gridRow: slot.calculatedSize?.gridRow,
-                    height: slot.calculatedSize?.height
+                    height: slot.calculatedSize?.height,
+                    minHeight: slot.calculatedSize?.minHeight,
+                    maxHeight: slot.calculatedSize?.maxHeight
                   }}
                 >
                   <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
