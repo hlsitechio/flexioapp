@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DndContext, DragOverlay, closestCorners, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { DashboardSidebar } from './sidebar';
 import { NotificationSidebar } from './sidebar/notifications';
-import { TopNavigation } from './top-navigation';
+import { UnifiedHeader } from './top-navigation';
 import { GridLayout } from './GridLayout';
 import { ImageBanner } from './banner';
 import { KanbanCard } from './kanban/KanbanCard';
@@ -10,12 +10,12 @@ import { Button } from '@/components/ui/button';
 import { Edit3, Eye } from 'lucide-react';
 import { KanbanItem } from '@/types/kanban';
 import { useSettings } from '@/contexts/SettingsContext';
-import { useEffect } from 'react';
 import { gradients } from '@/pages/customization/gallery-gradient/gradients';
 
 export function Dashboard() {
   const { editMode, setEditMode, dashboardBackground } = useSettings();
   const [draggedItem, setDraggedItem] = useState<KanbanItem | null>(null);
+  
   
   // Apply mesh gradient styles when dashboardBackground changes
   useEffect(() => {
@@ -23,6 +23,13 @@ export function Dashboard() {
     const dashboardElement = document.querySelector('.dashboard-background') as HTMLElement;
     
     if (gradient && 'style' in gradient && gradient.style && dashboardElement) {
+      // Clear previous styles
+      dashboardElement.style.background = '';
+      dashboardElement.style.backdropFilter = '';
+      dashboardElement.style.border = '';
+      dashboardElement.style.boxShadow = '';
+      
+      // Apply new styles
       Object.assign(dashboardElement.style, gradient.style);
     }
   }, [dashboardBackground]);
@@ -57,7 +64,7 @@ export function Dashboard() {
         <DashboardSidebar />
         
       <div className="flex-1 flex flex-col">
-        <TopNavigation editMode={editMode} />
+        <UnifiedHeader editMode={editMode} />
         
         <ImageBanner />
         

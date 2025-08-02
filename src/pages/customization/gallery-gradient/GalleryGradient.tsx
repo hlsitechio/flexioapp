@@ -20,11 +20,7 @@ export function GalleryGradient() {
               key={gradient.id}
               onClick={() => {
                 if ('style' in gradient && gradient.style) {
-                  // For mesh gradients, apply the style directly to the dashboard
-                  const dashboardElement = document.querySelector('.dashboard-background') as HTMLElement;
-                  if (dashboardElement && gradient.style) {
-                    Object.assign(dashboardElement.style, gradient.style);
-                  }
+                  // For mesh gradients, just set the ID - the useEffect in Dashboard will handle styling
                   setDashboardBackground(gradient.id);
                 } else {
                   setDashboardBackground(gradient.class);
