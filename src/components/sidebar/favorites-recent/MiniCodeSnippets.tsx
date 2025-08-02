@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 interface CodeSnippet {
   id: string;
@@ -43,6 +44,7 @@ const languages = [
 export function MiniCodeSnippets({ isCollapsed }: MiniCodeSnippetsProps) {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [snippets, setSnippets] = useState<CodeSnippet[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -133,7 +135,10 @@ export function MiniCodeSnippets({ isCollapsed }: MiniCodeSnippetsProps) {
 
   if (isCollapsed) {
     return (
-      <div className="flex flex-col items-center space-y-1 px-1">
+      <div 
+        className="flex flex-col items-center space-y-1 px-1 cursor-pointer hover:bg-muted/50 rounded p-1 transition-colors"
+        onClick={() => navigate('/code-snippets')}
+      >
         <Code2 className="h-4 w-4 text-primary" />
         <span className="text-xs font-medium">{snippets.length}</span>
       </div>
@@ -144,7 +149,10 @@ export function MiniCodeSnippets({ isCollapsed }: MiniCodeSnippetsProps) {
     <div className="space-y-1 px-2">
       {snippets.map((snippet) => (
         <div key={snippet.id} className="group flex items-center justify-between gap-2 py-1 px-2 rounded hover:bg-muted/50 transition-colors">
-          <div className="flex items-center gap-2 flex-1 min-w-0">
+          <div 
+            className="flex items-center gap-2 flex-1 min-w-0 cursor-pointer"
+            onClick={() => navigate('/code-snippets')}
+          >
             <div className={`w-2 h-2 rounded-full ${getLanguageColor(snippet.language)} flex-shrink-0`} />
             <span className="text-xs text-foreground truncate">{snippet.title}</span>
           </div>
@@ -152,7 +160,10 @@ export function MiniCodeSnippets({ isCollapsed }: MiniCodeSnippetsProps) {
             variant="ghost"
             size="sm"
             className="h-4 w-4 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-            onClick={() => copyCode(snippet.code)}
+            onClick={(e) => {
+              e.stopPropagation();
+              copyCode(snippet.code);
+            }}
           >
             <Copy className="h-2.5 w-2.5" />
           </Button>
@@ -165,9 +176,9 @@ export function MiniCodeSnippets({ isCollapsed }: MiniCodeSnippetsProps) {
           variant="ghost"
           size="sm"
           className="h-auto p-0 text-xs text-muted-foreground hover:text-foreground justify-start"
-          onClick={() => window.open('/components', '_blank')}
+          onClick={() => navigate('/code-snippets')}
         >
-          Add more
+          View all snippets
         </Button>
       </div>
     </div>
