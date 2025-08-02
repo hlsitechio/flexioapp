@@ -5,6 +5,7 @@ import {
   SidebarHeader,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { Edit3, Eye } from 'lucide-react';
 import { DashboardTitle } from './DashboardTitle';
 import { Action } from './Action';
 import { Tools } from './Tools';
@@ -13,7 +14,7 @@ import { UserNavigation } from './UserNavigation';
 import { useSettings } from '@/contexts/SettingsContext';
 
 export function DashboardSidebar() {
-  const { editMode } = useSettings();
+  const { editMode, setEditMode } = useSettings();
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
 
@@ -41,6 +42,35 @@ export function DashboardSidebar() {
         <SidebarContent className="flex flex-col h-full">
           {/* Main Content Area with Panels */}
           <div className="flex-1 p-4 space-y-6">
+            {/* Edit Mode Toggle */}
+            <div className="space-y-3">
+              {isCollapsed ? (
+                <div className="flex justify-center">
+                  <button 
+                    className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center mx-auto"
+                    onClick={() => setEditMode(!editMode)}
+                  >
+                    {editMode ? <Eye className="h-4 w-4" /> : <Edit3 className="h-4 w-4" />}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setEditMode(!editMode)}
+                  className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-sidebar-accent transition-all cursor-pointer text-left"
+                >
+                  {editMode ? <Eye className="h-4 w-4 text-sidebar-foreground/70" /> : <Edit3 className="h-4 w-4 text-sidebar-foreground/70" />}
+                  <div className="flex-1">
+                    <div className="text-sm font-medium text-sidebar-foreground">
+                      Edit Mode
+                    </div>
+                  </div>
+                </button>
+              )}
+            </div>
+            
+            {/* Divider */}
+            <div className="h-px bg-sidebar-border" />
+            
             <Action />
             
             {/* Divider */}
