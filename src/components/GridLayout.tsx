@@ -131,7 +131,7 @@ export function GridLayout({
               <CardContent className="p-0 flex items-center justify-center h-full relative overflow-hidden">
                 {/* Placeholder Image */}
                 <div className="w-full h-full relative">
-                  <img src={getPlaceholderImage(index)} alt={`Dashboard component placeholder ${index + 1}`} className="w-full h-full object-cover opacity-50" />
+                  
                   
                   <div className="absolute bottom-2 left-2 text-xs text-foreground font-medium">
                     Slot {index + 1}
