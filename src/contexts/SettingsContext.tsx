@@ -226,7 +226,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Initialize settings from localStorage first, then one-time sync with backend if authenticated
+  // Initialize settings based on authentication state
   useEffect(() => {
     if (isLoadingRef.current) {
       return;
@@ -234,25 +234,45 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     
     const currentUserId = user?.id || null;
     
-    // Always load localStorage first for immediate UI
-    loadSettingsFromLocalStorage();
-    
-    // If user exists and we haven't loaded from backend yet for this user
     if (user && currentUserId !== lastUserIdRef.current) {
+      // User authenticated - load settings from backend
       lastUserIdRef.current = currentUserId;
       hasLoadedFromBackendRef.current = false; // Reset for new user
       
-      // Perform one-time sync with backend (no persistent real-time)
+      // Load from backend first for authenticated users
       setTimeout(() => {
-        setupOneTimeSync();
-      }, 500);
+        loadSettingsFromBackend();
+      }, 100);
     } else if (!user) {
-      // User signed out - reset flags and save current settings
+      // User signed out - clear settings and reset to defaults
       hasLoadedFromBackendRef.current = false;
       lastUserIdRef.current = null;
-      saveCurrentSettingsToLocalStorage();
+      resetToDefaultSettings();
     }
-  }, [user?.id]); // Only depend on user.id, not the entire user object
+  }, [user?.id]);
+
+  const resetToDefaultSettings = () => {
+    setClockPosition('left');
+    setShowHeaderTitle(true);
+    setCustomHeaderTitle('Premium Dashboard');
+    setShowSidebarCrown(true);
+    setCustomSidebarTitle('Premium Dashboard');
+    setSidebarCollapsed(false);
+    setShowSeconds(true);
+    setShowDate(true);
+    setShowYear(true);
+    setUse24HourFormat(false);
+    setDashboardLayout({});
+    setGridSize('4x4');
+    setTopNavigationWidgets([]);
+    setQuickNote('');
+    setBannerImage('');
+    setShowBanner(false);
+    setBannerHeight(192);
+    setDashboardBackground('bg-gradient-to-br from-background to-muted/20');
+    setHideDividers(false);
+    setEditMode(false);
+  };
 
   const loadSettingsFromLocalStorage = () => {
     const savedClockPosition = getStorageString('clockPosition', 'left') as 'left' | 'center' | 'right';
@@ -370,10 +390,6 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       if (data) {
         // Apply settings from backend
         applySettingsFromPayload(data);
-        
-        // Save to localStorage for offline access
-        saveCurrentSettingsToLocalStorage();
-        
         hasLoadedFromBackendRef.current = true;
       } else {
         // No settings found, save current localStorage settings to backend
@@ -438,14 +454,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       if (error) {
         console.error('❌ Supabase error saving settings:', error);
         throw error;
-      } else {
-        // Also save to localStorage as backup
-        saveCurrentSettingsToLocalStorage();
       }
     } catch (error) {
       console.error('❌ Fatal error saving settings to backend:', error);
-      // Always save to localStorage as backup
-      saveCurrentSettingsToLocalStorage();
       throw error; // Re-throw so the UI can handle it
     } finally {
       isSavingRef.current = false;
@@ -471,25 +482,22 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  // Optimized save logic with debouncing to prevent excessive re-renders
+  // Save logic for authenticated users only
   const debouncedSave = useCallback(() => {
     // Clear existing timer
     if (saveTimerRef.current) {
       clearTimeout(saveTimerRef.current);
     }
     
-    // Save to localStorage immediately
-    saveCurrentSettingsToLocalStorage();
-    
-    // Save to backend with debouncing if authenticated
-    if (user) {
+    // Only save to backend if authenticated
+    if (user && hasLoadedFromBackendRef.current) {
       saveTimerRef.current = setTimeout(async () => {
         try {
           await saveSettingsToBackend();
         } catch (error) {
           console.error('❌ Backend save failed:', error);
         }
-      }, 2000); // Increased debounce time to reduce frequency
+      }, 1000);
     }
   }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote, bannerImage, showBanner, bannerHeight, dashboardBackground, hideDividers]);
 

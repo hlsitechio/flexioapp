@@ -7,6 +7,7 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { NotificationProvider } from "@/contexts/NotificationContext";
 import { SettingsProvider } from "@/contexts/SettingsContext";
+import { WorkspaceProvider } from "@/contexts/WorkspaceContext";
 import App from "./App.tsx";
 import "./index.css";
 
@@ -18,13 +19,15 @@ createRoot(document.getElementById("root")!).render(
       <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
         <AuthProvider>
           <NotificationProvider>
-            <SettingsProvider>
-              <TooltipProvider>
-                <SidebarProvider defaultOpen={true}>
-                  <App />
-                </SidebarProvider>
-              </TooltipProvider>
-            </SettingsProvider>
+            <WorkspaceProvider>
+              <SettingsProvider>
+                <TooltipProvider>
+                  <SidebarProvider defaultOpen={true}>
+                    <App />
+                  </SidebarProvider>
+                </TooltipProvider>
+              </SettingsProvider>
+            </WorkspaceProvider>
           </NotificationProvider>
         </AuthProvider>
       </ThemeProvider>

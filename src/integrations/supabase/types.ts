@@ -207,6 +207,7 @@ export type Database = {
           updated_at: string
           use_24_hour_format: boolean | null
           user_id: string
+          workspace_id: string | null
         }
         Insert: {
           banner_height?: number | null
@@ -235,6 +236,7 @@ export type Database = {
           updated_at?: string
           use_24_hour_format?: boolean | null
           user_id: string
+          workspace_id?: string | null
         }
         Update: {
           banner_height?: number | null
@@ -262,6 +264,31 @@ export type Database = {
           top_navigation_widgets?: Json | null
           updated_at?: string
           use_24_hour_format?: boolean | null
+          user_id?: string
+          workspace_id?: string | null
+        }
+        Relationships: []
+      }
+      workspaces: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
