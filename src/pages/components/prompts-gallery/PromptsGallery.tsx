@@ -1,6 +1,5 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from '@/components/ui/carousel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -95,8 +94,6 @@ export function PromptsGallery() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showDialog, setShowDialog] = useState(false);
-  const [api, setApi] = useState<CarouselApi>();
-  const carouselRef = useRef<HTMLDivElement>(null);
   const [newPrompt, setNewPrompt] = useState({
     title: '',
     description: '',
@@ -123,30 +120,6 @@ export function PromptsGallery() {
     filterPrompts();
   }, [prompts, searchTerm, selectedCategory]);
 
-  // Mouse wheel functionality for carousel
-  useEffect(() => {
-    const handleWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      
-      if (!api) return;
-
-      // Scroll to next/previous based on wheel direction
-      if (e.deltaY > 0) {
-        api.scrollNext();
-      } else {
-        api.scrollPrev();
-      }
-    };
-
-    const carousel = carouselRef.current;
-    if (carousel && api) {
-      carousel.addEventListener('wheel', handleWheel, { passive: false });
-      
-      return () => {
-        carousel.removeEventListener('wheel', handleWheel);
-      };
-    }
-  }, [api]);
 
   const loadPrompts = async () => {
     if (!user) return;
@@ -266,7 +239,7 @@ export function PromptsGallery() {
   };
 
   return (
-    <div className="space-y-6 h-full p-6">
+    <div className="flex flex-col h-full p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-semibold text-foreground">Prompts Gallery</h2>
@@ -386,101 +359,84 @@ export function PromptsGallery() {
         </Select>
       </div>
 
-      {/* Prompts Carousel */}
-      <div ref={carouselRef}>
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full"
-          setApi={setApi}
-        >
-          <CarouselContent className="-ml-2 md:-ml-4">
+      {/* Prompts Grid */}
+      <div className="flex-1 overflow-auto">
+        {filteredPrompts.length === 0 ? (
+          <div className="flex items-center justify-center h-full min-h-96">
+            <div className="text-center">
+              <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2">No prompts found</h3>
+              <p className="text-sm text-muted-foreground">
+                {searchTerm || selectedCategory !== 'all'
+                  ? 'Try adjusting your search filters'
+                  : 'Create your first prompt to get started'
+                }
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
             {filteredPrompts.map((prompt) => {
               const CategoryIcon = getCategoryIcon(prompt.category);
               return (
-                <CarouselItem key={prompt.id} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-                  <Card className="hover:shadow-md transition-shadow h-full">
-                    <CardHeader className="pb-2">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-2 flex-1 min-w-0">
-                          <CategoryIcon className="h-3 w-3 text-primary flex-shrink-0" />
-                          <CardTitle className="text-sm font-medium truncate">{prompt.title}</CardTitle>
-                        </div>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 w-6 p-0 flex-shrink-0"
-                          onClick={() => copyPrompt(prompt.content)}
-                        >
-                          <Copy className="h-3 w-3" />
-                        </Button>
+                <Card key={prompt.id} className="hover:shadow-md transition-shadow h-full flex flex-col">
+                  <CardHeader className="pb-2">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
+                        <CategoryIcon className="h-4 w-4 text-primary flex-shrink-0" />
+                        <CardTitle className="text-sm font-medium truncate">{prompt.title}</CardTitle>
                       </div>
-                      {prompt.description && (
-                        <p className="text-xs text-muted-foreground line-clamp-2">{prompt.description}</p>
-                      )}
-                    </CardHeader>
-                    
-                    <CardContent className="pt-0 flex-1">
-                      <div className="space-y-2">
-                        <div className="bg-muted/50 rounded p-2 text-xs font-mono h-16 overflow-hidden">
-                          <div className="line-clamp-3">
-                            {prompt.content.length > 120 
-                              ? `${prompt.content.substring(0, 120)}...` 
-                              : prompt.content
-                            }
-                          </div>
-                        </div>
-                        
-                        <div className="flex flex-wrap gap-1">
-                          {prompt.tags.slice(0, 2).map((tag, index) => (
-                            <Badge key={index} variant="secondary" className="text-xs py-0 px-1 h-4">
-                              {tag}
-                            </Badge>
-                          ))}
-                          {prompt.tags.length > 2 && (
-                            <Badge variant="outline" className="text-xs py-0 px-1 h-4">
-                              +{prompt.tags.length - 2}
-                            </Badge>
-                          )}
-                        </div>
-                        
-                        <div className="flex justify-between items-center text-xs text-muted-foreground">
-                          <span className="capitalize text-xs">{prompt.category}</span>
-                          {prompt.usage_count > 0 && (
-                            <span className="text-xs">{prompt.usage_count}</span>
-                          )}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 w-6 p-0 flex-shrink-0"
+                        onClick={() => copyPrompt(prompt.content)}
+                      >
+                        <Copy className="h-3 w-3" />
+                      </Button>
+                    </div>
+                    {prompt.description && (
+                      <p className="text-xs text-muted-foreground line-clamp-2">{prompt.description}</p>
+                    )}
+                  </CardHeader>
+                  
+                  <CardContent className="pt-0 flex-1 flex flex-col">
+                    <div className="space-y-3 flex-1">
+                      <div className="bg-muted/50 rounded p-3 text-xs font-mono min-h-20 overflow-hidden">
+                        <div className="line-clamp-4">
+                          {prompt.content.length > 150 
+                            ? `${prompt.content.substring(0, 150)}...` 
+                            : prompt.content
+                          }
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                </CarouselItem>
-              );
-            })}
-            
-            {filteredPrompts.length === 0 && (
-              <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-                <Card className="h-full">
-                  <CardContent className="flex items-center justify-center h-48">
-                    <div className="text-center">
-                      <MessageSquare className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                      <h3 className="text-sm font-medium text-foreground mb-1">No prompts found</h3>
-                      <p className="text-xs text-muted-foreground">
-                        {searchTerm || selectedCategory !== 'all'
-                          ? 'Try adjusting filters'
-                          : 'Create your first prompt'
-                        }
-                      </p>
+                      
+                      <div className="flex flex-wrap gap-1">
+                        {prompt.tags.slice(0, 3).map((tag, index) => (
+                          <Badge key={index} variant="secondary" className="text-xs py-0 px-2 h-5">
+                            {tag}
+                          </Badge>
+                        ))}
+                        {prompt.tags.length > 3 && (
+                          <Badge variant="outline" className="text-xs py-0 px-2 h-5">
+                            +{prompt.tags.length - 3}
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      <div className="flex justify-between items-center text-xs text-muted-foreground mt-auto">
+                        <span className="capitalize">{prompt.category}</span>
+                        {prompt.usage_count > 0 && (
+                          <span>Used {prompt.usage_count} times</span>
+                        )}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
-              </CarouselItem>
-            )}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
