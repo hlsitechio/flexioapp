@@ -142,116 +142,110 @@ export function PinnedNotes({ isCollapsed }: PinnedNotesProps) {
   }
 
   return (
-    <div className="space-y-2 px-2">
-      {!isAdding && (
-        <Button
-          variant="ghost"
-          size="sm"
-          className="w-full h-8 text-xs justify-start"
-          onClick={() => setIsAdding(true)}
-        >
-          <Plus className="h-3 w-3 mr-2" />
-          Add note
-        </Button>
+    <div className="space-y-1 px-2">
+      {!isAdding ? (
+        <div className="flex items-center gap-2 py-1 px-2">
+          <Pin className="h-3 w-3 text-primary" />
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-auto p-0 text-xs text-muted-foreground hover:text-foreground justify-start"
+            onClick={() => setIsAdding(true)}
+          >
+            Add note
+          </Button>
+        </div>
+      ) : (
+        <div className="space-y-2 p-2 bg-muted/30 rounded">
+          <Input
+            value={newNoteContent}
+            onChange={(e) => setNewNoteContent(e.target.value)}
+            placeholder="Enter note..."
+            className="h-6 text-xs"
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') addPinnedNote();
+              if (e.key === 'Escape') setIsAdding(false);
+            }}
+          />
+          <div className="flex gap-1">
+            <Button size="sm" className="h-5 text-xs px-2" onClick={addPinnedNote}>
+              Save
+            </Button>
+            <Button 
+              size="sm" 
+              variant="ghost" 
+              className="h-5 text-xs px-2" 
+              onClick={() => setIsAdding(false)}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
       )}
 
-      {isAdding && (
-        <Card className="border-0 bg-muted/30">
-          <CardContent className="p-2">
-            <div className="space-y-2">
+      {pinnedNotes.map((note) => (
+        <div key={note.id} className="group">
+          {editingId === note.id ? (
+            <div className="space-y-2 p-2 bg-muted/30 rounded">
               <Input
-                value={newNoteContent}
-                onChange={(e) => setNewNoteContent(e.target.value)}
-                placeholder="Enter note..."
-                className="h-8 text-xs"
+                value={editContent}
+                onChange={(e) => setEditContent(e.target.value)}
+                className="h-6 text-xs"
                 autoFocus
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') addPinnedNote();
-                  if (e.key === 'Escape') setIsAdding(false);
+                  if (e.key === 'Enter') updatePinnedNote(note.id, editContent);
+                  if (e.key === 'Escape') cancelEditing();
                 }}
               />
               <div className="flex gap-1">
-                <Button size="sm" className="h-6 text-xs px-2" onClick={addPinnedNote}>
+                <Button 
+                  size="sm" 
+                  className="h-5 text-xs px-2" 
+                  onClick={() => updatePinnedNote(note.id, editContent)}
+                >
                   Save
                 </Button>
                 <Button 
                   size="sm" 
                   variant="ghost" 
-                  className="h-6 text-xs px-2" 
-                  onClick={() => setIsAdding(false)}
+                  className="h-5 text-xs px-2" 
+                  onClick={cancelEditing}
                 >
                   Cancel
                 </Button>
               </div>
             </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {pinnedNotes.map((note) => (
-        <Card key={note.id} className="border-0 bg-muted/30">
-          <CardContent className="p-2">
-            {editingId === note.id ? (
-              <div className="space-y-2">
-                <Input
-                  value={editContent}
-                  onChange={(e) => setEditContent(e.target.value)}
-                  className="h-8 text-xs"
-                  autoFocus
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') updatePinnedNote(note.id, editContent);
-                    if (e.key === 'Escape') cancelEditing();
-                  }}
-                />
-                <div className="flex gap-1">
-                  <Button 
-                    size="sm" 
-                    className="h-6 text-xs px-2" 
-                    onClick={() => updatePinnedNote(note.id, editContent)}
-                  >
-                    Save
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant="ghost" 
-                    className="h-6 text-xs px-2" 
-                    onClick={cancelEditing}
-                  >
-                    Cancel
-                  </Button>
-                </div>
+          ) : (
+            <div className="flex items-center justify-between gap-2 py-1 px-2 rounded hover:bg-muted/50 transition-colors">
+              <span className="text-xs text-foreground flex-1 truncate">
+                {note.content}
+              </span>
+              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-4 w-4 p-0"
+                  onClick={() => startEditing(note)}
+                >
+                  <Edit3 className="h-2.5 w-2.5" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-4 w-4 p-0"
+                  onClick={() => removePinnedNote(note.id)}
+                >
+                  <X className="h-2.5 w-2.5" />
+                </Button>
               </div>
-            ) : (
-              <div className="flex items-start justify-between gap-2">
-                <p className="text-xs text-foreground flex-1 leading-relaxed">
-                  {note.content}
-                </p>
-                <div className="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-5 w-5 p-0 opacity-60 hover:opacity-100"
-                    onClick={() => startEditing(note)}
-                  >
-                    <Edit3 className="h-3 w-3" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-5 w-5 p-0 opacity-60 hover:opacity-100"
-                    onClick={() => removePinnedNote(note.id)}
-                  >
-                    <X className="h-3 w-3" />
-                  </Button>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+            </div>
+          )}
+        </div>
       ))}
 
       {pinnedNotes.length === 0 && !isAdding && (
-        <div className="text-xs text-muted-foreground px-2">
+        <div className="text-xs text-muted-foreground px-2 py-1">
           No pinned notes yet
         </div>
       )}
