@@ -13,31 +13,67 @@ import { useSettings } from '@/contexts/SettingsContext';
 import { gradients } from '@/pages/customization/gallery-gradient/gradients';
 
 export function Dashboard() {
-  const { editMode, setEditMode, dashboardBackground } = useSettings();
+  const { editMode, setEditMode, dashboardBackground, gradientMode } = useSettings();
   const [draggedItem, setDraggedItem] = useState<KanbanItem | null>(null);
   
   
-  // Apply mesh gradient styles when dashboardBackground changes
+  // Apply mesh gradient styles when dashboardBackground or gradientMode changes
   useEffect(() => {
     const gradient = gradients.find(g => g.id === dashboardBackground);
-    const dashboardElement = document.querySelector('.dashboard-background') as HTMLElement;
     
-    if (gradient && 'style' in gradient && gradient.style && dashboardElement) {
-      // Clear previous styles
-      dashboardElement.style.background = '';
-      dashboardElement.style.backdropFilter = '';
-      dashboardElement.style.border = '';
-      dashboardElement.style.boxShadow = '';
-      dashboardElement.className = dashboardElement.className.replace(/glassmorphic-\w+/g, '');
+    if (gradient && 'style' in gradient && gradient.style) {
+      const glassmorphicClass = gradient.class.split(' ').find(cls => cls.startsWith('glassmorphic-')) || '';
+      const gradientStyle = { ...gradient.style as React.CSSProperties, transition: 'all 0.5s ease-in-out' };
       
-      // Apply new styles with enhanced appearance
-      Object.assign(dashboardElement.style, gradient.style);
-      dashboardElement.classList.add(gradient.class.split(' ').find(cls => cls.startsWith('glassmorphic-')) || '');
+      // Clear all previous gradient styles from all potential targets
+      const allElements = document.querySelectorAll('.dashboard-background, .gradient-sidebar, .gradient-header');
+      allElements.forEach(element => {
+        if (element instanceof HTMLElement) {
+          element.style.background = '';
+          element.style.backdropFilter = '';
+          element.style.border = '';
+          element.style.boxShadow = '';
+          element.className = element.className.replace(/glassmorphic-\w+/g, '');
+        }
+      });
       
-      // Add smooth transition effect
-      dashboardElement.style.transition = 'all 0.5s ease-in-out';
+      // Apply gradients based on mode
+      switch (gradientMode) {
+        case 'full':
+          const fullElement = document.querySelector('.dashboard-container') as HTMLElement;
+          if (fullElement) {
+            Object.assign(fullElement.style, gradientStyle);
+            fullElement.classList.add(glassmorphicClass);
+          }
+          break;
+        case 'main':
+          const mainElement = document.querySelector('.main-content-area') as HTMLElement;
+          if (mainElement) {
+            Object.assign(mainElement.style, gradientStyle);
+            mainElement.classList.add(glassmorphicClass);
+          }
+          break;
+        case 'main-nav':
+          const mainNavElements = document.querySelectorAll('.main-content-area, .gradient-header');
+          mainNavElements.forEach(element => {
+            if (element instanceof HTMLElement) {
+              Object.assign(element.style, gradientStyle);
+              element.classList.add(glassmorphicClass);
+            }
+          });
+          break;
+        case 'main-sidebar':
+          const mainSidebarElements = document.querySelectorAll('.main-content-area, .gradient-sidebar');
+          mainSidebarElements.forEach(element => {
+            if (element instanceof HTMLElement) {
+              Object.assign(element.style, gradientStyle);
+              element.classList.add(glassmorphicClass);
+            }
+          });
+          break;
+      }
     }
-  }, [dashboardBackground]);
+  }, [dashboardBackground, gradientMode]);
   
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -65,18 +101,22 @@ export function Dashboard() {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className={`min-h-screen flex w-full dashboard-background ${typeof dashboardBackground === 'string' && dashboardBackground.startsWith('bg-') ? dashboardBackground : ''}`}>
-        <DashboardSidebar />
+      <div className={`min-h-screen flex w-full dashboard-container ${gradientMode === 'full' ? 'dashboard-background' : ''} ${typeof dashboardBackground === 'string' && dashboardBackground.startsWith('bg-') ? dashboardBackground : ''}`}>
+        <div className="gradient-sidebar">
+          <DashboardSidebar />
+        </div>
         
-      <div className="flex-1 flex flex-col">
-        <UnifiedHeader editMode={editMode} />
-        
-        <ImageBanner />
-        
-        <main className="flex-1 p-6">
-          <GridLayout editMode={editMode} />
-        </main>
-      </div>
+        <div className="flex-1 flex flex-col">
+          <div className="gradient-header">
+            <UnifiedHeader editMode={editMode} />
+          </div>
+          
+          <ImageBanner />
+          
+          <main className="flex-1 p-6 main-content-area">
+            <GridLayout editMode={editMode} />
+          </main>
+        </div>
       </div>
       
       {/* Notification Sidebar */}

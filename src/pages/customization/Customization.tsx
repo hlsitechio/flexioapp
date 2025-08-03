@@ -3,6 +3,7 @@ import { TopNavigation } from '@/components/top-navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Appearance } from './Appearance';
 import { GalleryGradient } from './gallery-gradient';
+import { GradientModeControl } from '@/components/customization/GradientModeControl';
 import { DividerControl } from '@/components/customization/DividerControl';
 import { useSettings } from '@/contexts/SettingsContext';
 
@@ -24,6 +25,9 @@ export function Customization() {
               
               {/* Divider Control */}
               <DividerControl />
+              
+              {/* Gradient Mode Control */}
+              <GradientModeControl />
               
               {/* Gallery Gradient */}
               <GalleryGradient />

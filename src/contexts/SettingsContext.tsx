@@ -64,6 +64,10 @@ interface SettingsContextType {
   dashboardBackground: string;
   setDashboardBackground: (background: string) => void;
   
+  // Gradient modes
+  gradientMode: 'full' | 'main' | 'main-nav' | 'main-sidebar';
+  setGradientMode: (mode: 'full' | 'main' | 'main-nav' | 'main-sidebar') => void;
+  
   // Divider visibility
   hideDividers: boolean;
   setHideDividers: (hide: boolean) => void;
@@ -142,6 +146,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   // Dashboard background
   const [dashboardBackground, setDashboardBackground] = useState<string>('bg-gradient-to-br from-background to-muted/20');
   
+  // Gradient modes
+  const [gradientMode, setGradientMode] = useState<'full' | 'main' | 'main-nav' | 'main-sidebar'>('main');
+  
   // Divider visibility
   const [hideDividers, setHideDividers] = useState<boolean>(false);
 
@@ -207,6 +214,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     if (data.dashboard_background !== undefined) {
       setDashboardBackground(data.dashboard_background);
     }
+    if (data.gradient_mode !== undefined) {
+      setGradientMode(data.gradient_mode);
+    }
     if (data.hide_dividers !== undefined) {
       setHideDividers(data.hide_dividers);
     }
@@ -270,6 +280,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setShowBanner(false);
     setBannerHeight(192);
     setDashboardBackground('bg-gradient-to-br from-background to-muted/20');
+    setGradientMode('main');
     setHideDividers(false);
     setEditMode(false);
   };
@@ -308,6 +319,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     // Dashboard background
     const savedDashboardBackground = getStorageString('dashboardBackground', 'bg-gradient-to-br from-background to-muted/20');
     
+    // Gradient mode
+    const savedGradientMode = getStorageString('gradientMode', 'main') as 'full' | 'main' | 'main-nav' | 'main-sidebar';
+    
     // Divider visibility
     const savedHideDividers = getStorageItem('hideDividers', false);
 
@@ -329,6 +343,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setShowBanner(savedShowBanner);
     setBannerHeight(savedBannerHeight);
     setDashboardBackground(savedDashboardBackground);
+    setGradientMode(savedGradientMode);
     setHideDividers(savedHideDividers);
   };
 
@@ -353,6 +368,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('showBanner', JSON.stringify(showBanner));
         localStorage.setItem('bannerHeight', JSON.stringify(bannerHeight));
         localStorage.setItem('dashboardBackground', dashboardBackground);
+        localStorage.setItem('gradientMode', gradientMode);
         localStorage.setItem('hideDividers', JSON.stringify(hideDividers));
       }
     } catch (error) {
@@ -447,6 +463,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           show_banner: showBanner,
           banner_height: bannerHeight,
           dashboard_background: dashboardBackground,
+          gradient_mode: gradientMode,
           hide_dividers: hideDividers,
           edit_mode: editMode,
           // Keep legacy fields for backward compatibility
@@ -505,7 +522,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         }
       }, 1000);
     }
-  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote, bannerImage, showBanner, bannerHeight, dashboardBackground, hideDividers]);
+  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote, bannerImage, showBanner, bannerHeight, dashboardBackground, gradientMode, hideDividers]);
 
   // Only trigger save when settings actually change (with debouncing)
   useEffect(() => {
@@ -526,6 +543,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       showBanner === false &&
       bannerHeight === 192 &&
       dashboardBackground === 'bg-gradient-to-br from-background to-muted/20' &&
+      gradientMode === 'main' &&
       hideDividers === false
     ) {
       return;
@@ -583,6 +601,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setBannerHeight,
     dashboardBackground,
     setDashboardBackground,
+    gradientMode,
+    setGradientMode,
     hideDividers,
     setHideDividers,
     saveSettingsToBackend,
@@ -606,6 +626,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     showBanner,
     bannerHeight,
     dashboardBackground,
+    gradientMode,
     hideDividers,
     addComponentToSlot,
     removeComponentFromSlot,
@@ -665,6 +686,8 @@ export function useSettings() {
       setBannerHeight: () => {},
       dashboardBackground: 'bg-gradient-to-br from-background to-muted/20',
       setDashboardBackground: () => {},
+      gradientMode: 'main' as const,
+      setGradientMode: () => {},
       hideDividers: false,
       setHideDividers: () => {},
       saveSettingsToBackend: async () => {},
