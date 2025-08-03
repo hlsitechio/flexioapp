@@ -28,9 +28,14 @@ export function Dashboard() {
       dashboardElement.style.backdropFilter = '';
       dashboardElement.style.border = '';
       dashboardElement.style.boxShadow = '';
+      dashboardElement.className = dashboardElement.className.replace(/glassmorphic-\w+/g, '');
       
-      // Apply new styles
+      // Apply new styles with enhanced appearance
       Object.assign(dashboardElement.style, gradient.style);
+      dashboardElement.classList.add(gradient.class.split(' ').find(cls => cls.startsWith('glassmorphic-')) || '');
+      
+      // Add smooth transition effect
+      dashboardElement.style.transition = 'all 0.5s ease-in-out';
     }
   }, [dashboardBackground]);
   

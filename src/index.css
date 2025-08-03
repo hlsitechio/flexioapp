@@ -259,7 +259,14 @@
   .glassmorphic-neon,
   .glassmorphic-forest,
   .glassmorphic-sunset,
-  .glassmorphic-rainbow {
+  .glassmorphic-rainbow,
+  .glassmorphic-lavender,
+  .glassmorphic-golden,
+  .glassmorphic-rose,
+  .glassmorphic-sky,
+  .glassmorphic-stone,
+  .glassmorphic-tropical,
+  .glassmorphic-midnight {
     position: relative;
   }
 
@@ -270,18 +277,26 @@
   .glassmorphic-neon::before,
   .glassmorphic-forest::before,
   .glassmorphic-sunset::before,
-  .glassmorphic-rainbow::before {
+  .glassmorphic-rainbow::before,
+  .glassmorphic-lavender::before,
+  .glassmorphic-golden::before,
+  .glassmorphic-rose::before,
+  .glassmorphic-sky::before,
+  .glassmorphic-stone::before,
+  .glassmorphic-tropical::before,
+  .glassmorphic-midnight::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    backdrop-filter: blur(20px) saturate(180%);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(24px) saturate(200%);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: inherit;
     z-index: -1;
+    transition: all 0.3s ease-in-out;
   }
 
   .dark .glassmorphic-ocean::before,
@@ -291,8 +306,16 @@
   .dark .glassmorphic-neon::before,
   .dark .glassmorphic-forest::before,
   .dark .glassmorphic-sunset::before,
-  .dark .glassmorphic-rainbow::before {
-    background: rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+  .dark .glassmorphic-rainbow::before,
+  .dark .glassmorphic-lavender::before,
+  .dark .glassmorphic-golden::before,
+  .dark .glassmorphic-rose::before,
+  .dark .glassmorphic-sky::before,
+  .dark .glassmorphic-stone::before,
+  .dark .glassmorphic-tropical::before,
+  .dark .glassmorphic-midnight::before {
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(28px) saturate(180%);
   }
 }
