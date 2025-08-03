@@ -91,7 +91,7 @@ export function AuthPage() {
   };
 
   return (
-    <div className="w-[1920px] h-[1080px] flex items-center justify-center bg-background overflow-hidden">
+    <div className="min-h-screen w-screen flex items-center justify-center bg-background fixed inset-0">
       <Card className="w-full max-w-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Welcome</CardTitle>
