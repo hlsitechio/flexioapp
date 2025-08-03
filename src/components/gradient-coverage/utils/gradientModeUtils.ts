@@ -69,17 +69,28 @@ export function applyGradientToTargets(
 ) {
   targets.forEach(selector => {
     const elements = document.querySelectorAll(selector);
+    
     elements.forEach(element => {
       if (element instanceof HTMLElement) {
-        // Apply consistent glassmorphic styles to all targets
+        // Clear any existing inline background styles first
+        element.style.background = '';
+        element.style.backgroundColor = '';
+        element.style.backdropFilter = '';
+        
+        // Remove any conflicting background classes
+        element.classList.remove('bg-background/95', 'bg-sidebar-background');
+        
+        // Apply gradient background
         if (gradientStyle.background) {
           element.style.background = gradientStyle.background;
         }
         
+        // Apply backdrop filter for glassmorphism
         if (gradientStyle.backdropFilter) {
           element.style.backdropFilter = gradientStyle.backdropFilter;
         }
         
+        // Apply border and shadow
         if (gradientStyle.border) {
           element.style.border = gradientStyle.border;
         }
@@ -88,16 +99,18 @@ export function applyGradientToTargets(
           element.style.boxShadow = gradientStyle.boxShadow;
         }
         
-        // Add glassmorphic class for consistent styling
+        // Add glassmorphic class for additional effects
         if (glassmorphicClass && !element.classList.contains(glassmorphicClass)) {
+          // Remove any existing glassmorphic classes first
+          element.className = element.className.replace(/glassmorphic-\w+/g, '').trim();
           element.classList.add(glassmorphicClass);
         }
         
-        // Remove any conflicting background classes that might interfere
-        element.classList.remove('bg-background/95', 'bg-sidebar-background');
-        
-        // Add smooth transition for gradient changes
+        // Add smooth transition
         element.style.transition = 'all 0.5s ease-in-out';
+        
+        // Ensure z-index doesn't interfere with content
+        element.style.position = 'relative';
       }
     });
   });

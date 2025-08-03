@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Appearance } from './Appearance';
 import { GalleryGradient } from './gallery-gradient';
 import { GradientModeControl } from '@/components/customization/GradientModeControl';
+import { GradientTester } from '@/components/gradient-coverage';
 import { DividerControl } from '@/components/customization/DividerControl';
 import { useSettings } from '@/contexts/SettingsContext';
 
@@ -31,6 +32,9 @@ export function Customization() {
               
               {/* Gallery Gradient */}
               <GalleryGradient />
+              
+              {/* Gradient System Tester */}
+              <GradientTester />
             </div>
           </div>
         </main>
