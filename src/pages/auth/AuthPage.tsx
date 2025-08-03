@@ -96,11 +96,11 @@ export function AuthPage() {
       <Card className="w-full max-w-lg">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
+            <div className="w-16 h-16 bg-white rounded-full overflow-hidden shadow-lg">
               <img 
                 src="/lovable-uploads/1c528921-f8c1-41e4-9ebb-4fb8c3452113.png" 
                 alt="Flexio Logo" 
-                className="w-16 h-16 object-cover rounded-full"
+                className="w-full h-full object-cover"
               />
             </div>
           </div>
