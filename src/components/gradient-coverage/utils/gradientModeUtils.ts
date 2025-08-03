@@ -52,8 +52,14 @@ export function clearAllGradientStyles() {
         // Remove glassmorphic classes
         element.className = element.className.replace(/glassmorphic-\w+/g, '').trim();
         
-        // Restore appropriate backdrop blur for transparent elements
-        if (selector.includes('header') || selector.includes('sidebar')) {
+        // Restore appropriate styles for sidebar and header elements
+        if (selector.includes('sidebar') || selector === '[data-sidebar="sidebar"]') {
+          // Ensure sidebar remains visible with proper background
+          element.style.backgroundColor = 'hsl(var(--background))';
+          element.style.backdropFilter = 'blur(20px)';
+          element.style.border = '1px solid hsl(var(--border))';
+          element.classList.add('bg-background/95');
+        } else if (selector.includes('header') || selector === '[data-component="header"]') {
           element.style.backdropFilter = 'blur(20px)';
           element.classList.add('bg-background/95');
         }
