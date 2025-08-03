@@ -93,7 +93,7 @@ export function AuthPage() {
 
   return (
     <div className="min-h-screen w-screen flex items-center justify-center bg-background fixed inset-0">
-      <Card className="w-full max-w-xl">
+      <Card className="w-full max-w-2xl min-h-[600px]">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <div className="w-16 h-16 bg-white/75 rounded-full overflow-hidden shadow-lg flex items-center justify-center">
@@ -109,7 +109,7 @@ export function AuthPage() {
             Sign in to your account or create a new one
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-8">
           <Tabs defaultValue="signin" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="signin">Sign In</TabsTrigger>
