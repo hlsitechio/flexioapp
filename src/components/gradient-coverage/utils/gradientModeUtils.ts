@@ -131,6 +131,15 @@ export function applySolidSidebarForFullMode() {
     'aside [class*="bg-"]'
   ];
   
+  // Target main content areas to match sidebar transparency
+  const mainContentSelectors = [
+    '.main-content-area',
+    '.dashboard-container',
+    'main',
+    'main .card',
+    'main [class*="bg-"]'
+  ];
+  
   // Separate selectors for scrollbar elements - comprehensive targeting
   const scrollbarSelectors = [
     'aside [data-radix-scroll-area-scrollbar]',
@@ -215,6 +224,32 @@ export function applySolidSidebarForFullMode() {
     // Add CSS for webkit scrollbars - OPAQUE
     addScrollbarCSS('1', 'hsl(var(--border))');
     
+    // Apply same OPAQUE treatment to main content areas
+    mainContentSelectors.forEach(selector => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(element => {
+        if (element instanceof HTMLElement) {
+          // Remove any transparent backgrounds and blur effects
+          element.style.background = '';
+          element.style.backgroundColor = '';
+          element.style.backdropFilter = '';
+          element.classList.remove('bg-background/95', 'bg-card/50', 'bg-muted/50');
+          
+          // Apply solid backgrounds
+          if (element.classList.contains('card') || element.closest('.card')) {
+            element.style.backgroundColor = 'hsl(var(--card))';
+            element.style.border = '1px solid hsl(var(--border))';
+          } else {
+            element.style.backgroundColor = 'hsl(var(--background))';
+          }
+          
+          element.style.transition = 'all 0.3s ease-in-out';
+          element.className = element.className.replace(/glassmorphic-\w+/g, '').trim();
+          element.className = element.className.replace(/bg-\w+\/\d+/g, '').trim();
+        }
+      });
+    });
+    
     sidebarIsOpaque = true;
   } else {
     // Make sidebar TRANSPARENT (100% transparency)
@@ -248,6 +283,25 @@ export function applySolidSidebarForFullMode() {
     
     // Add CSS for webkit scrollbars - TRANSPARENT
     addScrollbarCSS('0', 'transparent');
+    
+    // Apply same TRANSPARENT treatment to main content areas
+    mainContentSelectors.forEach(selector => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(element => {
+        if (element instanceof HTMLElement) {
+          // Apply transparent backgrounds
+          element.style.backgroundColor = 'transparent';
+          element.style.background = 'transparent';
+          element.style.backdropFilter = 'blur(20px)';
+          element.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+          element.style.transition = 'all 0.3s ease-in-out';
+          
+          // Remove any glassmorphic classes
+          element.className = element.className.replace(/glassmorphic-\w+/g, '').trim();
+          element.className = element.className.replace(/bg-\w+\/\d+/g, '').trim();
+        }
+      });
+    });
     
     sidebarIsOpaque = false;
   }
