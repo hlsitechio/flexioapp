@@ -1,11 +1,13 @@
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useSettings } from '@/contexts/SettingsContext';
-import { Layout, Monitor, Navigation, Sidebar, CheckCircle } from 'lucide-react';
+import { Layout, Monitor, Navigation, Sidebar, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import { GRADIENT_MODE_CONFIGS, applySolidSidebarForFullMode } from '@/components/gradient-coverage/utils/gradientModeUtils';
 
 export function GradientModeControl() {
   const { gradientMode, setGradientMode } = useSettings();
+  const [isSidebarSolid, setIsSidebarSolid] = useState(false);
 
   const iconMap = {
     'full': Monitor,
@@ -18,6 +20,11 @@ export function GradientModeControl() {
     ...config,
     icon: iconMap[config.id],
   }));
+
+  const handleSidebarToggle = () => {
+    applySolidSidebarForFullMode();
+    setIsSidebarSolid(!isSidebarSolid);
+  };
 
   return (
     <Card className="w-full">
@@ -36,9 +43,9 @@ export function GradientModeControl() {
                 key={mode.id}
                 variant={gradientMode === mode.id ? "default" : "outline"}
                 onClick={() => setGradientMode(mode.id)}
-                className="h-auto p-4 flex flex-col items-center space-y-2 text-center"
+                className="h-auto p-4 flex flex-col items-center space-y-2 text-center transition-all duration-300 hover:scale-105"
               >
-                <IconComponent className="h-5 w-5" />
+                <IconComponent className="h-5 w-5 transition-transform duration-200" />
                 <div>
                   <div className="font-medium text-sm">{mode.name}</div>
                   <div className="text-xs opacity-70">{mode.description}</div>
@@ -49,20 +56,30 @@ export function GradientModeControl() {
         </div>
         
         {gradientMode === 'full' && (
-          <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
+          <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20 animate-fade-in">
             <div className="flex items-center justify-between">
               <div className="text-sm">
-                <div className="font-medium text-primary">Solid Sidebar Option</div>
-                <div className="text-xs text-primary/80">Make sidebar 0% transparent</div>
+                <div className="font-medium text-primary transition-all duration-300">
+                  {isSidebarSolid ? 'Transparent Sidebar' : 'Solid Sidebar'}
+                </div>
+                <div className="text-xs text-primary/80 transition-all duration-300">
+                  {isSidebarSolid ? 'Make sidebar transparent' : 'Make sidebar 0% transparent'}
+                </div>
               </div>
               <Button
-                onClick={applySolidSidebarForFullMode}
+                onClick={handleSidebarToggle}
                 size="sm"
-                variant="secondary"
-                className="ml-3"
+                variant={isSidebarSolid ? "outline" : "secondary"}
+                className="ml-3 transition-all duration-300 hover:scale-105 group"
               >
-                <CheckCircle className="h-4 w-4 mr-1" />
-                Apply
+                {isSidebarSolid ? (
+                  <EyeOff className="h-4 w-4 mr-1 transition-transform duration-200 group-hover:scale-110" />
+                ) : (
+                  <Eye className="h-4 w-4 mr-1 transition-transform duration-200 group-hover:scale-110" />
+                )}
+                <span className="transition-all duration-200">
+                  {isSidebarSolid ? 'Transparent' : 'Solid'}
+                </span>
               </Button>
             </div>
           </div>
