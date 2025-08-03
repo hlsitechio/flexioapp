@@ -80,9 +80,18 @@ export function applyGradientToTargets(
         // Remove any conflicting background classes
         element.classList.remove('bg-background/95', 'bg-sidebar-background');
         
-        // Apply gradient background
+        // Special handling for main content areas to make them lighter
+        const isMainContent = selector.includes('.main-content-area') || 
+                             element.classList.contains('main-content-area');
+        
+        // Apply gradient background with reduced opacity for main content
         if (gradientStyle.background) {
-          element.style.background = gradientStyle.background;
+          if (isMainContent) {
+            // Make main content much lighter by adding opacity overlay
+            element.style.background = `linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2)), ${gradientStyle.background}`;
+          } else {
+            element.style.background = gradientStyle.background;
+          }
         }
         
         // Apply backdrop filter for glassmorphism
@@ -90,12 +99,16 @@ export function applyGradientToTargets(
           element.style.backdropFilter = gradientStyle.backdropFilter;
         }
         
-        // Apply border and shadow
+        // Apply border and shadow with reduced intensity for main content
         if (gradientStyle.border) {
-          element.style.border = gradientStyle.border;
+          if (isMainContent) {
+            element.style.border = '1px solid rgba(255, 255, 255, 0.2)';
+          } else {
+            element.style.border = gradientStyle.border;
+          }
         }
         
-        if (gradientStyle.boxShadow) {
+        if (gradientStyle.boxShadow && !isMainContent) {
           element.style.boxShadow = gradientStyle.boxShadow;
         }
         
