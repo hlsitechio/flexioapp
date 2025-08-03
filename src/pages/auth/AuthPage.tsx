@@ -16,6 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 export function AuthPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
   const { signIn, signUp } = useAuth();
   const { toast } = useToast();
@@ -66,8 +67,14 @@ export function AuthPage() {
       // Validate input
       emailSchema.parse(email);
       passwordSchema.parse(password);
+      
+      if (!fullName.trim()) {
+        throw new Error('Full name is required');
+      }
 
-      const { error } = await signUp(email, password);
+      const { error } = await signUp(email, password, { 
+        data: { full_name: fullName.trim() } 
+      });
       
       if (error) {
         toast({
@@ -165,6 +172,18 @@ export function AuthPage() {
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               >
                 <form onSubmit={handleSignUp} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-fullname">Full Name</Label>
+                    <Input
+                      id="signup-fullname"
+                      type="text"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      placeholder="Enter your full name"
+                      autoComplete="name"
+                      required
+                    />
+                  </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
                     <Input
