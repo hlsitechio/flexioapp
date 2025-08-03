@@ -1,13 +1,13 @@
-import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { Edit3, Eye, Palette } from 'lucide-react';
 import { DarkModeToggle } from '@/components/appearance';
+import { useSettings } from '@/contexts/SettingsContext';
 
 export function Appearance() {
-  const [editMode, setEditMode] = useState(false);
+  const { editMode, setEditMode } = useSettings();
 
   return (
     <Card className="animate-fade-in">

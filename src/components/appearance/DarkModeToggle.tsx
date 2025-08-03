@@ -1,13 +1,13 @@
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
 
 export function DarkModeToggle() {
-  const [isDark, setIsDark] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const isDark = theme === 'dark';
 
   const toggleDarkMode = () => {
-    setIsDark(!isDark);
-    // TODO: Implement actual dark mode functionality
+    setTheme(isDark ? 'light' : 'dark');
   };
 
   return (
