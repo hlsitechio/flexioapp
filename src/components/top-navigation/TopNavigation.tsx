@@ -3,13 +3,14 @@ import { DashboardTitle } from './DashboardTitle';
 import { TimeDisplay } from './TimeDisplay';
 import { TopNavigationGrid } from './TopNavigationGrid';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { Menu, Settings, AlignLeft, AlignCenter, AlignRight, Eye, EyeOff } from 'lucide-react';
+import { Menu, Settings, AlignLeft, AlignCenter, AlignRight, Eye, EyeOff, Sidebar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useSettings } from '@/contexts/SettingsContext';
+import { applySolidSidebarForFullMode } from '@/components/gradient-coverage/utils/gradientModeUtils';
 
 interface TopNavigationProps {
   editMode?: boolean;
@@ -48,6 +49,18 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
         <TopNavigationGrid editMode={editMode} />
         
         {clockPosition === 'right' && <TimeDisplay />}
+        
+        {editMode && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={applySolidSidebarForFullMode}
+            className="text-xs"
+          >
+            <Sidebar className="h-3 w-3 mr-1" />
+            Solid Sidebar
+          </Button>
+        )}
         
         {editMode && (
           <Popover open={isCustomizing} onOpenChange={setIsCustomizing}>
