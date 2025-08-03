@@ -5,6 +5,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { sanitizeText, textContentSchema } from '@/lib/security';
+import { z } from 'zod';
 
 interface PinnedNote {
   id: string;
@@ -54,11 +56,17 @@ export function PinnedNotes({ isCollapsed }: PinnedNotesProps) {
     if (!user || !newNoteContent.trim()) return;
 
     try {
+      // Validate and sanitize input
+      textContentSchema.parse(newNoteContent);
+      const sanitizedContent = sanitizeText(newNoteContent.trim());
+      
+      if (!sanitizedContent) return;
+
       const { data, error } = await supabase
         .from('pinned_notes')
         .insert({
           user_id: user.id,
-          content: newNoteContent.trim()
+          content: sanitizedContent
         })
         .select()
         .single();
@@ -68,7 +76,7 @@ export function PinnedNotes({ isCollapsed }: PinnedNotesProps) {
       setNewNoteContent('');
       setIsAdding(false);
     } catch (error) {
-      console.error('Error adding pinned note:', error);
+      console.error('Error adding pinned note:', error instanceof z.ZodError ? error.errors[0].message : error);
     }
   };
 
@@ -76,22 +84,28 @@ export function PinnedNotes({ isCollapsed }: PinnedNotesProps) {
     if (!user || !content.trim()) return;
 
     try {
+      // Validate and sanitize input
+      textContentSchema.parse(content);
+      const sanitizedContent = sanitizeText(content.trim());
+      
+      if (!sanitizedContent) return;
+
       const { error } = await supabase
         .from('pinned_notes')
-        .update({ content: content.trim() })
+        .update({ content: sanitizedContent })
         .eq('id', id)
         .eq('user_id', user.id);
 
       if (error) throw error;
       setPinnedNotes(notes => 
         notes.map(note => 
-          note.id === id ? { ...note, content: content.trim() } : note
+          note.id === id ? { ...note, content: sanitizedContent } : note
         )
       );
       setEditingId(null);
       setEditContent('');
     } catch (error) {
-      console.error('Error updating pinned note:', error);
+      console.error('Error updating pinned note:', error instanceof z.ZodError ? error.errors[0].message : error);
     }
   };
 

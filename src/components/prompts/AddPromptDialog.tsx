@@ -6,6 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Plus } from 'lucide-react';
+import { sanitizeText, titleSchema, textContentSchema } from '@/lib/security';
+import { z } from 'zod';
+import { useToast } from '@/hooks/use-toast';
 
 const categories = [
   { value: 'writing', label: 'Writing' },
@@ -27,6 +30,7 @@ interface AddPromptDialogProps {
 }
 
 export function AddPromptDialog({ onSave }: AddPromptDialogProps) {
+  const { toast } = useToast();
   const [showDialog, setShowDialog] = useState(false);
   const [newPrompt, setNewPrompt] = useState({
     title: '',
@@ -37,15 +41,35 @@ export function AddPromptDialog({ onSave }: AddPromptDialogProps) {
   });
 
   const handleSave = async () => {
-    await onSave(newPrompt);
-    setShowDialog(false);
-    setNewPrompt({
-      title: '',
-      description: '',
-      content: '',
-      category: 'writing',
-      tags: ''
-    });
+    try {
+      // Validate and sanitize input
+      titleSchema.parse(newPrompt.title);
+      textContentSchema.parse(newPrompt.content);
+      
+      const sanitizedPrompt = {
+        title: sanitizeText(newPrompt.title),
+        description: newPrompt.description ? sanitizeText(newPrompt.description) : '',
+        content: sanitizeText(newPrompt.content),
+        category: newPrompt.category,
+        tags: newPrompt.tags
+      };
+      
+      await onSave(sanitizedPrompt);
+      setShowDialog(false);
+      setNewPrompt({
+        title: '',
+        description: '',
+        content: '',
+        category: 'writing',
+        tags: ''
+      });
+    } catch (error) {
+      toast({
+        title: "Validation Error",
+        description: error instanceof z.ZodError ? error.errors[0].message : "Please check your input",
+        variant: "destructive"
+      });
+    }
   };
 
   return (

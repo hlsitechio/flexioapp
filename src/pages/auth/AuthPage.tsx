@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { emailSchema, passwordSchema } from '@/lib/security';
+import { z } from 'zod';
 
 export function AuthPage() {
   const [email, setEmail] = useState('');
@@ -21,20 +23,35 @@ export function AuthPage() {
     e.preventDefault();
     setLoading(true);
 
-    const { error } = await signIn(email, password);
-    
-    if (error) {
+    try {
+      // Validate input
+      emailSchema.parse(email);
+      if (!password) {
+        throw new Error('Password is required');
+      }
+
+      const { error } = await signIn(email, password);
+      
+      if (error) {
+        toast({
+          title: "Sign in failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Welcome back!",
+          description: "You have successfully signed in.",
+        });
+        navigate('/');
+      }
+    } catch (error) {
       toast({
-        title: "Sign in failed",
-        description: error.message,
+        title: "Validation Error",
+        description: error instanceof z.ZodError ? error.errors[0].message : 
+                    error instanceof Error ? error.message : "An unexpected error occurred.",
         variant: "destructive",
       });
-    } else {
-      toast({
-        title: "Welcome back!",
-        description: "You have successfully signed in.",
-      });
-      navigate('/');
     }
     setLoading(false);
   };
@@ -43,18 +60,31 @@ export function AuthPage() {
     e.preventDefault();
     setLoading(true);
 
-    const { error } = await signUp(email, password);
-    
-    if (error) {
+    try {
+      // Validate input
+      emailSchema.parse(email);
+      passwordSchema.parse(password);
+
+      const { error } = await signUp(email, password);
+      
+      if (error) {
+        toast({
+          title: "Sign up failed", 
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Account created!",
+          description: "Please check your email to verify your account.",
+        });
+      }
+    } catch (error) {
       toast({
-        title: "Sign up failed", 
-        description: error.message,
+        title: "Validation Error",
+        description: error instanceof z.ZodError ? error.errors[0].message : 
+                    error instanceof Error ? error.message : "An unexpected error occurred.",
         variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Account created!",
-        description: "Please check your email to verify your account.",
       });
     }
     setLoading(false);

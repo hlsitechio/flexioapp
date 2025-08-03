@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { sanitizeText, titleSchema, textContentSchema } from '@/lib/security';
+import { z } from 'zod';
 
 interface Prompt {
   id: string;
@@ -107,25 +109,37 @@ export function usePrompts() {
       return;
     }
 
-    if (!promptData.title || !promptData.content) {
-      toast({
-        title: "Missing fields",
-        description: "Please fill in title and content",
-        variant: "destructive"
-      });
-      return;
-    }
-
     try {
+      // Validate and sanitize input
+      titleSchema.parse(promptData.title);
+      textContentSchema.parse(promptData.content);
+      
+      const sanitizedData = {
+        title: sanitizeText(promptData.title),
+        description: promptData.description ? sanitizeText(promptData.description) : '',
+        content: sanitizeText(promptData.content),
+        category: promptData.category,
+        tags: promptData.tags
+      };
+      
+      if (!sanitizedData.title || !sanitizedData.content) {
+        toast({
+          title: "Missing fields",
+          description: "Please fill in title and content",
+          variant: "destructive"
+        });
+        return;
+      }
+
       const { data, error } = await supabase
         .from('user_prompts')
         .insert({
           user_id: user.id,
-          title: promptData.title,
-          description: promptData.description,
-          content: promptData.content,
-          category: promptData.category,
-          tags: promptData.tags.split(',').map(tag => tag.trim()).filter(Boolean),
+          title: sanitizedData.title,
+          description: sanitizedData.description,
+          content: sanitizedData.content,
+          category: sanitizedData.category,
+          tags: sanitizedData.tags.split(',').map(tag => sanitizeText(tag.trim())).filter(Boolean),
           is_favorite: false,
           usage_count: 0
         })
@@ -143,7 +157,7 @@ export function usePrompts() {
       console.error('Error saving prompt:', error);
       toast({
         title: "Error",
-        description: "Failed to save prompt",
+        description: error instanceof z.ZodError ? error.errors[0].message : "Failed to save prompt",
         variant: "destructive"
       });
     }
