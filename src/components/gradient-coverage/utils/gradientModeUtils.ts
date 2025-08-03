@@ -121,14 +121,16 @@ let sidebarIsOpaque = false; // Track current state
 export function applySolidSidebarForFullMode() {
   console.log('Toggle sidebar transparency called, current state:', sidebarIsOpaque);
   
-  // Target the sidebar and ALL its internal components
+  // Target the sidebar and ALL its internal components, including scrollbars
   const sidebarSelectors = [
     '.gradient-target-sidebar',
     '[data-sidebar="sidebar"]',
     'aside',
     'aside *',
     'aside .card',
-    'aside [class*="bg-"]'
+    'aside [class*="bg-"]',
+    'aside [data-radix-scroll-area-scrollbar]',
+    'aside [data-radix-scroll-area-thumb]'
   ];
   
   if (!sidebarIsOpaque) {
@@ -149,6 +151,13 @@ export function applySolidSidebarForFullMode() {
           if (element.tagName === 'ASIDE' || element.closest('aside')) {
             element.style.backgroundColor = 'hsl(var(--background))';
             element.style.border = '1px solid hsl(var(--border))';
+          }
+          
+          // Make scrollbars opaque
+          if (element.hasAttribute('data-radix-scroll-area-scrollbar') || 
+              element.hasAttribute('data-radix-scroll-area-thumb')) {
+            element.style.backgroundColor = 'hsl(var(--border))';
+            element.style.opacity = '1';
           }
           
           element.style.transition = 'all 0.3s ease-in-out';
@@ -172,6 +181,13 @@ export function applySolidSidebarForFullMode() {
           element.style.backdropFilter = 'blur(20px)';
           element.style.border = '1px solid rgba(255, 255, 255, 0.1)';
           element.style.transition = 'all 0.3s ease-in-out';
+          
+          // Make scrollbars transparent
+          if (element.hasAttribute('data-radix-scroll-area-scrollbar') || 
+              element.hasAttribute('data-radix-scroll-area-thumb')) {
+            element.style.backgroundColor = 'transparent';
+            element.style.opacity = '0.3';
+          }
         }
       });
     });
