@@ -100,7 +100,18 @@ export function AuthPage() {
   };
 
   return (
-    <div className="min-h-screen w-screen flex items-center justify-center bg-background fixed inset-0">
+    <div className="min-h-screen w-screen flex items-center justify-center fixed inset-0 relative">
+      {/* Background image with dimming */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-10"
+        style={{
+          backgroundImage: `url('/lovable-uploads/996d298b-f604-4b30-8018-274eb28c3ed1.png')`
+        }}
+      />
+      {/* Dark overlay for additional dimming */}
+      <div className="absolute inset-0 bg-background/90" />
+      {/* Content */}
+      <div className="relative z-10">
       <Card className="w-full max-w-2xl min-h-[600px]">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
@@ -218,6 +229,7 @@ export function AuthPage() {
           </Tabs>
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }
