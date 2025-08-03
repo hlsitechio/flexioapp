@@ -42,10 +42,18 @@ export function clearAllGradientStyles() {
     elements.forEach(element => {
       if (element instanceof HTMLElement) {
         element.style.background = '';
+        element.style.backgroundColor = '';
         element.style.backdropFilter = '';
         element.style.border = '';
         element.style.boxShadow = '';
         element.className = element.className.replace(/glassmorphic-\w+/g, '').trim();
+        
+        // Restore original background classes for header and sidebar
+        if (selector.includes('header')) {
+          element.classList.add('bg-background/95', 'backdrop-blur-xl');
+        } else if (selector.includes('sidebar')) {
+          element.classList.add('bg-sidebar-background', 'backdrop-blur-xl');
+        }
       }
     });
   });
@@ -60,9 +68,28 @@ export function applyGradientToTargets(
     const elements = document.querySelectorAll(selector);
     elements.forEach(element => {
       if (element instanceof HTMLElement) {
-        // Apply styles
-        if (gradientStyle.background) element.style.background = gradientStyle.background;
-        if (gradientStyle.backdropFilter) element.style.backdropFilter = gradientStyle.backdropFilter;
+        // Apply styles with modifications for specific targets
+        if (gradientStyle.background) {
+          let background = gradientStyle.background;
+          
+          // For navigation and sidebar, ensure solid, opaque backgrounds
+          if (selector.includes('header') || selector.includes('sidebar')) {
+            // Remove existing transparent backgrounds
+            element.style.backgroundColor = '';
+            element.style.backdropFilter = 'none';
+            
+            // Apply gradient background with full opacity
+            element.style.background = background;
+            
+            // Override any existing transparent classes
+            element.classList.remove('bg-background/95', 'bg-sidebar-background');
+            element.classList.remove('backdrop-blur-xl');
+          } else {
+            element.style.background = background;
+            if (gradientStyle.backdropFilter) element.style.backdropFilter = gradientStyle.backdropFilter;
+          }
+        }
+        
         if (gradientStyle.border) element.style.border = gradientStyle.border;
         if (gradientStyle.boxShadow) element.style.boxShadow = gradientStyle.boxShadow;
         
