@@ -2,36 +2,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { useSettings } from '@/contexts/SettingsContext';
 import { Layout, Monitor, Navigation, Sidebar } from 'lucide-react';
+import { GRADIENT_MODE_CONFIGS } from '@/components/gradient-coverage/utils/gradientModeUtils';
 
 export function GradientModeControl() {
   const { gradientMode, setGradientMode } = useSettings();
 
-  const modes = [
-    {
-      id: 'full' as const,
-      name: 'Full Dashboard',
-      description: 'Gradient behind everything',
-      icon: Monitor,
-    },
-    {
-      id: 'main' as const,
-      name: 'Main Only',
-      description: 'Gradient on main content only',
-      icon: Layout,
-    },
-    {
-      id: 'main-nav' as const,
-      name: 'Main + Navigation',
-      description: 'Gradient on main content and navigation',
-      icon: Navigation,
-    },
-    {
-      id: 'main-sidebar' as const,
-      name: 'Main + Sidebar',
-      description: 'Gradient on main content and sidebar',
-      icon: Sidebar,
-    },
-  ];
+  const iconMap = {
+    'full': Monitor,
+    'main': Layout,
+    'main-nav': Navigation,
+    'main-sidebar': Sidebar,
+  };
+
+  const modes = Object.values(GRADIENT_MODE_CONFIGS).map(config => ({
+    ...config,
+    icon: iconMap[config.id],
+  }));
 
   return (
     <Card className="w-full">
