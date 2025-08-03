@@ -117,10 +117,19 @@ export function applyGradientToTargets(
 }
 
 export function applySolidSidebarForFullMode() {
-  // Target the sidebar specifically and make it opaque
+  // Target the sidebar and ALL its internal components
   const sidebarSelectors = [
     '.gradient-target-sidebar',
-    '[data-sidebar="sidebar"]'
+    '[data-sidebar="sidebar"]',
+    '[data-sidebar="sidebar"] *', // All children inside sidebar
+    '[data-sidebar="sidebar"] .card',
+    '[data-sidebar="sidebar"] .bg-card',
+    '[data-sidebar="sidebar"] .bg-background',
+    '[data-sidebar="sidebar"] .bg-muted',
+    '[data-sidebar="sidebar"] .bg-accent',
+    'aside *', // All sidebar content
+    'aside .card',
+    'aside [class*="bg-"]' // Any background classes
   ];
   
   sidebarSelectors.forEach(selector => {
@@ -129,16 +138,26 @@ export function applySolidSidebarForFullMode() {
       if (element instanceof HTMLElement) {
         // Remove any transparent backgrounds and blur effects
         element.style.background = '';
+        element.style.backgroundColor = '';
         element.style.backdropFilter = '';
-        element.classList.remove('bg-background/95');
+        element.classList.remove('bg-background/95', 'bg-card/50', 'bg-muted/50');
         
-        // Apply solid background with 0% transparency
-        element.style.backgroundColor = 'hsl(var(--background))';
-        element.style.border = '1px solid hsl(var(--border))';
+        // Apply solid backgrounds based on element type
+        if (element.classList.contains('card') || element.closest('.card')) {
+          element.style.backgroundColor = 'hsl(var(--card))';
+          element.style.border = '1px solid hsl(var(--border))';
+        } else if (element.tagName === 'ASIDE' || element.closest('aside')) {
+          element.style.backgroundColor = 'hsl(var(--background))';
+        } else {
+          // Default solid background for other elements
+          element.style.backgroundColor = 'hsl(var(--background))';
+        }
+        
         element.style.transition = 'all 0.3s ease-in-out';
         
         // Remove any glassmorphic classes
         element.className = element.className.replace(/glassmorphic-\w+/g, '').trim();
+        element.className = element.className.replace(/bg-\w+\/\d+/g, '').trim();
       }
     });
   });
