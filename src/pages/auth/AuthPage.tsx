@@ -103,7 +103,7 @@ export function AuthPage() {
     <div className="min-h-screen w-screen flex items-center justify-center fixed inset-0 relative">
       {/* Background image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-80"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
         style={{
           backgroundImage: `url('/lovable-uploads/996d298b-f604-4b30-8018-274eb28c3ed1.png')`
         }}
