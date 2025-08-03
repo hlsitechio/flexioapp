@@ -227,6 +227,7 @@ export type Database = {
           show_sidebar_crown: boolean | null
           show_year: boolean | null
           sidebar_collapsed: boolean | null
+          sidebar_solid: boolean | null
           sidebar_title: string | null
           top_navigation_widgets: Json | null
           updated_at: string
@@ -257,6 +258,7 @@ export type Database = {
           show_sidebar_crown?: boolean | null
           show_year?: boolean | null
           sidebar_collapsed?: boolean | null
+          sidebar_solid?: boolean | null
           sidebar_title?: string | null
           top_navigation_widgets?: Json | null
           updated_at?: string
@@ -287,6 +289,7 @@ export type Database = {
           show_sidebar_crown?: boolean | null
           show_year?: boolean | null
           sidebar_collapsed?: boolean | null
+          sidebar_solid?: boolean | null
           sidebar_title?: string | null
           top_navigation_widgets?: Json | null
           updated_at?: string

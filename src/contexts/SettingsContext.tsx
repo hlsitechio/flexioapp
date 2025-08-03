@@ -29,6 +29,8 @@ interface SettingsContextType {
   setCustomSidebarTitle: (title: string) => void;
   sidebarCollapsed: boolean;
   setSidebarCollapsed: (collapsed: boolean) => void;
+  sidebarSolid: boolean;
+  setSidebarSolid: (solid: boolean) => void;
   
   // Top navigation grid settings
   topNavigationWidgets: string[];
@@ -118,6 +120,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const [showSidebarCrown, setShowSidebarCrown] = useState<boolean>(true);
   const [customSidebarTitle, setCustomSidebarTitle] = useState<string>('Premium Dashboard');
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
+  const [sidebarSolid, setSidebarSolid] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   
   // Clock display settings
@@ -180,6 +183,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     }
     if (data.sidebar_collapsed !== undefined) {
       setSidebarCollapsed(data.sidebar_collapsed);
+    }
+    if (data.sidebar_solid !== undefined) {
+      setSidebarSolid(data.sidebar_solid);
     }
     if (data.show_seconds !== undefined) {
       setShowSeconds(data.show_seconds);
@@ -268,6 +274,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setShowSidebarCrown(true);
     setCustomSidebarTitle('Premium Dashboard');
     setSidebarCollapsed(false);
+    setSidebarSolid(false);
     setShowSeconds(true);
     setShowDate(true);
     setShowYear(true);
@@ -451,6 +458,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           show_sidebar_crown: showSidebarCrown,
           custom_sidebar_title: customSidebarTitle,
           sidebar_collapsed: sidebarCollapsed,
+          sidebar_solid: sidebarSolid,
           show_seconds: showSeconds,
           show_date: showDate,
           show_year: showYear,
@@ -522,7 +530,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         }
       }, 1000);
     }
-  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote, bannerImage, showBanner, bannerHeight, dashboardBackground, gradientMode, hideDividers]);
+  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, sidebarSolid, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote, bannerImage, showBanner, bannerHeight, dashboardBackground, gradientMode, hideDividers]);
 
   // Only trigger save when settings actually change (with debouncing)
   useEffect(() => {
@@ -533,7 +541,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       customHeaderTitle === 'Premium Dashboard' && 
       showSidebarCrown === true && 
       customSidebarTitle === 'Premium Dashboard' && 
-      showSeconds === true && 
+      sidebarSolid === false &&
+      showSeconds === true &&
       showDate === true && 
       showYear === true && 
       use24HourFormat === false &&
@@ -581,6 +590,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setCustomSidebarTitle,
     sidebarCollapsed,
     setSidebarCollapsed,
+    sidebarSolid,
+    setSidebarSolid,
     editMode,
     setEditMode,
     dashboardLayout,
@@ -617,6 +628,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     showSidebarCrown,
     customSidebarTitle,
     sidebarCollapsed,
+    sidebarSolid,
     editMode,
     dashboardLayout,
     gridSize,
@@ -666,6 +678,8 @@ export function useSettings() {
       setCustomSidebarTitle: () => {},
       sidebarCollapsed: false,
       setSidebarCollapsed: () => {},
+      sidebarSolid: false,
+      setSidebarSolid: () => {},
       editMode: false,
       setEditMode: () => {},
       dashboardLayout: {},
