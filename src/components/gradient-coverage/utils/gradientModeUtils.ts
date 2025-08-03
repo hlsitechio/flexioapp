@@ -116,6 +116,34 @@ export function applyGradientToTargets(
   });
 }
 
+export function applySolidSidebarForFullMode() {
+  // Target the sidebar specifically and make it opaque
+  const sidebarSelectors = [
+    '.gradient-target-sidebar',
+    '[data-sidebar="sidebar"]'
+  ];
+  
+  sidebarSelectors.forEach(selector => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(element => {
+      if (element instanceof HTMLElement) {
+        // Remove any transparent backgrounds and blur effects
+        element.style.background = '';
+        element.style.backdropFilter = '';
+        element.classList.remove('bg-background/95');
+        
+        // Apply solid background with 0% transparency
+        element.style.backgroundColor = 'hsl(var(--background))';
+        element.style.border = '1px solid hsl(var(--border))';
+        element.style.transition = 'all 0.3s ease-in-out';
+        
+        // Remove any glassmorphic classes
+        element.className = element.className.replace(/glassmorphic-\w+/g, '').trim();
+      }
+    });
+  });
+}
+
 export function applyGradientMode(
   mode: GradientMode,
   gradientStyle: GradientStyle,

@@ -1,8 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useSettings } from '@/contexts/SettingsContext';
-import { Layout, Monitor, Navigation, Sidebar } from 'lucide-react';
-import { GRADIENT_MODE_CONFIGS } from '@/components/gradient-coverage/utils/gradientModeUtils';
+import { Layout, Monitor, Navigation, Sidebar, CheckCircle } from 'lucide-react';
+import { GRADIENT_MODE_CONFIGS, applySolidSidebarForFullMode } from '@/components/gradient-coverage/utils/gradientModeUtils';
 
 export function GradientModeControl() {
   const { gradientMode, setGradientMode } = useSettings();
@@ -47,6 +47,26 @@ export function GradientModeControl() {
             );
           })}
         </div>
+        
+        {gradientMode === 'full' && (
+          <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
+            <div className="flex items-center justify-between">
+              <div className="text-sm">
+                <div className="font-medium text-primary">Solid Sidebar Option</div>
+                <div className="text-xs text-primary/80">Make sidebar 0% transparent</div>
+              </div>
+              <Button
+                onClick={applySolidSidebarForFullMode}
+                size="sm"
+                variant="secondary"
+                className="ml-3"
+              >
+                <CheckCircle className="h-4 w-4 mr-1" />
+                Apply
+              </Button>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
