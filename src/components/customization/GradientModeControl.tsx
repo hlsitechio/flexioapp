@@ -70,16 +70,18 @@ export function GradientModeControl() {
                 onClick={handleSidebarToggle}
                 size="sm"
                 variant={isSidebarSolid ? "outline" : "secondary"}
-                className="ml-3 transition-all duration-300 hover:scale-105 group"
+                className="ml-3 transition-all duration-300 hover:scale-105 group min-w-[100px]"
               >
-                {isSidebarSolid ? (
-                  <EyeOff className="h-4 w-4 mr-1 transition-transform duration-200 group-hover:scale-110" />
-                ) : (
-                  <Eye className="h-4 w-4 mr-1 transition-transform duration-200 group-hover:scale-110" />
-                )}
-                <span className="transition-all duration-200">
-                  {isSidebarSolid ? 'Transparent' : 'Solid'}
-                </span>
+                <div className="flex items-center transition-all duration-300">
+                  {isSidebarSolid ? (
+                    <EyeOff className="h-4 w-4 mr-1 transition-all duration-300 group-hover:scale-110" />
+                  ) : (
+                    <Eye className="h-4 w-4 mr-1 transition-all duration-300 group-hover:scale-110" />
+                  )}
+                  <span className="transition-all duration-300 animate-fade-in font-medium">
+                    {isSidebarSolid ? 'Transparent' : 'Solid'}
+                  </span>
+                </div>
               </Button>
             </div>
           </div>
