@@ -94,6 +94,13 @@ export function AuthPage() {
     <div className="min-h-screen w-screen flex items-center justify-center bg-background fixed inset-0">
       <Card className="w-full max-w-lg">
         <CardHeader className="text-center">
+          <div className="flex justify-center mb-4">
+            <img 
+              src="/lovable-uploads/630ca830-79d6-4bdc-9e9e-6b1a34dafee8.png" 
+              alt="Flexio Logo" 
+              className="w-16 h-16 object-contain"
+            />
+          </div>
           <CardTitle className="text-2xl font-bold">Welcome to Flexio!</CardTitle>
           <CardDescription>
             Sign in to your account or create a new one
