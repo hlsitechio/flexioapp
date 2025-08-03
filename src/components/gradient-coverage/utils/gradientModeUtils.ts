@@ -128,9 +128,15 @@ export function applySolidSidebarForFullMode() {
     'aside',
     'aside *',
     'aside .card',
-    'aside [class*="bg-"]',
+    'aside [class*="bg-"]'
+  ];
+  
+  // Separate selectors for scrollbar elements
+  const scrollbarSelectors = [
     'aside [data-radix-scroll-area-scrollbar]',
-    'aside [data-radix-scroll-area-thumb]'
+    'aside [data-radix-scroll-area-thumb]',
+    'aside .scrollbar-thumb',
+    'aside .scrollbar-track'
   ];
   
   if (!sidebarIsOpaque) {
@@ -153,16 +159,21 @@ export function applySolidSidebarForFullMode() {
             element.style.border = '1px solid hsl(var(--border))';
           }
           
-          // Make scrollbars opaque
-          if (element.hasAttribute('data-radix-scroll-area-scrollbar') || 
-              element.hasAttribute('data-radix-scroll-area-thumb')) {
-            element.style.backgroundColor = 'hsl(var(--border))';
-            element.style.opacity = '1';
-          }
-          
           element.style.transition = 'all 0.3s ease-in-out';
           element.className = element.className.replace(/glassmorphic-\w+/g, '').trim();
           element.className = element.className.replace(/bg-\w+\/\d+/g, '').trim();
+        }
+      });
+    });
+    
+    // Handle scrollbars separately - make them OPAQUE (0% transparency)
+    scrollbarSelectors.forEach(selector => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(element => {
+        if (element instanceof HTMLElement) {
+          element.style.backgroundColor = 'hsl(var(--border))';
+          element.style.opacity = '1';
+          element.style.transition = 'all 0.3s ease-in-out';
         }
       });
     });
@@ -181,13 +192,18 @@ export function applySolidSidebarForFullMode() {
           element.style.backdropFilter = 'blur(20px)';
           element.style.border = '1px solid rgba(255, 255, 255, 0.1)';
           element.style.transition = 'all 0.3s ease-in-out';
-          
-          // Make scrollbars transparent
-          if (element.hasAttribute('data-radix-scroll-area-scrollbar') || 
-              element.hasAttribute('data-radix-scroll-area-thumb')) {
-            element.style.backgroundColor = 'transparent';
-            element.style.opacity = '0.3';
-          }
+        }
+      });
+    });
+    
+    // Handle scrollbars separately - make them TRANSPARENT (100% transparency)
+    scrollbarSelectors.forEach(selector => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(element => {
+        if (element instanceof HTMLElement) {
+          element.style.backgroundColor = 'transparent';
+          element.style.opacity = '0';
+          element.style.transition = 'all 0.3s ease-in-out';
         }
       });
     });
