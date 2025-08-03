@@ -100,7 +100,7 @@ export function AuthPage() {
               <img 
                 src="/lovable-uploads/1c528921-f8c1-41e4-9ebb-4fb8c3452113.png" 
                 alt="Flexio Logo" 
-                className="w-20 h-20 object-cover -m-2"
+                className="w-24 h-24 object-cover -m-4"
               />
             </div>
           </div>
