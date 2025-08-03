@@ -17,13 +17,13 @@ export const GRADIENT_MODE_CONFIGS = {
     id: 'main-nav' as const,
     name: 'Main + Navigation',
     description: 'Gradient on main content and navigation',
-    targets: ['.main-content-area', '.gradient-target-header']
+    targets: ['.main-content-area', '.gradient-target-header', '[data-component="header"]']
   },
   'main-sidebar': {
     id: 'main-sidebar' as const,
     name: 'Main + Sidebar',
     description: 'Gradient on main content and sidebar',
-    targets: ['.main-content-area', '.gradient-target-sidebar']
+    targets: ['.main-content-area', '.gradient-target-sidebar', '[data-sidebar="sidebar"]']
   }
 };
 
@@ -41,18 +41,21 @@ export function clearAllGradientStyles() {
     const elements = document.querySelectorAll(selector);
     elements.forEach(element => {
       if (element instanceof HTMLElement) {
+        // Clear all gradient-related styles
         element.style.background = '';
         element.style.backgroundColor = '';
         element.style.backdropFilter = '';
         element.style.border = '';
         element.style.boxShadow = '';
+        element.style.transition = '';
+        
+        // Remove glassmorphic classes
         element.className = element.className.replace(/glassmorphic-\w+/g, '').trim();
         
-        // Restore original background classes for header and sidebar
-        if (selector.includes('header')) {
-          element.classList.add('bg-background/95', 'backdrop-blur-xl');
-        } else if (selector.includes('sidebar')) {
-          element.classList.add('bg-sidebar-background', 'backdrop-blur-xl');
+        // Restore appropriate backdrop blur for transparent elements
+        if (selector.includes('header') || selector.includes('sidebar')) {
+          element.style.backdropFilter = 'blur(20px)';
+          element.classList.add('bg-background/95');
         }
       }
     });
@@ -68,37 +71,32 @@ export function applyGradientToTargets(
     const elements = document.querySelectorAll(selector);
     elements.forEach(element => {
       if (element instanceof HTMLElement) {
-        // Apply styles with modifications for specific targets
+        // Apply consistent glassmorphic styles to all targets
         if (gradientStyle.background) {
-          let background = gradientStyle.background;
-          
-          // For navigation and sidebar, ensure solid, opaque backgrounds
-          if (selector.includes('header') || selector.includes('sidebar')) {
-            // Remove existing transparent backgrounds
-            element.style.backgroundColor = '';
-            element.style.backdropFilter = 'none';
-            
-            // Apply gradient background with full opacity
-            element.style.background = background;
-            
-            // Override any existing transparent classes
-            element.classList.remove('bg-background/95', 'bg-sidebar-background');
-            element.classList.remove('backdrop-blur-xl');
-          } else {
-            element.style.background = background;
-            if (gradientStyle.backdropFilter) element.style.backdropFilter = gradientStyle.backdropFilter;
-          }
+          element.style.background = gradientStyle.background;
         }
         
-        if (gradientStyle.border) element.style.border = gradientStyle.border;
-        if (gradientStyle.boxShadow) element.style.boxShadow = gradientStyle.boxShadow;
+        if (gradientStyle.backdropFilter) {
+          element.style.backdropFilter = gradientStyle.backdropFilter;
+        }
         
-        // Add glassmorphic class
+        if (gradientStyle.border) {
+          element.style.border = gradientStyle.border;
+        }
+        
+        if (gradientStyle.boxShadow) {
+          element.style.boxShadow = gradientStyle.boxShadow;
+        }
+        
+        // Add glassmorphic class for consistent styling
         if (glassmorphicClass && !element.classList.contains(glassmorphicClass)) {
           element.classList.add(glassmorphicClass);
         }
         
-        // Add transition for smooth changes
+        // Remove any conflicting background classes that might interfere
+        element.classList.remove('bg-background/95', 'bg-sidebar-background');
+        
+        // Add smooth transition for gradient changes
         element.style.transition = 'all 0.5s ease-in-out';
       }
     });
