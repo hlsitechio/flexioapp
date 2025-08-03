@@ -215,6 +215,7 @@ export type Database = {
           dashboard_layout: Json | null
           dashboard_title: string | null
           edit_mode: boolean | null
+          gradient_mode: string | null
           grid_size: string | null
           hide_dividers: boolean | null
           id: string
@@ -244,6 +245,7 @@ export type Database = {
           dashboard_layout?: Json | null
           dashboard_title?: string | null
           edit_mode?: boolean | null
+          gradient_mode?: string | null
           grid_size?: string | null
           hide_dividers?: boolean | null
           id?: string
@@ -273,6 +275,7 @@ export type Database = {
           dashboard_layout?: Json | null
           dashboard_title?: string | null
           edit_mode?: boolean | null
+          gradient_mode?: string | null
           grid_size?: string | null
           hide_dividers?: boolean | null
           id?: string
