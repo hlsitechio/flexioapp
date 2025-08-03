@@ -131,13 +131,47 @@ export function applySolidSidebarForFullMode() {
     'aside [class*="bg-"]'
   ];
   
-  // Separate selectors for scrollbar elements
+  // Separate selectors for scrollbar elements - comprehensive targeting
   const scrollbarSelectors = [
     'aside [data-radix-scroll-area-scrollbar]',
     'aside [data-radix-scroll-area-thumb]',
+    'aside [data-radix-scroll-area-corner]',
     'aside .scrollbar-thumb',
-    'aside .scrollbar-track'
+    'aside .scrollbar-track',
+    'aside ::-webkit-scrollbar',
+    'aside ::-webkit-scrollbar-thumb',
+    'aside ::-webkit-scrollbar-track'
   ];
+  
+  // Also add CSS rules for webkit scrollbars
+  const addScrollbarCSS = (opacity: string, background: string) => {
+    const style = document.createElement('style');
+    style.id = 'sidebar-scrollbar-styles';
+    
+    // Remove existing style if present
+    const existing = document.getElementById('sidebar-scrollbar-styles');
+    if (existing) existing.remove();
+    
+    style.textContent = `
+      aside ::-webkit-scrollbar {
+        width: 8px;
+        opacity: ${opacity};
+        transition: all 0.3s ease-in-out;
+      }
+      aside ::-webkit-scrollbar-thumb {
+        background: ${background};
+        border-radius: 4px;
+        opacity: ${opacity};
+        transition: all 0.3s ease-in-out;
+      }
+      aside ::-webkit-scrollbar-track {
+        background: transparent;
+        opacity: ${opacity};
+        transition: all 0.3s ease-in-out;
+      }
+    `;
+    document.head.appendChild(style);
+  };
   
   if (!sidebarIsOpaque) {
     // Make sidebar OPAQUE (0% transparency)
@@ -177,6 +211,10 @@ export function applySolidSidebarForFullMode() {
         }
       });
     });
+    
+    // Add CSS for webkit scrollbars - OPAQUE
+    addScrollbarCSS('1', 'hsl(var(--border))');
+    
     sidebarIsOpaque = true;
   } else {
     // Make sidebar TRANSPARENT (100% transparency)
@@ -207,6 +245,10 @@ export function applySolidSidebarForFullMode() {
         }
       });
     });
+    
+    // Add CSS for webkit scrollbars - TRANSPARENT
+    addScrollbarCSS('0', 'transparent');
+    
     sidebarIsOpaque = false;
   }
 }
