@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { emailSchema, passwordSchema } from '@/lib/security';
 import { z } from 'zod';
+import flexioLogo from '@/assets/flexio-logo-f.png';
 
 export function AuthPage() {
   const [email, setEmail] = useState('');
@@ -96,7 +97,7 @@ export function AuthPage() {
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <img 
-              src="/lovable-uploads/6a7d7884-8d58-47c4-8b22-5fa070428f61.png" 
+              src={flexioLogo} 
               alt="Flexio Logo" 
               className="w-16 h-16 object-contain"
             />
