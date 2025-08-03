@@ -418,6 +418,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     isSavingRef.current = true;
 
     try {
+      console.log('💾 Saving settings to backend...', {
+        customSidebarTitle,
+        customHeaderTitle,
+        gridSize,
+        dashboardLayout: Object.keys(dashboardLayout).length
+      });
 
       const { data, error } = await supabase
         .from('user_settings')
