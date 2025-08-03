@@ -3,11 +3,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { useSettings } from '@/contexts/SettingsContext';
 import { Layout, Monitor, Navigation, Sidebar, CheckCircle, Eye, EyeOff } from 'lucide-react';
-import { GRADIENT_MODE_CONFIGS, applySolidSidebarForFullMode } from '@/components/gradient-coverage/utils/gradientModeUtils';
+import { GRADIENT_MODE_CONFIGS, applySolidSidebarForFullMode, getSidebarState } from '@/components/gradient-coverage/utils/gradientModeUtils';
 
 export function GradientModeControl() {
   const { gradientMode, setGradientMode } = useSettings();
   const [isSidebarSolid, setIsSidebarSolid] = useState(false);
+
+  // Sync component state with actual sidebar state
+  useEffect(() => {
+    setIsSidebarSolid(getSidebarState());
+  }, [gradientMode]);
 
   const iconMap = {
     'full': Monitor,
@@ -23,7 +28,8 @@ export function GradientModeControl() {
 
   const handleSidebarToggle = () => {
     applySolidSidebarForFullMode();
-    setIsSidebarSolid(!isSidebarSolid);
+    // Get the updated state after the toggle
+    setIsSidebarSolid(getSidebarState());
   };
 
   return (

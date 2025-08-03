@@ -137,6 +137,10 @@ export function applyGradientToTargets(
 
 let sidebarIsOpaque = false; // Track current state
 
+export function getSidebarState() {
+  return sidebarIsOpaque;
+}
+
 export function applySolidSidebarForFullMode() {
   console.log('Toggle sidebar transparency called, current state:', sidebarIsOpaque);
   
