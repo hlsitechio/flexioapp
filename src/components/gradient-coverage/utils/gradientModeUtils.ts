@@ -116,51 +116,67 @@ export function applyGradientToTargets(
   });
 }
 
+let sidebarIsOpaque = false; // Track current state
+
 export function applySolidSidebarForFullMode() {
+  console.log('Toggle sidebar transparency called, current state:', sidebarIsOpaque);
+  
   // Target the sidebar and ALL its internal components
   const sidebarSelectors = [
     '.gradient-target-sidebar',
     '[data-sidebar="sidebar"]',
-    '[data-sidebar="sidebar"] *', // All children inside sidebar
-    '[data-sidebar="sidebar"] .card',
-    '[data-sidebar="sidebar"] .bg-card',
-    '[data-sidebar="sidebar"] .bg-background',
-    '[data-sidebar="sidebar"] .bg-muted',
-    '[data-sidebar="sidebar"] .bg-accent',
-    'aside *', // All sidebar content
+    'aside',
+    'aside *',
     'aside .card',
-    'aside [class*="bg-"]' // Any background classes
+    'aside [class*="bg-"]'
   ];
   
-  sidebarSelectors.forEach(selector => {
-    const elements = document.querySelectorAll(selector);
-    elements.forEach(element => {
-      if (element instanceof HTMLElement) {
-        // Remove any transparent backgrounds and blur effects
-        element.style.background = '';
-        element.style.backgroundColor = '';
-        element.style.backdropFilter = '';
-        element.classList.remove('bg-background/95', 'bg-card/50', 'bg-muted/50');
-        
-        // Apply solid backgrounds based on element type
-        if (element.classList.contains('card') || element.closest('.card')) {
-          element.style.backgroundColor = 'hsl(var(--card))';
-          element.style.border = '1px solid hsl(var(--border))';
-        } else if (element.tagName === 'ASIDE' || element.closest('aside')) {
-          element.style.backgroundColor = 'hsl(var(--background))';
-        } else {
-          // Default solid background for other elements
-          element.style.backgroundColor = 'hsl(var(--background))';
+  if (!sidebarIsOpaque) {
+    // Make sidebar OPAQUE (0% transparency)
+    console.log('Making sidebar opaque (0% transparency)');
+    
+    sidebarSelectors.forEach(selector => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(element => {
+        if (element instanceof HTMLElement) {
+          // Remove any transparent backgrounds and blur effects
+          element.style.background = '';
+          element.style.backgroundColor = '';
+          element.style.backdropFilter = '';
+          element.classList.remove('bg-background/95', 'bg-card/50', 'bg-muted/50');
+          
+          // Apply solid backgrounds
+          if (element.tagName === 'ASIDE' || element.closest('aside')) {
+            element.style.backgroundColor = 'hsl(var(--background))';
+            element.style.border = '1px solid hsl(var(--border))';
+          }
+          
+          element.style.transition = 'all 0.3s ease-in-out';
+          element.className = element.className.replace(/glassmorphic-\w+/g, '').trim();
+          element.className = element.className.replace(/bg-\w+\/\d+/g, '').trim();
         }
-        
-        element.style.transition = 'all 0.3s ease-in-out';
-        
-        // Remove any glassmorphic classes
-        element.className = element.className.replace(/glassmorphic-\w+/g, '').trim();
-        element.className = element.className.replace(/bg-\w+\/\d+/g, '').trim();
-      }
+      });
     });
-  });
+    sidebarIsOpaque = true;
+  } else {
+    // Make sidebar TRANSPARENT (100% transparency)
+    console.log('Making sidebar transparent (100% transparency)');
+    
+    sidebarSelectors.forEach(selector => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(element => {
+        if (element instanceof HTMLElement) {
+          // Apply transparent backgrounds
+          element.style.backgroundColor = 'transparent';
+          element.style.background = 'transparent';
+          element.style.backdropFilter = 'blur(20px)';
+          element.style.border = '1px solid rgba(255, 255, 255, 0.1)';
+          element.style.transition = 'all 0.3s ease-in-out';
+        }
+      });
+    });
+    sidebarIsOpaque = false;
+  }
 }
 
 export function applyGradientMode(
