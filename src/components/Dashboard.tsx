@@ -26,15 +26,24 @@ export function Dashboard() {
       const gradientStyle = { ...gradient.style as React.CSSProperties, transition: 'all 0.5s ease-in-out' };
       
       // Clear all previous gradient styles from all potential targets
-      const allElements = document.querySelectorAll('.dashboard-background, .gradient-sidebar, .gradient-header');
-      allElements.forEach(element => {
-        if (element instanceof HTMLElement) {
-          element.style.background = '';
-          element.style.backdropFilter = '';
-          element.style.border = '';
-          element.style.boxShadow = '';
-          element.className = element.className.replace(/glassmorphic-\w+/g, '');
-        }
+      const allSelectors = [
+        '.dashboard-container',
+        '.main-content-area', 
+        '[data-sidebar="sidebar"]',
+        '[data-component="header"]'
+      ];
+      
+      allSelectors.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(element => {
+          if (element instanceof HTMLElement) {
+            element.style.background = '';
+            element.style.backdropFilter = '';
+            element.style.border = '';
+            element.style.boxShadow = '';
+            element.className = element.className.replace(/glassmorphic-\w+/g, '');
+          }
+        });
       });
       
       // Apply gradients based on mode
@@ -46,6 +55,7 @@ export function Dashboard() {
             fullElement.classList.add(glassmorphicClass);
           }
           break;
+          
         case 'main':
           const mainElement = document.querySelector('.main-content-area') as HTMLElement;
           if (mainElement) {
@@ -53,23 +63,35 @@ export function Dashboard() {
             mainElement.classList.add(glassmorphicClass);
           }
           break;
+          
         case 'main-nav':
-          const mainNavElements = document.querySelectorAll('.main-content-area, .gradient-header');
-          mainNavElements.forEach(element => {
-            if (element instanceof HTMLElement) {
-              Object.assign(element.style, gradientStyle);
-              element.classList.add(glassmorphicClass);
-            }
-          });
+          // Apply to main content
+          const mainNavMainElement = document.querySelector('.main-content-area') as HTMLElement;
+          if (mainNavMainElement) {
+            Object.assign(mainNavMainElement.style, gradientStyle);
+            mainNavMainElement.classList.add(glassmorphicClass);
+          }
+          // Apply to header
+          const headerElement = document.querySelector('[data-component="header"]') as HTMLElement;
+          if (headerElement) {
+            Object.assign(headerElement.style, gradientStyle);
+            headerElement.classList.add(glassmorphicClass);
+          }
           break;
+          
         case 'main-sidebar':
-          const mainSidebarElements = document.querySelectorAll('.main-content-area, .gradient-sidebar');
-          mainSidebarElements.forEach(element => {
-            if (element instanceof HTMLElement) {
-              Object.assign(element.style, gradientStyle);
-              element.classList.add(glassmorphicClass);
-            }
-          });
+          // Apply to main content
+          const mainSidebarMainElement = document.querySelector('.main-content-area') as HTMLElement;
+          if (mainSidebarMainElement) {
+            Object.assign(mainSidebarMainElement.style, gradientStyle);
+            mainSidebarMainElement.classList.add(glassmorphicClass);
+          }
+          // Apply to sidebar
+          const sidebarElement = document.querySelector('[data-sidebar="sidebar"]') as HTMLElement;
+          if (sidebarElement) {
+            Object.assign(sidebarElement.style, gradientStyle);
+            sidebarElement.classList.add(glassmorphicClass);
+          }
           break;
       }
     }

@@ -48,7 +48,7 @@ export function UnifiedHeader({ editMode = false }: UnifiedHeaderProps) {
   };
 
   return (
-    <header className={`h-20 bg-background/95 backdrop-blur-xl ${hideDividers ? '' : 'border-b border-border/50'} flex flex-col justify-center px-6 animate-fade-in relative`}>
+    <header className={`h-20 bg-background/95 backdrop-blur-xl ${hideDividers ? '' : 'border-b border-border/50'} flex flex-col justify-center px-6 animate-fade-in relative gradient-target-header`} data-component="header">
       {/* Top Section - Title and Clock */}
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center space-x-4">

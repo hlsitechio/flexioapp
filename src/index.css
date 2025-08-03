@@ -299,6 +299,25 @@
     transition: all 0.3s ease-in-out;
   }
 
+  /* Specific styling for gradient targets */
+  [data-sidebar="sidebar"].glassmorphic-lavender,
+  [data-sidebar="sidebar"].glassmorphic-golden,
+  [data-sidebar="sidebar"].glassmorphic-rose,
+  [data-sidebar="sidebar"].glassmorphic-sky,
+  [data-sidebar="sidebar"].glassmorphic-stone,
+  [data-sidebar="sidebar"].glassmorphic-tropical,
+  [data-sidebar="sidebar"].glassmorphic-midnight,
+  [data-component="header"].glassmorphic-lavender,
+  [data-component="header"].glassmorphic-golden,
+  [data-component="header"].glassmorphic-rose,
+  [data-component="header"].glassmorphic-sky,
+  [data-component="header"].glassmorphic-stone,
+  [data-component="header"].glassmorphic-tropical,
+  [data-component="header"].glassmorphic-midnight {
+    position: relative;
+    border-radius: 12px;
+  }
+
   .dark .glassmorphic-ocean::before,
   .dark .glassmorphic-fire::before,
   .dark .glassmorphic-cosmic::before,

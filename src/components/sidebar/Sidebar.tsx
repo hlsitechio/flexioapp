@@ -31,8 +31,9 @@ export function DashboardSidebar() {
       className="relative"
     >
       <Sidebar 
-        className={`${hideDividers ? '' : 'border-r border-sidebar-border'} bg-sidebar-background backdrop-blur-xl h-full`}
+        className={`${hideDividers ? '' : 'border-r border-sidebar-border'} bg-sidebar-background backdrop-blur-xl h-full gradient-target-sidebar`}
         collapsible="icon"
+        data-sidebar="sidebar"
       >
 
         <SidebarHeader className={`p-4 ${hideDividers ? '' : 'border-b border-sidebar-border'}`}>
