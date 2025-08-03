@@ -87,8 +87,8 @@ export function applyGradientToTargets(
         // Apply gradient background with reduced opacity for main content
         if (gradientStyle.background) {
           if (isMainContent) {
-            // Make main content much lighter by adding opacity overlay
-            element.style.background = `linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.2)), ${gradientStyle.background}`;
+            // Make main content much lighter to match sidebar brightness
+            element.style.background = `linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.5)), ${gradientStyle.background}`;
           } else {
             element.style.background = gradientStyle.background;
           }
