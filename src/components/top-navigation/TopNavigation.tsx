@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useSettings } from '@/contexts/SettingsContext';
-import { applySolidSidebarForFullMode } from '@/components/gradient-coverage/utils/gradientModeUtils';
+import { useSidebarState } from '@/hooks/useSidebarState';
 
 interface TopNavigationProps {
   editMode?: boolean;
@@ -26,6 +26,7 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
     setCustomHeaderTitle,
     hideDividers = false
   } = useSettings();
+  const { toggleSidebarTransparency } = useSidebarState();
   const [isCustomizing, setIsCustomizing] = useState(false);
 
   return (
@@ -54,7 +55,7 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
           <Button
             variant="outline"
             size="sm"
-            onClick={applySolidSidebarForFullMode}
+            onClick={toggleSidebarTransparency}
             className="text-xs"
           >
             <Sidebar className="h-3 w-3 mr-1" />

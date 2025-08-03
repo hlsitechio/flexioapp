@@ -1,18 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useSettings } from '@/contexts/SettingsContext';
-import { Layout, Monitor, Navigation, Sidebar, CheckCircle, Eye, EyeOff } from 'lucide-react';
-import { GRADIENT_MODE_CONFIGS, applySolidSidebarForFullMode, getSidebarState } from '@/components/gradient-coverage/utils/gradientModeUtils';
+import { Layout, Monitor, Navigation, Sidebar, Eye, EyeOff } from 'lucide-react';
+import { GRADIENT_MODE_CONFIGS } from '@/components/gradient-coverage/utils/gradientModeUtils';
+import { useGradientCoverage } from '@/hooks/useGradientCoverage';
+import { useSidebarState } from '@/hooks/useSidebarState';
 
 export function GradientModeControl() {
-  const { gradientMode, setGradientMode } = useSettings();
-  const [isSidebarSolid, setIsSidebarSolid] = useState(false);
+  const { gradientMode, changeGradientMode } = useGradientCoverage();
+  const { isSidebarSolid, toggleSidebarTransparency, syncWithActualState } = useSidebarState();
 
-  // Sync component state with actual sidebar state
+  // Sync sidebar state when gradient mode changes
   useEffect(() => {
-    setIsSidebarSolid(getSidebarState());
-  }, [gradientMode]);
+    syncWithActualState();
+  }, [gradientMode, syncWithActualState]);
 
   const iconMap = {
     'full': Monitor,
@@ -25,12 +26,6 @@ export function GradientModeControl() {
     ...config,
     icon: iconMap[config.id],
   }));
-
-  const handleSidebarToggle = () => {
-    applySolidSidebarForFullMode();
-    // Get the updated state after the toggle
-    setIsSidebarSolid(getSidebarState());
-  };
 
   return (
     <Card className="w-full">
@@ -48,7 +43,7 @@ export function GradientModeControl() {
               <Button
                 key={mode.id}
                 variant={gradientMode === mode.id ? "default" : "outline"}
-                onClick={() => setGradientMode(mode.id)}
+                onClick={() => changeGradientMode(mode.id)}
                 className="h-auto p-4 flex flex-col items-center space-y-2 text-center transition-all duration-300 hover:scale-105"
               >
                 <IconComponent className="h-5 w-5 transition-transform duration-200" />
@@ -73,7 +68,7 @@ export function GradientModeControl() {
                 </div>
               </div>
               <Button
-                onClick={handleSidebarToggle}
+                onClick={toggleSidebarTransparency}
                 size="sm"
                 variant={isSidebarSolid ? "outline" : "secondary"}
                 className="ml-3 transition-all duration-300 hover:scale-105 group min-w-[100px]"

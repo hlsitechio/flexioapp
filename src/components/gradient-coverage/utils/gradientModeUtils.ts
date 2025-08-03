@@ -142,8 +142,7 @@ export function getSidebarState() {
 }
 
 export function applySolidSidebarForFullMode() {
-  console.log('Toggle sidebar transparency called, current state:', sidebarIsOpaque);
-  
+  // Toggle the sidebar transparency state
   // Target the sidebar and ALL its internal components, including scrollbars
   const sidebarSelectors = [
     '.gradient-target-sidebar',

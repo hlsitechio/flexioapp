@@ -4,13 +4,14 @@ import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
 import { useNavigate } from 'react-router-dom';
 import { useSettings } from '@/contexts/SettingsContext';
-import { applySolidSidebarForFullMode } from '@/components/gradient-coverage/utils/gradientModeUtils';
+import { useSidebarState } from '@/hooks/useSidebarState';
 
 export function Action() {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
   const navigate = useNavigate();
   const { editMode } = useSettings();
+  const { toggleSidebarTransparency } = useSidebarState();
 
   // Only show when in edit mode
   if (!editMode) {
@@ -61,7 +62,7 @@ export function Action() {
             <Button 
               className="w-full justify-start hover:bg-sidebar-accent text-sidebar-foreground hover:text-sidebar-accent-foreground transition-all duration-300"
               variant="ghost"
-              onClick={applySolidSidebarForFullMode}
+              onClick={toggleSidebarTransparency}
             >
               <SidebarIcon className="h-4 w-4" />
               <span className="ml-2">Solid Sidebar</span>

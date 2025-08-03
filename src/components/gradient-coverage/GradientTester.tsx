@@ -2,23 +2,25 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useSettings } from '@/contexts/SettingsContext';
+import { Badge } from '@/components/ui/badge';
 import { gradients } from '@/pages/customization/gallery-gradient/gradients';
 import { GRADIENT_MODE_CONFIGS } from './utils/gradientModeUtils';
-import { Badge } from '@/components/ui/badge';
+import { useGradientCoverage } from '@/hooks/useGradientCoverage';
+import { useSettings } from '@/contexts/SettingsContext';
+import { GradientMode } from './types';
 
 export function GradientTester() {
-  const { dashboardBackground, setDashboardBackground, gradientMode, setGradientMode } = useSettings();
+  const { gradientMode, dashboardBackground, testGradientMode, changeGradientMode } = useGradientCoverage();
+  const { setDashboardBackground } = useSettings();
   const [testResults, setTestResults] = useState<Record<string, boolean>>({});
 
-  const testGradientMode = (gradientId: string, mode: string) => {
+  const testSpecificGradientMode = (gradientId: string, mode: GradientMode) => {
     const key = `${gradientId}-${mode}`;
-    setDashboardBackground(gradientId);
-    setGradientMode(mode as any);
+    testGradientMode(gradientId, mode);
     
     // Wait a bit for the gradient to apply, then check elements
     setTimeout(() => {
-      const config = GRADIENT_MODE_CONFIGS[mode as keyof typeof GRADIENT_MODE_CONFIGS];
+      const config = GRADIENT_MODE_CONFIGS[mode];
       if (!config) return;
       
       let allElementsHaveGradient = true;
@@ -45,13 +47,13 @@ export function GradientTester() {
   };
 
   const testAllCombinations = () => {
-    const modes = Object.keys(GRADIENT_MODE_CONFIGS);
+    const modes = Object.keys(GRADIENT_MODE_CONFIGS) as GradientMode[];
     const gradientIds = gradients.map(g => g.id);
     
     gradientIds.forEach((gradientId, gIndex) => {
       modes.forEach((mode, mIndex) => {
         setTimeout(() => {
-          testGradientMode(gradientId, mode);
+          testSpecificGradientMode(gradientId, mode);
         }, (gIndex * modes.length + mIndex) * 1500);
       });
     });
@@ -97,7 +99,7 @@ export function GradientTester() {
           
           <div>
             <label className="text-sm font-medium">Current Mode</label>
-            <Select value={gradientMode} onValueChange={setGradientMode}>
+            <Select value={gradientMode} onValueChange={changeGradientMode}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -117,7 +119,7 @@ export function GradientTester() {
             Test All Combinations ({getTotalTests()})
           </Button>
           <Button 
-            onClick={() => testGradientMode(dashboardBackground, gradientMode)} 
+            onClick={() => testSpecificGradientMode(dashboardBackground, gradientMode)} 
             variant="outline"
           >
             Test Current
