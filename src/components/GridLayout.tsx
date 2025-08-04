@@ -27,6 +27,8 @@ import {
   DashboardCountdownTimer,
   DashboardPromptsGallery,
   DashboardCodeBlock,
+  DashboardHabitTracker,
+  DashboardQuickCalculator,
   ImageGallery
 } from '@/components/dashboard';
 import { 
@@ -117,6 +119,10 @@ export function GridLayout({ editMode }: GridLayoutProps) {
         return <DashboardRandomQuote />;
       case 'Countdown Timer':
         return <DashboardCountdownTimer />;
+      case 'Habit Tracker':
+        return <DashboardHabitTracker />;
+      case 'Quick Calculator':
+        return <DashboardQuickCalculator />;
       case 'Image Gallery':
         return <ImageGallery />;
       case 'Prompts Gallery':

@@ -148,7 +148,6 @@ export function UserNavigation() {
             <AnimatePresence>
               {userNavigationOrder.map((componentId, index) => {
                 const Component = navigationComponents[componentId as keyof typeof navigationComponents];
-                console.log(`🔍 Component ${componentId}:`, Component ? 'Found' : 'Missing');
                 if (!Component) return null;
 
                 // Add visual separator after dark mode toggle
