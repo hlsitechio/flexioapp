@@ -183,8 +183,12 @@ export function GridLayout({ editMode }: GridLayoutProps) {
       addComponentToSlot(overSlotIndex, activeComponent.component, activeComponent.gridSize);
     }
   };
-  // Components for draggable grid slots
-  const DraggableGridSlot = ({ index, children, hasComponent }: { index: number; children: React.ReactNode; hasComponent: boolean }) => {
+  // Components for draggable grid slots - memoized to prevent re-renders
+  const DraggableGridSlot = React.memo(({ index, children, hasComponent }: { 
+    index: number; 
+    children: React.ReactNode; 
+    hasComponent: boolean 
+  }) => {
     const {
       attributes,
       listeners,
@@ -196,33 +200,38 @@ export function GridLayout({ editMode }: GridLayoutProps) {
       disabled: !editMode || !hasComponent,
     });
 
-    const style = {
+    const style = React.useMemo(() => ({
       transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
       opacity: isDragging ? 0.5 : 1,
-    };
+      willChange: isDragging ? 'transform' : 'auto',
+    }), [transform, isDragging]);
 
     return (
       <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
         {children}
       </div>
     );
-  };
+  });
 
-  const DroppableGridSlot = ({ index, children }: { index: number; children: React.ReactNode }) => {
+  const DroppableGridSlot = React.memo(({ index, children }: { 
+    index: number; 
+    children: React.ReactNode 
+  }) => {
     const { isOver, setNodeRef } = useDroppable({
       id: `slot-${index}`,
       disabled: !editMode,
     });
 
+    const className = React.useMemo(() => 
+      isOver && editMode ? 'ring-2 ring-primary ring-offset-2 transition-all duration-200' : ''
+    , [isOver, editMode]);
+
     return (
-      <div 
-        ref={setNodeRef}
-        className={`${isOver && editMode ? 'ring-2 ring-primary ring-offset-2' : ''}`}
-      >
+      <div ref={setNodeRef} className={className}>
         {children}
       </div>
     );
-  };
+  });
 
   return (
     <DndContext
@@ -307,13 +316,14 @@ export function GridLayout({ editMode }: GridLayoutProps) {
           } : undefined}
         >
           {editMode ? (
-            // Show all slots in edit mode with drag and drop
+            // Show all slots in edit mode with drag and drop - stable keys prevent flashing
             Array.from({ length: totalCells }, (_, index) => {
               const slotComponent = getSlotComponent(index);
               const hasComponent = slotComponent && slotComponent.component;
+              const stableKey = `slot-${gridSize}-${index}`; // Stable key to prevent remounting
               
               return (
-                 <DroppableGridSlot key={index} index={index}>
+                <DroppableGridSlot key={stableKey} index={index}>
                   <DraggableGridSlot index={index} hasComponent={!!hasComponent}>
                     <Card
                       className={`
@@ -355,16 +365,17 @@ export function GridLayout({ editMode }: GridLayoutProps) {
               );
             })
           ) : (
-            // Show only components with content in view mode
+            // Show only components with content in view mode - stable keys
             Array.from({ length: totalCells }, (_, index) => {
               const slotComponent = getSlotComponent(index);
               const hasComponent = slotComponent && slotComponent.component;
+              const stableKey = `view-${gridSize}-${index}`;
               
               if (!hasComponent) return null;
               
               return (
                 <Card 
-                  key={index}
+                  key={stableKey}
                   className="relative group transition-all duration-200 bg-card/50 backdrop-blur-sm"
                 >
                   <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
