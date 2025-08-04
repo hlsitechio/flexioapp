@@ -144,7 +144,7 @@ function GridSlot({ index, widgetId, editMode, onRemoveWidget, onAddWidget, avai
             <GripVertical className="h-3 w-3" />
           </div>
         )}
-        <div className="scale-90 origin-center cursor-grab active:cursor-grabbing">
+        <div className={`origin-center cursor-grab active:cursor-grabbing ${isDragging ? 'scale-100' : 'scale-90'}`}>
           <WidgetComponent />
         </div>
       </div>
@@ -256,7 +256,7 @@ export function TopNavigationGridLayout({ editMode = false }: TopNavigationGridL
 
       <DragOverlay>
         {activeWidget && activeId ? (
-          <div className="scale-90 origin-center opacity-80">
+          <div className="origin-center opacity-90 pointer-events-none">
             <activeWidget.component />
           </div>
         ) : null}
