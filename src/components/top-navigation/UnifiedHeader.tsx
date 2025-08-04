@@ -50,17 +50,17 @@ export function UnifiedHeader({ editMode = false }: UnifiedHeaderProps) {
   };
 
   return (
-    <header className={`${minimalNavigationMode ? 'h-14 bg-black text-white' : 'h-20 bg-background/95'} backdrop-blur-xl ${hideDividers ? '' : 'border-b border-border/50'} flex ${minimalNavigationMode ? 'items-center' : 'flex-col justify-center'} px-6 animate-fade-in relative gradient-target-header ${minimalNavigationMode ? '' : 'rounded-b-lg'}`} data-component="header">
+    <header className={`${minimalNavigationMode ? 'h-12 bg-black text-white' : 'h-16 bg-background/95'} backdrop-blur-xl ${hideDividers ? '' : 'border-b border-border/50'} flex ${minimalNavigationMode ? 'items-center' : 'flex-col justify-center'} px-4 animate-fade-in relative gradient-target-header ${minimalNavigationMode ? '' : 'rounded-b-lg'}`} data-component="header">
       {/* Top Section - Title and Clock */}
       <div className={`flex items-center justify-between ${minimalNavigationMode ? '' : 'mb-2'}`}>
         <div className="flex items-center space-x-4">
-          <SidebarTrigger className={`h-9 w-9 rounded-lg border ${minimalNavigationMode ? 'bg-gray-800 hover:bg-gray-700 text-white border-gray-600' : 'bg-sidebar-accent hover:bg-sidebar-accent/80 text-sidebar-foreground border-sidebar-border'}`}>
-            <Menu className="h-4 w-4" />
+          <SidebarTrigger className={`h-7 w-7 rounded border ${minimalNavigationMode ? 'bg-gray-800 hover:bg-gray-700 text-white border-gray-600' : 'bg-sidebar-accent hover:bg-sidebar-accent/80 text-sidebar-foreground border-sidebar-border'}`}>
+            <Menu className="h-3 w-3" />
           </SidebarTrigger>
           {showHeaderTitle && (
             <div className="flex items-center space-x-2">
-              <Crown className={`h-5 w-5 ${minimalNavigationMode ? 'text-white' : 'text-primary'}`} />
-              <h1 className={`text-xl font-semibold ${minimalNavigationMode ? 'text-white' : 'text-foreground'}`}>
+              <Crown className={`h-4 w-4 ${minimalNavigationMode ? 'text-white' : 'text-primary'}`} />
+              <h1 className={`text-lg font-medium ${minimalNavigationMode ? 'text-white' : 'text-foreground'}`}>
                 {getPageTitle()}
               </h1>
             </div>
