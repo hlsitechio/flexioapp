@@ -66,15 +66,14 @@ export function SolidSidebar() {
     <Sidebar
       className={`${
         collapsed ? "w-14" : "w-60"
-      } bg-background`}
+      }`}
       collapsible="icon"
       style={{
-        backgroundColor: 'hsl(var(--background))',
-        backdropFilter: 'none',
-        opacity: 1
+        backgroundColor: 'transparent',
+        backdropFilter: 'none'
       }}
     >
-      <SidebarHeader className="p-4 bg-background">
+      <SidebarHeader className="p-4">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <Star className="h-4 w-4 text-primary-foreground" />
@@ -88,7 +87,7 @@ export function SolidSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="bg-background">
+      <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="text-muted-foreground">
             {!collapsed && "Navigation"}
@@ -137,7 +136,7 @@ export function SolidSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 bg-background">
+      <SidebarFooter className="p-4">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
             <User className="h-4 w-4 text-muted-foreground" />

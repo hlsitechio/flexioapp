@@ -184,6 +184,30 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-muted-foreground/40;
   }
+
+  /* Dashboard integration styles */
+  .dashboard-container {
+    background: hsl(var(--background));
+  }
+
+  .gradient-sidebar {
+    background: inherit;
+  }
+
+  .main-content-area {
+    background: inherit;
+  }
+
+  /* Remove any background differences */
+  [data-sidebar="sidebar"] {
+    background: inherit !important;
+  }
+
+  /* Ensure content flows seamlessly */
+  .dashboard-container .gradient-sidebar,
+  .dashboard-container .main-content-area {
+    background: transparent;
+  }
 }
 
 @layer components {

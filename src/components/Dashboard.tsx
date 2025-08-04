@@ -80,21 +80,26 @@ export function Dashboard() {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className={`min-h-screen flex w-full dashboard-container ${typeof dashboardBackground === 'string' && dashboardBackground.startsWith('bg-') ? dashboardBackground : ''}`}>
-          <div className="gradient-sidebar">
-            <DashboardSidebar />
-          </div>
-          
-          <div className="flex-1 flex flex-col">
-            <div className="gradient-header">
-              <UnifiedHeader editMode={editMode} />
+        <div className={`min-h-screen w-full dashboard-container ${typeof dashboardBackground === 'string' && dashboardBackground.startsWith('bg-') ? dashboardBackground : ''}`}>
+          {/* Single unified background container */}
+          <div className="flex min-h-screen w-full">
+            <div className="gradient-sidebar">
+              <DashboardSidebar />
             </div>
             
-            <ImageBanner />
-            
-            <main className={`flex-1 main-content-area ${minimalNavigationMode ? 'p-6 pt-0 pl-6' : 'p-6 pl-6'}`}>
-              <GridLayout editMode={editMode} />
-            </main>
+            <div className="flex-1 flex flex-col">
+              <div className="gradient-header">
+                <UnifiedHeader editMode={editMode} />
+              </div>
+              
+              <ImageBanner />
+              
+              <main className={`flex-1 main-content-area -ml-6 ${minimalNavigationMode ? 'pt-0 pr-6 pb-6' : 'p-6 pt-6'}`}>
+                <div className="ml-6">
+                  <GridLayout editMode={editMode} />
+                </div>
+              </main>
+            </div>
           </div>
         </div>
         
