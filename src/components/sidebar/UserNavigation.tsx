@@ -37,12 +37,12 @@ export function UserNavigation() {
           const addSeparator = componentId === 'DarkModeToggle';
 
           return (
-            <React.Fragment key={componentId}>
+            <div key={componentId}>
               <Component />
               {addSeparator && !isCollapsed && (
                 <div className="my-2 h-px w-full bg-sidebar-border" />
               )}
-            </React.Fragment>
+            </div>
           );
         })}
       </SidebarMenu>
