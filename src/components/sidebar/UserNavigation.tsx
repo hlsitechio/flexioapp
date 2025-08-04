@@ -122,6 +122,10 @@ export function UserNavigation() {
     }
   };
 
+  // Group navigation items: theme toggle separate from others
+  const themeGroup = userNavigationOrder.filter(id => id === 'dark-mode-toggle');
+  const otherGroup = userNavigationOrder.filter(id => id !== 'dark-mode-toggle');
+
   return (
     <div className={`${hideDividers ? '' : 'border-t border-sidebar-border'} ${isCollapsed ? 'p-2' : 'p-4'}`}>
       {editMode && !isCollapsed && (
@@ -144,24 +148,47 @@ export function UserNavigation() {
           items={userNavigationOrder} 
           strategy={horizontalListSortingStrategy}
         >
-          <SidebarMenu className={isCollapsed ? 'flex-row flex-wrap gap-2 justify-center' : 'flex-row flex-wrap gap-1'}>
-            <AnimatePresence>
-              {userNavigationOrder.map((componentId) => {
-                const Component = navigationComponents[componentId as keyof typeof navigationComponents];
-                if (!Component) return null;
+          <div className="space-y-2">
+            {/* Theme toggle group */}
+            <SidebarMenu className={isCollapsed ? 'flex-row gap-2 justify-center' : 'flex-row gap-1 justify-start'}>
+              <AnimatePresence>
+                {themeGroup.map((componentId) => {
+                  const Component = navigationComponents[componentId as keyof typeof navigationComponents];
+                  if (!Component) return null;
 
-                return (
-                  <DraggableNavigationItem 
-                    key={componentId} 
-                    id={componentId}
-                    editMode={editMode}
-                  >
-                    <Component />
-                  </DraggableNavigationItem>
-                );
-              })}
-            </AnimatePresence>
-          </SidebarMenu>
+                  return (
+                    <DraggableNavigationItem 
+                      key={componentId} 
+                      id={componentId}
+                      editMode={editMode}
+                    >
+                      <Component />
+                    </DraggableNavigationItem>
+                  );
+                })}
+              </AnimatePresence>
+            </SidebarMenu>
+
+            {/* Other navigation items */}
+            <SidebarMenu className={isCollapsed ? 'flex-row flex-wrap gap-2 justify-center' : 'flex-row flex-wrap gap-1'}>
+              <AnimatePresence>
+                {otherGroup.map((componentId) => {
+                  const Component = navigationComponents[componentId as keyof typeof navigationComponents];
+                  if (!Component) return null;
+
+                  return (
+                    <DraggableNavigationItem 
+                      key={componentId} 
+                      id={componentId}
+                      editMode={editMode}
+                    >
+                      <Component />
+                    </DraggableNavigationItem>
+                  );
+                })}
+              </AnimatePresence>
+            </SidebarMenu>
+          </div>
         </SortableContext>
       </DndContext>
     </div>
