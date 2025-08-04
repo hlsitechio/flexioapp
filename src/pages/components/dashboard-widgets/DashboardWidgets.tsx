@@ -14,6 +14,9 @@ import {
   DashboardCountdownTimer,
   DashboardPromptsGallery,
   DashboardCodeBlock,
+  DashboardHabitTracker,
+  DashboardQuickCalculator,
+  DashboardBookmarkManager,
   ImageGallery
 } from '@/components/dashboard';
 
@@ -197,6 +200,21 @@ export function DashboardWidgets({ targetSlot, gridSize }: { targetSlot?: string
           <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
             <DashboardComponentShowcase componentName="Code Snippets" targetSlot={targetSlot} gridSize={gridSize}>
               <DashboardCodeBlock />
+            </DashboardComponentShowcase>
+          </CarouselItem>
+          <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+            <DashboardComponentShowcase componentName="Habit Tracker" targetSlot={targetSlot} gridSize={gridSize}>
+              <DashboardHabitTracker />
+            </DashboardComponentShowcase>
+          </CarouselItem>
+          <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+            <DashboardComponentShowcase componentName="Quick Calculator" targetSlot={targetSlot} gridSize={gridSize}>
+              <DashboardQuickCalculator />
+            </DashboardComponentShowcase>
+          </CarouselItem>
+          <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+            <DashboardComponentShowcase componentName="Bookmark Manager" targetSlot={targetSlot} gridSize={gridSize}>
+              <DashboardBookmarkManager />
             </DashboardComponentShowcase>
           </CarouselItem>
           
