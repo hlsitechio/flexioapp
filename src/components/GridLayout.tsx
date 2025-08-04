@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useSettings } from '@/contexts/SettingsContext';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import {
   DndContext,
   DragOverlay,
@@ -183,7 +184,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
       addComponentToSlot(overSlotIndex, activeComponent.component, activeComponent.gridSize);
     }
   };
-  // Components for draggable grid slots - memoized to prevent re-renders
+  // Enhanced components with framer-motion animations
   const DraggableGridSlot = React.memo(({ index, children, hasComponent }: { 
     index: number; 
     children: React.ReactNode; 
@@ -200,16 +201,47 @@ export function GridLayout({ editMode }: GridLayoutProps) {
       disabled: !editMode || !hasComponent,
     });
 
-    const style = React.useMemo(() => ({
-      transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
-      opacity: isDragging ? 0.5 : 1,
-      willChange: isDragging ? 'transform' : 'auto',
-    }), [transform, isDragging]);
+    // Motion values for smooth animations
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+    const scale = useTransform([x, y], ([x, y]) => isDragging ? 1.05 : 1);
+
+    React.useEffect(() => {
+      if (transform) {
+        x.set(transform.x);
+        y.set(transform.y);
+      } else {
+        x.set(0);
+        y.set(0);
+      }
+    }, [transform, x, y]);
 
     return (
-      <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <motion.div
+        ref={setNodeRef}
+        style={{ x, y, scale }}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ 
+          opacity: isDragging ? 0.7 : 1, 
+          scale: isDragging ? 1.05 : 1,
+          rotate: isDragging ? 2 : 0
+        }}
+        transition={{ 
+          type: "spring", 
+          stiffness: 300, 
+          damping: 30,
+          opacity: { duration: 0.2 }
+        }}
+        whileHover={hasComponent && editMode ? { 
+          scale: 1.02, 
+          y: -2,
+          transition: { duration: 0.2 } 
+        } : {}}
+        {...attributes} 
+        {...listeners}
+      >
         {children}
-      </div>
+      </motion.div>
     );
   });
 
@@ -222,14 +254,18 @@ export function GridLayout({ editMode }: GridLayoutProps) {
       disabled: !editMode,
     });
 
-    const className = React.useMemo(() => 
-      isOver && editMode ? 'ring-2 ring-primary ring-offset-2 transition-all duration-200' : ''
-    , [isOver, editMode]);
-
     return (
-      <div ref={setNodeRef} className={className}>
+      <motion.div 
+        ref={setNodeRef}
+        animate={{ 
+          scale: isOver && editMode ? 1.02 : 1,
+          borderColor: isOver && editMode ? "hsl(var(--primary))" : "transparent"
+        }}
+        transition={{ type: "spring", stiffness: 400, damping: 25 }}
+        className={isOver && editMode ? 'ring-2 ring-primary ring-offset-2' : ''}
+      >
         {children}
-      </div>
+      </motion.div>
     );
   });
 
@@ -307,100 +343,207 @@ export function GridLayout({ editMode }: GridLayoutProps) {
           </div>
         )}
 
-        {/* Dashboard Grid */}
-        <div 
+        {/* Dashboard Grid with Layout Animations */}
+        <motion.div 
+          layout
           className={`grid gap-4 w-full ${editMode ? '' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'}`}
           style={editMode ? {
             gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
             gridTemplateRows: `repeat(${rows}, minmax(200px, 1fr))`
           } : undefined}
+          transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
-          {editMode ? (
-            // Show all slots in edit mode with drag and drop - stable keys prevent flashing
-            Array.from({ length: totalCells }, (_, index) => {
-              const slotComponent = getSlotComponent(index);
-              const hasComponent = slotComponent && slotComponent.component;
-              const stableKey = `slot-${gridSize}-${index}`; // Stable key to prevent remounting
-              
-              return (
-                <DroppableGridSlot key={stableKey} index={index}>
-                  <DraggableGridSlot index={index} hasComponent={!!hasComponent}>
-                    <Card
-                      className={`
-                        relative group transition-all duration-200 
-                        ${!hasComponent ? 'hover:border-primary/50 cursor-pointer' : 'cursor-grab active:cursor-grabbing'}
-                        ${activeId === `slot-${index}` ? 'ring-2 ring-primary ring-offset-2' : ''}
-                        bg-card/50 backdrop-blur-sm
-                      `}
-                      onClick={() => !hasComponent && handleAddComponent(index)}
-                    >
+          <AnimatePresence mode="popLayout">
+            {editMode ? (
+              // Show all slots in edit mode with drag and drop - stable keys prevent flashing
+              Array.from({ length: totalCells }, (_, index) => {
+                const slotComponent = getSlotComponent(index);
+                const hasComponent = slotComponent && slotComponent.component;
+                const stableKey = `slot-${gridSize}-${index}`; // Stable key to prevent remounting
+                
+                return (
+                  <motion.div
+                    key={stableKey}
+                    layout
+                    initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                    transition={{ 
+                      type: "spring", 
+                      stiffness: 300, 
+                      damping: 25,
+                      delay: index * 0.02 // Staggered animation
+                    }}
+                  >
+                    <DroppableGridSlot index={index}>
+                      <DraggableGridSlot index={index} hasComponent={!!hasComponent}>
+                        <motion.div
+                          whileHover={!hasComponent ? {
+                            scale: 1.02,
+                            boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+                            transition: { duration: 0.2 }
+                          } : {}}
+                          whileTap={!hasComponent ? { scale: 0.98 } : {}}
+                        >
+                          <Card 
+                            className={`
+                              relative group transition-all duration-200 
+                              ${!hasComponent ? 'hover:border-primary/50 cursor-pointer' : 'cursor-grab active:cursor-grabbing'}
+                              ${activeId === `slot-${index}` ? 'ring-2 ring-primary ring-offset-2' : ''}
+                              bg-card/50 backdrop-blur-sm
+                            `}
+                            onClick={() => !hasComponent && handleAddComponent(index)}
+                          >
+                            <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
+                              <AnimatePresence mode="wait">
+                                {hasComponent ? (
+                                  <motion.div
+                                    key="component"
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="w-full h-full"
+                                  >
+                                    {/* Remove button with motion */}
+                                    <motion.div
+                                      initial={{ opacity: 0 }}
+                                      whileHover={{ opacity: 1 }}
+                                      transition={{ duration: 0.2 }}
+                                      className="absolute top-2 right-2 z-10"
+                                    >
+                                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                        <Button
+                                          variant="destructive"
+                                          size="sm"
+                                          className="h-6 w-6 p-0"
+                                          onClick={(e) => handleRemoveComponent(index, e)}
+                                        >
+                                          <X className="h-3 w-3" />
+                                        </Button>
+                                      </motion.div>
+                                    </motion.div>
+                                    {/* Render component with pointer-events disabled during drag */}
+                                    <div className="w-full h-full pointer-events-none">
+                                      {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
+                                    </div>
+                                  </motion.div>
+                                ) : (
+                                  <motion.div
+                                    key="empty"
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    whileHover={{ 
+                                      scale: 1.05, 
+                                      color: "hsl(var(--primary))",
+                                      transition: { duration: 0.2 }
+                                    }}
+                                    className="flex flex-col items-center space-y-3 text-muted-foreground"
+                                  >
+                                    <motion.div
+                                      animate={{ 
+                                        rotate: [0, 5, -5, 0],
+                                        scale: [1, 1.1, 1]
+                                      }}
+                                      transition={{ 
+                                        duration: 2, 
+                                        repeat: Infinity, 
+                                        repeatDelay: 3,
+                                        ease: "easeInOut"
+                                      }}
+                                    >
+                                      <Plus className="h-8 w-8" />
+                                    </motion.div>
+                                    <span className="text-sm font-medium">Add Component</span>
+                                    <span className="text-xs opacity-70">Slot {index + 1}</span>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </CardContent>
+                          </Card>
+                        </motion.div>
+                      </DraggableGridSlot>
+                    </DroppableGridSlot>
+                  </motion.div>
+                );
+              })
+            ) : (
+              // Show only components with content in view mode - stable keys
+              Array.from({ length: totalCells }, (_, index) => {
+                const slotComponent = getSlotComponent(index);
+                const hasComponent = slotComponent && slotComponent.component;
+                const stableKey = `view-${gridSize}-${index}`;
+                
+                if (!hasComponent) return null;
+                
+                return (
+                  <motion.div
+                    key={stableKey}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                    whileHover={{ 
+                      y: -4, 
+                      boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+                      transition: { duration: 0.3 }
+                    }}
+                    transition={{ 
+                      type: "spring", 
+                      stiffness: 300, 
+                      damping: 25,
+                      delay: index * 0.05
+                    }}
+                  >
+                    <Card className="relative group transition-all duration-200 bg-card/50 backdrop-blur-sm">
                       <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
-                        {hasComponent ? (
-                          <>
-                            {/* Remove button for edit mode */}
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              className="absolute top-2 right-2 z-10 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                              onClick={(e) => handleRemoveComponent(index, e)}
-                            >
-                              <X className="h-3 w-3" />
-                            </Button>
-                            {/* Render the actual component */}
-                            <div className="w-full h-full pointer-events-none">
-                              {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
-                            </div>
-                          </>
-                        ) : (
-                          <div className="flex flex-col items-center space-y-3 text-muted-foreground group-hover:text-primary transition-colors">
-                            <Plus className="h-8 w-8" />
-                            <span className="text-sm font-medium">Add Component</span>
-                            <span className="text-xs opacity-70">Slot {index + 1}</span>
-                          </div>
-                        )}
+                        <motion.div 
+                          className="w-full h-full"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.1, duration: 0.3 }}
+                        >
+                          {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
+                        </motion.div>
                       </CardContent>
                     </Card>
-                  </DraggableGridSlot>
-                </DroppableGridSlot>
-              );
-            })
-          ) : (
-            // Show only components with content in view mode - stable keys
-            Array.from({ length: totalCells }, (_, index) => {
-              const slotComponent = getSlotComponent(index);
-              const hasComponent = slotComponent && slotComponent.component;
-              const stableKey = `view-${gridSize}-${index}`;
-              
-              if (!hasComponent) return null;
-              
-              return (
-                <Card 
-                  key={stableKey}
-                  className="relative group transition-all duration-200 bg-card/50 backdrop-blur-sm"
-                >
-                  <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
-                    <div className="w-full h-full">
-                      {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            }).filter(Boolean)
-          )}
-        </div>
+                  </motion.div>
+                );
+              }).filter(Boolean)
+            )}
+          </AnimatePresence>
+        </motion.div>
       </div>
 
-      {/* Drag Overlay */}
+      {/* Enhanced Drag Overlay with Framer Motion */}
       <DragOverlay>
-        {activeId && draggedComponent ? (
-          <Card className="opacity-90 shadow-xl bg-card/90 backdrop-blur-sm border-primary">
-            <CardContent className="p-6 h-full flex flex-col items-center justify-center">
-              <div className="w-full h-full pointer-events-none">
-                {renderComponent(draggedComponent.component, draggedComponent.gridSize)}
-              </div>
-            </CardContent>
-          </Card>
-        ) : null}
+        <AnimatePresence>
+          {activeId && draggedComponent ? (
+            <motion.div
+              initial={{ scale: 1.05, rotate: 5 }}
+              animate={{ 
+                scale: 1.1, 
+                rotate: 8,
+                boxShadow: "0 25px 50px rgba(0,0,0,0.25)"
+              }}
+              exit={{ scale: 0.9, rotate: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            >
+              <Card className="opacity-90 bg-card/90 backdrop-blur-sm border-primary ring-2 ring-primary ring-offset-4">
+                <CardContent className="p-6 h-full flex flex-col items-center justify-center">
+                  <motion.div 
+                    className="w-full h-full pointer-events-none"
+                    animate={{ scale: [1, 1.02, 1] }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    {renderComponent(draggedComponent.component, draggedComponent.gridSize)}
+                  </motion.div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </DragOverlay>
     </DndContext>
   );
