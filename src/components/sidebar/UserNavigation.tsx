@@ -74,7 +74,7 @@ function DraggableNavigationItem({
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 10 }}
       transition={{ duration: 0.2 }}
-      className={`relative group ${isDragging ? 'z-50' : ''}`}
+      className={`relative group ${isDragging ? 'z-50' : ''} ${editMode ? 'touch-none' : ''}`}
       {...dragProps}
     >
       <div className={`relative ${isDragging ? 'opacity-50' : ''} ${editMode ? 'cursor-grab active:cursor-grabbing' : ''}`}>
@@ -85,8 +85,10 @@ function DraggableNavigationItem({
           </div>
         )}
         
-        {/* Navigation component */}
-        {children}
+        {/* Navigation component - disable pointer events in edit mode to allow dragging */}
+        <div className={editMode ? 'pointer-events-none' : ''}>
+          {children}
+        </div>
       </div>
     </motion.div>
   );
