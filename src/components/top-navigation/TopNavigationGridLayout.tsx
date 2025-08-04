@@ -160,7 +160,7 @@ interface TopNavigationGridLayoutProps {
 }
 
 export function TopNavigationGridLayout({ editMode = false }: TopNavigationGridLayoutProps) {
-  const { topNavigationWidgets, setTopNavigationWidgets } = useSettings();
+  const { topNavigationWidgets, setTopNavigationWidgets, minimalNavigationMode } = useSettings();
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const sensors = useSensors(
@@ -214,8 +214,8 @@ export function TopNavigationGridLayout({ editMode = false }: TopNavigationGridL
     widgetId: topNavigationWidgets[index] || null,
   }));
 
-  // Only show if there are widgets or we're in edit mode
-  if (topNavigationWidgets.length === 0 && !editMode) {
+  // Only show if there are widgets or we're in edit mode, and not in minimal mode
+  if ((topNavigationWidgets.length === 0 && !editMode) || minimalNavigationMode) {
     return null;
   }
 

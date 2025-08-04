@@ -35,6 +35,8 @@ interface SettingsContextType {
   // Top navigation grid settings
   topNavigationWidgets: string[];
   setTopNavigationWidgets: (widgets: string[]) => void;
+  minimalNavigationMode: boolean;
+  setMinimalNavigationMode: (minimal: boolean) => void;
   
   // Quick note
   quickNote: string;
@@ -141,6 +143,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   
   // Top navigation widgets
   const [topNavigationWidgets, setTopNavigationWidgets] = useState<string[]>([]);
+  
+  // Minimal navigation mode
+  const [minimalNavigationMode, setMinimalNavigationMode] = useState<boolean>(getStorageItem('minimalNavigationMode', false));
   
   // Quick note
   const [quickNote, setQuickNote] = useState<string>('');
@@ -406,6 +411,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('dashboardLayout', JSON.stringify(dashboardLayout));
         localStorage.setItem('gridSize', gridSize);
         localStorage.setItem('topNavigationWidgets', JSON.stringify(topNavigationWidgets));
+        localStorage.setItem('minimalNavigationMode', JSON.stringify(minimalNavigationMode));
         localStorage.setItem('quickNote', quickNote);
         localStorage.setItem('bannerImage', bannerImage);
         localStorage.setItem('showBanner', JSON.stringify(showBanner));
@@ -568,7 +574,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         }
       }, 1000);
     }
-  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, sidebarSolid, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, quickNote, bannerImage, showBanner, bannerHeight, dashboardBackground, gradientMode, hideDividers]);
+  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, sidebarSolid, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, minimalNavigationMode, quickNote, bannerImage, showBanner, bannerHeight, dashboardBackground, gradientMode, hideDividers]);
 
   // Only trigger save when settings actually change (with debouncing)
   useEffect(() => {
@@ -640,6 +646,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setGridSize,
     topNavigationWidgets,
     setTopNavigationWidgets,
+    minimalNavigationMode,
+    setMinimalNavigationMode,
     quickNote,
     setQuickNote,
     bannerImage,
@@ -673,6 +681,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     dashboardLayout,
     gridSize,
     topNavigationWidgets,
+    minimalNavigationMode,
     quickNote,
     bannerImage,
     showBanner,
@@ -731,6 +740,8 @@ export function useSettings() {
       setGridSize: () => {},
       topNavigationWidgets: [],
       setTopNavigationWidgets: () => {},
+      minimalNavigationMode: false,
+      setMinimalNavigationMode: () => {},
       quickNote: '',
       setQuickNote: () => {},
       bannerImage: '',

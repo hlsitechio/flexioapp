@@ -24,7 +24,9 @@ export function UnifiedHeader({ editMode = false }: UnifiedHeaderProps) {
     setShowHeaderTitle, 
     customHeaderTitle, 
     setCustomHeaderTitle,
-    hideDividers = false
+    hideDividers = false,
+    minimalNavigationMode,
+    setMinimalNavigationMode
   } = useSettings();
   const [isCustomizing, setIsCustomizing] = useState(false);
 
@@ -48,17 +50,17 @@ export function UnifiedHeader({ editMode = false }: UnifiedHeaderProps) {
   };
 
   return (
-    <header className={`h-20 bg-background/95 backdrop-blur-xl ${hideDividers ? '' : 'border-b border-border/50'} flex flex-col justify-center px-6 animate-fade-in relative gradient-target-header rounded-b-lg`} data-component="header">
+    <header className={`${minimalNavigationMode ? 'h-14 bg-black text-white' : 'h-20 bg-background/95'} backdrop-blur-xl ${hideDividers ? '' : 'border-b border-border/50'} flex ${minimalNavigationMode ? 'items-center' : 'flex-col justify-center'} px-6 animate-fade-in relative gradient-target-header ${minimalNavigationMode ? '' : 'rounded-b-lg'}`} data-component="header">
       {/* Top Section - Title and Clock */}
-      <div className="flex items-center justify-between mb-2">
+      <div className={`flex items-center justify-between ${minimalNavigationMode ? '' : 'mb-2'}`}>
         <div className="flex items-center space-x-4">
-          <SidebarTrigger className="h-9 w-9 rounded-lg bg-sidebar-accent hover:bg-sidebar-accent/80 text-sidebar-foreground border border-sidebar-border">
+          <SidebarTrigger className={`h-9 w-9 rounded-lg border ${minimalNavigationMode ? 'bg-gray-800 hover:bg-gray-700 text-white border-gray-600' : 'bg-sidebar-accent hover:bg-sidebar-accent/80 text-sidebar-foreground border-sidebar-border'}`}>
             <Menu className="h-4 w-4" />
           </SidebarTrigger>
           {showHeaderTitle && (
             <div className="flex items-center space-x-2">
-              <Crown className="h-5 w-5 text-primary" />
-              <h1 className="text-xl font-semibold text-foreground">
+              <Crown className={`h-5 w-5 ${minimalNavigationMode ? 'text-white' : 'text-primary'}`} />
+              <h1 className={`text-xl font-semibold ${minimalNavigationMode ? 'text-white' : 'text-foreground'}`}>
                 {getPageTitle()}
               </h1>
             </div>
@@ -85,6 +87,18 @@ export function UnifiedHeader({ editMode = false }: UnifiedHeaderProps) {
               </PopoverTrigger>
               <PopoverContent className="w-80" align="end">
                 <div className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-sm font-medium">Minimal Navigation Mode</Label>
+                      <Switch
+                        checked={minimalNavigationMode}
+                        onCheckedChange={setMinimalNavigationMode}
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Show only title and clock in a black bar
+                    </p>
+                  </div>
                   <div className="space-y-2">
                     <Label className="text-sm font-medium">Clock Position</Label>
                     <div className="flex space-x-2">
@@ -145,10 +159,12 @@ export function UnifiedHeader({ editMode = false }: UnifiedHeaderProps) {
         </div>
       </div>
 
-      {/* Bottom Section - Navigation Menu Grid */}
-      <div className="flex items-center justify-center">
-        <TopNavigationGridLayout editMode={editMode} />
-      </div>
+      {/* Bottom Section - Navigation Menu Grid - Only show if not in minimal mode */}
+      {!minimalNavigationMode && (
+        <div className="flex items-center justify-center">
+          <TopNavigationGridLayout editMode={editMode} />
+        </div>
+      )}
     </header>
   );
 }

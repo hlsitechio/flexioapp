@@ -24,15 +24,17 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
     setShowHeaderTitle, 
     customHeaderTitle, 
     setCustomHeaderTitle,
-    hideDividers = false
+    hideDividers = false,
+    minimalNavigationMode,
+    setMinimalNavigationMode
   } = useSettings();
   const { toggleSidebarTransparency } = useSidebarState();
   const [isCustomizing, setIsCustomizing] = useState(false);
 
   return (
-    <header className={`h-16 bg-background backdrop-blur-xl ${hideDividers ? '' : 'border-b border-border/50'} flex items-center justify-between px-6 animate-fade-in relative`}>
+    <header className={`${minimalNavigationMode ? 'h-14 bg-black text-white' : 'h-16 bg-background'} backdrop-blur-xl ${hideDividers ? '' : 'border-b border-border/50'} flex items-center justify-between px-6 animate-fade-in relative`}>
       <div className="flex items-center space-x-4">
-        <SidebarTrigger className="h-9 w-9 rounded-lg bg-sidebar-accent hover:bg-sidebar-accent/80 text-sidebar-foreground border border-sidebar-border">
+        <SidebarTrigger className={`h-9 w-9 rounded-lg border ${minimalNavigationMode ? 'bg-gray-800 hover:bg-gray-700 text-white border-gray-600' : 'bg-sidebar-accent hover:bg-sidebar-accent/80 text-sidebar-foreground border-sidebar-border'}`}>
           <Menu className="h-4 w-4" />
         </SidebarTrigger>
         {showHeaderTitle && <DashboardTitle customTitle={customHeaderTitle} />}
@@ -46,8 +48,8 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
           </div>
         )}
         
-        {/* Top Navigation Grid */}
-        <TopNavigationGridLayout editMode={editMode} />
+        {/* Top Navigation Grid - Only show if not in minimal mode */}
+        {!minimalNavigationMode && <TopNavigationGridLayout editMode={editMode} />}
         
         {clockPosition === 'right' && <TimeDisplay />}
         
@@ -73,6 +75,18 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
             </PopoverTrigger>
             <PopoverContent className="w-80" align="end">
               <div className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-sm font-medium">Minimal Navigation Mode</Label>
+                    <Switch
+                      checked={minimalNavigationMode}
+                      onCheckedChange={setMinimalNavigationMode}
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Show only title and clock in a black bar
+                  </p>
+                </div>
                 <div className="space-y-2">
                   <Label className="text-sm font-medium">Clock Position</Label>
                   <div className="flex space-x-2">
