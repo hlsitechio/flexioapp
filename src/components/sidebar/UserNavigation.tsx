@@ -104,6 +104,14 @@ export function UserNavigation() {
     setUserNavigationOrder 
   } = useSettings();
 
+  console.log('🔍 UserNavigation Debug:', {
+    userNavigationOrder,
+    isCollapsed,
+    editMode,
+    hideDividers,
+    navigationComponents: Object.keys(navigationComponents)
+  });
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -123,7 +131,7 @@ export function UserNavigation() {
   };
 
   return (
-    <div className={`${hideDividers ? '' : 'border-t border-sidebar-border'} ${isCollapsed ? 'p-2' : 'px-4 py-4'} rounded-b-lg mb-2 bg-sidebar-accent/50 border-2 border-blue-500/50`}>
+    <div className={`${hideDividers ? '' : 'border-t border-sidebar-border'} ${isCollapsed ? 'p-2' : 'px-4 py-4'} rounded-b-lg mb-2 bg-sidebar-accent/50 border-2 border-red-500 min-h-[60px]`}>
       {editMode && !isCollapsed && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
