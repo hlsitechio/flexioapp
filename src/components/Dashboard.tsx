@@ -13,7 +13,7 @@ import { useSettings } from '@/contexts/SettingsContext';
 import { GradientCoverageManager } from './gradient-coverage';
 
 export function Dashboard() {
-  const { editMode, setEditMode, dashboardBackground, gradientMode } = useSettings();
+  const { editMode, setEditMode, dashboardBackground, gradientMode, minimalNavigationMode } = useSettings();
   const [draggedItem, setDraggedItem] = useState<KanbanItem | null>(null);
   
   const sensors = useSensors(
@@ -58,7 +58,7 @@ export function Dashboard() {
             
             <ImageBanner />
             
-            <main className="flex-1 p-6 main-content-area">
+            <main className={`flex-1 main-content-area ${minimalNavigationMode ? 'p-6 pt-0' : 'p-6'}`}>
               <GridLayout editMode={editMode} />
             </main>
           </div>
