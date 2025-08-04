@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useNavigationSettings } from '@/contexts/NavigationSettingsContext';
 import { applySolidSidebarForFullMode, getSidebarState } from '@/components/gradient-coverage/utils/gradientModeUtils';
 
@@ -9,23 +9,23 @@ import { applySolidSidebarForFullMode, getSidebarState } from '@/components/grad
 export function useSidebarState() {
   const { sidebarSolid, setSidebarSolid } = useNavigationSettings();
 
-  const syncWithActualState = () => {
+  const syncWithActualState = useCallback(() => {
     const actualState = getSidebarState();
     setSidebarSolid(actualState);
-  };
+  }, [setSidebarSolid]);
 
-  const toggleSidebarTransparency = () => {
+  const toggleSidebarTransparency = useCallback(() => {
     applySolidSidebarForFullMode();
     syncWithActualState();
-  };
+  }, [syncWithActualState]);
 
-  const setSidebarTransparency = (solid: boolean) => {
+  const setSidebarTransparency = useCallback((solid: boolean) => {
     const currentState = getSidebarState();
     if (currentState !== solid) {
       applySolidSidebarForFullMode();
     }
     syncWithActualState();
-  };
+  }, [syncWithActualState]);
 
   return {
     isSidebarSolid: sidebarSolid,
