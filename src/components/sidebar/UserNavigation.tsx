@@ -28,7 +28,7 @@ export function UserNavigation() {
 
   return (
     <div className={`${hideDividers ? '' : 'border-t border-sidebar-border'} ${isCollapsed ? 'p-2' : 'px-4 py-4'}`}>
-      <SidebarMenu className={isCollapsed ? 'flex-row flex-wrap gap-2 justify-center' : 'flex-row flex-wrap gap-1'}>
+      <SidebarMenu className={isCollapsed ? 'flex-row gap-2 justify-center' : 'flex-row gap-1 justify-start'}>
         {userNavigationOrder.map((componentId) => {
           const Component = navigationComponents[componentId as keyof typeof navigationComponents];
           if (!Component) return null;
