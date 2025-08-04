@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { DashboardTitle } from './DashboardTitle';
 import { TimeDisplay } from './TimeDisplay';
 import { TopNavigationGridLayout } from './TopNavigationGridLayout';
-import { AnimatedSidebarTrigger } from '@/components/ui/animated-sidebar-trigger';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Menu, Settings, AlignLeft, AlignCenter, AlignRight, Eye, EyeOff, Sidebar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -34,10 +34,7 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
   return (
     <header className={`${minimalNavigationMode ? 'h-14 bg-black text-white' : 'h-16 bg-background'} backdrop-blur-xl ${hideDividers ? '' : 'border-b border-border/50'} flex items-center justify-between px-6 animate-fade-in relative`}>
       <div className="flex items-center space-x-4">
-        <AnimatedSidebarTrigger 
-          minimalMode={minimalNavigationMode}
-          className="shadow-sm"
-        />
+        <SidebarTrigger />
         {showHeaderTitle && <DashboardTitle customTitle={customHeaderTitle} />}
         {clockPosition === 'left' && <TimeDisplay />}
       </div>
