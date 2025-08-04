@@ -123,7 +123,7 @@ export function DashboardPromptsGallery() {
         ) : (
           <div className="space-y-2 max-h-64 overflow-y-auto">
             {prompts.map((prompt) => (
-              <div key={prompt.id} className="group border rounded-lg p-3 hover:bg-muted/50 transition-colors">
+              <div key={prompt.id} className="group border rounded-lg p-3 hover:bg-muted transition-colors">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
                     <h4 className="text-sm font-medium truncate">{prompt.title}</h4>

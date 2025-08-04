@@ -110,7 +110,7 @@ export function DashboardQuickCalculator() {
         <Input
           value={display}
           readOnly
-          className="text-right text-lg font-mono bg-muted/50 border-2"
+          className="text-right text-lg font-mono bg-muted border-2"
         />
 
         {/* Calculator Grid */}
@@ -245,7 +245,7 @@ export function DashboardQuickCalculator() {
           <div className="space-y-1 max-h-24 overflow-y-auto border-t pt-3">
             <div className="text-xs font-medium text-muted-foreground mb-1">Recent Calculations</div>
             {history.map((calc, index) => (
-              <div key={index} className="text-xs font-mono text-muted-foreground p-1 bg-muted/30 rounded">
+              <div key={index} className="text-xs font-mono text-muted-foreground p-1 bg-muted rounded">
                 {calc}
               </div>
             ))}

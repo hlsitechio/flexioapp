@@ -66,7 +66,7 @@ export function DashboardQuickNote() {
           />
         ) : (
           <div 
-            className="min-h-[80px] p-3 rounded-md border border-input bg-background cursor-pointer hover:bg-accent/50 transition-colors"
+            className="min-h-[80px] p-3 rounded-md border border-input bg-background cursor-pointer hover:bg-accent transition-colors"
             onClick={handleEdit}
           >
             <p className="text-sm text-muted-foreground italic">

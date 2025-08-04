@@ -396,7 +396,7 @@ export function DashboardBookmarkManager() {
             filteredBookmarks.map((bookmark) => (
               <div
                 key={bookmark.id}
-                className="p-3 rounded-lg border bg-muted/50 space-y-2"
+                className="p-3 rounded-lg border bg-muted space-y-2"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">

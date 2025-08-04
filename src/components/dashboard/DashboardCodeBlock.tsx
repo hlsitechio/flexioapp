@@ -167,7 +167,7 @@ export function DashboardCodeBlock() {
         ) : (
           <div className="space-y-3 max-h-80 overflow-y-auto">
             {snippets.map((snippet) => (
-              <div key={snippet.id} className="group border rounded-lg p-3 hover:bg-muted/50 transition-colors">
+              <div key={snippet.id} className="group border rounded-lg p-3 hover:bg-muted transition-colors">
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <div className="flex items-center gap-2 flex-1 min-w-0">
                     <div className={`w-2 h-2 rounded-full ${getLanguageColor(snippet.language)} flex-shrink-0`} />

@@ -262,7 +262,7 @@ export function DashboardHabitTracker() {
               return (
                 <div
                   key={habit.id}
-                  className="flex items-center space-x-3 p-3 rounded-lg border bg-muted/50"
+                  className="flex items-center space-x-3 p-3 rounded-lg border bg-muted"
                 >
                   <Checkbox
                     checked={completed}
