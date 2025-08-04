@@ -7,7 +7,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Edit3, Eye, GripVertical } from 'lucide-react';
 import { DashboardTitle } from './DashboardTitle';
-import { Action } from './Action';
+import { Action as ActionSimple } from './ActionSimple';
 import { Tools } from './Tools';
 import { FavoritesRecent } from './favorites-recent';
 import { UserNavigation } from './UserNavigation';
@@ -33,7 +33,7 @@ import { CSS } from '@dnd-kit/utilities';
 
 // Sidebar section configuration
 const sidebarSections = [
-  { id: 'action', name: 'Action', component: Action },
+  { id: 'action', name: 'Action', component: ActionSimple },
   { id: 'tools', name: 'Tools', component: Tools },
   { id: 'favorites', name: 'Favorites & Recent', component: FavoritesRecent },
 ];
