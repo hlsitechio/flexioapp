@@ -4,4 +4,7 @@ export { DashboardRandomQuote } from './DashboardRandomQuote';
 export { DashboardCountdownTimer } from './DashboardCountdownTimer';
 export { DashboardPromptsGallery } from './DashboardPromptsGallery';
 export { DashboardCodeBlock } from './DashboardCodeBlock';
+export { DashboardHabitTracker } from './DashboardHabitTracker';
+export { DashboardQuickCalculator } from './DashboardQuickCalculator';
+export { DashboardBookmarkManager } from './DashboardBookmarkManager';
 export { ImageGallery } from './image-gallery';
