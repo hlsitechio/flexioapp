@@ -33,9 +33,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
 
     // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.warn('Session error:', error);
+        // Clear any corrupted session data
+        localStorage.removeItem('sb-dfyemumhufbsznjnwvlt-auth-token');
+        setSession(null);
+        setUser(null);
+      } else {
+        setSession(session);
+        setUser(session?.user ?? null);
+      }
+      setLoading(false);
+    }).catch((error) => {
+      console.warn('Failed to get session:', error);
+      // Clear corrupted session data
+      localStorage.removeItem('sb-dfyemumhufbsznjnwvlt-auth-token');
+      setSession(null);
+      setUser(null);
       setLoading(false);
     });
 
