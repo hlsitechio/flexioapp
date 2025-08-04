@@ -341,6 +341,7 @@ export type Database = {
           updated_at: string
           use_24_hour_format: boolean | null
           user_id: string
+          user_navigation_order: Json | null
           workspace_id: string | null
         }
         Insert: {
@@ -373,6 +374,7 @@ export type Database = {
           updated_at?: string
           use_24_hour_format?: boolean | null
           user_id: string
+          user_navigation_order?: Json | null
           workspace_id?: string | null
         }
         Update: {
@@ -405,6 +407,7 @@ export type Database = {
           updated_at?: string
           use_24_hour_format?: boolean | null
           user_id?: string
+          user_navigation_order?: Json | null
           workspace_id?: string | null
         }
         Relationships: []
