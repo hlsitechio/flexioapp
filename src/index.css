@@ -292,7 +292,7 @@
     right: 0;
     bottom: 0;
     backdrop-filter: blur(24px) saturate(200%);
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.15); /* Lighter overlay for better transparency */
     border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: inherit;
     z-index: -1;
@@ -333,7 +333,7 @@
   .dark .glassmorphic-stone::before,
   .dark .glassmorphic-tropical::before,
   .dark .glassmorphic-midnight::before {
-    background: rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.08); /* Much lighter for dark mode */
     border: 1px solid rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(28px) saturate(180%);
   }

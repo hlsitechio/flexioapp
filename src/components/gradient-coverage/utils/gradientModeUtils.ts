@@ -86,18 +86,14 @@ export function applyGradientToTargets(
         // Remove any conflicting background classes
         element.classList.remove('bg-background/95', 'bg-sidebar-background');
         
-        // Special handling for main content areas to make them lighter
+        // Special handling for main content areas to make them match sidebar transparency
         const isMainContent = selector.includes('.main-content-area') || 
                              element.classList.contains('main-content-area');
         
-        // Apply gradient background with much lighter overlay for main content to match sidebar
+        // Apply gradient background WITHOUT overlay for main content to match sidebar
         if (gradientStyle.background) {
-          if (isMainContent) {
-            // Make main content much lighter to match sidebar brightness - use very light overlay
-            element.style.background = `linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), ${gradientStyle.background}`;
-          } else {
-            element.style.background = gradientStyle.background;
-          }
+          // No overlay - let the background show through exactly like sidebar
+          element.style.background = gradientStyle.background;
         }
         
         // Apply backdrop filter for glassmorphism
@@ -105,16 +101,12 @@ export function applyGradientToTargets(
           element.style.backdropFilter = gradientStyle.backdropFilter;
         }
         
-        // Apply border and shadow with reduced intensity for main content
+        // Apply border and shadow - same treatment for all elements
         if (gradientStyle.border) {
-          if (isMainContent) {
-            element.style.border = '1px solid rgba(255, 255, 255, 0.2)';
-          } else {
-            element.style.border = gradientStyle.border;
-          }
+          element.style.border = gradientStyle.border;
         }
         
-        if (gradientStyle.boxShadow && !isMainContent) {
+        if (gradientStyle.boxShadow) {
           element.style.boxShadow = gradientStyle.boxShadow;
         }
         
