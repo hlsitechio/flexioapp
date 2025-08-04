@@ -74,6 +74,10 @@ interface SettingsContextType {
   hideDividers: boolean;
   setHideDividers: (hide: boolean) => void;
   
+  // User navigation order
+  userNavigationOrder: string[];
+  setUserNavigationOrder: (order: string[]) => void;
+  
   // Manual save function
   saveSettingsToBackend: () => Promise<void>;
 }
@@ -154,6 +158,16 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   
   // Divider visibility
   const [hideDividers, setHideDividers] = useState<boolean>(false);
+  
+  // User navigation order
+  const [userNavigationOrder, setUserNavigationOrder] = useState<string[]>([
+    'dark-mode-toggle',
+    'profile', 
+    'notifications',
+    'settings',
+    'customization',
+    'sign-in-out'
+  ]);
 
   // One-time sync setup for sign-in
   const setupOneTimeSync = async () => {
@@ -226,6 +240,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     if (data.hide_dividers !== undefined) {
       setHideDividers(data.hide_dividers);
     }
+    if (data.user_navigation_order !== undefined) {
+      setUserNavigationOrder(data.user_navigation_order as string[]);
+    }
     if (data.edit_mode !== undefined) {
       setEditMode(data.edit_mode);
     }
@@ -290,6 +307,14 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setGradientMode('main');
     setHideDividers(false);
     setEditMode(false);
+    setUserNavigationOrder([
+      'dark-mode-toggle',
+      'profile', 
+      'notifications',
+      'settings',
+      'customization',
+      'sign-in-out'
+    ]);
   };
 
   const loadSettingsFromLocalStorage = () => {
@@ -331,6 +356,16 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     
     // Divider visibility
     const savedHideDividers = getStorageItem('hideDividers', false);
+    
+    // User navigation order
+    const savedUserNavigationOrder = getStorageItem('userNavigationOrder', [
+      'dark-mode-toggle',
+      'profile', 
+      'notifications',
+      'settings',
+      'customization',
+      'sign-in-out'
+    ]);
 
     setClockPosition(savedClockPosition);
     setShowHeaderTitle(savedShowHeaderTitle);
@@ -352,6 +387,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setDashboardBackground(savedDashboardBackground);
     setGradientMode(savedGradientMode);
     setHideDividers(savedHideDividers);
+    setUserNavigationOrder(savedUserNavigationOrder);
   };
 
   const saveCurrentSettingsToLocalStorage = () => {
@@ -377,6 +413,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('dashboardBackground', dashboardBackground);
         localStorage.setItem('gradientMode', gradientMode);
         localStorage.setItem('hideDividers', JSON.stringify(hideDividers));
+        localStorage.setItem('userNavigationOrder', JSON.stringify(userNavigationOrder));
       }
     } catch (error) {
       console.warn('❌ Error saving current settings to localStorage:', error);
@@ -474,6 +511,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           gradient_mode: gradientMode,
           hide_dividers: hideDividers,
           edit_mode: editMode,
+          user_navigation_order: userNavigationOrder,
           // Keep legacy fields for backward compatibility
           dashboard_title: customHeaderTitle,
           sidebar_title: customSidebarTitle,
@@ -616,6 +654,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setGradientMode,
     hideDividers,
     setHideDividers,
+    userNavigationOrder,
+    setUserNavigationOrder,
     saveSettingsToBackend,
   }), [
     clockPosition,
@@ -640,6 +680,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     dashboardBackground,
     gradientMode,
     hideDividers,
+    userNavigationOrder,
     addComponentToSlot,
     removeComponentFromSlot,
     saveSettingsToBackend,
@@ -704,6 +745,15 @@ export function useSettings() {
       setGradientMode: () => {},
       hideDividers: false,
       setHideDividers: () => {},
+      userNavigationOrder: [
+        'dark-mode-toggle',
+        'profile', 
+        'notifications',
+        'settings',
+        'customization',
+        'sign-in-out'
+      ],
+      setUserNavigationOrder: () => {},
       saveSettingsToBackend: async () => {},
     };
   }

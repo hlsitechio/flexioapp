@@ -1,3 +1,22 @@
+import React from 'react';
+import { GripHorizontal } from 'lucide-react';
+import { 
+  DndContext, 
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  horizontalListSortingStrategy,
+  useSortable
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { SidebarMenu, useSidebar } from '@/components/ui/sidebar';
 import { Profile } from './settings/Profile';
 import { UserSettings } from './settings/UserSettings';
@@ -6,22 +25,143 @@ import { NotificationButton } from './notifications';
 import { SignInOut } from './settings/SignInOut';
 import { SidebarDarkModeToggle } from './SidebarDarkModeToggle';
 import { useSettings } from '@/contexts/SettingsContext';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// Navigation component mapping
+const navigationComponents = {
+  'dark-mode-toggle': SidebarDarkModeToggle,
+  'profile': Profile,
+  'notifications': NotificationButton,
+  'settings': UserSettings,
+  'customization': UserCustomization,
+  'sign-in-out': SignInOut,
+};
+
+// Draggable navigation item wrapper
+function DraggableNavigationItem({ 
+  id, 
+  children, 
+  editMode 
+}: { 
+  id: string;
+  children: React.ReactNode;
+  editMode: boolean;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id, disabled: !editMode });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 1000 : 1,
+  };
+
+  // Apply drag props only when edit mode is enabled
+  const dragProps = editMode ? { ...attributes, ...listeners } : {};
+
+  return (
+    <motion.div
+      ref={setNodeRef}
+      style={style}
+      layout
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 10 }}
+      transition={{ duration: 0.2 }}
+      className={`relative group ${isDragging ? 'z-50' : ''}`}
+      {...dragProps}
+    >
+      <div className={`relative ${isDragging ? 'opacity-50' : ''} ${editMode ? 'cursor-grab active:cursor-grabbing' : ''}`}>
+        {/* Drag handle - visible when edit mode is on */}
+        {editMode && (
+          <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-4 h-4 flex items-center justify-center opacity-0 group-hover:opacity-60 transition-opacity duration-200 z-10 pointer-events-none">
+            <GripHorizontal className="h-3 w-3 text-sidebar-foreground/50" />
+          </div>
+        )}
+        
+        {/* Navigation component */}
+        {children}
+      </div>
+    </motion.div>
+  );
+}
 
 export function UserNavigation() {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
-  const { hideDividers = false } = useSettings();
+  const { 
+    hideDividers = false, 
+    editMode, 
+    userNavigationOrder, 
+    setUserNavigationOrder 
+  } = useSettings();
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (active.id !== over?.id) {
+      const oldIndex = userNavigationOrder.indexOf(active.id as string);
+      const newIndex = userNavigationOrder.indexOf(over?.id as string);
+
+      setUserNavigationOrder(arrayMove(userNavigationOrder, oldIndex, newIndex));
+    }
+  };
 
   return (
     <div className={`${hideDividers ? '' : 'border-t border-sidebar-border'} ${isCollapsed ? 'p-2' : 'p-4'}`}>
-      <SidebarMenu className={isCollapsed ? 'space-y-2 items-center' : 'space-y-1'}>
-        <SidebarDarkModeToggle />
-        <Profile />
-        <NotificationButton />
-        <UserSettings />
-        <UserCustomization />
-        <SignInOut />
-      </SidebarMenu>
+      {editMode && !isCollapsed && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          className="mb-3 text-xs text-sidebar-foreground/50 text-center"
+        >
+          Drag to reorder horizontally
+        </motion.div>
+      )}
+      
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext 
+          items={userNavigationOrder} 
+          strategy={horizontalListSortingStrategy}
+        >
+          <SidebarMenu className={isCollapsed ? 'flex-row flex-wrap gap-2 justify-center' : 'flex-row flex-wrap gap-1'}>
+            <AnimatePresence>
+              {userNavigationOrder.map((componentId) => {
+                const Component = navigationComponents[componentId as keyof typeof navigationComponents];
+                if (!Component) return null;
+
+                return (
+                  <DraggableNavigationItem 
+                    key={componentId} 
+                    id={componentId}
+                    editMode={editMode}
+                  >
+                    <Component />
+                  </DraggableNavigationItem>
+                );
+              })}
+            </AnimatePresence>
+          </SidebarMenu>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 }
