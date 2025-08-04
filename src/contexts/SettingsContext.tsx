@@ -473,6 +473,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
   const saveSettingsToBackend = async () => {
     if (!user) {
+      console.log('⚠️ Cannot save settings: User not authenticated');
       return;
     }
     
@@ -488,9 +489,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
     try {
       console.log('💾 Saving settings to backend...', {
+        userId: user.id,
+        userEmail: user.email,
         customSidebarTitle,
         customHeaderTitle,
         gridSize,
+        minimalNavigationMode,
         dashboardLayout: Object.keys(dashboardLayout).length
       });
 
@@ -531,11 +535,21 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         .select();
 
       if (error) {
-        console.error('❌ Supabase error saving settings:', error);
+        console.error('❌ Supabase error saving settings:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code,
+          fullError: error
+        });
         throw error;
       }
     } catch (error) {
-      console.error('❌ Fatal error saving settings to backend:', error);
+      console.error('❌ Fatal error saving settings to backend:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+        fullError: error
+      });
       throw error; // Re-throw so the UI can handle it
     } finally {
       isSavingRef.current = false;
@@ -574,7 +588,11 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         try {
           await saveSettingsToBackend();
         } catch (error) {
-          console.error('❌ Backend save failed:', error);
+          console.error('❌ Backend save failed:', {
+            message: error instanceof Error ? error.message : 'Unknown error',
+            stack: error instanceof Error ? error.stack : undefined,
+            fullError: error
+          });
         }
       }, 1000);
     }
