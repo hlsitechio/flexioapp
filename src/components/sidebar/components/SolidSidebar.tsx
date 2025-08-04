@@ -65,29 +65,30 @@ export function SolidSidebar() {
   return (
     <Sidebar
       className={`${
-        collapsed ? "w-12" : "w-48"
-      }`}
+        collapsed ? "w-14" : "w-60"
+      } bg-background border-r border-border`}
       collapsible="icon"
       style={{
-        backgroundColor: 'transparent',
-        backdropFilter: 'none'
+        backgroundColor: 'hsl(var(--background))',
+        backdropFilter: 'none',
+        opacity: 1
       }}
     >
-      <SidebarHeader className="p-3">
+      <SidebarHeader className="p-4 border-b border-border bg-background">
         <div className="flex items-center space-x-2">
-          <div className="w-6 h-6 bg-primary rounded flex items-center justify-center">
-            <Star className="h-3 w-3 text-primary-foreground" />
+          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+            <Star className="h-4 w-4 text-primary-foreground" />
           </div>
           {!collapsed && (
             <div className="flex flex-col">
-              <span className="font-medium text-xs text-foreground">Dashboard</span>
-              <span className="text-[10px] text-muted-foreground">Premium</span>
+              <span className="font-semibold text-sm text-foreground">Solid Dashboard</span>
+              <span className="text-xs text-muted-foreground">Premium UI</span>
             </div>
           )}
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="bg-background">
         <SidebarGroup>
           <SidebarGroupLabel className="text-muted-foreground">
             {!collapsed && "Navigation"}
@@ -101,9 +102,9 @@ export function SolidSidebar() {
                       to={item.url} 
                       end={item.url === "/"}
                       className={getNavCls}
-                     >
-                       <item.icon className="h-3 w-3" />
-                       {!collapsed && <span className="ml-2 text-xs">{item.title}</span>}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {!collapsed && <span className="ml-2">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -124,9 +125,9 @@ export function SolidSidebar() {
                     <NavLink 
                       to={item.url} 
                       className={getNavCls}
-                     >
-                       <item.icon className="h-3 w-3" />
-                       {!collapsed && <span className="ml-2 text-xs">{item.title}</span>}
+                    >
+                      <item.icon className="h-4 w-4" />
+                      {!collapsed && <span className="ml-2">{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -136,15 +137,15 @@ export function SolidSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-3">
+      <SidebarFooter className="p-4 border-t border-border bg-background">
         <div className="flex items-center space-x-2">
-          <div className="w-6 h-6 bg-muted rounded-full flex items-center justify-center">
-            <User className="h-3 w-3 text-muted-foreground" />
+          <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
+            <User className="h-4 w-4 text-muted-foreground" />
           </div>
           {!collapsed && (
             <div className="flex flex-col">
-              <span className="text-xs font-medium text-foreground">User</span>
-              <span className="text-[10px] text-muted-foreground">user@app.com</span>
+              <span className="text-sm font-medium text-foreground">User Name</span>
+              <span className="text-xs text-muted-foreground">user@example.com</span>
             </div>
           )}
         </div>

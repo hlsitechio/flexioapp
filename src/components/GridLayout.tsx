@@ -327,10 +327,10 @@ export function GridLayout({ editMode }: GridLayoutProps) {
         {/* Dashboard Grid with Optimized Layout Animations */}
         <motion.div 
           layout
-          className="grid gap-1.5 w-full"
+          className="grid gap-4 w-full"
           style={{
             gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-            gridTemplateRows: `repeat(${rows}, minmax(100px, 1fr))`
+            gridTemplateRows: `repeat(${rows}, minmax(200px, 1fr))`
           }}
           transition={{ type: "spring", stiffness: 500, damping: 40, mass: 0.8 }}
         >
@@ -376,7 +376,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                             `}
                             onClick={() => !hasComponent && handleAddComponent(index)}
                           >
-                            <CardContent className="p-4 h-full flex flex-col items-center justify-center relative">
+                            <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
                                 <AnimatePresence mode="wait">
                                 {hasComponent ? (
                                   <motion.div
@@ -481,7 +481,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                     }}
                   >
                     <Card className="relative group transition-all duration-200 bg-card/50 backdrop-blur-sm">
-                      <CardContent className="p-4 h-full flex flex-col items-center justify-center relative">
+                      <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
                         <motion.div 
                           className="w-full h-full"
                           initial={{ opacity: 0 }}
@@ -514,7 +514,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
             >
               <Card className="opacity-95 bg-card/95 backdrop-blur-sm border-primary ring-1 ring-primary">
-                <CardContent className="p-4 h-full flex flex-col items-center justify-center">
+                <CardContent className="p-6 h-full flex flex-col items-center justify-center">
                   <motion.div 
                     className="w-full h-full pointer-events-none"
                     animate={{ scale: [1, 1.01, 1] }}
