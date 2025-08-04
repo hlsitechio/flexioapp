@@ -3,8 +3,8 @@ import { useNavigationSettings } from '@/contexts/NavigationSettingsContext';
 import { applySolidSidebarForFullMode, getSidebarState } from '@/components/gradient-coverage/utils/gradientModeUtils';
 
 /**
- * Updated hook that integrates with the new navigation settings context
- * while maintaining backward compatibility
+ * Hook that integrates with the navigation settings context
+ * while maintaining backward compatibility with gradient utilities
  */
 export function useSidebarState() {
   const { sidebarSolid, setSidebarSolid } = useNavigationSettings();
