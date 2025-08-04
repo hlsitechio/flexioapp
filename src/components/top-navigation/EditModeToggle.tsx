@@ -15,7 +15,7 @@ export function EditModeToggle({ editMode, setEditMode }: EditModeToggleProps) {
       className={`transition-all duration-300 ${
         editMode 
           ? 'button-premium glow' 
-          : 'hover:shadow-md'
+          : ''
       }`}
     >
       {editMode ? (
