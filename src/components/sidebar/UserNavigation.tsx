@@ -123,7 +123,7 @@ export function UserNavigation() {
   };
 
   return (
-    <div className={`${hideDividers ? '' : 'border-t border-sidebar-border'} ${isCollapsed ? 'p-2' : 'p-4'}`}>
+    <div className={`${hideDividers ? '' : 'border-t border-sidebar-border'} ${isCollapsed ? 'p-2' : 'px-4 py-4'} rounded-b-lg mx-2 mb-2`}>
       {editMode && !isCollapsed && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
