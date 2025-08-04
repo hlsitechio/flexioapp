@@ -85,22 +85,18 @@ export function Dashboard() {
             <DashboardSidebar />
           </div>
           
-          <div className="flex-1 flex flex-col -ml-px max-w-6xl mx-auto">
+          <div className="flex-1 flex flex-col -ml-px">
             <div className="gradient-header rounded-b-lg">
               <UnifiedHeader editMode={editMode} />
             </div>
             
             <ImageBanner />
             
-            <main className={`flex-1 main-content-area ${minimalNavigationMode ? 'p-6 pt-6' : 'p-6'}`}>
+            <main className={`flex-1 main-content-area ${minimalNavigationMode ? 'p-6 pt-6 pr-8' : 'p-6 pr-8'}`}>
               <GridLayout editMode={editMode} />
             </main>
           </div>
-          
-          {/* Right spacing to balance the sidebar */}
-          <div className="w-4"></div>
         </div>
-        
         {/* Notification Sidebar */}
         <NotificationSidebar />
         
