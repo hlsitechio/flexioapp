@@ -28,7 +28,7 @@ export function UserNavigation() {
 
   return (
     <div className={`${hideDividers ? '' : 'border-t border-sidebar-border'} ${isCollapsed ? 'p-2' : 'px-4 py-4'}`}>
-      <SidebarMenu className={isCollapsed ? 'flex-row gap-2 justify-center' : 'flex-row gap-1 justify-start'}>
+      <SidebarMenu className={isCollapsed ? 'flex-col gap-2 items-center' : 'flex-col gap-1'}>
         {userNavigationOrder.map((componentId) => {
           const Component = navigationComponents[componentId as keyof typeof navigationComponents];
           if (!Component) return null;
@@ -37,12 +37,12 @@ export function UserNavigation() {
           const addSeparator = componentId === 'DarkModeToggle';
 
           return (
-            <div key={componentId} className="flex items-center">
+            <React.Fragment key={componentId}>
               <Component />
               {addSeparator && !isCollapsed && (
-                <div className="mx-2 h-4 w-px bg-sidebar-border" />
+                <div className="my-2 h-px w-full bg-sidebar-border" />
               )}
-            </div>
+            </React.Fragment>
           );
         })}
       </SidebarMenu>
