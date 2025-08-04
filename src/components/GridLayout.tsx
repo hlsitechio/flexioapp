@@ -322,7 +322,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
         )}
 
         {editMode && (
-          <div className="mb-4 p-4 bg-muted/50 rounded-lg border border-border/50">
+          <div className="mb-4 p-4 bg-muted rounded-lg">
             <p className="text-sm text-muted-foreground">
               <strong>Drag & Drop:</strong> In edit mode, you can drag components between grid slots to rearrange them. 
               Click on empty slots to add new components.
@@ -378,7 +378,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                               relative group transition-all duration-200 
                               ${!hasComponent ? 'hover:border-primary/50 cursor-pointer' : ''}
                               ${activeId === `slot-${index}` ? 'ring-2 ring-primary ring-offset-2' : ''}
-                              bg-card/50 backdrop-blur-sm
+                              bg-card
                             `}
                             onClick={() => !hasComponent && handleAddComponent(index)}
                           >
@@ -486,7 +486,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                       mass: 0.8
                     }}
                   >
-                    <Card className="relative group transition-all duration-200 bg-card/50 backdrop-blur-sm">
+                    <Card className="relative group transition-all duration-200 bg-card">
                       <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
                         <motion.div 
                           className="w-full h-full"
@@ -519,7 +519,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
               exit={{ scale: 0.95, rotate: 0 }}
               transition={{ type: "spring", stiffness: 400, damping: 25 }}
             >
-              <Card className="opacity-95 bg-card/95 backdrop-blur-sm border-primary ring-1 ring-primary">
+              <Card className="opacity-95 bg-card">
                 <CardContent className="p-6 h-full flex flex-col items-center justify-center">
                   <motion.div 
                     className="w-full h-full pointer-events-none"

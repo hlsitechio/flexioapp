@@ -214,7 +214,7 @@ export function DashboardGrid({ editMode, setEditMode }: DashboardGridProps) {
       </div>
 
       {/* Grid Layout Instructions */}
-      <div className="mb-4 p-4 bg-muted/50 rounded-lg border border-border/50">
+      <div className="mb-4 p-4 bg-muted rounded-lg">
         <p className="text-sm text-muted-foreground">
           <strong>Grid Layout:</strong> Drag widgets from the left column to the dashboard grid on the right. 
           The grid supports {gridSize} layout with {getMaxItems(gridSize)} maximum slots. 
@@ -237,7 +237,7 @@ export function DashboardGrid({ editMode, setEditMode }: DashboardGridProps) {
       {/* Empty Dashboard State */}
       {columns.find(col => col.id === 'dashboard')?.items.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="text-center space-y-4 bg-background/80 backdrop-blur-sm p-8 rounded-lg border border-border/50">
+          <div className="text-center space-y-4 bg-background p-8 rounded-lg">
             <div className="text-4xl text-muted-foreground/50">📊</div>
             <h3 className="text-lg font-medium text-muted-foreground">
               Empty {gridSize} Dashboard Grid
