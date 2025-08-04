@@ -346,11 +346,11 @@ export function GridLayout({ editMode }: GridLayoutProps) {
         {/* Dashboard Grid with Layout Animations */}
         <motion.div 
           layout
-          className={`grid gap-4 w-full ${editMode ? '' : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'}`}
-          style={editMode ? {
+          className="grid gap-4 w-full"
+          style={{
             gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
             gridTemplateRows: `repeat(${rows}, minmax(200px, 1fr))`
-          } : undefined}
+          }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
           <AnimatePresence mode="popLayout">
@@ -469,13 +469,16 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                 );
               })
             ) : (
-              // Show only components with content in view mode - stable keys
+              // Show all slots in view mode but hide empty ones to maintain grid layout
               Array.from({ length: totalCells }, (_, index) => {
                 const slotComponent = getSlotComponent(index);
                 const hasComponent = slotComponent && slotComponent.component;
                 const stableKey = `view-${gridSize}-${index}`;
                 
-                if (!hasComponent) return null;
+                if (!hasComponent) {
+                  // Return invisible placeholder to maintain grid structure
+                  return <div key={stableKey} />;
+                }
                 
                 return (
                   <motion.div
@@ -510,7 +513,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                     </Card>
                   </motion.div>
                 );
-              }).filter(Boolean)
+              })
             )}
           </AnimatePresence>
         </motion.div>
