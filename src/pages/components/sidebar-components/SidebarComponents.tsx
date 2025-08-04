@@ -113,18 +113,6 @@ export function SidebarComponents() {
                 <TaskCounter />
               </SidebarComponentShowcase>
             </CarouselItem>
-            
-            {/* Placeholder for Future Sidebar Components */}
-            <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-              <Card className="animate-fade-in">
-                <CardContent className="min-h-[200px] flex items-center justify-center">
-                  <div className="text-center text-muted-foreground">
-                    <PanelLeftOpen className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                    <p className="text-sm">More sidebar components coming soon...</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </CarouselItem>
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
