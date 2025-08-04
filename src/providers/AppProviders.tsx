@@ -9,6 +9,7 @@ import { WorkspaceProvider } from "@/contexts/WorkspaceContext";
 import { UISettingsProvider } from "@/contexts/UISettingsContext";
 import { DashboardSettingsProvider } from "@/contexts/DashboardSettingsContext";
 import { NavigationSettingsProvider } from "@/contexts/NavigationSettingsContext";
+import { SettingsProvider } from "@/contexts/SettingsContext";
 
 const queryClient = new QueryClient();
 
@@ -29,17 +30,19 @@ export function AppProviders({ children }: AppProvidersProps) {
         <AuthProvider>
           <NotificationProvider>
             <WorkspaceProvider>
-              <UISettingsProvider>
-                <DashboardSettingsProvider>
-                  <NavigationSettingsProvider>
-                    <TooltipProvider>
-                      <SidebarProvider defaultOpen={true}>
-                        {children}
-                      </SidebarProvider>
-                    </TooltipProvider>
-                  </NavigationSettingsProvider>
-                </DashboardSettingsProvider>
-              </UISettingsProvider>
+              <SettingsProvider>
+                <UISettingsProvider>
+                  <DashboardSettingsProvider>
+                    <NavigationSettingsProvider>
+                      <TooltipProvider>
+                        <SidebarProvider defaultOpen={true}>
+                          {children}
+                        </SidebarProvider>
+                      </TooltipProvider>
+                    </NavigationSettingsProvider>
+                  </DashboardSettingsProvider>
+                </UISettingsProvider>
+              </SettingsProvider>
             </WorkspaceProvider>
           </NotificationProvider>
         </AuthProvider>
