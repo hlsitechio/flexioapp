@@ -45,7 +45,7 @@ function DraggableToolItem({ tool, index, editMode }: {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: tool.id });
+  } = useSortable({ id: tool.id, disabled: !editMode });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -54,6 +54,9 @@ function DraggableToolItem({ tool, index, editMode }: {
   };
 
   const Component = tool.component;
+
+  // Apply drag props only when edit mode is enabled
+  const dragProps = editMode ? { ...attributes, ...listeners } : {};
 
   return (
     <motion.div
@@ -64,14 +67,15 @@ function DraggableToolItem({ tool, index, editMode }: {
       exit={{ opacity: 0, y: 10 }}
       transition={{ duration: 0.2, delay: index * 0.05 }}
       className={`relative group ${isDragging ? 'z-50' : ''}`}
-      {...attributes}
-      {...listeners}
+      {...dragProps}
     >
-      <div className={`relative ${isDragging ? 'opacity-50' : ''} cursor-grab active:cursor-grabbing`}>
-        {/* Drag handle - visible on hover */}
-        <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center opacity-0 group-hover:opacity-60 transition-opacity duration-200 z-10 pointer-events-none">
-          <GripVertical className="h-3 w-3 text-sidebar-foreground/50" />
-        </div>
+      <div className={`relative ${isDragging ? 'opacity-50' : ''} ${editMode ? 'cursor-grab active:cursor-grabbing' : ''}`}>
+        {/* Drag handle - visible when edit mode is on */}
+        {editMode && (
+          <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center opacity-0 group-hover:opacity-60 transition-opacity duration-200 z-10 pointer-events-none">
+            <GripVertical className="h-3 w-3 text-sidebar-foreground/50" />
+          </div>
+        )}
         
         {/* Tool component */}
         <Component />
@@ -155,9 +159,11 @@ export function Tools() {
             >
               <Wrench className="h-3 w-3" />
               <span>Tools</span>
-              <span className="text-xs text-sidebar-foreground/50 normal-case">
-                (Drag to reorder)
-              </span>
+              {editMode && (
+                <span className="text-xs text-sidebar-foreground/50 normal-case">
+                  (Drag to reorder)
+                </span>
+              )}
             </motion.h3>
           </AnimatePresence>
 
