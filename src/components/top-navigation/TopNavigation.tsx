@@ -32,7 +32,7 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
   return (
     <header className={`h-16 bg-background backdrop-blur-xl ${hideDividers ? '' : 'border-b border-border/50'} flex items-center justify-between px-6 animate-fade-in relative`}>
       <div className="flex items-center space-x-4">
-        <SidebarTrigger className="h-9 w-9 rounded-lg bg-sidebar-accent hover:bg-sidebar-accent/80 text-sidebar-foreground shadow-sm border border-sidebar-border">
+        <SidebarTrigger className="h-9 w-9 rounded-lg bg-sidebar-accent hover:bg-sidebar-accent/80 text-sidebar-foreground border border-sidebar-border">
           <Menu className="h-4 w-4" />
         </SidebarTrigger>
         {showHeaderTitle && <DashboardTitle customTitle={customHeaderTitle} />}
