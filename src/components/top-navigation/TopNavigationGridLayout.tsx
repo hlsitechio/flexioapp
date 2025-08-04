@@ -134,19 +134,12 @@ function GridSlot({ index, widgetId, editMode, onRemoveWidget, onAddWidget, avai
     <div
       ref={setNodeRef}
       style={style}
-      className={`relative group ${isDragging ? 'opacity-50 z-10' : ''}`}
+      className={`relative group ${isDragging ? 'opacity-50 z-10' : ''} cursor-grab active:cursor-grabbing`}
       {...attributes}
       {...listeners}
     >
-      <div className="flex items-center gap-1">
-        {editMode && (
-          <div className="cursor-grab active:cursor-grabbing p-1 opacity-60 hover:opacity-100 transition-opacity">
-            <GripVertical className="h-3 w-3" />
-          </div>
-        )}
-        <div className={`origin-center cursor-grab active:cursor-grabbing ${isDragging ? 'scale-100' : 'scale-90'}`}>
-          <WidgetComponent />
-        </div>
+      <div className={`origin-center ${isDragging ? 'scale-100' : 'scale-90'} transition-transform`}>
+        <WidgetComponent />
       </div>
       {editMode && (
         <Button
