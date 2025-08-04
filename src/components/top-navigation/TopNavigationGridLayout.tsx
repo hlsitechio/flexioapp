@@ -136,17 +136,15 @@ function GridSlot({ index, widgetId, editMode, onRemoveWidget, onAddWidget, avai
       style={style}
       className={`relative group ${isDragging ? 'opacity-50 z-10' : ''}`}
       {...attributes}
+      {...listeners}
     >
       <div className="flex items-center gap-1">
         {editMode && (
-          <div
-            {...listeners}
-            className="cursor-grab active:cursor-grabbing p-1 opacity-60 hover:opacity-100 transition-opacity"
-          >
+          <div className="cursor-grab active:cursor-grabbing p-1 opacity-60 hover:opacity-100 transition-opacity">
             <GripVertical className="h-3 w-3" />
           </div>
         )}
-        <div className="scale-90 origin-center">
+        <div className="scale-90 origin-center cursor-grab active:cursor-grabbing">
           <WidgetComponent />
         </div>
       </div>
