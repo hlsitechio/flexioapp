@@ -90,11 +90,11 @@ export function applyGradientToTargets(
         const isMainContent = selector.includes('.main-content-area') || 
                              element.classList.contains('main-content-area');
         
-        // Apply gradient background with reduced opacity for main content
+        // Apply gradient background with much lighter overlay for main content to match sidebar
         if (gradientStyle.background) {
           if (isMainContent) {
-            // Make main content much lighter to match sidebar brightness
-            element.style.background = `linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), ${gradientStyle.background}`;
+            // Make main content much lighter to match sidebar brightness - use very light overlay
+            element.style.background = `linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), ${gradientStyle.background}`;
           } else {
             element.style.background = gradientStyle.background;
           }
