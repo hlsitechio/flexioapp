@@ -203,7 +203,14 @@ export function GridLayout({ editMode }: GridLayoutProps) {
 
     const style = transform ? {
       transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      willChange: 'transform',
     } : undefined;
+
+    // Apply drag attributes only to components, not empty slots
+    const dragProps = hasComponent && editMode ? {
+      ...attributes,
+      ...listeners,
+    } : {};
 
     return (
       <div
@@ -212,10 +219,9 @@ export function GridLayout({ editMode }: GridLayoutProps) {
         className={`
           transition-all duration-200
           ${isDragging ? 'opacity-70 scale-105 rotate-1 z-50' : ''}
-          ${hasComponent && editMode ? 'hover:scale-102 hover:-translate-y-1' : ''}
+          ${hasComponent && editMode ? 'hover:scale-102 hover:-translate-y-1 cursor-grab active:cursor-grabbing' : ''}
         `}
-        {...attributes} 
-        {...listeners}
+        {...dragProps}
       >
         {children}
       </div>
@@ -364,7 +370,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                           <Card 
                             className={`
                               relative group transition-all duration-200 
-                              ${!hasComponent ? 'hover:border-primary/50 cursor-pointer' : 'cursor-grab active:cursor-grabbing'}
+                              ${!hasComponent ? 'hover:border-primary/50 cursor-pointer' : ''}
                               ${activeId === `slot-${index}` ? 'ring-2 ring-primary ring-offset-2' : ''}
                               bg-card/50 backdrop-blur-sm
                             `}
