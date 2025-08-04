@@ -37,7 +37,7 @@ const images = [
 
 export function ImageGallery() {
   return (
-    <Card className="w-full h-full">
+    <Card className="w-full h-full rounded-lg">
       <CardContent className="p-4 h-full flex flex-col">
         <h3 className="text-lg font-semibold mb-4 text-foreground">Image Gallery</h3>
         <div className="flex-1 flex items-center justify-center">
