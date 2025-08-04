@@ -29,12 +29,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // Navigation component mapping
 const navigationComponents = {
-  'dark-mode-toggle': SidebarDarkModeToggle,
-  'profile': Profile,
-  'notifications': NotificationButton,
-  'settings': UserSettings,
-  'customization': UserCustomization,
-  'sign-in-out': SignInOut,
+  'DarkModeToggle': SidebarDarkModeToggle,
+  'Profile': Profile,
+  'NotificationButton': NotificationButton,
+  'UserSettings': UserSettings,
+  'UserCustomization': UserCustomization,
+  'SignInOut': SignInOut,
 };
 
 // Draggable navigation item wrapper
