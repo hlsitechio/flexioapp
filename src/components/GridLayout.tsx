@@ -318,7 +318,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
           </div>
         )}
 
-        {/* Dashboard Grid with Layout Animations */}
+        {/* Dashboard Grid with Optimized Layout Animations */}
         <motion.div 
           layout
           className="grid gap-4 w-full"
@@ -326,9 +326,9 @@ export function GridLayout({ editMode }: GridLayoutProps) {
             gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
             gridTemplateRows: `repeat(${rows}, minmax(200px, 1fr))`
           }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          transition={{ type: "spring", stiffness: 500, damping: 40, mass: 0.8 }}
         >
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence mode="wait">
             {editMode ? (
               // Show all slots in edit mode with drag and drop - stable keys prevent flashing
               Array.from({ length: totalCells }, (_, index) => {
@@ -339,15 +339,16 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                 return (
                   <motion.div
                     key={stableKey}
-                    layout
-                    initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                    layout="position"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ 
                       type: "spring", 
-                      stiffness: 300, 
-                      damping: 25,
-                      delay: index * 0.02 // Staggered animation
+                      stiffness: 500, 
+                      damping: 35,
+                      mass: 0.6,
+                      opacity: { duration: 0.15 }
                     }}
                   >
                     <DroppableGridSlot index={index}>
@@ -355,8 +356,8 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                         <motion.div
                           whileHover={!hasComponent ? {
                             scale: 1.02,
-                            boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
-                            transition: { duration: 0.2 }
+                            y: -2,
+                            transition: { duration: 0.15, ease: "easeOut" }
                           } : {}}
                           whileTap={!hasComponent ? { scale: 0.98 } : {}}
                         >
@@ -370,24 +371,24 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                             onClick={() => !hasComponent && handleAddComponent(index)}
                           >
                             <CardContent className="p-6 h-full flex flex-col items-center justify-center relative">
-                              <AnimatePresence mode="wait">
+                                <AnimatePresence mode="wait">
                                 {hasComponent ? (
                                   <motion.div
                                     key="component"
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.9 }}
-                                    transition={{ duration: 0.2 }}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.15 }}
                                     className="w-full h-full"
                                   >
-                                    {/* Remove button with motion */}
+                                    {/* Remove button with optimized motion */}
                                     <motion.div
                                       initial={{ opacity: 0 }}
                                       whileHover={{ opacity: 1 }}
-                                      transition={{ duration: 0.2 }}
+                                      transition={{ duration: 0.15 }}
                                       className="absolute top-2 right-2 z-10"
                                     >
-                                      <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                                         <Button
                                           variant="destructive"
                                           size="sm"
@@ -406,25 +407,25 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                                 ) : (
                                   <motion.div
                                     key="empty"
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
                                     whileHover={{ 
-                                      scale: 1.05, 
+                                      scale: 1.02, 
                                       color: "hsl(var(--primary))",
-                                      transition: { duration: 0.2 }
+                                      transition: { duration: 0.15, ease: "easeOut" }
                                     }}
                                     className="flex flex-col items-center space-y-3 text-muted-foreground"
                                   >
                                     <motion.div
                                       animate={{ 
-                                        rotate: [0, 5, -5, 0],
-                                        scale: [1, 1.1, 1]
+                                        rotate: [0, 3, -3, 0],
+                                        scale: [1, 1.05, 1]
                                       }}
                                       transition={{ 
-                                        duration: 2, 
+                                        duration: 3, 
                                         repeat: Infinity, 
-                                        repeatDelay: 3,
+                                        repeatDelay: 4,
                                         ease: "easeInOut"
                                       }}
                                     >
@@ -458,20 +459,19 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                 return (
                   <motion.div
                     key={stableKey}
-                    layout
-                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                    layout="position"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
                     whileHover={{ 
-                      y: -4, 
-                      boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
-                      transition: { duration: 0.3 }
+                      y: -2, 
+                      transition: { duration: 0.2, ease: "easeOut" }
                     }}
                     transition={{ 
                       type: "spring", 
-                      stiffness: 300, 
-                      damping: 25,
-                      delay: index * 0.05
+                      stiffness: 400, 
+                      damping: 30,
+                      mass: 0.8
                     }}
                   >
                     <Card className="relative group transition-all duration-200 bg-card/50 backdrop-blur-sm">
@@ -480,7 +480,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                           className="w-full h-full"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
-                          transition={{ delay: 0.1, duration: 0.3 }}
+                          transition={{ duration: 0.2 }}
                         >
                           {renderComponent(slotComponent.component, slotComponent.gridSize || gridSize)}
                         </motion.div>
@@ -499,21 +499,20 @@ export function GridLayout({ editMode }: GridLayoutProps) {
         <AnimatePresence>
           {activeId && draggedComponent ? (
             <motion.div
-              initial={{ scale: 1.05, rotate: 5 }}
+              initial={{ scale: 1.02, rotate: 2 }}
               animate={{ 
-                scale: 1.1, 
-                rotate: 8,
-                boxShadow: "0 25px 50px rgba(0,0,0,0.25)"
+                scale: 1.05, 
+                rotate: 3
               }}
-              exit={{ scale: 0.9, rotate: 0 }}
-              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              exit={{ scale: 0.95, rotate: 0 }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
             >
-              <Card className="opacity-90 bg-card/90 backdrop-blur-sm border-primary ring-2 ring-primary ring-offset-4">
+              <Card className="opacity-95 bg-card/95 backdrop-blur-sm border-primary ring-1 ring-primary">
                 <CardContent className="p-6 h-full flex flex-col items-center justify-center">
                   <motion.div 
                     className="w-full h-full pointer-events-none"
-                    animate={{ scale: [1, 1.02, 1] }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+                    animate={{ scale: [1, 1.01, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                   >
                     {renderComponent(draggedComponent.component, draggedComponent.gridSize)}
                   </motion.div>
