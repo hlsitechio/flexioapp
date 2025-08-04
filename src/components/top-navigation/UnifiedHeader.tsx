@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { TimeDisplay } from './TimeDisplay';
-import { TopNavigationGrid } from './TopNavigationGrid';
+import { TopNavigationGridLayout } from './TopNavigationGridLayout';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Menu, Settings, AlignLeft, AlignCenter, AlignRight, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -147,7 +147,7 @@ export function UnifiedHeader({ editMode = false }: UnifiedHeaderProps) {
 
       {/* Bottom Section - Navigation Grid */}
       <div className="flex items-center justify-center">
-        <TopNavigationGrid editMode={editMode} />
+        <TopNavigationGridLayout editMode={editMode} />
       </div>
     </header>
   );
