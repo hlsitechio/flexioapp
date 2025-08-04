@@ -80,7 +80,7 @@ export function UnifiedHeader({ editMode = false }: UnifiedHeaderProps) {
               <PopoverTrigger asChild>
                 <Button variant="outline" size="sm" className="text-xs">
                   <Settings className="h-3 w-3 mr-1" />
-                  Customize Header
+                  Customize Navigation Menu
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-80" align="end">
@@ -130,11 +130,11 @@ export function UnifiedHeader({ editMode = false }: UnifiedHeaderProps) {
 
                   {showHeaderTitle && (
                     <div className="space-y-2">
-                      <Label className="text-sm font-medium">Navigation Title</Label>
+                      <Label className="text-sm font-medium">Navigation Menu Title</Label>
                       <Input
                         value={customHeaderTitle}
                         onChange={(e) => setCustomHeaderTitle(e.target.value)}
-                        placeholder="Enter custom navigation title"
+                        placeholder="Enter custom navigation menu title"
                       />
                     </div>
                   )}
@@ -145,7 +145,7 @@ export function UnifiedHeader({ editMode = false }: UnifiedHeaderProps) {
         </div>
       </div>
 
-      {/* Bottom Section - Navigation Grid */}
+      {/* Bottom Section - Navigation Menu Grid */}
       <div className="flex items-center justify-center">
         <TopNavigationGridLayout editMode={editMode} />
       </div>
