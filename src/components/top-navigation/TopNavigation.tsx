@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { DashboardTitle } from './DashboardTitle';
 import { TimeDisplay } from './TimeDisplay';
-import { TopNavigationGrid } from './TopNavigationGrid';
+import { TopNavigationGridLayout } from './TopNavigationGridLayout';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Menu, Settings, AlignLeft, AlignCenter, AlignRight, Eye, EyeOff, Sidebar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -47,7 +47,7 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
         )}
         
         {/* Top Navigation Grid */}
-        <TopNavigationGrid editMode={editMode} />
+        <TopNavigationGridLayout editMode={editMode} />
         
         {clockPosition === 'right' && <TimeDisplay />}
         
