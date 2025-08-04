@@ -50,6 +50,7 @@ function DraggableToolItem({ tool, index, editMode }: {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    willChange: isDragging ? 'transform' : undefined,
   };
 
   const Component = tool.component;
@@ -63,18 +64,14 @@ function DraggableToolItem({ tool, index, editMode }: {
       exit={{ opacity: 0, y: 10 }}
       transition={{ duration: 0.2, delay: index * 0.05 }}
       className={`relative group ${isDragging ? 'z-50' : ''}`}
+      {...attributes}
+      {...listeners}
     >
-      <div className={`relative ${isDragging ? 'opacity-50' : ''}`}>
-        {/* Drag handle - only visible in edit mode */}
-        {editMode && (
-          <div
-            {...attributes}
-            {...listeners}
-            className="absolute -left-6 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center cursor-grab hover:cursor-grabbing opacity-0 group-hover:opacity-60 transition-opacity duration-200 z-10"
-          >
-            <GripVertical className="h-3 w-3 text-sidebar-foreground/50" />
-          </div>
-        )}
+      <div className={`relative ${isDragging ? 'opacity-50' : ''} cursor-grab active:cursor-grabbing`}>
+        {/* Drag handle - visible on hover */}
+        <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center opacity-0 group-hover:opacity-60 transition-opacity duration-200 z-10 pointer-events-none">
+          <GripVertical className="h-3 w-3 text-sidebar-foreground/50" />
+        </div>
         
         {/* Tool component */}
         <Component />
@@ -158,11 +155,9 @@ export function Tools() {
             >
               <Wrench className="h-3 w-3" />
               <span>Tools</span>
-              {editMode && (
-                <span className="text-xs text-sidebar-foreground/50 normal-case">
-                  (Drag to reorder)
-                </span>
-              )}
+              <span className="text-xs text-sidebar-foreground/50 normal-case">
+                (Drag to reorder)
+              </span>
             </motion.h3>
           </AnimatePresence>
 
