@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DndContext, DragOverlay, closestCorners, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { DashboardSidebar } from './sidebar';
 import { NotificationSidebar } from './sidebar/notifications';
@@ -34,6 +34,40 @@ export function Dashboard() {
   const handleDragEnd = () => {
     setDraggedItem(null);
   };
+
+  // Prevent page reload in edit mode
+  useEffect(() => {
+    if (!editMode) return;
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = 'You are in edit mode. Are you sure you want to leave?';
+      return 'You are in edit mode. Are you sure you want to leave?';
+    };
+
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest('a[href]');
+      
+      if (anchor && anchor.hasAttribute('href')) {
+        const href = anchor.getAttribute('href');
+        if (href && (href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:'))) {
+          // Allow external links, but prevent internal navigation
+          return;
+        }
+        // Prevent navigation for internal links in edit mode
+        e.preventDefault();
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    document.addEventListener('click', handleClick, true);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      document.removeEventListener('click', handleClick, true);
+    };
+  }, [editMode]);
 
   return (
     <>
