@@ -94,7 +94,7 @@ export function Dashboard() {
               
               <ImageBanner />
               
-              <main className={`flex-1 main-content-area -ml-4 ${minimalNavigationMode ? 'pt-0 pr-2 pb-2' : 'p-2 pt-2'}`}>
+              <main className={`flex-1 main-content-area -ml-4 ${minimalNavigationMode ? 'pt-0 pr-3 pb-3' : 'p-3 pt-3'}`}>
                 <div className="ml-4">
                   <GridLayout editMode={editMode} />
                 </div>
