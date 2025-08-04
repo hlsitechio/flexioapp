@@ -1,47 +1,34 @@
 import { useCallback, useEffect } from 'react';
-import { applySolidSidebarForFullMode, getSidebarState } from '@/components/gradient-coverage/utils/gradientModeUtils';
-import { useSettings } from '@/contexts/SettingsContext';
+import { useNavigationSettings } from '@/contexts/NavigationSettingsContext';
 
 /**
- * Custom hook for managing sidebar transparency state
- * Centralizes sidebar state management and provides a clean API
- * Now integrates with SettingsContext for persistence
+ * Updated hook that integrates with the new navigation settings context
+ * while maintaining backward compatibility
  */
 export function useSidebarState() {
-  const { sidebarSolid, setSidebarSolid } = useSettings();
+  const { sidebarSolid, setSidebarSolid } = useNavigationSettings();
 
-  /**
-   * Sync local state with the actual sidebar state and persistence
-   */
-  const syncWithActualState = useCallback(() => {
+  // For now, we'll use the legacy gradient coverage utils
+  // TODO: Migrate these to the navigation settings context
+  const { applySolidSidebarForFullMode, getSidebarState } = require('@/components/gradient-coverage/utils/gradientModeUtils');
+
+  const syncWithActualState = () => {
     const actualState = getSidebarState();
     setSidebarSolid(actualState);
-  }, [setSidebarSolid]);
+  };
 
-  /**
-   * Toggle sidebar transparency and update both local and persisted state
-   */
-  const toggleSidebarTransparency = useCallback(() => {
+  const toggleSidebarTransparency = () => {
     applySolidSidebarForFullMode();
-    // Sync state after toggle to ensure persistence
     syncWithActualState();
-  }, [syncWithActualState]);
+  };
 
-  /**
-   * Set sidebar to a specific transparency state
-   */
-  const setSidebarTransparency = useCallback((solid: boolean) => {
+  const setSidebarTransparency = (solid: boolean) => {
     const currentState = getSidebarState();
     if (currentState !== solid) {
       applySolidSidebarForFullMode();
     }
     syncWithActualState();
-  }, [syncWithActualState]);
-
-  // Sync on mount and when settings change
-  useEffect(() => {
-    syncWithActualState();
-  }, [syncWithActualState]);
+  };
 
   return {
     isSidebarSolid: sidebarSolid,
