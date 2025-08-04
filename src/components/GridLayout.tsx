@@ -340,8 +340,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
           }}
           transition={{ type: "spring", stiffness: 500, damping: 40, mass: 0.8 }}
         >
-          <AnimatePresence mode="wait">
-            {editMode ? (
+          {editMode ? (
               // Show all slots in edit mode with drag and drop - stable keys prevent flashing
               Array.from({ length: totalCells }, (_, index) => {
                 const slotComponent = getSlotComponent(index);
@@ -502,7 +501,6 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                 );
               })
             )}
-          </AnimatePresence>
         </motion.div>
       </div>
 
