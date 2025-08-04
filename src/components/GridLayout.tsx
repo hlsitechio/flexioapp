@@ -327,10 +327,10 @@ export function GridLayout({ editMode }: GridLayoutProps) {
         {/* Dashboard Grid with Optimized Layout Animations */}
         <motion.div 
           layout
-          className="grid gap-3 w-full"
+          className="grid gap-1.5 w-full"
           style={{
             gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-            gridTemplateRows: `repeat(${rows}, minmax(140px, 1fr))`
+            gridTemplateRows: `repeat(${rows}, minmax(100px, 1fr))`
           }}
           transition={{ type: "spring", stiffness: 500, damping: 40, mass: 0.8 }}
         >

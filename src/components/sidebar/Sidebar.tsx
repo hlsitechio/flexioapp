@@ -95,7 +95,7 @@ function DraggableSidebarSection({
         
         {/* Divider after section (except for last section) */}
         {!hideDividers && index < sidebarSections.length - 1 && (
-          <div className="h-px bg-sidebar-border mt-4" />
+          <div className="h-px bg-sidebar-border mt-2" />
         )}
       </div>
     </motion.div>
@@ -142,7 +142,7 @@ export function DashboardSidebar() {
     <motion.div
       initial={false}
       animate={{
-        width: isCollapsed ? 60 : 260,
+        width: isCollapsed ? 48 : 200,
       }}
       transition={{
         duration: 0.3,
@@ -156,32 +156,32 @@ export function DashboardSidebar() {
         data-sidebar="sidebar"
       >
 
-        <SidebarHeader className={`p-3 ${hideDividers ? '' : 'border-b border-sidebar-border'}`}>
+        <SidebarHeader className={`p-1.5 ${hideDividers ? '' : 'border-b border-sidebar-border'}`}>
           <DashboardTitle editMode={editMode} />
         </SidebarHeader>
 
         <SidebarContent className="flex flex-col h-full">
           {/* Main Content Area with Draggable Panels */}
-          <div className="flex-1 p-3">
+          <div className="flex-1 p-1.5">
             {/* Edit Mode Toggle */}
-            <div className="space-y-2 mb-5">
+            <div className="space-y-1 mb-2">
               {isCollapsed ? (
                 <div className="flex justify-center">
                   <button 
-                    className="w-9 h-9 p-0 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center mx-auto"
+                    className="w-6 h-6 p-0 rounded text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center mx-auto"
                     onClick={() => setEditMode(!editMode)}
                   >
-                    {editMode ? <Eye className="h-4 w-4" /> : <Edit3 className="h-4 w-4" />}
+                    {editMode ? <Eye className="h-2.5 w-2.5" /> : <Edit3 className="h-2.5 w-2.5" />}
                   </button>
                 </div>
               ) : (
                 <button
                   onClick={() => setEditMode(!editMode)}
-                  className="w-full flex items-center space-x-3 p-2.5 rounded-lg hover:bg-sidebar-accent transition-all cursor-pointer text-left"
+                  className="w-full flex items-center space-x-1.5 p-1.5 rounded hover:bg-sidebar-accent transition-all cursor-pointer text-left"
                 >
-                  {editMode ? <Eye className="h-4 w-4 text-sidebar-foreground/70" /> : <Edit3 className="h-4 w-4 text-sidebar-foreground/70" />}
+                  {editMode ? <Eye className="h-2.5 w-2.5 text-sidebar-foreground/70" /> : <Edit3 className="h-2.5 w-2.5 text-sidebar-foreground/70" />}
                   <div className="flex-1">
-                    <div className="text-sm font-medium text-sidebar-foreground">
+                    <div className="text-xs font-medium text-sidebar-foreground">
                       Edit Mode {editMode && !isCollapsed && <span className="text-xs text-sidebar-foreground/50 normal-case">(Drag to reorder)</span>}
                     </div>
                   </div>
@@ -196,7 +196,7 @@ export function DashboardSidebar() {
               onDragStart={handleDragStart}
               onDragEnd={handleDragEnd}
             >
-              <div className="space-y-4 relative">
+              <div className="space-y-2 relative">
                 <SortableContext 
                   items={sections.map(section => section.id)} 
                   strategy={verticalListSortingStrategy}
