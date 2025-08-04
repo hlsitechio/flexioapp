@@ -166,12 +166,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   
   // User navigation order
   const [userNavigationOrder, setUserNavigationOrder] = useState<string[]>([
-    'dark-mode-toggle',
-    'profile', 
-    'notifications',
-    'settings',
-    'customization',
-    'sign-in-out'
+    'DarkModeToggle',
+    'Profile', 
+    'NotificationButton',
+    'UserSettings',
+    'UserCustomization',
+    'SignInOut'
   ]);
 
   // One-time sync setup for sign-in
@@ -316,12 +316,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setHideDividers(false);
     setEditMode(false);
     setUserNavigationOrder([
-      'dark-mode-toggle',
-      'profile', 
-      'notifications',
-      'settings',
-      'customization',
-      'sign-in-out'
+      'DarkModeToggle',
+      'Profile', 
+      'NotificationButton',
+      'UserSettings',
+      'UserCustomization',
+      'SignInOut'
     ]);
   };
 
@@ -367,12 +367,12 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     
     // User navigation order
     const savedUserNavigationOrder = getStorageItem('userNavigationOrder', [
-      'dark-mode-toggle',
-      'profile', 
-      'notifications',
-      'settings',
-      'customization',
-      'sign-in-out'
+      'DarkModeToggle',
+      'Profile', 
+      'NotificationButton',
+      'UserSettings',
+      'UserCustomization',
+      'SignInOut'
     ]);
 
     setClockPosition(savedClockPosition);
@@ -779,12 +779,12 @@ export function useSettings() {
       hideDividers: false,
       setHideDividers: () => {},
       userNavigationOrder: [
-        'dark-mode-toggle',
-        'profile', 
-        'notifications',
-        'settings',
-        'customization',
-        'sign-in-out'
+        'DarkModeToggle',
+        'Profile', 
+        'NotificationButton',
+        'UserSettings',
+        'UserCustomization',
+        'SignInOut'
       ],
       setUserNavigationOrder: () => {},
       saveSettingsToBackend: async () => {},

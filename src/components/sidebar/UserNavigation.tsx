@@ -104,14 +104,6 @@ export function UserNavigation() {
     setUserNavigationOrder 
   } = useSettings();
 
-  console.log('🔍 UserNavigation Debug:', {
-    userNavigationOrder,
-    isCollapsed,
-    editMode,
-    hideDividers,
-    navigationComponents: Object.keys(navigationComponents)
-  });
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -131,21 +123,13 @@ export function UserNavigation() {
   };
 
   return (
-    <div className="bg-red-500 border-4 border-yellow-400 p-4 m-2 rounded-lg min-h-[100px]">
-      <div className="text-white font-bold mb-2">USER NAVIGATION - DEBUG</div>
-      <div className="text-white text-xs mb-2">
-        Order: {userNavigationOrder.join(', ')}
-      </div>
-      <div className="text-white text-xs mb-2">
-        Components: {Object.keys(navigationComponents).join(', ')}
-      </div>
-      
+    <div className={`${hideDividers ? '' : 'border-t border-sidebar-border'} ${isCollapsed ? 'p-2' : 'px-4 py-4'}`}>
       {editMode && !isCollapsed && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className="mb-3 text-xs text-white text-center"
+          className="mb-3 text-xs text-sidebar-foreground/50 text-center"
         >
           Drag to reorder horizontally
         </motion.div>
@@ -164,12 +148,10 @@ export function UserNavigation() {
             <AnimatePresence>
               {userNavigationOrder.map((componentId, index) => {
                 const Component = navigationComponents[componentId as keyof typeof navigationComponents];
-                if (!Component) {
-                  return <div key={componentId} className="bg-orange-500 p-2 text-white text-xs">Missing: {componentId}</div>;
-                }
+                if (!Component) return null;
 
                 // Add visual separator after dark mode toggle
-                const addSeparator = componentId === 'dark-mode-toggle';
+                const addSeparator = componentId === 'DarkModeToggle';
 
                 return (
                   <div key={componentId} className="flex items-center">
