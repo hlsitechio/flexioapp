@@ -51,7 +51,7 @@ export function Dashboard() {
             <DashboardSidebar />
           </div>
           
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col -ml-px">
             <div className="gradient-header rounded-b-lg">
               <UnifiedHeader editMode={editMode} />
             </div>
