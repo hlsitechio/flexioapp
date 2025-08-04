@@ -184,7 +184,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
       addComponentToSlot(overSlotIndex, activeComponent.component, activeComponent.gridSize);
     }
   };
-  // Enhanced components with framer-motion animations
+  // Simplified draggable component without conflicting transforms
   const DraggableGridSlot = React.memo(({ index, children, hasComponent }: { 
     index: number; 
     children: React.ReactNode; 
@@ -201,47 +201,24 @@ export function GridLayout({ editMode }: GridLayoutProps) {
       disabled: !editMode || !hasComponent,
     });
 
-    // Motion values for smooth animations
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
-    const scale = useTransform([x, y], ([x, y]) => isDragging ? 1.05 : 1);
-
-    React.useEffect(() => {
-      if (transform) {
-        x.set(transform.x);
-        y.set(transform.y);
-      } else {
-        x.set(0);
-        y.set(0);
-      }
-    }, [transform, x, y]);
+    const style = transform ? {
+      transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+    } : undefined;
 
     return (
-      <motion.div
+      <div
         ref={setNodeRef}
-        style={{ x, y, scale }}
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ 
-          opacity: isDragging ? 0.7 : 1, 
-          scale: isDragging ? 1.05 : 1,
-          rotate: isDragging ? 2 : 0
-        }}
-        transition={{ 
-          type: "spring", 
-          stiffness: 300, 
-          damping: 30,
-          opacity: { duration: 0.2 }
-        }}
-        whileHover={hasComponent && editMode ? { 
-          scale: 1.02, 
-          y: -2,
-          transition: { duration: 0.2 } 
-        } : {}}
+        style={style}
+        className={`
+          transition-all duration-200
+          ${isDragging ? 'opacity-70 scale-105 rotate-1 z-50' : ''}
+          ${hasComponent && editMode ? 'hover:scale-102 hover:-translate-y-1' : ''}
+        `}
         {...attributes} 
         {...listeners}
       >
         {children}
-      </motion.div>
+      </div>
     );
   });
 
@@ -255,17 +232,15 @@ export function GridLayout({ editMode }: GridLayoutProps) {
     });
 
     return (
-      <motion.div 
+      <div 
         ref={setNodeRef}
-        animate={{ 
-          scale: isOver && editMode ? 1.02 : 1,
-          borderColor: isOver && editMode ? "hsl(var(--primary))" : "transparent"
-        }}
-        transition={{ type: "spring", stiffness: 400, damping: 25 }}
-        className={isOver && editMode ? 'ring-2 ring-primary ring-offset-2' : ''}
+        className={`
+          transition-all duration-200
+          ${isOver && editMode ? 'ring-2 ring-primary ring-offset-2 scale-102' : ''}
+        `}
       >
         {children}
-      </motion.div>
+      </div>
     );
   });
 
