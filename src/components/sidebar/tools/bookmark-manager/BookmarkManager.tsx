@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSidebar } from '@/components/ui/sidebar';
-import { Bookmark, Plus, ExternalLink, Star, Trash2, Edit } from 'lucide-react';
+import { Bookmark, Plus, ExternalLink, Star, Trash2, Edit, Upload } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { BookmarkImporter } from '@/lib/bookmark-import';
 
 interface BookmarkData {
   id: string;
@@ -29,7 +30,10 @@ export function BookmarkManager() {
   const [bookmarks, setBookmarks] = useState<BookmarkData[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [importDialogOpen, setImportDialogOpen] = useState(false);
   const [editingBookmark, setEditingBookmark] = useState<BookmarkData | null>(null);
+  const [importing, setImporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     title: '',
     url: '',
@@ -202,6 +206,70 @@ export function BookmarkManager() {
     setDialogOpen(true);
   };
 
+  const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.html') && !file.name.endsWith('.htm')) {
+      toast({
+        title: "Error",
+        description: "Please select an HTML file",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setImporting(true);
+    try {
+      const { data: user } = await supabase.auth.getUser();
+      if (!user.user) return;
+
+      const htmlContent = await file.text();
+      const importedBookmarks = BookmarkImporter.parseHtmlFile(htmlContent);
+
+      if (importedBookmarks.length === 0) {
+        toast({
+          title: "No bookmarks found",
+          description: "The file doesn't contain any valid bookmarks",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const bookmarksToInsert = await BookmarkImporter.processBookmarksForImport(
+        importedBookmarks,
+        user.user.id
+      );
+
+      const { data, error } = await supabase
+        .from('bookmarks')
+        .insert(bookmarksToInsert)
+        .select();
+
+      if (error) throw error;
+
+      setBookmarks(prev => [...(data || []), ...prev]);
+      setImportDialogOpen(false);
+      
+      toast({
+        title: "Success",
+        description: `Imported ${importedBookmarks.length} bookmarks successfully!`,
+      });
+    } catch (error) {
+      console.error('Error importing bookmarks:', error);
+      toast({
+        title: "Error",
+        description: "Failed to import bookmarks",
+        variant: "destructive",
+      });
+    } finally {
+      setImporting(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
   useEffect(() => {
     loadBookmarks();
   }, []);
@@ -254,19 +322,70 @@ export function BookmarkManager() {
             transition={{ duration: 0.2, delay: 0.25 }}
             className="px-2 space-y-3"
           >
-            {/* Add bookmark button */}
+            {/* Add bookmark and import buttons */}
+            <div className="flex space-x-2">
+              <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    onClick={openAddDialog}
+                    size="sm"
+                    variant="outline"
+                    className="flex-1 h-7 text-xs"
+                  >
+                    <Plus className="h-3 w-3 mr-1" />
+                    Add
+                  </Button>
+                </DialogTrigger>
+              </Dialog>
+              <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="flex-1 h-7 text-xs"
+                  >
+                    <Upload className="h-3 w-3 mr-1" />
+                    Import
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Import Bookmarks</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div className="text-sm text-muted-foreground">
+                      Import bookmarks from HTML files exported from Chrome, Firefox, or Edge.
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="bookmark-file-sidebar">Select HTML File</Label>
+                      <Input
+                        id="bookmark-file-sidebar"
+                        type="file"
+                        ref={fileInputRef}
+                        accept=".html,.htm"
+                        onChange={handleFileImport}
+                        disabled={importing}
+                      />
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      <strong>Supported browsers:</strong>
+                      <ul className="list-disc list-inside mt-1 space-y-1">
+                        <li>Chrome: Settings → Bookmarks → Export</li>
+                        <li>Firefox: Bookmarks → Import/Export</li>
+                        <li>Edge: Settings → Favorites → Export</li>
+                      </ul>
+                    </div>
+                    {importing && (
+                      <div className="text-sm text-muted-foreground text-center py-2">
+                        Importing bookmarks...
+                      </div>
+                    )}
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  onClick={openAddDialog}
-                  size="sm"
-                  variant="outline"
-                  className="w-full h-7 text-xs"
-                >
-                  <Plus className="h-3 w-3 mr-1" />
-                  Add Bookmark
-                </Button>
-              </DialogTrigger>
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                   <DialogTitle>

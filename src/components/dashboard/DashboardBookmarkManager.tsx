@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Bookmark, Plus, ExternalLink, Star, Search, Tag } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Bookmark, Plus, ExternalLink, Star, Search, Tag, Upload } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { BookmarkImporter } from '@/lib/bookmark-import';
 
 interface BookmarkData {
   id: string;
@@ -27,7 +28,10 @@ export function DashboardBookmarkManager() {
   const [filteredBookmarks, setFilteredBookmarks] = useState<BookmarkData[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [importDialogOpen, setImportDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [importing, setImporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     title: '',
     url: '',
@@ -161,6 +165,71 @@ export function DashboardBookmarkManager() {
     setFilteredBookmarks(filtered);
   };
 
+  const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.name.endsWith('.html') && !file.name.endsWith('.htm')) {
+      toast({
+        title: "Error",
+        description: "Please select an HTML file",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setImporting(true);
+    try {
+      const { data: user } = await supabase.auth.getUser();
+      if (!user.user) return;
+
+      const htmlContent = await file.text();
+      const importedBookmarks = BookmarkImporter.parseHtmlFile(htmlContent);
+
+      if (importedBookmarks.length === 0) {
+        toast({
+          title: "No bookmarks found",
+          description: "The file doesn't contain any valid bookmarks",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const bookmarksToInsert = await BookmarkImporter.processBookmarksForImport(
+        importedBookmarks,
+        user.user.id
+      );
+
+      const { data, error } = await supabase
+        .from('bookmarks')
+        .insert(bookmarksToInsert)
+        .select();
+
+      if (error) throw error;
+
+      setBookmarks(prev => [...(data || []), ...prev]);
+      setFilteredBookmarks(prev => [...(data || []), ...prev]);
+      setImportDialogOpen(false);
+      
+      toast({
+        title: "Success",
+        description: `Imported ${importedBookmarks.length} bookmarks successfully!`,
+      });
+    } catch (error) {
+      console.error('Error importing bookmarks:', error);
+      toast({
+        title: "Error",
+        description: "Failed to import bookmarks",
+        variant: "destructive",
+      });
+    } finally {
+      setImporting(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
   useEffect(() => {
     loadBookmarks();
   }, []);
@@ -210,6 +279,52 @@ export function DashboardBookmarkManager() {
                 Add
               </Button>
             </DialogTrigger>
+          </Dialog>
+          <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm" variant="outline">
+                <Upload className="h-4 w-4 mr-1" />
+                Import
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Import Bookmarks</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4">
+                <div className="text-sm text-muted-foreground">
+                  Import bookmarks from HTML files exported from Chrome, Firefox, or Edge.
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="bookmark-file">Select HTML File</Label>
+                  <Input
+                    id="bookmark-file"
+                    type="file"
+                    ref={fileInputRef}
+                    accept=".html,.htm"
+                    onChange={handleFileImport}
+                    disabled={importing}
+                  />
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  <strong>Supported browsers:</strong>
+                  <ul className="list-disc list-inside mt-1 space-y-1">
+                    <li>Chrome: Settings → Bookmarks → Bookmark manager → Export bookmarks</li>
+                    <li>Firefox: Bookmarks → Manage bookmarks → Import and Backup → Export</li>
+                    <li>Edge: Settings → Favorites → Export favorites</li>
+                  </ul>
+                </div>
+                {importing && (
+                  <div className="text-sm text-muted-foreground text-center py-2">
+                    Importing bookmarks...
+                  </div>
+                )}
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
                 <DialogTitle>Add Bookmark</DialogTitle>
@@ -265,8 +380,7 @@ export function DashboardBookmarkManager() {
                 </div>
               </div>
             </DialogContent>
-          </Dialog>
-        </div>
+        </Dialog>
 
         {/* Bookmarks list */}
         <div className="space-y-2 max-h-64 overflow-y-auto">
