@@ -224,6 +224,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     if (data.top_navigation_widgets !== undefined) {
       setTopNavigationWidgets(data.top_navigation_widgets as string[]);
     }
+    if (data.minimal_navigation_mode !== undefined) {
+      setMinimalNavigationMode(data.minimal_navigation_mode);
+    }
     if (data.quick_note !== undefined) {
       setQuickNote(data.quick_note);
     }
@@ -509,6 +512,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
           dashboard_layout: dashboardLayout,
           grid_size: gridSize,
           top_navigation_widgets: topNavigationWidgets,
+          minimal_navigation_mode: minimalNavigationMode,
           quick_note: quickNote,
           banner_image: bannerImage,
           show_banner: showBanner,

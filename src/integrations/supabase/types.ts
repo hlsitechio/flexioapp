@@ -326,6 +326,7 @@ export type Database = {
           grid_size: string | null
           hide_dividers: boolean | null
           id: string
+          minimal_navigation_mode: boolean | null
           quick_note: string | null
           show_banner: boolean | null
           show_date: boolean | null
@@ -357,6 +358,7 @@ export type Database = {
           grid_size?: string | null
           hide_dividers?: boolean | null
           id?: string
+          minimal_navigation_mode?: boolean | null
           quick_note?: string | null
           show_banner?: boolean | null
           show_date?: boolean | null
@@ -388,6 +390,7 @@ export type Database = {
           grid_size?: string | null
           hide_dividers?: boolean | null
           id?: string
+          minimal_navigation_mode?: boolean | null
           quick_note?: string | null
           show_banner?: boolean | null
           show_date?: boolean | null
