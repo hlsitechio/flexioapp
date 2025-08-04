@@ -1,4 +1,5 @@
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { AnimatedSidebarTrigger } from "@/components/ui/animated-sidebar-trigger";
 import { SolidSidebar } from "./SolidSidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -10,7 +11,7 @@ export function SolidSidebarDemo() {
         
         <div className="flex-1 flex flex-col">
           <header className="h-16 bg-background border-b border-border flex items-center px-6">
-            <SidebarTrigger className="mr-4" />
+            <AnimatedSidebarTrigger className="shadow-sm" />
             <h1 className="text-xl font-semibold text-foreground">
               Solid Sidebar Demo
             </h1>

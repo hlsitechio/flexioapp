@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { TimeDisplay } from './TimeDisplay';
 import { TopNavigationGridLayout } from './TopNavigationGridLayout';
-import { SidebarTrigger } from '@/components/ui/sidebar';
+import { AnimatedSidebarTrigger } from '@/components/ui/animated-sidebar-trigger';
 import { Menu, Settings, AlignLeft, AlignCenter, AlignRight, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -54,9 +54,10 @@ export function UnifiedHeader({ editMode = false }: UnifiedHeaderProps) {
       {/* Top Section - Title and Clock */}
       <div className={`flex items-center justify-between ${minimalNavigationMode ? '' : 'mb-2'}`}>
         <div className="flex items-center space-x-4">
-          <SidebarTrigger className={`h-9 w-9 rounded-lg border ${minimalNavigationMode ? 'bg-gray-800 hover:bg-gray-700 text-white border-gray-600' : 'bg-sidebar-accent hover:bg-sidebar-accent/80 text-sidebar-foreground border-sidebar-border'}`}>
-            <Menu className="h-4 w-4" />
-          </SidebarTrigger>
+          <AnimatedSidebarTrigger 
+            minimalMode={minimalNavigationMode}
+            className="shadow-sm"
+          />
           {showHeaderTitle && (
             <div className="flex items-center space-x-2">
               <Crown className={`h-5 w-5 ${minimalNavigationMode ? 'text-white' : 'text-primary'}`} />
