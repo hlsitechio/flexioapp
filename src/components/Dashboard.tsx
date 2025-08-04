@@ -85,14 +85,14 @@ export function Dashboard() {
             <DashboardSidebar />
           </div>
           
-          <div className="flex-1 flex flex-col -ml-px">
-            <div className="gradient-header rounded-b-lg">
+          <div className="flex-1 flex flex-col">
+            <div className="gradient-header">
               <UnifiedHeader editMode={editMode} />
             </div>
             
             <ImageBanner />
             
-            <main className={`flex-1 main-content-area ${minimalNavigationMode ? 'p-6 pt-0' : 'p-6'}`}>
+            <main className={`flex-1 main-content-area ${minimalNavigationMode ? 'p-6 pt-0 pl-6' : 'p-6 pl-6'}`}>
               <GridLayout editMode={editMode} />
             </main>
           </div>
