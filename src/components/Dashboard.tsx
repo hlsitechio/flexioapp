@@ -92,8 +92,10 @@ export function Dashboard() {
             
             <ImageBanner />
             
-            <main className={`flex-1 main-content-area ${minimalNavigationMode ? 'p-6 pt-6 pr-8' : 'p-6 pr-8'}`}>
-              <GridLayout editMode={editMode} />
+            <main className={`flex-1 main-content-area overflow-y-auto max-h-[calc(100vh-120px)] ${minimalNavigationMode ? 'p-6 pt-6 pr-8' : 'p-6 pr-8'}`}>
+              <div className="min-h-full">
+                <GridLayout editMode={editMode} />
+              </div>
             </main>
           </div>
         </div>

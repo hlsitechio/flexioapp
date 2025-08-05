@@ -160,9 +160,9 @@ export function DashboardSidebar() {
           <DashboardTitle editMode={editMode} />
         </SidebarHeader>
 
-        <SidebarContent className="flex flex-col h-full">
+        <SidebarContent className="flex flex-col h-full max-h-[calc(100vh-80px)] overflow-hidden">
           {/* Main Content Area with Draggable Panels */}
-          <div className="flex-1 p-4">
+          <div className="flex-1 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-sidebar-border scrollbar-track-transparent">
             {/* Edit Mode Toggle */}
             <div className="space-y-3 mb-6">
               {isCollapsed ? (

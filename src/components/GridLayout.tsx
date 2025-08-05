@@ -333,13 +333,13 @@ export function GridLayout({ editMode }: GridLayoutProps) {
           </div>
         )}
 
-        {/* Dashboard Grid with Optimized Layout Animations */}
+        {/* Dashboard Grid with Scrollable Layout */}
         <motion.div 
           layout
-          className="grid gap-4 w-full"
+          className="grid gap-4 w-full pb-6"
           style={{
             gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-            gridTemplateRows: `repeat(${rows}, minmax(200px, 1fr))`
+            gridAutoRows: 'minmax(200px, auto)'
           }}
           transition={{ type: "spring", stiffness: 500, damping: 40, mass: 0.8 }}
         >
