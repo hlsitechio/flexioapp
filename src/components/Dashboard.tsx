@@ -80,7 +80,7 @@ export function Dashboard() {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className={`min-h-screen flex w-full dashboard-container ${typeof dashboardBackground === 'string' && dashboardBackground.startsWith('bg-') ? dashboardBackground : ''}`}>
+        <div className={`h-screen flex w-full dashboard-container ${typeof dashboardBackground === 'string' && dashboardBackground.startsWith('bg-') ? dashboardBackground : ''}`}>
           <div className="gradient-sidebar">
             <DashboardSidebar />
           </div>
@@ -92,7 +92,7 @@ export function Dashboard() {
             
             <ImageBanner />
             
-            <main className={`flex-1 main-content-area overflow-y-auto max-h-[calc(100vh-120px)] ${minimalNavigationMode ? 'p-6 pt-6 pr-8' : 'p-6 pr-8'}`}>
+            <main className={`flex-1 main-content-area overflow-y-auto ${minimalNavigationMode ? 'p-6 pt-6 pr-8' : 'p-6 pr-8'}`}>
               <div className="min-h-full">
                 <GridLayout editMode={editMode} />
               </div>
