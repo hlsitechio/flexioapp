@@ -233,11 +233,12 @@ export function LandingPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30 hover-scale">
-              <div className="aspect-video relative overflow-hidden bg-muted/20 flex items-center justify-center">
-                <div className="text-center space-y-2">
-                  <Image className="h-12 w-12 mx-auto text-muted-foreground/50" />
-                  <p className="text-sm text-muted-foreground">Task Management Image</p>
-                </div>
+              <div className="aspect-video relative overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop&crop=center" 
+                  alt="Task Management Interface Placeholder" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-blue-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">📋</div>
@@ -252,11 +253,12 @@ export function LandingPage() {
             </Card>
 
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/30 hover-scale">
-              <div className="aspect-video relative overflow-hidden bg-muted/20 flex items-center justify-center">
-                <div className="text-center space-y-2">
-                  <Image className="h-12 w-12 mx-auto text-muted-foreground/50" />
-                  <p className="text-sm text-muted-foreground">Smart Calendar Image</p>
-                </div>
+              <div className="aspect-video relative overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop&crop=center" 
+                  alt="Smart Calendar Interface Placeholder" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-green-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">📅</div>
@@ -271,11 +273,12 @@ export function LandingPage() {
             </Card>
 
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/30 dark:to-purple-900/30 hover-scale">
-              <div className="aspect-video relative overflow-hidden bg-muted/20 flex items-center justify-center">
-                <div className="text-center space-y-2">
-                  <Image className="h-12 w-12 mx-auto text-muted-foreground/50" />
-                  <p className="text-sm text-muted-foreground">Note Taking Image</p>
-                </div>
+              <div className="aspect-video relative overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=600&fit=crop&crop=center" 
+                  alt="Note Taking Interface Placeholder" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-purple-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">📝</div>
@@ -290,11 +293,12 @@ export function LandingPage() {
             </Card>
 
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/30 hover-scale">
-              <div className="aspect-video relative overflow-hidden bg-muted/20 flex items-center justify-center">
-                <div className="text-center space-y-2">
-                  <Image className="h-12 w-12 mx-auto text-muted-foreground/50" />
-                  <p className="text-sm text-muted-foreground">Bookmark Manager Image</p>
-                </div>
+              <div className="aspect-video relative overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop&crop=center" 
+                  alt="Bookmark Manager Interface Placeholder" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-orange-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">🔗</div>
@@ -309,11 +313,12 @@ export function LandingPage() {
             </Card>
 
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/30 hover-scale">
-              <div className="aspect-video relative overflow-hidden bg-muted/20 flex items-center justify-center">
-                <div className="text-center space-y-2">
-                  <Image className="h-12 w-12 mx-auto text-muted-foreground/50" />
-                  <p className="text-sm text-muted-foreground">Time Tracking Image</p>
-                </div>
+              <div className="aspect-video relative overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&crop=center" 
+                  alt="Time Tracking Interface Placeholder" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-red-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">⏱️</div>
@@ -328,11 +333,12 @@ export function LandingPage() {
             </Card>
 
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-950/30 dark:to-cyan-900/30 hover-scale">
-              <div className="aspect-video relative overflow-hidden bg-muted/20 flex items-center justify-center">
-                <div className="text-center space-y-2">
-                  <Image className="h-12 w-12 mx-auto text-muted-foreground/50" />
-                  <p className="text-sm text-muted-foreground">Quick Tools Image</p>
-                </div>
+              <div className="aspect-video relative overflow-hidden">
+                <img 
+                  src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop&crop=center" 
+                  alt="Quick Tools Interface Placeholder" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-cyan-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">🧮</div>
@@ -400,12 +406,11 @@ export function LandingPage() {
             </div>
             
             <div className="relative group hover-scale">
-              <div className="aspect-video bg-muted/20 rounded-2xl shadow-2xl border border-border/50 w-full flex items-center justify-center">
-                <div className="text-center space-y-4">
-                  <Image className="h-16 w-16 mx-auto text-muted-foreground/50" />
-                  <p className="text-lg text-muted-foreground">Multi-purpose Dashboard Image</p>
-                </div>
-              </div>
+              <img 
+                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&crop=center" 
+                alt="Multi-purpose Dashboard Interface Placeholder" 
+                className="rounded-2xl shadow-2xl border border-border/50 w-full"
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-sm rounded-lg p-2">
                 <span className="text-sm font-medium text-foreground">Live Dashboard</span>
@@ -447,12 +452,11 @@ export function LandingPage() {
                 </div>
               </div>
               <div className="relative group hover-scale">
-                <div className="aspect-video bg-muted/20 rounded-2xl shadow-2xl border border-border/50 flex items-center justify-center">
-                  <div className="text-center space-y-4">
-                    <Image className="h-16 w-16 mx-auto text-muted-foreground/50" />
-                    <p className="text-lg text-muted-foreground">Complete Dashboard Overview</p>
-                  </div>
-                </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=800&h=600&fit=crop&crop=center" 
+                  alt="Complete Dashboard Overview Placeholder" 
+                  className="rounded-2xl shadow-2xl border border-border/50"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </div>
             </div>
@@ -475,12 +479,11 @@ export function LandingPage() {
                 </div>
               </div>
               <div className="lg:order-1 relative group hover-scale">
-                <div className="aspect-video bg-muted/20 rounded-2xl shadow-2xl border border-border/50 flex items-center justify-center">
-                  <div className="text-center space-y-4">
-                    <Image className="h-16 w-16 mx-auto text-muted-foreground/50" />
-                    <p className="text-lg text-muted-foreground">Advanced Analytics</p>
-                  </div>
-                </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800&h=600&fit=crop&crop=center" 
+                  alt="Advanced Analytics Placeholder" 
+                  className="rounded-2xl shadow-2xl border border-border/50"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </div>
             </div>
@@ -503,12 +506,11 @@ export function LandingPage() {
                 </div>
               </div>
               <div className="relative group hover-scale">
-                <div className="aspect-video bg-muted/20 rounded-2xl shadow-2xl border border-border/50 flex items-center justify-center">
-                  <div className="text-center space-y-4">
-                    <Image className="h-16 w-16 mx-auto text-muted-foreground/50" />
-                    <p className="text-lg text-muted-foreground">Project Management Suite</p>
-                  </div>
-                </div>
+                <img 
+                  src="https://images.unsplash.com/photo-1473091534298-04dcbce3278c?w=800&h=600&fit=crop&crop=center" 
+                  alt="Project Management Suite Placeholder" 
+                  className="rounded-2xl shadow-2xl border border-border/50"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </div>
             </div>
