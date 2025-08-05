@@ -7,4 +7,5 @@ export { DashboardCodeBlock } from './DashboardCodeBlock';
 export { DashboardHabitTracker } from './DashboardHabitTracker';
 export { DashboardQuickCalculator } from './DashboardQuickCalculator';
 export { DashboardBookmarkManager } from './DashboardBookmarkManager';
+export { DashboardDateDisplay } from './DashboardDateDisplay';
 export { ImageGallery } from './image-gallery';

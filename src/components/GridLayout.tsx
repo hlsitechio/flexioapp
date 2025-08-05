@@ -29,6 +29,7 @@ import {
   DashboardCodeBlock,
   DashboardHabitTracker,
   DashboardQuickCalculator,
+  DashboardDateDisplay,
   ImageGallery
 } from '@/components/dashboard';
 import { 
@@ -129,6 +130,8 @@ export function GridLayout({ editMode }: GridLayoutProps) {
         return <DashboardPromptsGallery />;
       case 'Code Snippets':
         return <DashboardCodeBlock />;
+      case 'Date Display':
+        return <DashboardDateDisplay />;
       default:
         return null;
     }
