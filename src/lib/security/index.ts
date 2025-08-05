@@ -1,17 +1,27 @@
 // Enhanced Security Suite - 2025 Edition
+console.log('🔍 Loading security index.ts...');
+
+// Re-export original security utilities first
+export * from '../security';
+
+console.log('✅ Original security utilities exported');
+
+// Export enhanced modules
 export * from './csp-monitor';
 export * from './gdpr-compliance';
 export * from './devtools-integration';
 export * from './enhanced-monitoring';
 
-// Re-export original security utilities
-export * from '../security';
+console.log('✅ Enhanced security modules exported');
 
 import { cspMonitor } from './csp-monitor';
 import { gdprCompliance } from './gdpr-compliance';
 import { devToolsIntegration } from './devtools-integration';
 import { securityMonitoring } from './enhanced-monitoring';
+
 const isDevelopment = import.meta.env.DEV;
+
+console.log('📦 Security instances imported:', { cspMonitor, gdprCompliance, devToolsIntegration, securityMonitoring });
 
 /**
  * Initialize the complete security suite with Chrome DevTools integration
