@@ -221,7 +221,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Features Showcase Section */}
+      {/* Features Showcase Section with Images */}
       <section className="py-24 px-8 sm:px-12 lg:px-16 bg-background">
         <div className="max-w-[1800px] mx-auto">
           <div className="text-center space-y-6 mb-20">
@@ -235,73 +235,121 @@ export function LandingPage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-            <Card className="p-8 space-y-6 border-0 shadow-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30 hover-scale">
-              <div className="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center">
-                <div className="text-2xl">📋</div>
+            <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30 hover-scale">
+              <div className="aspect-video relative overflow-hidden">
+                <img 
+                  src={projectManagement} 
+                  alt="Task Management Interface" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4">
+                  <div className="text-2xl mb-2">📋</div>
+                  <h3 className="text-xl font-bold text-white">Task Management</h3>
+                </div>
               </div>
-              <div className="space-y-3">
-                <h3 className="text-2xl font-bold">Task Management</h3>
-                <p className="text-muted-foreground text-lg leading-relaxed">
+              <div className="p-6">
+                <p className="text-muted-foreground leading-relaxed">
                   Kanban boards, task counters, and habit trackers to keep your projects organized and on track.
                 </p>
               </div>
             </Card>
 
-            <Card className="p-8 space-y-6 border-0 shadow-xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/30 hover-scale">
-              <div className="w-16 h-16 bg-green-500/10 rounded-2xl flex items-center justify-center">
-                <div className="text-2xl">📅</div>
+            <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/30 hover-scale">
+              <div className="aspect-video relative overflow-hidden">
+                <img 
+                  src={dashboardMain} 
+                  alt="Smart Calendar Interface" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-green-900/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4">
+                  <div className="text-2xl mb-2">📅</div>
+                  <h3 className="text-xl font-bold text-white">Smart Calendar</h3>
+                </div>
               </div>
-              <div className="space-y-3">
-                <h3 className="text-2xl font-bold">Smart Calendar</h3>
-                <p className="text-muted-foreground text-lg leading-relaxed">
+              <div className="p-6">
+                <p className="text-muted-foreground leading-relaxed">
                   Advanced calendar with mini views, event management, and intelligent scheduling.
                 </p>
               </div>
             </Card>
 
-            <Card className="p-8 space-y-6 border-0 shadow-xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/30 dark:to-purple-900/30 hover-scale">
-              <div className="w-16 h-16 bg-purple-500/10 rounded-2xl flex items-center justify-center">
-                <div className="text-2xl">📝</div>
+            <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/30 dark:to-purple-900/30 hover-scale">
+              <div className="aspect-video relative overflow-hidden">
+                <img 
+                  src={analyticsDashboard} 
+                  alt="Note Taking Interface" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-purple-900/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4">
+                  <div className="text-2xl mb-2">📝</div>
+                  <h3 className="text-xl font-bold text-white">Note Taking</h3>
+                </div>
               </div>
-              <div className="space-y-3">
-                <h3 className="text-2xl font-bold">Note Taking</h3>
-                <p className="text-muted-foreground text-lg leading-relaxed">
+              <div className="p-6">
+                <p className="text-muted-foreground leading-relaxed">
                   Quick notes, code snippets, and prompts gallery for capturing and organizing your ideas.
                 </p>
               </div>
             </Card>
 
-            <Card className="p-8 space-y-6 border-0 shadow-xl bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/30 hover-scale">
-              <div className="w-16 h-16 bg-orange-500/10 rounded-2xl flex items-center justify-center">
-                <div className="text-2xl">🔗</div>
+            <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/30 hover-scale">
+              <div className="aspect-video relative overflow-hidden">
+                <img 
+                  src={projectManagement} 
+                  alt="Bookmark Manager Interface" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-orange-900/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4">
+                  <div className="text-2xl mb-2">🔗</div>
+                  <h3 className="text-xl font-bold text-white">Bookmark Manager</h3>
+                </div>
               </div>
-              <div className="space-y-3">
-                <h3 className="text-2xl font-bold">Bookmark Manager</h3>
-                <p className="text-muted-foreground text-lg leading-relaxed">
+              <div className="p-6">
+                <p className="text-muted-foreground leading-relaxed">
                   Organize and access your important links with smart categorization and quick search.
                 </p>
               </div>
             </Card>
 
-            <Card className="p-8 space-y-6 border-0 shadow-xl bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/30 hover-scale">
-              <div className="w-16 h-16 bg-red-500/10 rounded-2xl flex items-center justify-center">
-                <div className="text-2xl">⏱️</div>
+            <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/30 hover-scale">
+              <div className="aspect-video relative overflow-hidden">
+                <img 
+                  src={analyticsDashboard} 
+                  alt="Time Tracking Interface" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-red-900/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4">
+                  <div className="text-2xl mb-2">⏱️</div>
+                  <h3 className="text-xl font-bold text-white">Time Tracking</h3>
+                </div>
               </div>
-              <div className="space-y-3">
-                <h3 className="text-2xl font-bold">Time Tracking</h3>
-                <p className="text-muted-foreground text-lg leading-relaxed">
+              <div className="p-6">
+                <p className="text-muted-foreground leading-relaxed">
                   Countdown timers, productivity analytics, and time management tools to optimize your workflow.
                 </p>
               </div>
             </Card>
 
-            <Card className="p-8 space-y-6 border-0 shadow-xl bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-950/30 dark:to-cyan-900/30 hover-scale">
-              <div className="w-16 h-16 bg-cyan-500/10 rounded-2xl flex items-center justify-center">
-                <div className="text-2xl">🧮</div>
+            <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-950/30 dark:to-cyan-900/30 hover-scale">
+              <div className="aspect-video relative overflow-hidden">
+                <img 
+                  src={dashboardMain} 
+                  alt="Quick Tools Interface" 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-cyan-900/60 to-transparent"></div>
+                <div className="absolute bottom-4 left-4">
+                  <div className="text-2xl mb-2">🧮</div>
+                  <h3 className="text-xl font-bold text-white">Quick Tools</h3>
+                </div>
               </div>
-              <div className="space-y-3">
-                <h3 className="text-2xl font-bold">Quick Tools</h3>
-                <p className="text-muted-foreground text-lg leading-relaxed">
+              <div className="p-6">
+                <p className="text-muted-foreground leading-relaxed">
                   Built-in calculator, image gallery, and utilities for instant productivity boosts.
                 </p>
               </div>
@@ -310,7 +358,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Multi-Purpose Dashboard Section */}
+      {/* Multi-Purpose Dashboard Section with Image */}
       <section className="py-24 px-8 sm:px-12 lg:px-16 bg-muted/20">
         <div className="max-w-[1800px] mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -360,63 +408,15 @@ export function LandingPage() {
               </div>
             </div>
             
-            <div className="relative">
-              <div id="dashboard-mockup" className="bg-gradient-to-br from-background to-muted/30 rounded-2xl p-8 border border-border/50 shadow-2xl">
-                <div className="bg-background rounded-xl p-6">
-                  {/* Dashboard Mockup Content */}
-                  <div className="space-y-6">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold">FlexIO Dashboard</h3>
-                      <div className="flex gap-2">
-                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4 space-y-2">
-                        <div className="text-sm text-muted-foreground">Tasks Today</div>
-                        <div className="text-2xl font-bold">12</div>
-                        <div className="text-xs text-green-600">+3 from yesterday</div>
-                      </div>
-                      
-                      <div className="bg-green-50 dark:bg-green-950/30 rounded-lg p-4 space-y-2">
-                        <div className="text-sm text-muted-foreground">Completed</div>
-                        <div className="text-2xl font-bold">8</div>
-                        <div className="text-xs text-green-600">67% completion</div>
-                      </div>
-                      
-                      <div className="bg-purple-50 dark:bg-purple-950/30 rounded-lg p-4 space-y-2">
-                        <div className="text-sm text-muted-foreground">Focus Time</div>
-                        <div className="text-2xl font-bold">4.2h</div>
-                        <div className="text-xs text-blue-600">+0.5h from avg</div>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium">Recent Activity</span>
-                        <span className="text-xs text-muted-foreground">Live</span>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-3 p-2 bg-muted/30 rounded">
-                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                          <span className="text-sm">Completed "Review project proposal"</span>
-                        </div>
-                        <div className="flex items-center gap-3 p-2 bg-muted/30 rounded">
-                          <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                          <span className="text-sm">Added 3 new bookmarks</span>
-                        </div>
-                        <div className="flex items-center gap-3 p-2 bg-muted/30 rounded">
-                          <div className="w-2 h-2 rounded-full bg-purple-500"></div>
-                          <span className="text-sm">Updated calendar events</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+            <div className="relative group hover-scale">
+              <img 
+                src={dashboardMain} 
+                alt="FlexIO Multi-purpose Dashboard Interface" 
+                className="rounded-2xl shadow-2xl border border-border/50 w-full"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-sm rounded-lg p-2">
+                <span className="text-sm font-medium text-foreground">Live Dashboard</span>
               </div>
             </div>
           </div>
