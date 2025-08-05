@@ -83,7 +83,11 @@ export function LandingPage() {
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
                     <span className="ml-4 text-sm text-muted-foreground">FlexIO Dashboard</span>
                   </div>
-                  <LeadCaptureForm source="homepage_hero" campaign="landing_page" />
+                  <img 
+                    src="/lovable-uploads/1e4e07cd-139c-439e-953b-8928b1dad0e1.png" 
+                    alt="FlexIO Dashboard Preview" 
+                    className="w-full rounded-lg shadow-lg"
+                  />
                 </div>
                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/20 rounded-full blur-xl"></div>
                 <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-accent/20 rounded-full blur-2xl"></div>
