@@ -21,7 +21,7 @@ class PerformanceMonitor {
       const loadTime = navigation.loadEventEnd - navigation.fetchStart;
       this.metrics.set(`pageLoad_${pageName}`, loadTime);
       
-      console.log(`Page Load Time for ${pageName}: ${loadTime}ms`);
+      // Silent performance tracking
     }
   }
 

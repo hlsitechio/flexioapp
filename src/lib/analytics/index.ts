@@ -25,10 +25,7 @@ class VercelAnalyticsProvider implements AnalyticsProvider {
     
     // Vercel Analytics is automatically initialized
     this.initialized = true;
-    // Reduced console logging for performance
-    if (import.meta.env.DEV) {
-      console.log('Vercel Analytics initialized');
-    }
+    // Silent initialization
   }
 
   track(event: AnalyticsEvent) {
@@ -36,17 +33,17 @@ class VercelAnalyticsProvider implements AnalyticsProvider {
     
     // Vercel Analytics doesn't have custom event tracking in the free tier
     // This would be implemented with their Pro features
-    console.log('Vercel Analytics event:', event);
+    // Silent tracking
   }
 
   identify(userId: string, traits?: Record<string, any>) {
     // Vercel Analytics doesn't support user identification
-    console.log('Vercel Analytics identify:', { userId, traits });
+    // Silent identify
   }
 
   page(name: string, properties?: Record<string, any>) {
     // Page views are automatically tracked by Vercel Analytics
-    console.log('Vercel Analytics page view:', { name, properties });
+    // Silent page tracking
   }
 }
 
@@ -81,7 +78,7 @@ class GoogleAnalyticsProvider implements AnalyticsProvider {
     gtag('config', measurementId, config);
 
     this.initialized = true;
-    console.log('Google Analytics initialized');
+    // Silent GA initialization
   }
 
   track(event: AnalyticsEvent) {
@@ -143,9 +140,7 @@ export class AnalyticsManager {
     this.queue = [];
 
     this.initialized = true;
-    if (import.meta.env.DEV) {
-      console.log('Analytics Manager initialized');
-    }
+    // Silent analytics manager initialization
   }
 
   track(event: AnalyticsEvent) {

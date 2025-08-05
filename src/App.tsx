@@ -21,31 +21,21 @@ const App = () => {
   const { user, loading } = useAuth();
   const { workspace, loading: workspaceLoading } = useWorkspace();
 
-  // Initialize monitoring and analytics once
+  // Initialize monitoring and analytics once - silent success, only log errors
   useEffect(() => {
-    console.group("🚀 App Initialization");
-    console.log("⚡ Starting monitoring and analytics...");
-    
     try {
       initializeMonitoring();
       analytics.initialize();
       analytics.trackPageView(window.location.pathname);
-      
-      console.log("✅ All systems initialized successfully");
     } catch (error) {
-      console.error("❌ Error during initialization:", error);
+      console.error("❌ App initialization failed:", error);
     }
-    
-    console.groupEnd();
-  }, []); // Only run once on mount
+  }, []);
 
-  // Log state changes only when meaningful
+  // Only log final authenticated state once
   useEffect(() => {
-    if (!loading && !workspaceLoading) {
-      console.group("📊 App State");
-      console.log(`👤 User: ${user ? '✅ Authenticated' : '❌ Not authenticated'}`);
-      console.log(`🗂️  Workspace: ${workspace ? '✅ Loaded' : '❌ Not loaded'}`);
-      console.groupEnd();
+    if (!loading && !workspaceLoading && user && workspace) {
+      console.log("✅ App ready - User authenticated & workspace loaded");
     }
   }, [user, workspace, loading, workspaceLoading]);
 
