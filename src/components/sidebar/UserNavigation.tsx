@@ -27,7 +27,7 @@ export function UserNavigation() {
   } = useSettings();
 
   return (
-    <div className={`${hideDividers ? '' : 'border-t border-sidebar-border'} ${isCollapsed ? 'p-2' : 'px-4 py-4'}`}>
+    <div className={`${hideDividers ? '' : 'border-t border-sidebar-border'} ${isCollapsed ? 'p-2' : 'px-4 pt-4 pb-2'}`}>
       <SidebarMenu className={isCollapsed ? 'flex-col gap-2 items-center' : 'flex-col gap-1'}>
         {userNavigationOrder.map((componentId) => {
           const Component = navigationComponents[componentId as keyof typeof navigationComponents];
