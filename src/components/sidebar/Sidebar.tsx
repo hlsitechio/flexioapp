@@ -10,6 +10,7 @@ import { DashboardTitle } from './DashboardTitle';
 import { Tools } from './Tools';
 import { FavoritesRecent } from './favorites-recent';
 import { UserNavigation } from './UserNavigation';
+import { WorkspaceSwitcher } from '@/components/workspace/WorkspaceSwitcher';
 import { useSettings } from '@/contexts/SettingsContext';
 import { useState, useCallback } from 'react';
 import {
@@ -154,8 +155,9 @@ export function DashboardSidebar() {
         data-sidebar="sidebar"
       >
 
-        <SidebarHeader className={`p-4 ${hideDividers ? '' : 'border-b border-sidebar-border'}`}>
+        <SidebarHeader className={`p-4 space-y-3 ${hideDividers ? '' : 'border-b border-sidebar-border'}`}>
           <DashboardTitle editMode={editMode} />
+          {!isCollapsed && <WorkspaceSwitcher />}
         </SidebarHeader>
 
         <SidebarContent className="flex flex-col h-full overflow-hidden">
