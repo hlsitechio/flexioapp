@@ -19,10 +19,13 @@ interface AnalyticsConfig {
 class GracefulAnalytics {
   private config: AnalyticsConfig;
   private blockedServices: Set<string> = new Set();
+  private eventQueue: Array<{ eventName: string; properties: Record<string, any> }> = [];
+  private processingQueue = false;
 
   constructor(config: AnalyticsConfig) {
     this.config = config;
     this.setupErrorHandlers();
+    this.startQueueProcessor();
   }
 
   private setupErrorHandlers() {
@@ -87,8 +90,38 @@ class GracefulAnalytics {
     }
   }
 
+  // Queue processor to batch analytics calls
+  private startQueueProcessor() {
+    setInterval(() => {
+      if (!this.processingQueue && this.eventQueue.length > 0) {
+        this.processEventQueue();
+      }
+    }, 1000); // Process queue every second
+  }
+
+  private async processEventQueue() {
+    if (this.processingQueue || this.eventQueue.length === 0) return;
+    
+    this.processingQueue = true;
+    const eventsToProcess = this.eventQueue.splice(0, 5); // Process max 5 events at once
+    
+    for (const { eventName, properties } of eventsToProcess) {
+      await this.sendEvent(eventName, properties);
+    }
+    
+    this.processingQueue = false;
+  }
+
   // Safe analytics methods that handle blocking gracefully
   trackEvent(eventName: string, properties: Record<string, any> = {}) {
+    // Add to queue instead of immediate processing
+    this.eventQueue.push({ eventName, properties });
+    
+    // Always store events locally as backup
+    this.storeEventLocally(eventName, properties);
+  }
+
+  private async sendEvent(eventName: string, properties: Record<string, any>) {
     // Try Google Analytics
     if (this.config.googleAnalytics?.enabled && !this.blockedServices.has('Google Analytics')) {
       try {
@@ -100,19 +133,19 @@ class GracefulAnalytics {
       }
     }
 
-    // Try Facebook Pixel
+    // Try Facebook Pixel with throttling
     if (this.config.facebookPixel?.enabled && !this.blockedServices.has('Facebook Pixel')) {
       try {
         if (typeof (window as any).fbq === 'function') {
-          (window as any).fbq('track', eventName, properties);
+          // Add small delay to prevent performance issues
+          setTimeout(() => {
+            (window as any).fbq('track', eventName, properties);
+          }, 10);
         }
       } catch (error) {
         this.handleBlockedService('Facebook Pixel', 'fbq function');
       }
     }
-
-    // Always store events locally as backup
-    this.storeEventLocally(eventName, properties);
   }
 
   private storeEventLocally(eventName: string, properties: Record<string, any>) {
