@@ -1,13 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LeadCaptureForm } from '@/components/forms';
-import { CheckCircle, ArrowRight, Star, Users, Shield, Zap } from 'lucide-react';
-import dashboardMain from '@/assets/dashboard-main.jpg';
-import analyticsDashboard from '@/assets/analytics-dashboard.jpg';
-import projectManagement from '@/assets/project-management.jpg';
-import calendarInterface from '@/assets/calendar-interface.jpg';
-import notesInterface from '@/assets/notes-interface.jpg';
-import bookmarksInterface from '@/assets/bookmarks-interface.jpg';
+import { CheckCircle, ArrowRight, Star, Users, Shield, Zap, Image } from 'lucide-react';
 
 export function LandingPage() {
   return (
@@ -239,12 +233,11 @@ export function LandingPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30 hover-scale">
-              <div className="aspect-video relative overflow-hidden">
-                <img 
-                  src={projectManagement} 
-                  alt="Task Management Interface" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+              <div className="aspect-video relative overflow-hidden bg-muted/20 flex items-center justify-center">
+                <div className="text-center space-y-2">
+                  <Image className="h-12 w-12 mx-auto text-muted-foreground/50" />
+                  <p className="text-sm text-muted-foreground">Task Management Image</p>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-blue-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">📋</div>
@@ -259,12 +252,11 @@ export function LandingPage() {
             </Card>
 
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/30 hover-scale">
-              <div className="aspect-video relative overflow-hidden">
-                <img 
-                  src={calendarInterface} 
-                  alt="Smart Calendar Interface" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+              <div className="aspect-video relative overflow-hidden bg-muted/20 flex items-center justify-center">
+                <div className="text-center space-y-2">
+                  <Image className="h-12 w-12 mx-auto text-muted-foreground/50" />
+                  <p className="text-sm text-muted-foreground">Smart Calendar Image</p>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-green-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">📅</div>
@@ -279,12 +271,11 @@ export function LandingPage() {
             </Card>
 
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/30 dark:to-purple-900/30 hover-scale">
-              <div className="aspect-video relative overflow-hidden">
-                <img 
-                  src={notesInterface} 
-                  alt="Note Taking Interface" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+              <div className="aspect-video relative overflow-hidden bg-muted/20 flex items-center justify-center">
+                <div className="text-center space-y-2">
+                  <Image className="h-12 w-12 mx-auto text-muted-foreground/50" />
+                  <p className="text-sm text-muted-foreground">Note Taking Image</p>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-purple-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">📝</div>
@@ -299,12 +290,11 @@ export function LandingPage() {
             </Card>
 
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/30 hover-scale">
-              <div className="aspect-video relative overflow-hidden">
-                <img 
-                  src={bookmarksInterface} 
-                  alt="Bookmark Manager Interface" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+              <div className="aspect-video relative overflow-hidden bg-muted/20 flex items-center justify-center">
+                <div className="text-center space-y-2">
+                  <Image className="h-12 w-12 mx-auto text-muted-foreground/50" />
+                  <p className="text-sm text-muted-foreground">Bookmark Manager Image</p>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-orange-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">🔗</div>
@@ -319,12 +309,11 @@ export function LandingPage() {
             </Card>
 
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/30 hover-scale">
-              <div className="aspect-video relative overflow-hidden">
-                <img 
-                  src={analyticsDashboard} 
-                  alt="Time Tracking Interface" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+              <div className="aspect-video relative overflow-hidden bg-muted/20 flex items-center justify-center">
+                <div className="text-center space-y-2">
+                  <Image className="h-12 w-12 mx-auto text-muted-foreground/50" />
+                  <p className="text-sm text-muted-foreground">Time Tracking Image</p>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-red-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">⏱️</div>
@@ -339,12 +328,11 @@ export function LandingPage() {
             </Card>
 
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-950/30 dark:to-cyan-900/30 hover-scale">
-              <div className="aspect-video relative overflow-hidden">
-                <img 
-                  src={dashboardMain} 
-                  alt="Quick Tools Interface" 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+              <div className="aspect-video relative overflow-hidden bg-muted/20 flex items-center justify-center">
+                <div className="text-center space-y-2">
+                  <Image className="h-12 w-12 mx-auto text-muted-foreground/50" />
+                  <p className="text-sm text-muted-foreground">Quick Tools Image</p>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-cyan-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">🧮</div>
@@ -412,11 +400,12 @@ export function LandingPage() {
             </div>
             
             <div className="relative group hover-scale">
-              <img 
-                src={dashboardMain} 
-                alt="FlexIO Multi-purpose Dashboard Interface" 
-                className="rounded-2xl shadow-2xl border border-border/50 w-full"
-              />
+              <div className="aspect-video bg-muted/20 rounded-2xl shadow-2xl border border-border/50 w-full flex items-center justify-center">
+                <div className="text-center space-y-4">
+                  <Image className="h-16 w-16 mx-auto text-muted-foreground/50" />
+                  <p className="text-lg text-muted-foreground">Multi-purpose Dashboard Image</p>
+                </div>
+              </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-sm rounded-lg p-2">
                 <span className="text-sm font-medium text-foreground">Live Dashboard</span>
@@ -458,11 +447,12 @@ export function LandingPage() {
                 </div>
               </div>
               <div className="relative group hover-scale">
-                <img 
-                  src={dashboardMain} 
-                  alt="FlexIO Main Dashboard Interface" 
-                  className="rounded-2xl shadow-2xl border border-border/50"
-                />
+                <div className="aspect-video bg-muted/20 rounded-2xl shadow-2xl border border-border/50 flex items-center justify-center">
+                  <div className="text-center space-y-4">
+                    <Image className="h-16 w-16 mx-auto text-muted-foreground/50" />
+                    <p className="text-lg text-muted-foreground">Complete Dashboard Overview</p>
+                  </div>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </div>
             </div>
@@ -485,11 +475,12 @@ export function LandingPage() {
                 </div>
               </div>
               <div className="lg:order-1 relative group hover-scale">
-                <img 
-                  src={analyticsDashboard} 
-                  alt="FlexIO Analytics Dashboard" 
-                  className="rounded-2xl shadow-2xl border border-border/50"
-                />
+                <div className="aspect-video bg-muted/20 rounded-2xl shadow-2xl border border-border/50 flex items-center justify-center">
+                  <div className="text-center space-y-4">
+                    <Image className="h-16 w-16 mx-auto text-muted-foreground/50" />
+                    <p className="text-lg text-muted-foreground">Advanced Analytics</p>
+                  </div>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </div>
             </div>
@@ -512,11 +503,12 @@ export function LandingPage() {
                 </div>
               </div>
               <div className="relative group hover-scale">
-                <img 
-                  src={projectManagement} 
-                  alt="FlexIO Project Management Interface" 
-                  className="rounded-2xl shadow-2xl border border-border/50"
-                />
+                <div className="aspect-video bg-muted/20 rounded-2xl shadow-2xl border border-border/50 flex items-center justify-center">
+                  <div className="text-center space-y-4">
+                    <Image className="h-16 w-16 mx-auto text-muted-foreground/50" />
+                    <p className="text-lg text-muted-foreground">Project Management Suite</p>
+                  </div>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </div>
             </div>
