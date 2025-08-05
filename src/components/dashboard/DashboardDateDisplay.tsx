@@ -22,19 +22,21 @@ export function DashboardDateDisplay() {
   const year = currentDate.getFullYear();
 
   return (
-    <Card className="h-full flex items-center justify-center bg-gradient-to-br from-card to-card/80 border-border/50">
+    <Card className="h-full flex items-center justify-center bg-gradient-to-br from-purple-500/20 via-violet-500/10 to-blue-500/20 border-purple-300/30 backdrop-blur-sm">
       <CardContent className="p-6 text-center">
         <div className="space-y-2">
-          <div className="text-2xl md:text-3xl font-semibold text-foreground">
+          <div className="text-2xl md:text-3xl font-semibold text-transparent bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text">
             {month}
           </div>
-          <div className="text-6xl md:text-7xl font-bold text-primary">
+          <div className="text-6xl md:text-7xl font-bold text-transparent bg-gradient-to-br from-purple-600 via-violet-500 to-blue-500 bg-clip-text drop-shadow-lg">
             {day}
           </div>
-          <div className="text-2xl md:text-3xl font-semibold text-muted-foreground">
+          <div className="text-2xl md:text-3xl font-semibold text-transparent bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text">
             {year}
           </div>
         </div>
+        {/* Decorative gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/5 via-transparent to-violet-500/5 rounded-lg pointer-events-none" />
       </CardContent>
     </Card>
   );
