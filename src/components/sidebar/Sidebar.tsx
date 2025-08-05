@@ -151,7 +151,7 @@ export function DashboardSidebar() {
       className="relative"
     >
       <Sidebar 
-        className={`${hideDividers ? '' : 'border-r border-sidebar-border'} bg-sidebar-background backdrop-blur-xl h-full gradient-target-sidebar`}
+        className={`${hideDividers ? '' : 'border-r border-sidebar-border'} bg-sidebar-background backdrop-blur-xl h-screen gradient-target-sidebar`}
         collapsible="icon"
         data-sidebar="sidebar"
       >
@@ -160,7 +160,7 @@ export function DashboardSidebar() {
           <DashboardTitle editMode={editMode} />
         </SidebarHeader>
 
-        <SidebarContent className="flex flex-col h-full max-h-[calc(100vh-80px)] overflow-hidden">
+        <SidebarContent className="flex flex-col h-full max-h-[calc(100vh-64px)] overflow-hidden">
           {/* Main Content Area with Draggable Panels */}
           <div className="flex-1 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-sidebar-border scrollbar-track-transparent">
             {/* Edit Mode Toggle */}
