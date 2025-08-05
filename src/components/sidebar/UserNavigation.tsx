@@ -8,6 +8,7 @@ import { UserSettings } from './settings/UserSettings';
 import { UserCustomization } from './settings/UserCustomization';
 import { NotificationButton } from './notifications';
 import { SignInOut } from './settings/SignInOut';
+import { AdminAccess } from './settings/AdminAccess';
 import { SidebarDarkModeToggle } from './SidebarDarkModeToggle';
 import { useSettings } from '@/contexts/SettingsContext';
 
@@ -96,6 +97,9 @@ export function UserNavigation() {
       </div>
 
       <SidebarMenu className={isCollapsed ? 'flex-col gap-2 items-center' : 'flex-col gap-1'}>
+        {/* Admin Access - Always show first if user is admin */}
+        <AdminAccess />
+        
         {userNavigationOrder.map((componentId) => {
           const Component = navigationComponents[componentId as keyof typeof navigationComponents];
           if (!Component) return null;
