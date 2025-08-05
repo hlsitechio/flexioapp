@@ -12,55 +12,130 @@ class UnifiedSecurityLogger {
   private messages: SecurityMessage[] = [];
   private maxMessages = 1000;
   private listeners: Array<(message: SecurityMessage) => void> = [];
+  private originalConsole: {
+    log: typeof console.log;
+    warn: typeof console.warn;
+    error: typeof console.error;
+    info: typeof console.info;
+  };
+  private suppressDuplicates = true;
+  private lastMessages = new Set<string>();
 
   constructor() {
+    // Store original console methods
+    this.originalConsole = {
+      log: console.log.bind(console),
+      warn: console.warn.bind(console),
+      error: console.error.bind(console),
+      info: console.info.bind(console)
+    };
+    
     // Override console methods to capture security-related logs
     this.interceptConsoleLogs();
   }
 
   private interceptConsoleLogs() {
-    const originalLog = console.log;
-    const originalWarn = console.warn;
-    const originalError = console.error;
-
     console.log = (...args) => {
-      const message = args.join(' ');
+      const message = this.formatMessage(args);
       if (this.isSecurityMessage(message)) {
-        this.addMessage({
-          level: 'info',
-          category: this.categorizeMessage(message),
-          message,
-          metadata: { args }
-        });
+        this.handleSecurityMessage('info', message, args);
+        if (this.shouldSuppressConsole(message)) return;
       }
-      originalLog.apply(console, args);
+      this.originalConsole.log.apply(console, args);
     };
 
     console.warn = (...args) => {
-      const message = args.join(' ');
+      const message = this.formatMessage(args);
       if (this.isSecurityMessage(message)) {
-        this.addMessage({
-          level: 'warn',
-          category: this.categorizeMessage(message),
-          message,
-          metadata: { args }
-        });
+        this.handleSecurityMessage('warn', message, args);
+        if (this.shouldSuppressConsole(message)) return;
       }
-      originalWarn.apply(console, args);
+      this.originalConsole.warn.apply(console, args);
     };
 
     console.error = (...args) => {
-      const message = args.join(' ');
+      const message = this.formatMessage(args);
       if (this.isSecurityMessage(message)) {
-        this.addMessage({
-          level: 'error',
-          category: this.categorizeMessage(message),
-          message,
-          metadata: { args }
-        });
+        this.handleSecurityMessage('error', message, args);
+        if (this.shouldSuppressConsole(message)) return;
       }
-      originalError.apply(console, args);
+      this.originalConsole.error.apply(console, args);
     };
+
+    console.info = (...args) => {
+      const message = this.formatMessage(args);
+      if (this.isSecurityMessage(message)) {
+        this.handleSecurityMessage('info', message, args);
+        if (this.shouldSuppressConsole(message)) return;
+      }
+      this.originalConsole.info.apply(console, args);
+    };
+  }
+
+  private formatMessage(args: any[]): string {
+    return args.map(arg => {
+      if (typeof arg === 'object') {
+        try {
+          return JSON.stringify(arg, null, 2);
+        } catch {
+          return String(arg);
+        }
+      }
+      return String(arg);
+    }).join(' ');
+  }
+
+  private handleSecurityMessage(level: SecurityMessage['level'], message: string, args: any[]) {
+    const cleanMessage = this.cleanMessage(message);
+    
+    this.addMessage({
+      level,
+      category: this.categorizeMessage(cleanMessage),
+      message: cleanMessage,
+      metadata: { 
+        args,
+        originalLength: message.length,
+        timestamp: Date.now()
+      }
+    });
+  }
+
+  private shouldSuppressConsole(message: string): boolean {
+    // Suppress duplicate messages within 1 second
+    const key = this.cleanMessage(message);
+    if (this.suppressDuplicates && this.lastMessages.has(key)) {
+      return true;
+    }
+    
+    this.lastMessages.add(key);
+    setTimeout(() => this.lastMessages.delete(key), 1000);
+    
+    // Always show in unified logger but suppress console for certain messages
+    return this.isVerboseSecurityMessage(message);
+  }
+
+  private isVerboseSecurityMessage(message: string): boolean {
+    const verbosePatterns = [
+      'Security instances imported',
+      'Enhanced security modules exported',
+      'Original security utilities exported',
+      'App ready - User authenticated',
+      'Loading security index.ts'
+    ];
+    
+    return verbosePatterns.some(pattern => 
+      message.includes(pattern)
+    );
+  }
+
+  private cleanMessage(message: string): string {
+    // Remove console styling and excess whitespace
+    return message
+      .replace(/%c/g, '')
+      .replace(/color:[^;]+;?/g, '')
+      .replace(/font-[^;]+;?/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 
   private isSecurityMessage(message: string): boolean {
@@ -160,6 +235,25 @@ class UnifiedSecurityLogger {
     return JSON.stringify(this.messages, null, 2);
   }
 
+  public enableConsoleSupression(enabled: boolean) {
+    this.suppressDuplicates = enabled;
+  }
+
+  public restoreConsole() {
+    console.log = this.originalConsole.log;
+    console.warn = this.originalConsole.warn;
+    console.error = this.originalConsole.error;
+    console.info = this.originalConsole.info;
+  }
+
+  public getConsoleStats() {
+    return {
+      suppressedMessages: this.lastMessages.size,
+      totalCaptured: this.messages.length,
+      suppressionEnabled: this.suppressDuplicates
+    };
+  }
+
   public getSummary() {
     const total = this.messages.length;
     const byLevel = this.messages.reduce((acc, msg) => {
@@ -209,3 +303,16 @@ export const securityLog = {
     securityLogger.addMessage({ level: 'debug', category, message, metadata });
   }
 };
+
+// Global security logger controls for DevTools
+if (typeof window !== 'undefined') {
+  (window as any).__SECURITY_LOGGER__ = {
+    getMessages: () => securityLogger.getMessages(),
+    getSummary: () => securityLogger.getSummary(),
+    export: () => securityLogger.exportMessages(),
+    clear: () => securityLogger.clearMessages(),
+    enableSuppression: (enabled: boolean) => securityLogger.enableConsoleSupression(enabled),
+    restore: () => securityLogger.restoreConsole(),
+    stats: () => securityLogger.getConsoleStats()
+  };
+}

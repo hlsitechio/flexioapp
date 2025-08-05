@@ -98,6 +98,18 @@ export function SecurityMessageCenter() {
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => {
+              (window as any).__SECURITY_LOGGER__?.enableSuppression(
+                !(window as any).__SECURITY_LOGGER__?.stats().suppressionEnabled
+              );
+              toast.success('Console suppression toggled');
+            }}
+          >
+            {(window as any).__SECURITY_LOGGER__?.stats().suppressionEnabled ? '🔇' : '🔊'} Console
+          </Button>
           <Button variant="outline" size="sm" onClick={handleClear}>
             <Trash2 className="h-4 w-4 mr-2" />
             Clear
