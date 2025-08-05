@@ -1,6 +1,6 @@
 export const stagingConfig = {
   api: {
-    baseUrl: process.env.VITE_API_BASE_URL || 'https://staging-api.yourdomain.com',
+    baseUrl: import.meta.env.VITE_API_BASE_URL || 'https://staging-api.yourdomain.com',
     timeout: 12000,
     retries: 4,
   },

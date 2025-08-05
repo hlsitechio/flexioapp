@@ -594,7 +594,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
             fullError: error
           });
         }
-      }, 1000);
+      }, 2000); // Increased to 2 seconds to reduce rapid saves
     }
   }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, sidebarSolid, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, minimalNavigationMode, quickNote, bannerImage, showBanner, bannerHeight, dashboardBackground, gradientMode, hideDividers]);
 

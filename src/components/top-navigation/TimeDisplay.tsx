@@ -23,10 +23,10 @@ export function TimeDisplay() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
-    }, 1000);
+    }, showSeconds ? 1000 : 60000); // Update every second if showing seconds, otherwise every minute
 
     return () => clearInterval(timer);
-  }, []);
+  }, [showSeconds]);
 
   const formatTime = (date: Date) => {
     // Optimize by avoiding object creation on every render

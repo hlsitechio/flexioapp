@@ -16,10 +16,14 @@ export function CountdownTimer() {
     
     if (isActive && timeLeft > 0) {
       interval = setInterval(() => {
-        setTimeLeft(timeLeft => timeLeft - 1);
+        setTimeLeft(timeLeft => {
+          if (timeLeft <= 1) {
+            setIsActive(false);
+            return 0;
+          }
+          return timeLeft - 1;
+        });
       }, 1000);
-    } else if (timeLeft === 0) {
-      setIsActive(false);
     }
     
     return () => {
