@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Plus, Edit, Trash2, Copy, Star, Folder, Briefcase, Heart, Settings } from 'lucide-react';
+import { Plus, Edit, Trash2, Copy, Star, Folder, Briefcase, Heart, Settings, RotateCcw, Save } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const categoryIcons = {
@@ -38,6 +38,8 @@ export function WorkspaceProfileManager() {
     duplicateProfile,
     saveCurrentConfiguration,
     setAsDefault,
+    resetToDefaults,
+    saveDefaultConfiguration,
   } = useWorkspaceProfile();
 
   const { toast } = useToast();
@@ -179,24 +181,75 @@ export function WorkspaceProfileManager() {
         </CardHeader>
         <CardContent>
           {currentProfile && (
-            <div className="mb-6 p-4 rounded-lg bg-primary/5 border border-primary/20">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Star className="h-5 w-5 text-primary" />
-                  <div>
-                    <div className="font-medium">Current Profile: {currentProfile.name}</div>
-                    <div className="text-sm text-muted-foreground">
-                      Category: {currentProfile.category}
+            <div className="mb-6 space-y-4">
+              {/* Current Profile Info */}
+              <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Star className="h-5 w-5 text-primary" />
+                    <div>
+                      <div className="font-medium">Current Profile: {currentProfile.name}</div>
+                      <div className="text-sm text-muted-foreground">
+                        Category: {currentProfile.category}
+                      </div>
                     </div>
                   </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => saveCurrentConfiguration(currentProfile.id)}
+                    >
+                      <Save className="h-3 w-3 mr-1" />
+                      Save Changes
+                    </Button>
+                  </div>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => saveCurrentConfiguration(currentProfile.id)}
-                >
-                  Save Changes
-                </Button>
+              </div>
+
+              {/* Default Configuration Actions */}
+              <div className="p-4 rounded-lg bg-muted/30 border border-muted">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-medium text-sm">Default Configuration</div>
+                    <div className="text-xs text-muted-foreground">
+                      Reset everything to clean state or save current defaults
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="outline" size="sm">
+                          <RotateCcw className="h-3 w-3 mr-1" />
+                          Reset to Defaults
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Reset to Defaults</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This will reset your current profile to the default configuration. All customizations will be lost. Are you sure?
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={resetToDefaults}>
+                            Reset Dashboard
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                    
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={saveDefaultConfiguration}
+                    >
+                      <Settings className="h-3 w-3 mr-1" />
+                      Save as Clean Slate
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
           )}

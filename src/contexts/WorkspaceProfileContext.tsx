@@ -68,6 +68,8 @@ interface WorkspaceProfileContextType {
   saveCurrentConfiguration: (profileId: string) => Promise<void>;
   loadProfileConfiguration: (profile: WorkspaceProfile) => void;
   setAsDefault: (profileId: string) => Promise<void>;
+  resetToDefaults: () => Promise<void>;
+  saveDefaultConfiguration: () => Promise<WorkspaceProfile | null>;
 }
 
 const WorkspaceProfileContext = createContext<WorkspaceProfileContextType | undefined>(undefined);
@@ -359,6 +361,113 @@ export function WorkspaceProfileProvider({ children }: { children: React.ReactNo
     // TODO: Implement applying profile settings to all contexts
   };
 
+  const getDefaultConfiguration = () => {
+    return {
+      // Dashboard Layout Settings
+      dashboard_layout: {},
+      grid_size: '4x4',
+      banner_image: '',
+      show_banner: false,
+      banner_height: 192,
+      dashboard_background: 'bg-gradient-to-br from-background to-muted/20',
+      
+      // UI Settings
+      custom_header_title: 'Premium Dashboard',
+      custom_sidebar_title: 'Premium Dashboard',
+      show_header_title: true,
+      show_sidebar_crown: true,
+      
+      // Navigation Settings
+      top_navigation_widgets: [],
+      user_navigation_order: ['Profile', 'UserSettings', 'NotificationButton'],
+      minimal_navigation_mode: false,
+      sidebar_solid: false,
+      sidebar_collapsed: false,
+      
+      // Appearance Settings
+      gradient_mode: 'full',
+      hide_dividers: false,
+      
+      // Clock Settings
+      use_24_hour_format: false,
+      show_year: true,
+      show_date: true,
+      show_seconds: true,
+      clock_position: 'left',
+      
+      // Other Settings
+      edit_mode: false,
+      quick_note: '',
+    };
+  };
+
+  const resetToDefaults = async () => {
+    if (!currentProfile) return;
+
+    const defaultConfig = getDefaultConfiguration();
+    
+    try {
+      await updateProfile(currentProfile.id, defaultConfig);
+      
+      // Apply the defaults immediately
+      loadProfileConfiguration({ ...currentProfile, ...defaultConfig });
+      
+      toast({
+        title: "Reset Complete",
+        description: "Dashboard has been reset to default configuration.",
+      });
+    } catch (error) {
+      console.error('Error resetting to defaults:', error);
+      toast({
+        title: "Error",
+        description: "Failed to reset to defaults.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const saveDefaultConfiguration = async (): Promise<WorkspaceProfile | null> => {
+    if (!user || !workspace) return null;
+
+    const defaultConfig = getDefaultConfiguration();
+    
+    try {
+      const { data, error } = await supabase
+        .from('workspace_profiles')
+        .insert({
+          user_id: user.id,
+          workspace_id: workspace.id,
+          name: 'Clean Slate',
+          category: 'default',
+          is_default: false,
+          ...defaultConfig,
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error saving default configuration:', error);
+        toast({
+          title: "Error",
+          description: "Failed to save default configuration.",
+          variant: "destructive",
+        });
+        return null;
+      }
+
+      setProfiles(prev => [...prev, data as WorkspaceProfile]);
+      toast({
+        title: "Success",
+        description: "Default configuration saved as 'Clean Slate' profile.",
+      });
+      
+      return data as WorkspaceProfile;
+    } catch (error) {
+      console.error('Error saving default configuration:', error);
+      return null;
+    }
+  };
+
   const value: WorkspaceProfileContextType = {
     profiles,
     currentProfile,
@@ -371,6 +480,8 @@ export function WorkspaceProfileProvider({ children }: { children: React.ReactNo
     saveCurrentConfiguration,
     loadProfileConfiguration,
     setAsDefault,
+    resetToDefaults,
+    saveDefaultConfiguration,
   };
 
   return (
