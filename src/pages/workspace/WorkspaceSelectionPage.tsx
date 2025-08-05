@@ -22,12 +22,16 @@ export function WorkspaceSelectionPage() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // If user already has a profile loaded, redirect to dashboard
+  // Only redirect if we have a current profile AND we're not in a loading state
   useEffect(() => {
-    if (currentProfile && !loading) {
-      navigate('/', { replace: true });
+    if (currentProfile && !loading && profiles.length > 0) {
+      // Use setTimeout to avoid immediate redirect during initial load
+      const timer = setTimeout(() => {
+        navigate('/', { replace: true });
+      }, 100);
+      return () => clearTimeout(timer);
     }
-  }, [currentProfile, loading, navigate]);
+  }, [currentProfile, loading, profiles.length, navigate]);
 
   const handleSelectWorkspace = async (profileId: string) => {
     setIsLoading(true);
@@ -35,11 +39,14 @@ export function WorkspaceSelectionPage() {
     
     try {
       await switchToProfile(profileId);
-      toast({
-        title: "Workspace loaded",
-        description: "Welcome to your workspace!",
-      });
-      navigate('/', { replace: true });
+      // Use setTimeout to ensure state has settled before navigating
+      setTimeout(() => {
+        toast({
+          title: "Workspace loaded",
+          description: "Welcome to your workspace!",
+        });
+        navigate('/', { replace: true });
+      }, 200);
     } catch (error) {
       toast({
         title: "Error",
@@ -59,11 +66,14 @@ export function WorkspaceSelectionPage() {
       const newProfile = await createProfile('New Workspace', 'personal');
       if (newProfile) {
         await switchToProfile(newProfile.id);
-        toast({
-          title: "Workspace created",
-          description: "Welcome to your new workspace!",
-        });
-        navigate('/', { replace: true });
+        // Use setTimeout to ensure state has settled before navigating
+        setTimeout(() => {
+          toast({
+            title: "Workspace created",
+            description: "Welcome to your new workspace!",
+          });
+          navigate('/', { replace: true });
+        }, 200);
       } else {
         throw new Error('Failed to create profile');
       }
