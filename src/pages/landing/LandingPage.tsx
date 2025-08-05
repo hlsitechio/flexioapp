@@ -26,16 +26,16 @@ export function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[600px]">
+            <div className="space-y-6">
               <div className="space-y-4">
-                <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+                <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-tight">
                   Transform Your Business with{' '}
                   <span className="text-primary">Next-Gen Technology</span>
                 </h1>
-                <p className="text-xl text-muted-foreground max-w-2xl">
+                <p className="text-lg lg:text-xl text-muted-foreground max-w-xl">
                   Streamline operations, boost productivity, and accelerate growth with our innovative platform trusted by thousands of businesses worldwide.
                 </p>
               </div>
@@ -50,7 +50,7 @@ export function LandingPage() {
                 </Button>
               </div>
 
-              <div className="flex items-center space-x-8 text-sm text-muted-foreground">
+              <div className="flex items-center flex-wrap gap-6 text-sm text-muted-foreground">
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
                   <span>Free 14-day trial</span>
@@ -74,7 +74,7 @@ export function LandingPage() {
       </section>
 
       {/* Social Proof */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 border-y bg-muted/30">
+      <section className="py-8 px-4 sm:px-6 lg:px-8 border-y bg-muted/30">
         <div className="max-w-7xl mx-auto">
           <div className="text-center space-y-8">
             <p className="text-muted-foreground">Trusted by innovative companies worldwide</p>
@@ -98,7 +98,7 @@ export function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
+      <section id="features" className="py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl md:text-4xl font-bold">Everything you need to succeed</h2>
@@ -142,7 +142,7 @@ export function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-primary text-primary-foreground">
+      <section className="py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-primary text-primary-foreground">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <h2 className="text-3xl md:text-4xl font-bold">
             Ready to transform your business?
