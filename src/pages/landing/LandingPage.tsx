@@ -5,6 +5,9 @@ import { CheckCircle, ArrowRight, Star, Users, Shield, Zap } from 'lucide-react'
 import dashboardMain from '@/assets/dashboard-main.jpg';
 import analyticsDashboard from '@/assets/analytics-dashboard.jpg';
 import projectManagement from '@/assets/project-management.jpg';
+import calendarInterface from '@/assets/calendar-interface.jpg';
+import notesInterface from '@/assets/notes-interface.jpg';
+import bookmarksInterface from '@/assets/bookmarks-interface.jpg';
 
 export function LandingPage() {
   return (
@@ -258,7 +261,7 @@ export function LandingPage() {
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
                 <img 
-                  src={dashboardMain} 
+                  src={calendarInterface} 
                   alt="Smart Calendar Interface" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -278,7 +281,7 @@ export function LandingPage() {
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/30 dark:to-purple-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
                 <img 
-                  src={analyticsDashboard} 
+                  src={notesInterface} 
                   alt="Note Taking Interface" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
@@ -298,7 +301,7 @@ export function LandingPage() {
             <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
                 <img 
-                  src={projectManagement} 
+                  src={bookmarksInterface} 
                   alt="Bookmark Manager Interface" 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
