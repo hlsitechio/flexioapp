@@ -518,25 +518,117 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Get Started Today Section */}
       <section className="py-24 px-8 sm:px-12 lg:px-16 bg-foreground text-background">
-        <div className="max-w-[1400px] mx-auto text-center space-y-12">
-          <div className="space-y-6">
-            <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-              Ready to transform your productivity?
-            </h2>
-            <p className="text-xl lg:text-2xl opacity-80 max-w-3xl mx-auto leading-relaxed">
-              Join thousands of businesses that have already revolutionized their operations with FlexIO.
-            </p>
-          </div>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button size="lg" variant="secondary" className="text-lg px-10 py-4 rounded-full hover-scale">
-              Get Started Free
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button size="lg" variant="outline" className="text-lg px-10 py-4 rounded-full border-background text-background hover:bg-background hover:text-foreground hover-scale" asChild>
-              <a href="/demo">Request Demo</a>
-            </Button>
+        <div className="max-w-[800px] mx-auto">
+          <div className="space-y-8">
+            <div className="text-center space-y-4">
+              <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
+                Get Started Today
+              </h2>
+              <p className="text-xl opacity-80 leading-relaxed">
+                Join thousands of businesses already using our platform
+              </p>
+            </div>
+            
+            <div className="bg-background/5 backdrop-blur-sm border border-background/20 rounded-2xl p-8">
+              <form className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label htmlFor="firstName" className="text-sm font-medium text-background">
+                      First Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      placeholder="Enter your first name"
+                      className="w-full px-4 py-3 bg-background/10 border border-background/20 rounded-lg text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="lastName" className="text-sm font-medium text-background">
+                      Last Name *
+                    </label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      placeholder="Enter your last name"
+                      className="w-full px-4 py-3 bg-background/10 border border-background/20 rounded-lg text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <label htmlFor="email" className="text-sm font-medium text-background">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email address"
+                    className="w-full px-4 py-3 bg-background/10 border border-background/20 rounded-lg text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label htmlFor="company" className="text-sm font-medium text-background">
+                      Company
+                    </label>
+                    <input
+                      type="text"
+                      id="company"
+                      placeholder="Your company name"
+                      className="w-full px-4 py-3 bg-background/10 border border-background/20 rounded-lg text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="jobTitle" className="text-sm font-medium text-background">
+                      Job Title
+                    </label>
+                    <input
+                      type="text"
+                      id="jobTitle"
+                      placeholder="Your job title"
+                      className="w-full px-4 py-3 bg-background/10 border border-background/20 rounded-lg text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label htmlFor="industry" className="text-sm font-medium text-background">
+                      Industry
+                    </label>
+                    <input
+                      type="text"
+                      id="industry"
+                      placeholder="Your industry"
+                      className="w-full px-4 py-3 bg-background/10 border border-background/20 rounded-lg text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="companySize" className="text-sm font-medium text-background">
+                      Company Size
+                    </label>
+                    <input
+                      type="text"
+                      id="companySize"
+                      placeholder="e.g., 1-10, 11-50, 51-200"
+                      className="w-full px-4 py-3 bg-background/10 border border-background/20 rounded-lg text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    />
+                  </div>
+                </div>
+                
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  className="w-full text-lg py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg hover-scale"
+                >
+                  Get Started
+                </Button>
+              </form>
+            </div>
           </div>
         </div>
       </section>
