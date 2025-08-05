@@ -817,6 +817,119 @@ export type Database = {
         }
         Relationships: []
       }
+      workspace_profiles: {
+        Row: {
+          banner_height: number | null
+          banner_image: string | null
+          category: string | null
+          clock_position: string | null
+          created_at: string
+          custom_header_title: string | null
+          custom_sidebar_title: string | null
+          dashboard_background: string | null
+          dashboard_layout: Json | null
+          edit_mode: boolean | null
+          gradient_mode: string | null
+          grid_size: string | null
+          hide_dividers: boolean | null
+          id: string
+          is_default: boolean | null
+          minimal_navigation_mode: boolean | null
+          name: string
+          quick_note: string | null
+          show_banner: boolean | null
+          show_date: boolean | null
+          show_header_title: boolean | null
+          show_seconds: boolean | null
+          show_sidebar_crown: boolean | null
+          show_year: boolean | null
+          sidebar_collapsed: boolean | null
+          sidebar_solid: boolean | null
+          top_navigation_widgets: Json | null
+          updated_at: string
+          use_24_hour_format: boolean | null
+          user_id: string
+          user_navigation_order: Json | null
+          workspace_id: string
+        }
+        Insert: {
+          banner_height?: number | null
+          banner_image?: string | null
+          category?: string | null
+          clock_position?: string | null
+          created_at?: string
+          custom_header_title?: string | null
+          custom_sidebar_title?: string | null
+          dashboard_background?: string | null
+          dashboard_layout?: Json | null
+          edit_mode?: boolean | null
+          gradient_mode?: string | null
+          grid_size?: string | null
+          hide_dividers?: boolean | null
+          id?: string
+          is_default?: boolean | null
+          minimal_navigation_mode?: boolean | null
+          name?: string
+          quick_note?: string | null
+          show_banner?: boolean | null
+          show_date?: boolean | null
+          show_header_title?: boolean | null
+          show_seconds?: boolean | null
+          show_sidebar_crown?: boolean | null
+          show_year?: boolean | null
+          sidebar_collapsed?: boolean | null
+          sidebar_solid?: boolean | null
+          top_navigation_widgets?: Json | null
+          updated_at?: string
+          use_24_hour_format?: boolean | null
+          user_id: string
+          user_navigation_order?: Json | null
+          workspace_id: string
+        }
+        Update: {
+          banner_height?: number | null
+          banner_image?: string | null
+          category?: string | null
+          clock_position?: string | null
+          created_at?: string
+          custom_header_title?: string | null
+          custom_sidebar_title?: string | null
+          dashboard_background?: string | null
+          dashboard_layout?: Json | null
+          edit_mode?: boolean | null
+          gradient_mode?: string | null
+          grid_size?: string | null
+          hide_dividers?: boolean | null
+          id?: string
+          is_default?: boolean | null
+          minimal_navigation_mode?: boolean | null
+          name?: string
+          quick_note?: string | null
+          show_banner?: boolean | null
+          show_date?: boolean | null
+          show_header_title?: boolean | null
+          show_seconds?: boolean | null
+          show_sidebar_crown?: boolean | null
+          show_year?: boolean | null
+          sidebar_collapsed?: boolean | null
+          sidebar_solid?: boolean | null
+          top_navigation_widgets?: Json | null
+          updated_at?: string
+          use_24_hour_format?: boolean | null
+          user_id?: string
+          user_navigation_order?: Json | null
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspace_profiles_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workspaces: {
         Row: {
           created_at: string
@@ -849,7 +962,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      workspace_category: "work" | "personal" | "fun" | "default"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -976,6 +1089,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      workspace_category: ["work", "personal", "fun", "default"],
+    },
   },
 } as const

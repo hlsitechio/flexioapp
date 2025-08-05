@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { NotificationProvider } from "@/contexts/NotificationContext";
 import { WorkspaceProvider } from "@/contexts/WorkspaceContext";
+import { WorkspaceProfileProvider } from "@/contexts/WorkspaceProfileContext";
 import { UISettingsProvider } from "@/contexts/UISettingsContext";
 import { DashboardSettingsProvider } from "@/contexts/DashboardSettingsContext";
 import { NavigationSettingsProvider } from "@/contexts/NavigationSettingsContext";
@@ -30,19 +31,21 @@ export function AppProviders({ children }: AppProvidersProps) {
         <AuthProvider>
           <NotificationProvider>
             <WorkspaceProvider>
-              <SettingsProvider>
-                <UISettingsProvider>
-                  <DashboardSettingsProvider>
-                    <NavigationSettingsProvider>
-                      <TooltipProvider>
-                        <SidebarProvider defaultOpen={true}>
-                          {children}
-                        </SidebarProvider>
-                      </TooltipProvider>
-                    </NavigationSettingsProvider>
-                  </DashboardSettingsProvider>
-                </UISettingsProvider>
-              </SettingsProvider>
+              <WorkspaceProfileProvider>
+                <SettingsProvider>
+                  <UISettingsProvider>
+                    <DashboardSettingsProvider>
+                      <NavigationSettingsProvider>
+                        <TooltipProvider>
+                          <SidebarProvider defaultOpen={true}>
+                            {children}
+                          </SidebarProvider>
+                        </TooltipProvider>
+                      </NavigationSettingsProvider>
+                    </DashboardSettingsProvider>
+                  </UISettingsProvider>
+                </SettingsProvider>
+              </WorkspaceProfileProvider>
             </WorkspaceProvider>
           </NotificationProvider>
         </AuthProvider>

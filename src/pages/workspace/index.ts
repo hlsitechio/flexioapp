@@ -1,0 +1,1 @@
+export { WorkspaceProfilesPage } from './WorkspaceProfilesPage';

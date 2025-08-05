@@ -14,6 +14,7 @@ import { ComponentsPage } from "./pages/components";
 import { CustomizationPage } from "./pages/customization";
 import { PromptsGalleryPage } from "./pages/prompts-gallery";
 import { CodeSnippetsPage } from "./pages/code-snippets";
+import { WorkspaceProfilesPage } from "./pages/workspace";
 import { LandingPage, ContactPage, DemoPage } from "./pages/landing";
 import NotFound from "./pages/NotFound";
 
@@ -67,6 +68,7 @@ const App = () => {
           <Route path="/customization" element={user ? <CustomizationPage /> : <Navigate to="/auth" replace />} />
           <Route path="/prompts-gallery" element={user ? <PromptsGalleryPage /> : <Navigate to="/auth" replace />} />
           <Route path="/code-snippets" element={user ? <CodeSnippetsPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace-profiles" element={user ? <WorkspaceProfilesPage /> : <Navigate to="/auth" replace />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
