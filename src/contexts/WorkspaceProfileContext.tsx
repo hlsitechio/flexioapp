@@ -349,16 +349,117 @@ export function WorkspaceProfileProvider({ children }: { children: React.ReactNo
   };
 
   const saveCurrentConfiguration = async (profileId: string) => {
-    // This will be implemented to gather current settings from all contexts
-    // and save them to the profile
-    console.log('Saving current configuration to profile:', profileId);
-    // TODO: Implement gathering current state from all contexts
+    if (!user || !workspace) return;
+
+    try {
+      // Get current settings from localStorage (where contexts save their state)
+      const currentConfig = {
+        // Dashboard Layout Settings
+        dashboard_layout: JSON.parse(localStorage.getItem('dashboard-settings') || '{}'),
+        
+        // UI Settings  
+        custom_header_title: localStorage.getItem('custom-header-title') || 'Premium Dashboard',
+        custom_sidebar_title: localStorage.getItem('custom-sidebar-title') || 'Premium Dashboard',
+        show_header_title: localStorage.getItem('show-header-title') === 'true',
+        show_sidebar_crown: localStorage.getItem('show-sidebar-crown') !== 'false',
+        
+        // Navigation Settings
+        top_navigation_widgets: JSON.parse(localStorage.getItem('top-navigation-widgets') || '[]'),
+        user_navigation_order: JSON.parse(localStorage.getItem('user-navigation-order') || '["Profile", "UserSettings", "NotificationButton"]'),
+        minimal_navigation_mode: localStorage.getItem('minimal-navigation-mode') === 'true',
+        sidebar_solid: localStorage.getItem('sidebar-solid') === 'true',
+        sidebar_collapsed: localStorage.getItem('sidebar-collapsed') === 'true',
+        
+        // Appearance Settings
+        gradient_mode: localStorage.getItem('gradient-mode') || 'full',
+        hide_dividers: localStorage.getItem('hide-dividers') === 'true',
+        
+        // Clock Settings
+        use_24_hour_format: localStorage.getItem('use-24-hour-format') === 'true',
+        show_year: localStorage.getItem('show-year') !== 'false',
+        show_date: localStorage.getItem('show-date') !== 'false', 
+        show_seconds: localStorage.getItem('show-seconds') !== 'false',
+        clock_position: localStorage.getItem('clock-position') || 'left',
+        
+        // Other Settings
+        edit_mode: localStorage.getItem('edit-mode') === 'true',
+        quick_note: localStorage.getItem('quick-note') || '',
+        
+        // Banner and Background
+        banner_image: localStorage.getItem('banner-image') || '',
+        show_banner: localStorage.getItem('show-banner') === 'true',
+        banner_height: parseInt(localStorage.getItem('banner-height') || '192'),
+        dashboard_background: localStorage.getItem('dashboard-background') || 'bg-gradient-to-br from-background to-muted/20',
+        grid_size: localStorage.getItem('grid-size') || '4x4',
+      };
+
+      await updateProfile(profileId, currentConfig);
+      
+      toast({
+        title: "Configuration Saved",
+        description: "Current dashboard configuration has been saved to this profile.",
+      });
+    } catch (error) {
+      console.error('Error saving current configuration:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save current configuration.",
+        variant: "destructive",
+      });
+    }
   };
 
   const loadProfileConfiguration = (profile: WorkspaceProfile) => {
-    // This will be implemented to apply profile settings to all contexts
-    console.log('Loading profile configuration:', profile.name);
-    // TODO: Implement applying profile settings to all contexts
+    try {
+      console.log('Loading profile configuration:', profile.name);
+      
+      // Apply settings to localStorage (where contexts read from)
+      localStorage.setItem('dashboard-settings', JSON.stringify(profile.dashboard_layout || {}));
+      localStorage.setItem('grid-size', profile.grid_size || '4x4');
+      localStorage.setItem('banner-image', profile.banner_image || '');
+      localStorage.setItem('show-banner', profile.show_banner ? 'true' : 'false');
+      localStorage.setItem('banner-height', profile.banner_height?.toString() || '192');
+      localStorage.setItem('dashboard-background', profile.dashboard_background || 'bg-gradient-to-br from-background to-muted/20');
+      
+      // UI Settings
+      localStorage.setItem('custom-header-title', profile.custom_header_title || 'Premium Dashboard');
+      localStorage.setItem('custom-sidebar-title', profile.custom_sidebar_title || 'Premium Dashboard');
+      localStorage.setItem('show-header-title', profile.show_header_title ? 'true' : 'false');
+      localStorage.setItem('show-sidebar-crown', profile.show_sidebar_crown ? 'true' : 'false');
+      
+      // Navigation Settings
+      localStorage.setItem('top-navigation-widgets', JSON.stringify(profile.top_navigation_widgets || []));
+      localStorage.setItem('user-navigation-order', JSON.stringify(profile.user_navigation_order || ['Profile', 'UserSettings', 'NotificationButton']));
+      localStorage.setItem('minimal-navigation-mode', profile.minimal_navigation_mode ? 'true' : 'false');
+      localStorage.setItem('sidebar-solid', profile.sidebar_solid ? 'true' : 'false');
+      localStorage.setItem('sidebar-collapsed', profile.sidebar_collapsed ? 'true' : 'false');
+      
+      // Appearance Settings
+      localStorage.setItem('gradient-mode', profile.gradient_mode || 'full');
+      localStorage.setItem('hide-dividers', profile.hide_dividers ? 'true' : 'false');
+      
+      // Clock Settings
+      localStorage.setItem('use-24-hour-format', profile.use_24_hour_format ? 'true' : 'false');
+      localStorage.setItem('show-year', profile.show_year ? 'true' : 'false');
+      localStorage.setItem('show-date', profile.show_date ? 'true' : 'false');
+      localStorage.setItem('show-seconds', profile.show_seconds ? 'true' : 'false');
+      localStorage.setItem('clock-position', profile.clock_position || 'left');
+      
+      // Other Settings
+      localStorage.setItem('edit-mode', profile.edit_mode ? 'true' : 'false');
+      localStorage.setItem('quick-note', profile.quick_note || '');
+      
+      // Trigger a page reload to ensure all contexts pick up the new settings
+      window.location.reload();
+      
+    } catch (error) {
+      console.error('Error loading profile configuration:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load profile configuration.",
+        variant: "destructive",
+      });
+    }
   };
 
   const getDefaultConfiguration = () => {
