@@ -18,31 +18,36 @@ import { LandingPage, ContactPage, DemoPage } from "./pages/landing";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
-  console.log("App component starting...");
-  
   const { user, loading } = useAuth();
-  console.log("Auth state:", { user: !!user, loading });
-  
   const { workspace, loading: workspaceLoading } = useWorkspace();
-  console.log("Workspace state:", { workspace: !!workspace, loading: workspaceLoading });
 
   // Initialize monitoring and analytics once
   useEffect(() => {
-    console.log("Initializing monitoring and analytics...");
+    console.group("🚀 App Initialization");
+    console.log("⚡ Starting monitoring and analytics...");
+    
     try {
       initializeMonitoring();
-      console.log("Monitoring initialized successfully");
-      
       analytics.initialize();
-      console.log("Analytics initialized successfully");
-      
-      // Track initial page view
       analytics.trackPageView(window.location.pathname);
-      console.log("Initial page view tracked");
+      
+      console.log("✅ All systems initialized successfully");
     } catch (error) {
-      console.error("Error during initialization:", error);
+      console.error("❌ Error during initialization:", error);
     }
+    
+    console.groupEnd();
   }, []); // Only run once on mount
+
+  // Log state changes only when meaningful
+  useEffect(() => {
+    if (!loading && !workspaceLoading) {
+      console.group("📊 App State");
+      console.log(`👤 User: ${user ? '✅ Authenticated' : '❌ Not authenticated'}`);
+      console.log(`🗂️  Workspace: ${workspace ? '✅ Loaded' : '❌ Not loaded'}`);
+      console.groupEnd();
+    }
+  }, [user, workspace, loading, workspaceLoading]);
 
   if (loading || (user && workspaceLoading)) {
     return (
