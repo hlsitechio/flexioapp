@@ -393,10 +393,10 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                                   >
                                     {/* Remove button with optimized motion */}
                                     <motion.div
-                                      initial={{ opacity: 0 }}
+                                      initial={{ opacity: 0.7 }}
                                       whileHover={{ opacity: 1 }}
                                       transition={{ duration: 0.15 }}
-                                      className="absolute top-2 right-2 z-10"
+                                      className="absolute top-2 right-2 z-10 group-hover:opacity-100"
                                     >
                                       <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                                         <Button
