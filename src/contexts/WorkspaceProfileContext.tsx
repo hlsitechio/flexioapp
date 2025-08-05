@@ -449,8 +449,10 @@ export function WorkspaceProfileProvider({ children }: { children: React.ReactNo
       localStorage.setItem('edit-mode', profile.edit_mode ? 'true' : 'false');
       localStorage.setItem('quick-note', profile.quick_note || '');
       
-      // Trigger a page reload to ensure all contexts pick up the new settings
-      window.location.reload();
+      // Dispatch custom event to notify other contexts of changes
+      window.dispatchEvent(new CustomEvent('profileConfigurationChanged', { 
+        detail: { profile } 
+      }));
       
     } catch (error) {
       console.error('Error loading profile configuration:', error);
