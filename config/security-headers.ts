@@ -23,11 +23,11 @@ export const productionSecurityHeaders = {
   // Content Security Policy
   'Content-Security-Policy': [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://*.vercel-analytics.com https://*.googletagmanager.com https://www.googletagmanager.com https://px.ads.linkedin.com https://snap.licdn.com",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://*.vercel-analytics.com https://*.googletagmanager.com https://www.googletagmanager.com https://px.ads.linkedin.com https://snap.licdn.com https://cdn.gpteng.co https://connect.facebook.net",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https:",
-    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.vercel-analytics.com https://*.googleanalytics.com https://px.ads.linkedin.com",
+    "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.vercel-analytics.com https://*.googleanalytics.com https://px.ads.linkedin.com https://www.facebook.com",
     "frame-src 'none'",
     "object-src 'none'",
     "base-uri 'self'",
