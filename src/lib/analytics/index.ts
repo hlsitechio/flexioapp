@@ -1,10 +1,4 @@
-// Fallback configuration to prevent app crashes
-const integrationsConfig = {
-  analytics: {
-    vercel: { enabled: true, debug: false },
-    googleAnalytics: { enabled: false, measurementId: '', config: {} }
-  }
-};
+import { integrationsConfig } from '../../../config/integrations';
 
 // Analytics event interface
 export interface AnalyticsEvent {

@@ -1,9 +1,4 @@
-// Fallback configuration to prevent app crashes
-const config = {
-  features: { enablePerformanceMetrics: true },
-  logging: { level: 'info', enableConsole: true },
-  monitoring: { enableErrorReporting: true, enableSentry: false }
-};
+import { config } from '../../../config';
 
 // Performance monitoring
 class PerformanceMonitor {
