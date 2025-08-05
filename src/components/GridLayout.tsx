@@ -420,12 +420,11 @@ export function GridLayout({ editMode }: GridLayoutProps) {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
-                                    whileHover={{ 
-                                      scale: 1.02, 
-                                      color: "hsl(var(--primary))",
-                                      transition: { duration: 0.15, ease: "easeOut" }
-                                    }}
-                                    className="flex flex-col items-center space-y-3 text-muted-foreground"
+                                     whileHover={{ 
+                                       scale: 1.02, 
+                                       transition: { duration: 0.15, ease: "easeOut" }
+                                     }}
+                                    className="flex flex-col items-center space-y-3 text-muted-foreground hover:text-primary transition-colors duration-200"
                                   >
                                     <motion.div
                                       animate={{ 
