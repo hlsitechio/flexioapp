@@ -92,6 +92,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const isLoadingRef = useRef(false);
   const isSavingRef = useRef(false);
   const hasLoadedFromBackendRef = useRef(false);
+  const lastSaveLogRef = useRef<string>('');
+  const saveLogCountRef = useRef(0);
   const lastUserIdRef = useRef<string | null>(null);
   
   // Helper function to safely access localStorage
@@ -488,15 +490,40 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     isSavingRef.current = true;
 
     try {
-      console.log('💾 Saving settings to backend...', {
+      // Create a unique identifier for this save operation
+      const saveIdentifier = JSON.stringify({
         userId: user.id,
-        userEmail: user.email,
         customSidebarTitle,
         customHeaderTitle,
         gridSize,
         minimalNavigationMode,
         dashboardLayout: Object.keys(dashboardLayout).length
       });
+
+      // Check if we've already logged this exact save recently
+      if (lastSaveLogRef.current === saveIdentifier) {
+        saveLogCountRef.current += 1;
+        console.log(`💾 Settings save (${saveLogCountRef.current}x) - deduplicating logs`);
+      } else {
+        // New save operation - reset counter and log full details
+        saveLogCountRef.current = 1;
+        lastSaveLogRef.current = saveIdentifier;
+        console.log('💾 Saving settings to backend...', {
+          userId: user.id,
+          userEmail: user.email,
+          customSidebarTitle,
+          customHeaderTitle,
+          gridSize,
+          minimalNavigationMode,
+          dashboardLayout: Object.keys(dashboardLayout).length
+        });
+      }
+
+      // Reset the log identifier after 5 seconds to allow fresh logging
+      setTimeout(() => {
+        lastSaveLogRef.current = '';
+        saveLogCountRef.current = 0;
+      }, 5000);
 
       const { data, error } = await supabase
         .from('user_settings')
