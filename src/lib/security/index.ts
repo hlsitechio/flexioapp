@@ -11,6 +11,7 @@ export * from './csp-monitor';
 export * from './gdpr-compliance';
 export * from './devtools-integration';
 export * from './enhanced-monitoring';
+export * from './unified-logger';
 
 console.log('✅ Enhanced security modules exported');
 
@@ -18,6 +19,7 @@ import { cspMonitor } from './csp-monitor';
 import { gdprCompliance } from './gdpr-compliance';
 import { devToolsIntegration } from './devtools-integration';
 import { securityMonitoring } from './enhanced-monitoring';
+import { securityLogger, securityLog } from './unified-logger';
 
 const isDevelopment = import.meta.env.DEV;
 
@@ -256,5 +258,7 @@ export {
   cspMonitor,
   gdprCompliance,
   devToolsIntegration,
-  securityMonitoring
+  securityMonitoring,
+  securityLogger,
+  securityLog
 };
