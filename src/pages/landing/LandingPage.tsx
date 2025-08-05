@@ -26,10 +26,10 @@ export function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="grid lg:grid-cols-5 gap-8 lg:gap-16 items-center min-h-[600px]">
-            <div className="lg:col-span-3 space-y-6">
+      <section className="py-12 lg:py-16 px-8 sm:px-12 lg:px-16">
+        <div className="max-w-[1800px] mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[600px]">
+            <div className="space-y-6">
               <div className="space-y-4">
                 <h1 className="text-4xl lg:text-5xl xl:text-7xl font-bold tracking-tight leading-tight">
                   Transform Your Business with{' '}
@@ -66,7 +66,7 @@ export function LandingPage() {
               </div>
             </div>
 
-            <div className="lg:col-span-2 w-full max-w-md lg:max-w-lg mx-auto">
+            <div className="w-full max-w-md lg:max-w-lg mx-auto lg:mx-0">
               <LeadCaptureForm source="homepage_hero" campaign="landing_page" />
             </div>
           </div>
