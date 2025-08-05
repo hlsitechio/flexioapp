@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ClockSettings } from './ClockSettings';
+import { BackendStatus } from './BackendStatus';
 import { WorkspaceProfileManager } from '@/components/workspace/WorkspaceProfileManager';
 import { useSettings } from '@/contexts/SettingsContext';
 
@@ -27,8 +28,9 @@ export function Settings() {
             </div>
             
             <Tabs defaultValue="general" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="general">General</TabsTrigger>
+                <TabsTrigger value="backend">Backend Status</TabsTrigger>
                 <TabsTrigger value="workspace">Workspace Controls</TabsTrigger>
                 <TabsTrigger value="danger">Danger Zone</TabsTrigger>
               </TabsList>
@@ -36,6 +38,12 @@ export function Settings() {
               <TabsContent value="general" className="space-y-6">
                 <div className="max-w-2xl">
                   <ClockSettings />
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="backend" className="space-y-6">
+                <div className="max-w-4xl">
+                  <BackendStatus />
                 </div>
               </TabsContent>
               

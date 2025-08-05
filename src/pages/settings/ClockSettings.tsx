@@ -88,9 +88,6 @@ export function ClockSettings() {
         </div>
       </CardContent>
     </Card>
-    
-    {/* Debug Component */}
-    <ClockSettingsDebug />
     </div>
   );
 }
