@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { DashboardTitle } from './DashboardTitle';
 import { TimeDisplay } from './TimeDisplay';
 import { TopNavigationGridLayout } from './TopNavigationGridLayout';
+import { WorkspaceSwitcher } from '@/components/workspace/WorkspaceSwitcher';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Menu, Settings, AlignLeft, AlignCenter, AlignRight, Eye, EyeOff, Sidebar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -48,6 +49,9 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
         
         {/* Top Navigation Grid - Only show if not in minimal mode */}
         {!minimalNavigationMode && <TopNavigationGridLayout editMode={editMode} />}
+        
+        {/* Workspace Switcher - Always show */}
+        <WorkspaceSwitcher />
         
         {clockPosition === 'right' && <TimeDisplay />}
         
