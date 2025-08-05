@@ -14,6 +14,10 @@ export function SignInOut() {
     if (user) {
       // User is signed in, sign them out
       await signOut();
+      // Clear workspace state to force workspace selection on next login
+      localStorage.removeItem('currentWorkspaceProfile');
+      localStorage.removeItem('workspaceId');
+      navigate('/auth');
     } else {
       // User is not signed in, navigate to auth page
       navigate('/auth');
