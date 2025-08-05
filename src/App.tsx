@@ -3,6 +3,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useWorkspace } from "@/contexts/WorkspaceContext";
+import { initializeMonitoring } from "@/lib/monitoring";
+import { analytics } from "@/lib/analytics";
+import { useEffect } from "react";
 import Index from "./pages/Index";
 import { AuthPage } from "./pages/auth";
 import { Settings } from "./pages/settings";
@@ -16,6 +19,17 @@ import NotFound from "./pages/NotFound";
 const App = () => {
   const { user, loading } = useAuth();
   const { workspace, loading: workspaceLoading } = useWorkspace();
+
+  // Initialize monitoring and analytics
+  useEffect(() => {
+    initializeMonitoring();
+    analytics.initialize();
+  }, []);
+
+  // Track page views
+  useEffect(() => {
+    analytics.trackPageView(window.location.pathname);
+  }, []);
 
   if (loading || (user && workspaceLoading)) {
     return (
