@@ -14,7 +14,7 @@ import { ComponentsPage } from "./pages/components";
 import { CustomizationPage } from "./pages/customization";
 import { PromptsGalleryPage } from "./pages/prompts-gallery";
 import { CodeSnippetsPage } from "./pages/code-snippets";
-import { WorkspaceProfilesPage } from "./pages/workspace";
+import { WorkspaceProfilesPage, WorkspaceSelectionPage } from "./pages/workspace";
 import { LandingPage, ContactPage, DemoPage } from "./pages/landing";
 import NotFound from "./pages/NotFound";
 
@@ -60,8 +60,9 @@ const App = () => {
           <Route path="/demo" element={<DemoPage />} />
           
           {/* Protected routes - authentication required */}
-          <Route path="/auth" element={user ? <Navigate to="/" replace /> : <AuthPage />} />
-          <Route path="/" element={user && workspace ? <Index /> : <Navigate to="/auth" replace />} />
+          <Route path="/auth" element={user ? <Navigate to="/workspace-selection" replace /> : <AuthPage />} />
+          <Route path="/workspace-selection" element={user ? <WorkspaceSelectionPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/" element={user && workspace ? <Index /> : <Navigate to="/workspace-selection" replace />} />
           <Route path="/profile" element={user ? <ProfilePage /> : <Navigate to="/auth" replace />} />
           <Route path="/components" element={user ? <ComponentsPage /> : <Navigate to="/auth" replace />} />
           <Route path="/settings" element={user ? <Settings /> : <Navigate to="/auth" replace />} />
