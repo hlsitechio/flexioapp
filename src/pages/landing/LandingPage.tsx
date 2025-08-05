@@ -2,6 +2,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LeadCaptureForm } from '@/components/forms';
 import { CheckCircle, ArrowRight, Star, Users, Shield, Zap } from 'lucide-react';
+import dashboardMain from '@/assets/dashboard-main.jpg';
+import analyticsDashboard from '@/assets/analytics-dashboard.jpg';
+import projectManagement from '@/assets/project-management.jpg';
 
 export function LandingPage() {
   return (
@@ -218,46 +221,302 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-24 px-8 sm:px-12 lg:px-16 bg-muted/30">
-        <div className="max-w-[1600px] mx-auto">
+      {/* Features Showcase Section */}
+      <section className="py-24 px-8 sm:px-12 lg:px-16 bg-background">
+        <div className="max-w-[1800px] mx-auto">
           <div className="text-center space-y-6 mb-20">
-            <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">Everything you need to succeed</h2>
+            <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
+              Everything you need in one platform
+            </h2>
             <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Powerful features designed to help your business grow faster and more efficiently.
+              From project management to productivity tracking, FlexIO combines all your essential tools 
+              in one intelligent workspace.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
-            <Card className="p-8 text-center space-y-6 border-0 shadow-xl bg-background/70 backdrop-blur-sm hover-scale">
-              <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto">
-                <Zap className="h-8 w-8 text-primary" />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+            <Card className="p-8 space-y-6 border-0 shadow-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30 hover-scale">
+              <div className="w-16 h-16 bg-blue-500/10 rounded-2xl flex items-center justify-center">
+                <div className="text-2xl">📋</div>
               </div>
-              <h3 className="text-2xl font-bold">Lightning Fast</h3>
-              <p className="text-muted-foreground text-lg leading-relaxed">
-                Built for speed with cutting-edge technology that delivers results in real-time.
-              </p>
+              <div className="space-y-3">
+                <h3 className="text-2xl font-bold">Task Management</h3>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  Kanban boards, task counters, and habit trackers to keep your projects organized and on track.
+                </p>
+              </div>
             </Card>
 
-            <Card className="p-8 text-center space-y-6 border-0 shadow-xl bg-background/70 backdrop-blur-sm hover-scale">
-              <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto">
-                <Shield className="h-8 w-8 text-primary" />
+            <Card className="p-8 space-y-6 border-0 shadow-xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/30 hover-scale">
+              <div className="w-16 h-16 bg-green-500/10 rounded-2xl flex items-center justify-center">
+                <div className="text-2xl">📅</div>
               </div>
-              <h3 className="text-2xl font-bold">Enterprise Security</h3>
-              <p className="text-muted-foreground text-lg leading-relaxed">
-                Bank-level security with end-to-end encryption and compliance certifications.
-              </p>
+              <div className="space-y-3">
+                <h3 className="text-2xl font-bold">Smart Calendar</h3>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  Advanced calendar with mini views, event management, and intelligent scheduling.
+                </p>
+              </div>
             </Card>
 
-            <Card className="p-8 text-center space-y-6 border-0 shadow-xl bg-background/70 backdrop-blur-sm hover-scale">
-              <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto">
-                <Users className="h-8 w-8 text-primary" />
+            <Card className="p-8 space-y-6 border-0 shadow-xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/30 dark:to-purple-900/30 hover-scale">
+              <div className="w-16 h-16 bg-purple-500/10 rounded-2xl flex items-center justify-center">
+                <div className="text-2xl">📝</div>
               </div>
-              <h3 className="text-2xl font-bold">Team Collaboration</h3>
-              <p className="text-muted-foreground text-lg leading-relaxed">
-                Work together seamlessly with real-time collaboration and communication tools.
-              </p>
+              <div className="space-y-3">
+                <h3 className="text-2xl font-bold">Note Taking</h3>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  Quick notes, code snippets, and prompts gallery for capturing and organizing your ideas.
+                </p>
+              </div>
             </Card>
+
+            <Card className="p-8 space-y-6 border-0 shadow-xl bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/30 hover-scale">
+              <div className="w-16 h-16 bg-orange-500/10 rounded-2xl flex items-center justify-center">
+                <div className="text-2xl">🔗</div>
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-2xl font-bold">Bookmark Manager</h3>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  Organize and access your important links with smart categorization and quick search.
+                </p>
+              </div>
+            </Card>
+
+            <Card className="p-8 space-y-6 border-0 shadow-xl bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/30 hover-scale">
+              <div className="w-16 h-16 bg-red-500/10 rounded-2xl flex items-center justify-center">
+                <div className="text-2xl">⏱️</div>
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-2xl font-bold">Time Tracking</h3>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  Countdown timers, productivity analytics, and time management tools to optimize your workflow.
+                </p>
+              </div>
+            </Card>
+
+            <Card className="p-8 space-y-6 border-0 shadow-xl bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-950/30 dark:to-cyan-900/30 hover-scale">
+              <div className="w-16 h-16 bg-cyan-500/10 rounded-2xl flex items-center justify-center">
+                <div className="text-2xl">🧮</div>
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-2xl font-bold">Quick Tools</h3>
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  Built-in calculator, image gallery, and utilities for instant productivity boosts.
+                </p>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Multi-Purpose Dashboard Section */}
+      <section className="py-24 px-8 sm:px-12 lg:px-16 bg-muted/20">
+        <div className="max-w-[1800px] mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <div className="w-16 h-1 bg-primary rounded-full"></div>
+                <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
+                  Multi-purpose dashboard{' '}
+                  <span className="text-primary">for every workflow</span>
+                </h2>
+                <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">
+                  Adapt FlexIO to your unique business needs with customizable layouts, intelligent insights, 
+                  and seamless integration of all your productivity tools in one unified interface.
+                </p>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg">Customizable Grid Layouts</h4>
+                    <p className="text-muted-foreground">Drag-and-drop interface with square and vertical grid options</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg">Real-time Collaboration</h4>
+                    <p className="text-muted-foreground">Share workspaces and collaborate with team members instantly</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="h-5 w-5 text-green-500" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-lg">Smart Automation</h4>
+                    <p className="text-muted-foreground">AI-powered suggestions and automated workflow optimizations</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="relative">
+              <div id="dashboard-mockup" className="bg-gradient-to-br from-background to-muted/30 rounded-2xl p-8 border border-border/50 shadow-2xl">
+                <div className="bg-background rounded-xl p-6">
+                  {/* Dashboard Mockup Content */}
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold">FlexIO Dashboard</h3>
+                      <div className="flex gap-2">
+                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="bg-blue-50 dark:bg-blue-950/30 rounded-lg p-4 space-y-2">
+                        <div className="text-sm text-muted-foreground">Tasks Today</div>
+                        <div className="text-2xl font-bold">12</div>
+                        <div className="text-xs text-green-600">+3 from yesterday</div>
+                      </div>
+                      
+                      <div className="bg-green-50 dark:bg-green-950/30 rounded-lg p-4 space-y-2">
+                        <div className="text-sm text-muted-foreground">Completed</div>
+                        <div className="text-2xl font-bold">8</div>
+                        <div className="text-xs text-green-600">67% completion</div>
+                      </div>
+                      
+                      <div className="bg-purple-50 dark:bg-purple-950/30 rounded-lg p-4 space-y-2">
+                        <div className="text-sm text-muted-foreground">Focus Time</div>
+                        <div className="text-2xl font-bold">4.2h</div>
+                        <div className="text-xs text-blue-600">+0.5h from avg</div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium">Recent Activity</span>
+                        <span className="text-xs text-muted-foreground">Live</span>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-3 p-2 bg-muted/30 rounded">
+                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                          <span className="text-sm">Completed "Review project proposal"</span>
+                        </div>
+                        <div className="flex items-center gap-3 p-2 bg-muted/30 rounded">
+                          <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                          <span className="text-sm">Added 3 new bookmarks</span>
+                        </div>
+                        <div className="flex items-center gap-3 p-2 bg-muted/30 rounded">
+                          <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                          <span className="text-sm">Updated calendar events</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Dashboard Gallery Section */}
+      <section className="py-24 px-8 sm:px-12 lg:px-16 bg-background">
+        <div className="max-w-[1800px] mx-auto">
+          <div className="text-center space-y-6 mb-20">
+            <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
+              See FlexIO in action
+            </h2>
+            <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              Explore how FlexIO transforms your workspace with intelligent dashboards, 
+              comprehensive analytics, and seamless project management.
+            </p>
+          </div>
+
+          <div className="space-y-16">
+            {/* Main Dashboard */}
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <div className="w-16 h-1 bg-blue-500 rounded-full"></div>
+                  <h3 className="text-3xl lg:text-4xl font-bold">Complete Dashboard Overview</h3>
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    Your central hub for productivity. Monitor tasks, track progress, manage calendars, 
+                    and access all your tools from one beautiful, organized interface.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm">Task Management</span>
+                  <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-sm">Calendar Integration</span>
+                  <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm">Quick Notes</span>
+                </div>
+              </div>
+              <div className="relative group hover-scale">
+                <img 
+                  src={dashboardMain} 
+                  alt="FlexIO Main Dashboard Interface" 
+                  className="rounded-2xl shadow-2xl border border-border/50"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </div>
+            </div>
+
+            {/* Analytics Dashboard */}
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="lg:order-2 space-y-6">
+                <div className="space-y-4">
+                  <div className="w-16 h-1 bg-green-500 rounded-full"></div>
+                  <h3 className="text-3xl lg:text-4xl font-bold">Advanced Analytics</h3>
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    Deep insights into your productivity patterns. Track performance metrics, 
+                    identify trends, and optimize your workflow with data-driven decisions.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-sm">Performance Metrics</span>
+                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm">Time Tracking</span>
+                  <span className="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full text-sm">Reports</span>
+                </div>
+              </div>
+              <div className="lg:order-1 relative group hover-scale">
+                <img 
+                  src={analyticsDashboard} 
+                  alt="FlexIO Analytics Dashboard" 
+                  className="rounded-2xl shadow-2xl border border-border/50"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </div>
+            </div>
+
+            {/* Project Management */}
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <div className="w-16 h-1 bg-purple-500 rounded-full"></div>
+                  <h3 className="text-3xl lg:text-4xl font-bold">Project Management Suite</h3>
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    Comprehensive project oversight with Kanban boards, team collaboration tools, 
+                    timeline management, and integrated communication features.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm">Kanban Boards</span>
+                  <span className="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full text-sm">Team Collaboration</span>
+                  <span className="px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-full text-sm">Timeline View</span>
+                </div>
+              </div>
+              <div className="relative group hover-scale">
+                <img 
+                  src={projectManagement} 
+                  alt="FlexIO Project Management Interface" 
+                  className="rounded-2xl shadow-2xl border border-border/50"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
