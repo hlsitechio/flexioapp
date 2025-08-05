@@ -4,7 +4,7 @@ const isDevelopment = import.meta.env.DEV;
 
 export interface SecurityEvent {
   id: string;
-  type: 'csp_violation' | 'xss_attempt' | 'data_breach' | 'unauthorized_access' | 'privacy_violation';
+  type: 'csp_violation' | 'xss_attempt' | 'data_breach' | 'unauthorized_access' | 'privacy_violation' | 'monitoring';
   severity: 'low' | 'medium' | 'high' | 'critical';
   timestamp: Date;
   description: string;
@@ -146,15 +146,45 @@ class EnhancedSecurityMonitoring {
   private setupClickjackingDetection() {
     // Detect if page is loaded in iframe
     if (window.self !== window.top) {
-      this.recordEvent({
-        type: 'unauthorized_access',
-        severity: 'medium',
-        description: 'Page loaded in iframe - potential clickjacking attempt',
-        metadata: {
-          parentOrigin: document.referrer,
-          frameLocation: window.location.href
-        }
-      });
+      const parentOrigin = document.referrer;
+      const currentOrigin = window.location.origin;
+      
+      // Whitelist trusted domains (Lovable development environment)
+      const trustedDomains = [
+        'lovable.dev',
+        'lovableproject.com',
+        'localhost',
+        '127.0.0.1'
+      ];
+      
+      const isTrustedParent = trustedDomains.some(domain => 
+        parentOrigin.includes(domain) || currentOrigin.includes(domain)
+      );
+      
+      if (!isTrustedParent) {
+        this.recordEvent({
+          type: 'unauthorized_access',
+          severity: 'medium',
+          description: 'Page loaded in iframe from untrusted origin - potential clickjacking attempt',
+          metadata: {
+            parentOrigin,
+            frameLocation: window.location.href,
+            currentOrigin
+          }
+        });
+      } else {
+        // Log as debug info for trusted environments
+        this.recordEvent({
+          type: 'monitoring',
+          severity: 'low',
+          description: 'Page running in trusted iframe environment (development)',
+          metadata: {
+            parentOrigin,
+            frameLocation: window.location.href,
+            trustedEnvironment: true
+          }
+        });
+      }
     }
   }
 
