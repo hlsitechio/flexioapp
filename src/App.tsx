@@ -18,16 +18,30 @@ import { LandingPage, ContactPage, DemoPage } from "./pages/landing";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
+  console.log("App component starting...");
+  
   const { user, loading } = useAuth();
+  console.log("Auth state:", { user: !!user, loading });
+  
   const { workspace, loading: workspaceLoading } = useWorkspace();
+  console.log("Workspace state:", { workspace: !!workspace, loading: workspaceLoading });
 
   // Initialize monitoring and analytics once
   useEffect(() => {
-    initializeMonitoring();
-    analytics.initialize();
-    
-    // Track initial page view
-    analytics.trackPageView(window.location.pathname);
+    console.log("Initializing monitoring and analytics...");
+    try {
+      initializeMonitoring();
+      console.log("Monitoring initialized successfully");
+      
+      analytics.initialize();
+      console.log("Analytics initialized successfully");
+      
+      // Track initial page view
+      analytics.trackPageView(window.location.pathname);
+      console.log("Initial page view tracked");
+    } catch (error) {
+      console.error("Error during initialization:", error);
+    }
   }, []); // Only run once on mount
 
   if (loading || (user && workspaceLoading)) {
