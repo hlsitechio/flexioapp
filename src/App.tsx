@@ -14,6 +14,7 @@ import { ComponentsPage } from "./pages/components";
 import { CustomizationPage } from "./pages/customization";
 import { PromptsGalleryPage } from "./pages/prompts-gallery";
 import { CodeSnippetsPage } from "./pages/code-snippets";
+import { LandingPage, ContactPage, DemoPage } from "./pages/landing";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
@@ -45,6 +46,12 @@ const App = () => {
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Public routes - no authentication required */}
+          <Route path="/landing" element={<LandingPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/demo" element={<DemoPage />} />
+          
+          {/* Protected routes - authentication required */}
           <Route path="/auth" element={user ? <Navigate to="/" replace /> : <AuthPage />} />
           <Route path="/" element={user && workspace ? <Index /> : <Navigate to="/auth" replace />} />
           <Route path="/profile" element={user ? <ProfilePage /> : <Navigate to="/auth" replace />} />
