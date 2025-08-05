@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react'; // Fixed ComponentShowcase reference error
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from '@/components/ui/carousel';
-import { LayoutDashboard, Plus } from 'lucide-react';
+import { LayoutDashboard, Plus, Clock, Calculator, CalendarDays, NotebookPen, MessageSquareQuote, Timer, Target, Image, Sparkles, Code, Bookmark } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useSettings } from '@/contexts/SettingsContext';
@@ -20,6 +21,60 @@ import {
   DashboardDateDisplay,
   ImageGallery
 } from '@/components/dashboard';
+
+// Component categories
+const componentCategories = [
+  {
+    id: 'all',
+    name: 'All Components',
+    icon: LayoutDashboard,
+    count: 12
+  },
+  {
+    id: 'productivity',
+    name: 'Productivity',
+    icon: Target,
+    count: 6,
+    components: ['Task Counter', 'Quick Note', 'Habit Tracker', 'Bookmark Manager', 'Quick Calculator', 'Countdown Timer']
+  },
+  {
+    id: 'time',
+    name: 'Time & Calendar',
+    icon: CalendarDays,
+    count: 2,
+    components: ['Calendar', 'Date Display']
+  },
+  {
+    id: 'content',
+    name: 'Content & Media',
+    icon: Image,
+    count: 3,
+    components: ['Image Gallery', 'Random Quote', 'Code Snippets']
+  },
+  {
+    id: 'creative',
+    name: 'Creative & Fun',
+    icon: Sparkles,
+    count: 1,
+    components: ['Prompts Gallery']
+  }
+];
+
+// All available components with their metadata
+const allComponents = [
+  { name: 'Calendar', category: 'time', icon: CalendarDays },
+  { name: 'Task Counter', category: 'productivity', icon: Target },
+  { name: 'Quick Note', category: 'productivity', icon: NotebookPen },
+  { name: 'Random Quote', category: 'content', icon: MessageSquareQuote },
+  { name: 'Countdown Timer', category: 'productivity', icon: Timer },
+  { name: 'Image Gallery', category: 'content', icon: Image },
+  { name: 'Prompts Gallery', category: 'creative', icon: Sparkles },
+  { name: 'Code Snippets', category: 'content', icon: Code },
+  { name: 'Habit Tracker', category: 'productivity', icon: Target },
+  { name: 'Quick Calculator', category: 'productivity', icon: Calculator },
+  { name: 'Bookmark Manager', category: 'productivity', icon: Bookmark },
+  { name: 'Date Display', category: 'time', icon: Clock }
+];
 
 // Dashboard component wrapper with hover add button
 function DashboardComponentShowcase({ 
@@ -111,7 +166,13 @@ function SidebarComponentShowcase({ children, componentName }: { children: React
 
 export function DashboardWidgets({ targetSlot, gridSize }: { targetSlot?: string | null; gridSize?: string | null }) {
   const [api, setApi] = useState<CarouselApi>();
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const carouselRef = useRef<HTMLDivElement>(null);
+
+  // Filter components based on selected category
+  const filteredComponents = selectedCategory === 'all' 
+    ? allComponents 
+    : allComponents.filter(component => component.category === selectedCategory);
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
@@ -152,6 +213,42 @@ export function DashboardWidgets({ targetSlot, gridSize }: { targetSlot?: string
         }
       </p>
       
+      {/* Component Categories Menu */}
+      <div className="bg-card border border-border rounded-lg p-4">
+        <h3 className="text-sm font-medium text-foreground mb-3">Component Categories</h3>
+        <div className="flex flex-wrap gap-2">
+          {componentCategories.map((category) => {
+            const IconComponent = category.icon;
+            return (
+              <Button
+                key={category.id}
+                variant={selectedCategory === category.id ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSelectedCategory(category.id)}
+                className={`h-9 px-3 text-xs font-medium transition-all duration-200 ${
+                  selectedCategory === category.id 
+                    ? 'bg-primary text-primary-foreground shadow-md' 
+                    : 'bg-background hover:bg-muted border-border'
+                }`}
+              >
+                <IconComponent className="h-3.5 w-3.5 mr-1.5" />
+                {category.name}
+                <Badge 
+                  variant="secondary" 
+                  className={`ml-2 h-5 px-1.5 text-xs ${
+                    selectedCategory === category.id 
+                      ? 'bg-primary-foreground/20 text-primary-foreground' 
+                      : 'bg-muted text-muted-foreground'
+                  }`}
+                >
+                  {category.count}
+                </Badge>
+              </Button>
+            );
+          })}
+        </div>
+      </div>
+      
       {/* Dashboard Widgets Carousel */}
       <div ref={carouselRef}>
         <Carousel
@@ -163,67 +260,25 @@ export function DashboardWidgets({ targetSlot, gridSize }: { targetSlot?: string
           setApi={setApi}
         >
           <CarouselContent className="-ml-2 md:-ml-4">
-          <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Calendar" targetSlot={targetSlot} gridSize={gridSize}>
-              <Calendar />
-            </DashboardComponentShowcase>
-          </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Task Counter" targetSlot={targetSlot} gridSize={gridSize}>
-              <DashboardTaskCounter />
-            </DashboardComponentShowcase>
-          </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Quick Note" targetSlot={targetSlot} gridSize={gridSize}>
-              <DashboardQuickNote />
-            </DashboardComponentShowcase>
-          </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Random Quote" targetSlot={targetSlot} gridSize={gridSize}>
-              <DashboardRandomQuote />
-            </DashboardComponentShowcase>
-          </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Countdown Timer" targetSlot={targetSlot} gridSize={gridSize}>
-              <DashboardCountdownTimer />
-            </DashboardComponentShowcase>
-          </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Image Gallery" targetSlot={targetSlot} gridSize={gridSize}>
-              <ImageGallery />
-            </DashboardComponentShowcase>
-          </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Prompts Gallery" targetSlot={targetSlot} gridSize={gridSize}>
-              <DashboardPromptsGallery />
-            </DashboardComponentShowcase>
-          </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Code Snippets" targetSlot={targetSlot} gridSize={gridSize}>
-              <DashboardCodeBlock />
-            </DashboardComponentShowcase>
-          </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Habit Tracker" targetSlot={targetSlot} gridSize={gridSize}>
-              <DashboardHabitTracker />
-            </DashboardComponentShowcase>
-          </CarouselItem>
-          <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-            <DashboardComponentShowcase componentName="Quick Calculator" targetSlot={targetSlot} gridSize={gridSize}>
-              <DashboardQuickCalculator />
-            </DashboardComponentShowcase>
-          </CarouselItem>
-           <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-             <DashboardComponentShowcase componentName="Bookmark Manager" targetSlot={targetSlot} gridSize={gridSize}>
-               <DashboardBookmarkManager />
-             </DashboardComponentShowcase>
-           </CarouselItem>
-           <CarouselItem className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-             <DashboardComponentShowcase componentName="Date Display" targetSlot={targetSlot} gridSize={gridSize}>
-               <DashboardDateDisplay />
-             </DashboardComponentShowcase>
-           </CarouselItem>
-           </CarouselContent>
+            {filteredComponents.map((component) => (
+              <CarouselItem key={component.name} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                <DashboardComponentShowcase componentName={component.name} targetSlot={targetSlot} gridSize={gridSize}>
+                  {component.name === 'Calendar' && <Calendar />}
+                  {component.name === 'Task Counter' && <DashboardTaskCounter />}
+                  {component.name === 'Quick Note' && <DashboardQuickNote />}
+                  {component.name === 'Random Quote' && <DashboardRandomQuote />}
+                  {component.name === 'Countdown Timer' && <DashboardCountdownTimer />}
+                  {component.name === 'Image Gallery' && <ImageGallery />}
+                  {component.name === 'Prompts Gallery' && <DashboardPromptsGallery />}
+                  {component.name === 'Code Snippets' && <DashboardCodeBlock />}
+                  {component.name === 'Habit Tracker' && <DashboardHabitTracker />}
+                  {component.name === 'Quick Calculator' && <DashboardQuickCalculator />}
+                  {component.name === 'Bookmark Manager' && <DashboardBookmarkManager />}
+                  {component.name === 'Date Display' && <DashboardDateDisplay />}
+                </DashboardComponentShowcase>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
