@@ -480,8 +480,8 @@ export function LandingPage() {
               </div>
               <div className="lg:order-1 relative group hover-scale">
                 <img 
-                  src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800&h=600&fit=crop&crop=center" 
-                  alt="Advanced Analytics Placeholder" 
+                  src="/lovable-uploads/79fcf154-2cea-4690-a606-1b838ab3b07d.png" 
+                  alt="Advanced Analytics" 
                   className="rounded-2xl shadow-2xl border border-border/50"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
