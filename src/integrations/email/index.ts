@@ -11,6 +11,9 @@ export interface EmailData {
   templateData?: Record<string, any>;
   tags?: string[];
   category?: string;
+  cc?: string | string[];
+  bcc?: string | string[];
+  replyTo?: string;
 }
 
 export interface NewsletterSubscriber {
@@ -107,6 +110,68 @@ class SendGridProvider implements EmailProvider {
       templateId,
       templateData: data,
     });
+  }
+}
+
+// Resend Email Provider
+class ResendProvider implements EmailProvider {
+  private apiKey: string;
+  private fromEmail: string;
+  private fromName: string;
+
+  constructor() {
+    this.apiKey = integrationsConfig.email.resend.apiKey;
+    this.fromEmail = integrationsConfig.email.resend.fromEmail;
+    this.fromName = integrationsConfig.email.resend.fromName;
+  }
+
+  initialize(): boolean {
+    return !!(this.apiKey && this.fromEmail);
+  }
+
+  async sendEmail(emailData: EmailData): Promise<{ success: boolean; id?: string; error?: string }> {
+    if (!this.initialize()) {
+      return { success: false, error: 'Resend not configured' };
+    }
+
+    try {
+      const payload = {
+        from: `${this.fromName} <${emailData.from || this.fromEmail}>`,
+        to: Array.isArray(emailData.to) ? emailData.to : [emailData.to],
+        ...(emailData.cc && { cc: Array.isArray(emailData.cc) ? emailData.cc : [emailData.cc] }),
+        ...(emailData.bcc && { bcc: Array.isArray(emailData.bcc) ? emailData.bcc : [emailData.bcc] }),
+        subject: emailData.subject,
+        ...(emailData.html && { html: emailData.html }),
+        ...(emailData.text && { text: emailData.text }),
+        ...(emailData.replyTo && { reply_to: emailData.replyTo }),
+        ...(emailData.tags && { tags: emailData.tags }),
+      };
+
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        return { success: false, error: `Resend API error: ${error.message || response.statusText}` };
+      }
+
+      const result = await response.json();
+      return { success: true, id: result.id };
+    } catch (error) {
+      return { success: false, error: `Resend error: ${error}` };
+    }
+  }
+
+  async sendTemplateEmail(templateId: string, to: string, data: Record<string, any>): Promise<{ success: boolean; error?: string }> {
+    // For Resend, templates are typically handled via React Email
+    // This would require setting up React Email templates in your edge functions
+    return { success: false, error: 'Template emails with Resend should be handled via Supabase Edge Functions with React Email' };
   }
 }
 
@@ -258,6 +323,10 @@ export class EmailManager {
 
   initialize() {
     // Initialize email providers
+    if (integrationsConfig.email.resend.enabled) {
+      this.emailProviders.set('resend', new ResendProvider());
+    }
+    
     if (integrationsConfig.email.sendgrid.enabled) {
       this.emailProviders.set('sendgrid', new SendGridProvider());
     }

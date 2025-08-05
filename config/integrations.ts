@@ -63,6 +63,18 @@ export const integrationsConfig = {
 
   // Email Services
   email: {
+    resend: {
+      enabled: true, // Enable Resend by default
+      apiKey: '', // Resend API Key
+      fromEmail: 'noreply@yourdomain.com',
+      fromName: 'Your BI Platform',
+      templates: {
+        welcome: '',
+        resetPassword: '',
+        emailVerification: '',
+        notification: '',
+      },
+    },
     sendgrid: {
       enabled: false,
       apiKey: '', // SendGrid API Key
