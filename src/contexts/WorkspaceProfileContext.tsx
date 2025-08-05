@@ -70,6 +70,7 @@ interface WorkspaceProfileContextType {
   setAsDefault: (profileId: string) => Promise<void>;
   resetToDefaults: () => Promise<void>;
   saveDefaultConfiguration: () => Promise<WorkspaceProfile | null>;
+  createEmptyDemoTemplate: () => Promise<WorkspaceProfile | null>;
 }
 
 const WorkspaceProfileContext = createContext<WorkspaceProfileContextType | undefined>(undefined);
@@ -513,6 +514,53 @@ export function WorkspaceProfileProvider({ children }: { children: React.ReactNo
     };
   };
 
+  const getCompletelyEmptyConfiguration = () => {
+    return {
+      // Dashboard Layout Settings - Completely empty
+      dashboard_layout: {
+        slot1: [],
+        slot2: [],
+        slot3: [],
+        slot4: [],
+        slot5: [],
+        slot6: [],
+      },
+      grid_size: '3x3', // Smaller grid for free tier
+      banner_image: '',
+      show_banner: false,
+      banner_height: 120, // Smaller banner height
+      dashboard_background: 'bg-background', // Plain background
+      
+      // UI Settings - Basic/Free tier
+      custom_header_title: 'Dashboard',
+      custom_sidebar_title: 'Dashboard',
+      show_header_title: false, // Hidden for free tier
+      show_sidebar_crown: false, // No crown for free tier
+      
+      // Navigation Settings - Minimal
+      top_navigation_widgets: [],
+      user_navigation_order: ['Profile'],
+      minimal_navigation_mode: true, // Minimal for free tier
+      sidebar_solid: false,
+      sidebar_collapsed: true, // Collapsed by default for free tier
+      
+      // Appearance Settings - Basic
+      gradient_mode: 'none', // No gradients for free tier
+      hide_dividers: true, // Hidden for cleaner look
+      
+      // Clock Settings - Basic
+      use_24_hour_format: false,
+      show_year: false, // Hidden for free tier
+      show_date: true,
+      show_seconds: false, // Hidden for free tier
+      clock_position: 'left',
+      
+      // Other Settings - Minimal
+      edit_mode: false,
+      quick_note: '', // Empty note
+    };
+  };
+
   const resetToDefaults = async () => {
     if (!currentProfile) return;
 
@@ -580,6 +628,48 @@ export function WorkspaceProfileProvider({ children }: { children: React.ReactNo
     }
   };
 
+  const createEmptyDemoTemplate = async (): Promise<WorkspaceProfile | null> => {
+    if (!user || !workspace) return null;
+
+    const emptyConfig = getCompletelyEmptyConfiguration();
+    
+    try {
+      const { data, error } = await supabase
+        .from('workspace_profiles')
+        .insert({
+          user_id: user.id,
+          workspace_id: workspace.id,
+          name: 'Demo - Free Tier',
+          category: 'default',
+          is_default: false,
+          ...emptyConfig,
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error creating empty demo template:', error);
+        toast({
+          title: "Error",
+          description: "Failed to create empty demo template.",
+          variant: "destructive",
+        });
+        return null;
+      }
+
+      setProfiles(prev => [...prev, data as WorkspaceProfile]);
+      toast({
+        title: "Success",
+        description: "Empty demo template created as 'Demo - Free Tier' profile.",
+      });
+      
+      return data as WorkspaceProfile;
+    } catch (error) {
+      console.error('Error creating empty demo template:', error);
+      return null;
+    }
+  };
+
   const value: WorkspaceProfileContextType = {
     profiles,
     currentProfile,
@@ -594,6 +684,7 @@ export function WorkspaceProfileProvider({ children }: { children: React.ReactNo
     setAsDefault,
     resetToDefaults,
     saveDefaultConfiguration,
+    createEmptyDemoTemplate,
   };
 
   return (
