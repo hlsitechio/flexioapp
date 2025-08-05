@@ -21,16 +21,14 @@ const App = () => {
   const { user, loading } = useAuth();
   const { workspace, loading: workspaceLoading } = useWorkspace();
 
-  // Initialize monitoring and analytics
+  // Initialize monitoring and analytics once
   useEffect(() => {
     initializeMonitoring();
     analytics.initialize();
-  }, []);
-
-  // Track page views
-  useEffect(() => {
+    
+    // Track initial page view
     analytics.trackPageView(window.location.pathname);
-  }, []);
+  }, []); // Only run once on mount
 
   if (loading || (user && workspaceLoading)) {
     return (

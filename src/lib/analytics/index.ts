@@ -25,7 +25,10 @@ class VercelAnalyticsProvider implements AnalyticsProvider {
     
     // Vercel Analytics is automatically initialized
     this.initialized = true;
-    console.log('Vercel Analytics initialized');
+    // Reduced console logging for performance
+    if (import.meta.env.DEV) {
+      console.log('Vercel Analytics initialized');
+    }
   }
 
   track(event: AnalyticsEvent) {
@@ -140,7 +143,9 @@ export class AnalyticsManager {
     this.queue = [];
 
     this.initialized = true;
-    console.log('Analytics Manager initialized');
+    if (import.meta.env.DEV) {
+      console.log('Analytics Manager initialized');
+    }
   }
 
   track(event: AnalyticsEvent) {
