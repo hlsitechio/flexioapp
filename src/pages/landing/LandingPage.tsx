@@ -27,15 +27,15 @@ export function LandingPage() {
 
       {/* Hero Section */}
       <section className="py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[600px]">
-            <div className="space-y-6">
+        <div className="max-w-[1400px] mx-auto">
+          <div className="grid lg:grid-cols-5 gap-8 lg:gap-16 items-center min-h-[600px]">
+            <div className="lg:col-span-3 space-y-6">
               <div className="space-y-4">
-                <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-tight">
+                <h1 className="text-4xl lg:text-5xl xl:text-7xl font-bold tracking-tight leading-tight">
                   Transform Your Business with{' '}
                   <span className="text-primary">Next-Gen Technology</span>
                 </h1>
-                <p className="text-lg lg:text-xl text-muted-foreground max-w-xl">
+                <p className="text-lg lg:text-xl text-muted-foreground max-w-2xl">
                   Streamline operations, boost productivity, and accelerate growth with our innovative platform trusted by thousands of businesses worldwide.
                 </p>
               </div>
@@ -66,7 +66,7 @@ export function LandingPage() {
               </div>
             </div>
 
-            <div className="lg:justify-self-end w-full max-w-md">
+            <div className="lg:col-span-2 w-full max-w-md lg:max-w-lg mx-auto">
               <LeadCaptureForm source="homepage_hero" campaign="landing_page" />
             </div>
           </div>
