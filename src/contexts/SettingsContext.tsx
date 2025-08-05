@@ -602,14 +602,14 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  // Save logic for authenticated users only
+  // Save logic for authenticated users only  
   const debouncedSave = useCallback(() => {
     // Clear existing timer
     if (saveTimerRef.current) {
       clearTimeout(saveTimerRef.current);
     }
     
-    // Only save to backend if authenticated
+    // Only save to backend if authenticated and have loaded initial settings
     if (user && hasLoadedFromBackendRef.current) {
       saveTimerRef.current = setTimeout(async () => {
         try {
@@ -621,9 +621,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
             fullError: error
           });
         }
-      }, 2000); // Increased to 2 seconds to reduce rapid saves
+      }, 2000); // 2 seconds debounce
     }
-  }, [user, clockPosition, showHeaderTitle, customHeaderTitle, showSidebarCrown, customSidebarTitle, sidebarCollapsed, sidebarSolid, showSeconds, showDate, showYear, use24HourFormat, dashboardLayout, gridSize, topNavigationWidgets, minimalNavigationMode, quickNote, bannerImage, showBanner, bannerHeight, dashboardBackground, gradientMode, hideDividers]);
+  }, [user]); // Only depend on user, not all settings
 
   // Only trigger save when settings actually change (with debouncing)
   useEffect(() => {
