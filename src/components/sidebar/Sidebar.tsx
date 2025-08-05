@@ -5,9 +5,8 @@ import {
   SidebarHeader,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { Edit3, Eye, GripVertical } from 'lucide-react';
+import { GripVertical } from 'lucide-react';
 import { DashboardTitle } from './DashboardTitle';
-import { Action as ActionSimple } from './ActionSimple';
 import { Tools } from './Tools';
 import { FavoritesRecent } from './favorites-recent';
 import { UserNavigation } from './UserNavigation';
@@ -33,7 +32,6 @@ import { CSS } from '@dnd-kit/utilities';
 
 // Sidebar section configuration
 const sidebarSections = [
-  { id: 'action', name: 'Action', component: ActionSimple },
   { id: 'tools', name: 'Tools', component: Tools },
   { id: 'favorites', name: 'Favorites & Recent', component: FavoritesRecent },
 ];
@@ -163,31 +161,6 @@ export function DashboardSidebar() {
         <SidebarContent className="flex flex-col h-full overflow-hidden">
           {/* Main Content Area with Draggable Panels */}
           <div className="flex-1 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-sidebar-border scrollbar-track-transparent">
-            {/* Edit Mode Toggle */}
-            <div className="space-y-3 mb-6">
-              {isCollapsed ? (
-                <div className="flex justify-center">
-                  <button 
-                    className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center mx-auto"
-                    onClick={() => setEditMode(!editMode)}
-                  >
-                    {editMode ? <Eye className="h-4 w-4" /> : <Edit3 className="h-4 w-4" />}
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => setEditMode(!editMode)}
-                  className="w-full flex items-center space-x-3 p-3 rounded-lg hover:bg-sidebar-accent transition-all cursor-pointer text-left"
-                >
-                  {editMode ? <Eye className="h-4 w-4 text-sidebar-foreground/70" /> : <Edit3 className="h-4 w-4 text-sidebar-foreground/70" />}
-                  <div className="flex-1">
-                    <div className="text-sm font-medium text-sidebar-foreground">
-                      Edit Mode {editMode && !isCollapsed && <span className="text-xs text-sidebar-foreground/50 normal-case">(Drag to reorder)</span>}
-                    </div>
-                  </div>
-                </button>
-              )}
-            </div>
 
             {/* Draggable Sections */}
             <DndContext
