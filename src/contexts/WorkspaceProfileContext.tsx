@@ -467,7 +467,14 @@ export function WorkspaceProfileProvider({ children }: { children: React.ReactNo
   const getDefaultConfiguration = () => {
     return {
       // Dashboard Layout Settings
-      dashboard_layout: {},
+      dashboard_layout: {
+        slot1: [],
+        slot2: [],
+        slot3: [],
+        slot4: [],
+        slot5: [],
+        slot6: [],
+      },
       grid_size: '4x4',
       banner_image: '',
       show_banner: false,
