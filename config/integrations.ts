@@ -65,7 +65,7 @@ export const integrationsConfig = {
   email: {
     resend: {
       enabled: true, // Enable Resend by default
-      apiKey: Deno?.env?.get('RESEND_API_KEY') || '', // Resend API Key from Supabase secrets
+      apiKey: '', // Resend API Key (configured in Supabase Edge Functions)
       fromEmail: 'noreply@yourdomain.com',
       fromName: 'Your BI Platform',
       templates: {
