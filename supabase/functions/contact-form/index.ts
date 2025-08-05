@@ -175,8 +175,86 @@ serve(async (req) => {
       ip_address: clientIP,
     });
 
-    // TODO: Send notification email to sales team for high priority inquiries
-    // TODO: Send auto-response email to user
+    // Send notification email to sales team for high priority inquiries
+    if (priority === 'high') {
+      try {
+        const emailResponse = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${supabaseKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            to: 'sales@yourdomain.com', // Update with your sales email
+            subject: `🚨 High Priority Contact Form Submission - ${body.inquiryType}`,
+            html: `
+              <h2>New High Priority Contact Form Submission</h2>
+              <p><strong>Type:</strong> ${body.inquiryType}</p>
+              <p><strong>Name:</strong> ${body.name}</p>
+              <p><strong>Email:</strong> ${body.email}</p>
+              ${body.company ? `<p><strong>Company:</strong> ${body.company}</p>` : ''}
+              ${body.phone ? `<p><strong>Phone:</strong> ${body.phone}</p>` : ''}
+              <p><strong>Subject:</strong> ${body.subject || 'No subject'}</p>
+              <p><strong>Message:</strong></p>
+              <p>${body.message.replace(/\n/g, '<br>')}</p>
+              <hr>
+              <p><small>Submission ID: ${submission.id}</small></p>
+              <p><small>Submitted at: ${new Date().toLocaleString()}</small></p>
+            `,
+            tags: ['contact-form', 'high-priority', body.inquiryType],
+          }),
+        });
+        
+        if (!emailResponse.ok) {
+          console.error('Failed to send notification email:', await emailResponse.text());
+        }
+      } catch (emailError) {
+        console.error('Error sending notification email:', emailError);
+      }
+    }
+
+    // Send auto-response email to user
+    try {
+      const autoReplyResponse = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${supabaseKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          to: body.email,
+          subject: 'Thank you for contacting us!',
+          html: `
+            <h2>Thank you for reaching out, ${body.name}!</h2>
+            <p>We have received your ${body.inquiryType || 'general'} inquiry and will get back to you as soon as possible.</p>
+            
+            <h3>Your Message Details:</h3>
+            <p><strong>Subject:</strong> ${body.subject || `${body.inquiryType || 'General'} Inquiry`}</p>
+            <p><strong>Message:</strong></p>
+            <p style="background: #f5f5f5; padding: 10px; border-left: 3px solid #007bff;">
+              ${body.message.replace(/\n/g, '<br>')}
+            </p>
+            
+            ${priority === 'high' ? 
+              '<p><strong>Priority:</strong> High - We will respond within 24 hours.</p>' : 
+              '<p>We typically respond within 1-2 business days.</p>'
+            }
+            
+            <p>Best regards,<br>The BI Platform Team</p>
+            
+            <hr>
+            <p><small>Reference ID: ${submission.id}</small></p>
+          `,
+          tags: ['auto-reply', 'contact-form'],
+        }),
+      });
+      
+      if (!autoReplyResponse.ok) {
+        console.error('Failed to send auto-reply email:', await autoReplyResponse.text());
+      }
+    } catch (emailError) {
+      console.error('Error sending auto-reply email:', emailError);
+    }
 
     return new Response(
       JSON.stringify({ 
