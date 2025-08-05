@@ -113,10 +113,12 @@ export function WorkspaceProfileProvider({ children }: { children: React.ReactNo
 
       if (data && data.length > 0) {
         setProfiles(data as WorkspaceProfile[]);
-        // Set current profile to default or first profile
-        const defaultProfile = data.find(p => p.is_default) || data[0];
-        setCurrentProfile(defaultProfile as WorkspaceProfile);
-        loadProfileConfiguration(defaultProfile as WorkspaceProfile);
+        // Only set current profile to default if no profile is currently set
+        if (!currentProfile) {
+          const defaultProfile = data.find(p => p.is_default) || data[0];
+          setCurrentProfile(defaultProfile as WorkspaceProfile);
+          loadProfileConfiguration(defaultProfile as WorkspaceProfile);
+        }
       } else {
         // Create default profile for new workspace
         await createDefaultProfile();
