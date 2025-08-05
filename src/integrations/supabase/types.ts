@@ -92,6 +92,144 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_submissions: {
+        Row: {
+          assigned_to: string | null
+          company: string | null
+          created_at: string
+          email: string
+          id: string
+          inquiry_type: string | null
+          message: string
+          metadata: Json | null
+          name: string
+          phone: string | null
+          priority: string | null
+          resolved_at: string | null
+          source_page: string | null
+          status: string | null
+          subject: string | null
+          updated_at: string
+          utm_data: Json | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          company?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          inquiry_type?: string | null
+          message: string
+          metadata?: Json | null
+          name: string
+          phone?: string | null
+          priority?: string | null
+          resolved_at?: string | null
+          source_page?: string | null
+          status?: string | null
+          subject?: string | null
+          updated_at?: string
+          utm_data?: Json | null
+        }
+        Update: {
+          assigned_to?: string | null
+          company?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          inquiry_type?: string | null
+          message?: string
+          metadata?: Json | null
+          name?: string
+          phone?: string | null
+          priority?: string | null
+          resolved_at?: string | null
+          source_page?: string | null
+          status?: string | null
+          subject?: string | null
+          updated_at?: string
+          utm_data?: Json | null
+        }
+        Relationships: []
+      }
+      demo_requests: {
+        Row: {
+          company: string
+          company_size: string | null
+          created_at: string
+          demo_type: string | null
+          demo_url: string | null
+          email: string
+          first_name: string
+          follow_up_date: string | null
+          id: string
+          industry: string | null
+          job_title: string | null
+          last_name: string
+          meeting_notes: string | null
+          outcome: string | null
+          phone: string | null
+          preferred_date: string | null
+          preferred_time: string | null
+          sales_rep: string | null
+          scheduled_date: string | null
+          status: string | null
+          timezone: string | null
+          updated_at: string
+          use_case: string | null
+        }
+        Insert: {
+          company: string
+          company_size?: string | null
+          created_at?: string
+          demo_type?: string | null
+          demo_url?: string | null
+          email: string
+          first_name: string
+          follow_up_date?: string | null
+          id?: string
+          industry?: string | null
+          job_title?: string | null
+          last_name: string
+          meeting_notes?: string | null
+          outcome?: string | null
+          phone?: string | null
+          preferred_date?: string | null
+          preferred_time?: string | null
+          sales_rep?: string | null
+          scheduled_date?: string | null
+          status?: string | null
+          timezone?: string | null
+          updated_at?: string
+          use_case?: string | null
+        }
+        Update: {
+          company?: string
+          company_size?: string | null
+          created_at?: string
+          demo_type?: string | null
+          demo_url?: string | null
+          email?: string
+          first_name?: string
+          follow_up_date?: string | null
+          id?: string
+          industry?: string | null
+          job_title?: string | null
+          last_name?: string
+          meeting_notes?: string | null
+          outcome?: string | null
+          phone?: string | null
+          preferred_date?: string | null
+          preferred_time?: string | null
+          sales_rep?: string | null
+          scheduled_date?: string | null
+          status?: string | null
+          timezone?: string | null
+          updated_at?: string
+          use_case?: string | null
+        }
+        Relationships: []
+      }
       habit_logs: {
         Row: {
           completed_at: string
@@ -160,6 +298,141 @@ export type Database = {
           target_frequency?: number
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          campaign: string | null
+          company: string | null
+          company_size: string | null
+          conversion_date: string | null
+          created_at: string
+          email: string
+          first_name: string | null
+          id: string
+          industry: string | null
+          ip_address: unknown | null
+          job_title: string | null
+          last_contacted_at: string | null
+          last_name: string | null
+          lead_score: number | null
+          notes: string | null
+          page_url: string | null
+          phone: string | null
+          referrer: string | null
+          source: string
+          status: string | null
+          updated_at: string
+          user_agent: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+        }
+        Insert: {
+          campaign?: string | null
+          company?: string | null
+          company_size?: string | null
+          conversion_date?: string | null
+          created_at?: string
+          email: string
+          first_name?: string | null
+          id?: string
+          industry?: string | null
+          ip_address?: unknown | null
+          job_title?: string | null
+          last_contacted_at?: string | null
+          last_name?: string | null
+          lead_score?: number | null
+          notes?: string | null
+          page_url?: string | null
+          phone?: string | null
+          referrer?: string | null
+          source: string
+          status?: string | null
+          updated_at?: string
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Update: {
+          campaign?: string | null
+          company?: string | null
+          company_size?: string | null
+          conversion_date?: string | null
+          created_at?: string
+          email?: string
+          first_name?: string | null
+          id?: string
+          industry?: string | null
+          ip_address?: unknown | null
+          job_title?: string | null
+          last_contacted_at?: string | null
+          last_name?: string | null
+          lead_score?: number | null
+          notes?: string | null
+          page_url?: string | null
+          phone?: string | null
+          referrer?: string | null
+          source?: string
+          status?: string | null
+          updated_at?: string
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Relationships: []
+      }
+      newsletter_subscriptions: {
+        Row: {
+          confirmed_at: string | null
+          created_at: string
+          email: string
+          first_name: string | null
+          id: string
+          interests: Json | null
+          last_name: string | null
+          preferences: Json | null
+          status: string | null
+          subscription_source: string | null
+          unsubscribed_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          confirmed_at?: string | null
+          created_at?: string
+          email: string
+          first_name?: string | null
+          id?: string
+          interests?: Json | null
+          last_name?: string | null
+          preferences?: Json | null
+          status?: string | null
+          subscription_source?: string | null
+          unsubscribed_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          confirmed_at?: string | null
+          created_at?: string
+          email?: string
+          first_name?: string | null
+          id?: string
+          interests?: Json | null
+          last_name?: string | null
+          preferences?: Json | null
+          status?: string | null
+          subscription_source?: string | null
+          unsubscribed_at?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -409,6 +682,138 @@ export type Database = {
           user_id?: string
           user_navigation_order?: Json | null
           workspace_id?: string | null
+        }
+        Relationships: []
+      }
+      website_analytics: {
+        Row: {
+          browser: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          device_type: string | null
+          event_data: Json | null
+          event_name: string
+          id: string
+          ip_address: unknown | null
+          os: string | null
+          page_url: string | null
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          event_data?: Json | null
+          event_name: string
+          id?: string
+          ip_address?: unknown | null
+          os?: string | null
+          page_url?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          event_data?: Json | null
+          event_name?: string
+          id?: string
+          ip_address?: unknown | null
+          os?: string | null
+          page_url?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
+      website_content: {
+        Row: {
+          author: string | null
+          category: string | null
+          content: string | null
+          content_type: string
+          created_at: string
+          excerpt: string | null
+          featured_image: string | null
+          id: string
+          language: string | null
+          meta_description: string | null
+          meta_title: string | null
+          published_at: string | null
+          reading_time: number | null
+          seo_keywords: Json | null
+          slug: string
+          status: string | null
+          tags: Json | null
+          title: string
+          updated_at: string
+          view_count: number | null
+        }
+        Insert: {
+          author?: string | null
+          category?: string | null
+          content?: string | null
+          content_type: string
+          created_at?: string
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          language?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
+          published_at?: string | null
+          reading_time?: number | null
+          seo_keywords?: Json | null
+          slug: string
+          status?: string | null
+          tags?: Json | null
+          title: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Update: {
+          author?: string | null
+          category?: string | null
+          content?: string | null
+          content_type?: string
+          created_at?: string
+          excerpt?: string | null
+          featured_image?: string | null
+          id?: string
+          language?: string | null
+          meta_description?: string | null
+          meta_title?: string | null
+          published_at?: string | null
+          reading_time?: number | null
+          seo_keywords?: Json | null
+          slug?: string
+          status?: string | null
+          tags?: Json | null
+          title?: string
+          updated_at?: string
+          view_count?: number | null
         }
         Relationships: []
       }
