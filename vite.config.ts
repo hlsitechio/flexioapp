@@ -10,7 +10,6 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     // Add security headers for development  
     headers: {
-      'X-Frame-Options': 'SAMEORIGIN',
       'X-Content-Type-Options': 'nosniff',
       'X-XSS-Protection': '1; mode=block',
     },
