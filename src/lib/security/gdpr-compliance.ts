@@ -195,9 +195,9 @@ class GDPRCompliance {
     // Handle form submission
     document.getElementById('gdpr-form')?.addEventListener('submit', (e) => {
       e.preventDefault();
-      const functional = (document.getElementById('functional') as HTMLInputElement).checked;
-      const analytics = (document.getElementById('analytics') as HTMLInputElement).checked;
-      const marketing = (document.getElementById('marketing') as HTMLInputElement).checked;
+      const functional = Boolean((document.getElementById('functional') as HTMLInputElement)?.checked);
+      const analytics = Boolean((document.getElementById('analytics') as HTMLInputElement)?.checked);
+      const marketing = Boolean((document.getElementById('marketing') as HTMLInputElement)?.checked);
 
       this.recordConsent({
         analytics,
@@ -266,7 +266,7 @@ class GDPRCompliance {
   }
 
   public hasConsent(type: keyof Omit<GDPRConsent, 'timestamp' | 'version' | 'userAgent'>): boolean {
-    return this.consent?.[type] || false;
+    return Boolean(this.consent?.[type]) || false;
   }
 
   public getConsent(): GDPRConsent | null {

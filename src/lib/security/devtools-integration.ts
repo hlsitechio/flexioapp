@@ -1,6 +1,6 @@
 import { cspMonitor, type SecurityReport, type SecurityAuditResult } from './csp-monitor';
 import { gdprCompliance, type PrivacyReport } from './gdpr-compliance';
-import { config, featureFlags } from '@/config';
+const isDevelopment = import.meta.env.DEV;
 
 export interface DevToolsSecurityPanel {
   name: string;
@@ -40,7 +40,7 @@ class DevToolsIntegration {
   private isInitialized = false;
 
   constructor() {
-    if (config.features.enableDebugTools) {
+    if (isDevelopment) {
       this.initialize();
     }
   }

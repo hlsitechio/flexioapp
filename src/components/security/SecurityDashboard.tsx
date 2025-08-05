@@ -4,31 +4,64 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { AlertTriangle, Shield, Lock, Eye, Download, RefreshCw } from 'lucide-react';
-import { securityMonitoring, cspMonitor, gdprCompliance, type SecurityDashboard as SecurityDashboardType } from '@/lib/security';
+
+// Import security modules directly to avoid export issues
+const getSecurityModules = async () => {
+  const { securityMonitoring } = await import('@/lib/security/enhanced-monitoring');
+  const { cspMonitor } = await import('@/lib/security/csp-monitor');
+  const { gdprCompliance } = await import('@/lib/security/gdpr-compliance');
+  return { securityMonitoring, cspMonitor, gdprCompliance };
+};
+
+type SecurityDashboardType = {
+  score: number;
+  alerts: any[];
+  recentEvents: any[];
+  trends: {
+    violationsLast24h: number;
+    alertsLast7d: number;
+    securityIncidents: number;
+  };
+  recommendations: string[];
+};
 
 export function SecurityDashboard() {
   const [dashboard, setDashboard] = useState<SecurityDashboardType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
+  const [securityModules, setSecurityModules] = useState<any>(null);
 
   useEffect(() => {
-    loadDashboard();
-    
-    // Set up periodic updates
-    const interval = setInterval(loadDashboard, 30000); // Update every 30 seconds
-    
-    // Listen for security events
-    window.addEventListener('security-event', loadDashboard);
-    
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener('security-event', loadDashboard);
-    };
+    initializeModules();
   }, []);
 
-  const loadDashboard = async () => {
+  const initializeModules = async () => {
     try {
-      const dashboardData = securityMonitoring.generateDashboard();
+      const modules = await getSecurityModules();
+      setSecurityModules(modules);
+      loadDashboard(modules);
+      
+      // Set up periodic updates
+      const interval = setInterval(() => loadDashboard(modules), 30000);
+      
+      // Listen for security events
+      window.addEventListener('security-event', () => loadDashboard(modules));
+      
+      return () => {
+        clearInterval(interval);
+        window.removeEventListener('security-event', () => loadDashboard(modules));
+      };
+    } catch (error) {
+      console.error('Failed to initialize security modules:', error);
+      setIsLoading(false);
+    }
+  };
+
+  const loadDashboard = async (modules = securityModules) => {
+    if (!modules) return;
+    
+    try {
+      const dashboardData = modules.securityMonitoring.generateDashboard();
       setDashboard(dashboardData);
       setLastUpdate(new Date());
     } catch (error) {
@@ -39,9 +72,11 @@ export function SecurityDashboard() {
   };
 
   const runSecurityAudit = async () => {
+    if (!securityModules) return;
+    
     setIsLoading(true);
     try {
-      await cspMonitor.performSecurityAudit();
+      await securityModules.cspMonitor.performSecurityAudit();
       await loadDashboard();
     } catch (error) {
       console.error('Security audit failed:', error);
@@ -51,7 +86,9 @@ export function SecurityDashboard() {
   };
 
   const exportReport = () => {
-    const report = securityMonitoring.exportSecurityReport();
+    if (!securityModules) return;
+    
+    const report = securityModules.securityMonitoring.exportSecurityReport();
     const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     
@@ -113,7 +150,7 @@ export function SecurityDashboard() {
           <Button
             variant="outline"
             size="sm"
-            onClick={loadDashboard}
+            onClick={() => loadDashboard()}
             disabled={isLoading}
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
@@ -164,52 +201,6 @@ export function SecurityDashboard() {
         </CardContent>
       </Card>
 
-      {/* Alerts */}
-      {dashboard.alerts.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-yellow-600" />
-              Active Alerts ({dashboard.alerts.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {dashboard.alerts.slice(0, 5).map((alert) => (
-                <div
-                  key={alert.id}
-                  className="flex items-center justify-between p-3 border rounded-lg"
-                >
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <Badge variant={getSeverityColor(alert.type)}>
-                        {alert.type.replace('_', ' ').toUpperCase()}
-                      </Badge>
-                      <span className="text-sm text-muted-foreground">
-                        {alert.timestamp.toLocaleTimeString()}
-                      </span>
-                    </div>
-                    <p className="mt-1 text-sm">{alert.message}</p>
-                  </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => securityMonitoring.acknowledgeAlert(alert.id)}
-                  >
-                    Acknowledge
-                  </Button>
-                </div>
-              ))}
-              {dashboard.alerts.length > 5 && (
-                <p className="text-sm text-muted-foreground">
-                  And {dashboard.alerts.length - 5} more alerts...
-                </p>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
       {/* Security Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
@@ -259,7 +250,7 @@ export function SecurityDashboard() {
             <p className="text-muted-foreground">No recent security events.</p>
           ) : (
             <div className="space-y-3">
-              {dashboard.recentEvents.map((event) => (
+              {dashboard.recentEvents.map((event: any) => (
                 <div
                   key={event.id}
                   className="flex items-center justify-between p-3 border rounded-lg"
@@ -306,67 +297,6 @@ export function SecurityDashboard() {
           </CardContent>
         </Card>
       )}
-
-      {/* GDPR Status */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Lock className="h-5 w-5" />
-            GDPR Compliance Status
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {(() => {
-              const consent = gdprCompliance.getConsent();
-              const report = gdprCompliance.generatePrivacyReport();
-              
-              return (
-                <>
-                  <div className="flex items-center justify-between">
-                    <span>Consent Status</span>
-                    <Badge variant={consent ? 'default' : 'destructive'}>
-                      {consent ? 'Valid' : 'Missing'}
-                    </Badge>
-                  </div>
-                  
-                  {consent && (
-                    <>
-                      <div className="flex items-center justify-between">
-                        <span>Consent Date</span>
-                        <span className="text-sm text-muted-foreground">
-                          {consent.timestamp.toLocaleDateString()}
-                        </span>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <span>Analytics Consent</span>
-                        <Badge variant={consent.analytics ? 'default' : 'secondary'}>
-                          {consent.analytics ? 'Granted' : 'Denied'}
-                        </Badge>
-                      </div>
-                      
-                      <div className="flex items-center justify-between">
-                        <span>Marketing Consent</span>
-                        <Badge variant={consent.marketing ? 'default' : 'secondary'}>
-                          {consent.marketing ? 'Granted' : 'Denied'}
-                        </Badge>
-                      </div>
-                    </>
-                  )}
-                  
-                  <div className="flex items-center justify-between">
-                    <span>Data Processing Records</span>
-                    <span className="text-sm text-muted-foreground">
-                      {report.processingRecords.length} records
-                    </span>
-                  </div>
-                </>
-              );
-            })()}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

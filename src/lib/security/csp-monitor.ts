@@ -1,4 +1,4 @@
-import { config, featureFlags } from '@/config';
+const isDevelopment = import.meta.env.DEV;
 
 export interface CSPViolation {
   documentURI: string;
@@ -63,7 +63,7 @@ class CSPMonitor {
   }
 
   private initializeDevToolsIntegration() {
-    if (config.features.enableDebugTools && typeof window !== 'undefined') {
+    if (isDevelopment && typeof window !== 'undefined') {
       // Create DevTools extension integration
       (window as any).__SECURITY_MONITOR__ = {
         getViolations: () => this.violations,
@@ -84,7 +84,7 @@ class CSPMonitor {
     this.metrics.cspViolations.push(violation);
 
     // Log in development
-    if (config.features.enableDebugTools) {
+    if (isDevelopment) {
       console.warn('CSP Violation:', violation);
       this.suggestCSPFix(violation);
     }

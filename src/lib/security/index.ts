@@ -11,7 +11,7 @@ import { cspMonitor } from './csp-monitor';
 import { gdprCompliance } from './gdpr-compliance';
 import { devToolsIntegration } from './devtools-integration';
 import { securityMonitoring } from './enhanced-monitoring';
-import { config } from '@/config';
+const isDevelopment = import.meta.env.DEV;
 
 /**
  * Initialize the complete security suite with Chrome DevTools integration
@@ -25,7 +25,7 @@ export function initializeSecuritySuite() {
     securityMonitoring.startMonitoring();
     
     // Initialize DevTools integration if enabled
-    if (config.features.enableDebugTools) {
+    if (isDevelopment) {
       console.log('%c🛠️ DevTools Security Integration Active', 'color: #3b82f6; font-weight: bold;');
     }
     
@@ -70,7 +70,7 @@ export function initializeSecuritySuite() {
     console.log('%c✅ Security Suite Initialized Successfully', 'color: #10b981; font-weight: bold;');
     
     // Log available tools for developers
-    if (config.features.enableDebugTools) {
+    if (isDevelopment) {
       setTimeout(() => {
         console.log(`
 %c🔒 Security DevTools Available:
@@ -221,7 +221,7 @@ export function getSecurityStatus() {
       dashboard: securityMonitoring.generateDashboard()
     },
     devtools: {
-      enabled: config.features.enableDebugTools,
+      enabled: isDevelopment,
       panels: devToolsIntegration.getPanels().length
     }
   };

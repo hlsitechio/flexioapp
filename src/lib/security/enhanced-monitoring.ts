@@ -1,6 +1,6 @@
 import { cspMonitor } from './csp-monitor';
 import { gdprCompliance } from './gdpr-compliance';
-import { config, featureFlags } from '@/config';
+const isDevelopment = import.meta.env.DEV;
 
 export interface SecurityEvent {
   id: string;
@@ -205,13 +205,16 @@ class EnhancedSecurityMonitoring {
   }
 
   private setupServiceWorkerMonitoring() {
-    navigator.serviceWorker.ready.then((registration) => {
-      registration.addEventListener('message', (event) => {
-        if (event.data?.type === 'SECURITY_EVENT') {
-          this.recordEvent(event.data.event);
-        }
+    // Monitor for performance-based security issues
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.addEventListener('message', (event: MessageEvent) => {
+          if (event.data?.type === 'SECURITY_EVENT') {
+            this.recordEvent(event.data.event);
+          }
+        });
       });
-    });
+    }
   }
 
   private setupPerformanceMonitoring() {
@@ -285,7 +288,7 @@ class EnhancedSecurityMonitoring {
   }
 
   private exposeDevToolsInterface() {
-    if (config.features.enableDebugTools) {
+    if (isDevelopment) {
       (window as any).__SECURITY_MONITORING__ = {
         getEvents: () => this.events,
         getAlerts: () => this.alerts,
@@ -314,7 +317,7 @@ class EnhancedSecurityMonitoring {
     }
 
     // Log to console in development
-    if (config.features.enableDebugTools) {
+    if (isDevelopment) {
       console.warn(`🚨 Security Event [${event.severity.toUpperCase()}]:`, event);
     }
 
