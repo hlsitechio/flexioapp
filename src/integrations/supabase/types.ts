@@ -956,6 +956,7 @@ export type Database = {
       }
       workspaces: {
         Row: {
+          archived_at: string | null
           created_at: string
           id: string
           name: string
@@ -963,6 +964,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          archived_at?: string | null
           created_at?: string
           id?: string
           name?: string
@@ -970,6 +972,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          archived_at?: string | null
           created_at?: string
           id?: string
           name?: string
@@ -983,6 +986,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      archive_workspace: {
+        Args: { _workspace_id: string }
+        Returns: undefined
+      }
+      cleanup_archived_workspaces: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      get_user_by_id: {
+        Args: { _user_id: string }
+        Returns: {
+          id: string
+          email: string
+          created_at: string
+        }[]
+      }
       get_user_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]
@@ -993,6 +1012,10 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
         }
         Returns: boolean
+      }
+      restore_workspace: {
+        Args: { _workspace_id: string }
+        Returns: undefined
       }
     }
     Enums: {

@@ -12,7 +12,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Crown, Users, Settings, Database, Eye, UserCheck, Trash2, Plus, Bug, Monitor, MessageSquare, Link, Globe } from 'lucide-react';
+import { Crown, Users, Settings, Database, Eye, UserCheck, Trash2, Plus, Bug, Monitor, MessageSquare, Link, Globe, Archive, RotateCcw, Copy } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 interface User {
   id: string;
@@ -34,6 +36,18 @@ interface UserWorkspace {
   workspace_number?: number;
   role?: string;
   urlFormat?: string;
+  archived_at?: string | null;
+}
+
+interface ArchivedWorkspace {
+  id: string;
+  name: string;
+  created_at: string;
+  archived_at: string;
+  user_id: string;
+  profiles_count: number;
+  role?: string;
+  urlFormat?: string;
 }
 
 interface WorkspaceProfile {
@@ -53,6 +67,7 @@ export default function AdminDashboard() {
   
   const [users, setUsers] = useState<User[]>([]);
   const [workspaces, setWorkspaces] = useState<UserWorkspace[]>([]);
+  const [archivedWorkspaces, setArchivedWorkspaces] = useState<ArchivedWorkspace[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedWorkspace, setSelectedWorkspace] = useState<UserWorkspace | null>(null);
   const [workspaceProfiles, setWorkspaceProfiles] = useState<WorkspaceProfile[]>([]);
@@ -61,6 +76,8 @@ export default function AdminDashboard() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [debugMode, setDebugMode] = useState(false);
   const [realtimeUsers, setRealtimeUsers] = useState<any[]>([]);
+  const [newWorkspaceName, setNewWorkspaceName] = useState('');
+  const [selectedUserForWorkspace, setSelectedUserForWorkspace] = useState<string>('');
 
   // Check if current user is admin via database
   useEffect(() => {
@@ -87,6 +104,7 @@ export default function AdminDashboard() {
     if (isAdmin) {
       loadUsers();
       loadAllWorkspaces();
+      loadArchivedWorkspaces();
     }
   }, [isAdmin]);
 
@@ -616,6 +634,156 @@ export default function AdminDashboard() {
     }
   };
 
+  const loadArchivedWorkspaces = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('workspaces')
+        .select(`
+          id,
+          name,
+          created_at,
+          archived_at,
+          user_id,
+          workspace_profiles (count)
+        `)
+        .not('archived_at', 'is', null)
+        .order('archived_at', { ascending: false });
+
+      if (error) throw error;
+
+      // Get user roles for workspace URL formatting
+      const { data: roles, error: rolesError } = await supabase
+        .from('user_roles')
+        .select('user_id, role');
+
+      if (rolesError) throw rolesError;
+
+      const archivedData = data?.map(workspace => {
+        const userRole = roles?.find(r => r.user_id === workspace.user_id)?.role || 'free';
+        return {
+          id: workspace.id,
+          name: workspace.name,
+          created_at: workspace.created_at,
+          archived_at: workspace.archived_at!,
+          user_id: workspace.user_id,
+          profiles_count: workspace.workspace_profiles?.[0]?.count || 0,
+          role: userRole
+        };
+      }) || [];
+
+      setArchivedWorkspaces(archivedData);
+    } catch (error) {
+      console.error('Error loading archived workspaces:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load archived workspaces.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const archiveWorkspace = async (workspaceId: string) => {
+    try {
+      const { error } = await supabase
+        .rpc('archive_workspace', { _workspace_id: workspaceId });
+
+      if (error) throw error;
+
+      await loadAllWorkspaces();
+      await loadArchivedWorkspaces();
+      
+      toast({
+        title: "Success",
+        description: "Workspace archived successfully. It can be restored within 30 days.",
+      });
+    } catch (error) {
+      console.error('Error archiving workspace:', error);
+      toast({
+        title: "Error",
+        description: "Failed to archive workspace.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const restoreWorkspace = async (workspaceId: string) => {
+    try {
+      const { error } = await supabase
+        .rpc('restore_workspace', { _workspace_id: workspaceId });
+
+      if (error) throw error;
+
+      await loadAllWorkspaces();
+      await loadArchivedWorkspaces();
+      
+      toast({
+        title: "Success",
+        description: "Workspace restored successfully.",
+      });
+    } catch (error) {
+      console.error('Error restoring workspace:', error);
+      toast({
+        title: "Error",
+        description: "Failed to restore workspace.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const createWorkspaceForUser = async () => {
+    if (!selectedUserForWorkspace || !newWorkspaceName) {
+      toast({
+        title: "Missing Information",
+        description: "Please select a user and enter a workspace name.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('workspaces')
+        .insert({
+          name: newWorkspaceName,
+          user_id: selectedUserForWorkspace
+        });
+
+      if (error) throw error;
+
+      await loadAllWorkspaces();
+      setNewWorkspaceName('');
+      setSelectedUserForWorkspace('');
+      
+      toast({
+        title: "Success",
+        description: `Workspace "${newWorkspaceName}" created for user.`,
+      });
+    } catch (error) {
+      console.error('Error creating workspace:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create workspace.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const copyUserId = async (userId: string) => {
+    try {
+      await navigator.clipboard.writeText(userId);
+      toast({
+        title: "Copied!",
+        description: "User ID copied to clipboard.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to copy user ID.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const filteredUsers = users.filter(user =>
     user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.profile?.full_name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -687,6 +855,10 @@ export default function AdminDashboard() {
             <Database className="h-4 w-4" />
             Workspaces
           </TabsTrigger>
+          <TabsTrigger value="archives" className="flex items-center gap-2">
+            <Archive className="h-4 w-4" />
+            Archives
+          </TabsTrigger>
           <TabsTrigger value="templates" className="flex items-center gap-2">
             <Settings className="h-4 w-4" />
             Templates
@@ -702,7 +874,54 @@ export default function AdminDashboard() {
         <TabsContent value="users" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>User Management</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle>User Management</CardTitle>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Create Workspace for User
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Create Workspace for Specific User</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="user-select">Select User</Label>
+                        <Select value={selectedUserForWorkspace} onValueChange={setSelectedUserForWorkspace}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose a user..." />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {users.map((user) => (
+                              <SelectItem key={user.id} value={user.id}>
+                                <div className="flex flex-col">
+                                  <span>{user.profile?.full_name || 'Unnamed User'}</span>
+                                  <span className="text-xs text-muted-foreground">ID: {user.id}</span>
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div>
+                        <Label htmlFor="workspace-name">Workspace Name</Label>
+                        <Input
+                          id="workspace-name"
+                          value={newWorkspaceName}
+                          onChange={(e) => setNewWorkspaceName(e.target.value)}
+                          placeholder="Enter workspace name..."
+                        />
+                      </div>
+                      <Button onClick={createWorkspaceForUser} className="w-full">
+                        Create Workspace
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
               <Input
                 placeholder="Search users..."
                 value={searchTerm}
@@ -715,9 +934,9 @@ export default function AdminDashboard() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>User</TableHead>
+                    <TableHead>Full User ID</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Created</TableHead>
-                    <TableHead>Last Sign In</TableHead>
                     <TableHead>Role</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
@@ -731,16 +950,27 @@ export default function AdminDashboard() {
                             {user.profile?.full_name || 'Unnamed User'}
                           </div>
                           <div className="text-sm text-muted-foreground">
-                            ID: {user.id.slice(0, 8)}...
+                            {user.email}
                           </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <code className="text-xs bg-muted px-2 py-1 rounded font-mono">
+                            {user.id}
+                          </code>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => copyUserId(user.id)}
+                          >
+                            <Copy className="h-3 w-3" />
+                          </Button>
                         </div>
                       </TableCell>
                       <TableCell>{user.email}</TableCell>
                       <TableCell>
                         {new Date(user.created_at).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        {user.last_sign_in_at ? new Date(user.last_sign_in_at).toLocaleDateString() : 'Never'}
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
@@ -871,6 +1101,33 @@ export default function AdminDashboard() {
                                 Add Demo Templates
                               </Button>
                             )}
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-orange-600 hover:text-orange-700"
+                                >
+                                  <Archive className="h-4 w-4 mr-2" />
+                                  Archive
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Archive Workspace</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Are you sure you want to archive "{workspace.name}"? 
+                                    The workspace will be hidden from users but can be restored within 30 days.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction onClick={() => archiveWorkspace(workspace.id)}>
+                                    Archive Workspace
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
                           </div>
                         </TableCell>
                       </TableRow>
@@ -947,6 +1204,146 @@ export default function AdminDashboard() {
               </CardContent>
             </Card>
           )}
+        </TabsContent>
+
+        <TabsContent value="archives" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Archive className="h-5 w-5" />
+                Archived Workspaces
+                <Badge variant="outline" className="ml-2">
+                  30-Day Recovery
+                </Badge>
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Workspaces archived by users or admins. They can be restored within 30 days before permanent deletion.
+              </p>
+            </CardHeader>
+            <CardContent>
+              {archivedWorkspaces.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <Archive className="mx-auto h-12 w-12 mb-4 opacity-50" />
+                  <h3 className="text-lg font-semibold mb-2">No Archived Workspaces</h3>
+                  <p>When workspaces are deleted, they'll appear here for 30 days recovery period.</p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Workspace Name</TableHead>
+                      <TableHead>Owner</TableHead>
+                      <TableHead>Archived Date</TableHead>
+                      <TableHead>Days Remaining</TableHead>
+                      <TableHead>Profiles</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {archivedWorkspaces.map((workspace) => {
+                      const owner = users.find(u => u.id === workspace.user_id);
+                      const archivedDate = new Date(workspace.archived_at);
+                      const daysRemaining = Math.max(0, 30 - Math.floor((Date.now() - archivedDate.getTime()) / (1000 * 60 * 60 * 24)));
+                      
+                      return (
+                        <TableRow key={workspace.id}>
+                          <TableCell className="font-medium">{workspace.name}</TableCell>
+                          <TableCell>
+                            <div>
+                              <div className="font-medium">
+                                {owner?.profile?.full_name || 'Unknown User'}
+                              </div>
+                              <div className="text-sm text-muted-foreground">
+                                {owner?.email || workspace.user_id.slice(0, 8) + '...'}
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            {archivedDate.toLocaleDateString()}
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant={daysRemaining > 7 ? 'secondary' : daysRemaining > 3 ? 'outline' : 'destructive'}>
+                              {daysRemaining} days left
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <Badge variant="secondary">
+                              {workspace.profiles_count} profiles
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => restoreWorkspace(workspace.id)}
+                                className="text-green-600 hover:text-green-700"
+                              >
+                                <RotateCcw className="h-4 w-4 mr-2" />
+                                Restore
+                              </Button>
+                              <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="text-destructive hover:text-destructive"
+                                  >
+                                    <Trash2 className="h-4 w-4 mr-2" />
+                                    Delete Permanently
+                                  </Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                  <AlertDialogHeader>
+                                    <AlertDialogTitle>Permanently Delete Workspace</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      Are you sure you want to permanently delete "{workspace.name}"? 
+                                      This action cannot be undone and all data will be lost forever.
+                                    </AlertDialogDescription>
+                                  </AlertDialogHeader>
+                                  <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction 
+                                      onClick={async () => {
+                                        try {
+                                          const { error } = await supabase
+                                            .from('workspaces')
+                                            .delete()
+                                            .eq('id', workspace.id);
+                                          
+                                          if (error) throw error;
+                                          
+                                          await loadArchivedWorkspaces();
+                                          toast({
+                                            title: "Success",
+                                            description: "Workspace permanently deleted.",
+                                          });
+                                        } catch (error) {
+                                          console.error('Error deleting workspace:', error);
+                                          toast({
+                                            title: "Error",
+                                            description: "Failed to delete workspace.",
+                                            variant: "destructive",
+                                          });
+                                        }
+                                      }}
+                                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                    >
+                                      Delete Forever
+                                    </AlertDialogAction>
+                                  </AlertDialogFooter>
+                                </AlertDialogContent>
+                              </AlertDialog>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="templates" className="space-y-6">
