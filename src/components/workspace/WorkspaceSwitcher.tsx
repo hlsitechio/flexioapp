@@ -1,5 +1,7 @@
+
 import React, { useState } from 'react';
 import { useWorkspaceProfile } from '@/contexts/WorkspaceProfileContext';
+import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -23,7 +25,9 @@ import {
   Folder, 
   Settings as SettingsIcon,
   Star,
-  Check
+  Check,
+  Crown,
+  Zap
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -32,6 +36,20 @@ const categoryIcons = {
   personal: Heart,
   fun: Folder,
   default: SettingsIcon,
+};
+
+const roleIcons = {
+  free: SettingsIcon,
+  pro: Zap,
+  premium: Crown,
+  admin: Crown,
+};
+
+const roleColors = {
+  free: 'text-muted-foreground',
+  pro: 'text-blue-500',
+  premium: 'text-purple-500',
+  admin: 'text-red-500',
 };
 
 export function WorkspaceSwitcher() {
@@ -43,6 +61,7 @@ export function WorkspaceSwitcher() {
     switchToProfile,
   } = useWorkspaceProfile();
 
+  const { userRole, getWorkspaceNumber } = useWorkspace();
   const { toast } = useToast();
   
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -54,6 +73,16 @@ export function WorkspaceSwitcher() {
       toast({
         title: "Error",
         description: "Profile name is required.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Check if free user already has profiles
+    if (userRole === 'free' && profiles.length >= 1) {
+      toast({
+        title: "Upgrade Required",
+        description: "Free users can only have one workspace profile. Upgrade to Pro or Premium for multiple profiles.",
         variant: "destructive",
       });
       return;
@@ -82,6 +111,7 @@ export function WorkspaceSwitcher() {
   }
 
   const CurrentIcon = categoryIcons[currentProfile.category as keyof typeof categoryIcons];
+  const RoleIcon = roleIcons[userRole];
   
   // Sort profiles to get consistent numbering
   const sortedProfiles = [...profiles].sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
@@ -100,10 +130,11 @@ export function WorkspaceSwitcher() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="flex items-center gap-2 min-w-[180px] justify-between">
+          <Button variant="outline" size="sm" className="flex items-center gap-2 min-w-[200px] justify-between">
             <div className="flex items-center gap-2">
               <CurrentIcon className="h-4 w-4" />
               <span className="truncate">#{currentWorkspaceNumber} {currentProfile.name}</span>
+              <RoleIcon className={`h-3 w-3 ${roleColors[userRole]}`} />
               {currentProfile.is_default && (
                 <Star className="h-3 w-3 text-primary" />
               )}
@@ -111,8 +142,13 @@ export function WorkspaceSwitcher() {
             <ChevronDown className="h-4 w-4 opacity-50" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[240px]">
-          <DropdownMenuLabel>Switch Workspace</DropdownMenuLabel>
+        <DropdownMenuContent align="end" className="w-[260px]">
+          <DropdownMenuLabel className="flex items-center gap-2">
+            Switch Workspace
+            <Badge variant="secondary" className={`text-xs ${roleColors[userRole]}`}>
+              {userRole.toUpperCase()}
+            </Badge>
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           
           {Object.entries(groupedProfiles).map(([category, categoryProfiles]) => {
@@ -156,6 +192,9 @@ export function WorkspaceSwitcher() {
           <DropdownMenuItem onClick={() => setIsCreateDialogOpen(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Create New Profile
+            {userRole === 'free' && profiles.length >= 1 && (
+              <Crown className="h-3 w-3 ml-1 text-muted-foreground" />
+            )}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -166,53 +205,67 @@ export function WorkspaceSwitcher() {
           <DialogHeader>
             <DialogTitle>Create New Workspace Profile</DialogTitle>
             <DialogDescription>
-              Create a new profile to save your current dashboard configuration.
+              {userRole === 'free' && profiles.length >= 1 
+                ? "Free users can only have one workspace profile. Upgrade to Pro or Premium for multiple profiles."
+                : "Create a new profile to save your current dashboard configuration."
+              }
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="profileName">Profile Name</Label>
-              <Input
-                id="profileName"
-                value={newProfileName}
-                onChange={(e) => setNewProfileName(e.target.value)}
-                placeholder="Enter profile name..."
-              />
+          {userRole !== 'free' || profiles.length === 0 ? (
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="profileName">Profile Name</Label>
+                <Input
+                  id="profileName"
+                  value={newProfileName}
+                  onChange={(e) => setNewProfileName(e.target.value)}
+                  placeholder="Enter profile name..."
+                />
+              </div>
+              <div>
+                <Label htmlFor="profileCategory">Category</Label>
+                <Select value={newProfileCategory} onValueChange={(value: any) => setNewProfileCategory(value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="work">
+                      <div className="flex items-center gap-2">
+                        <Briefcase className="h-4 w-4" />
+                        Work
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="personal">
+                      <div className="flex items-center gap-2">
+                        <Heart className="h-4 w-4" />
+                        Personal
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="fun">
+                      <div className="flex items-center gap-2">
+                        <Folder className="h-4 w-4" />
+                        Fun
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <div>
-              <Label htmlFor="profileCategory">Category</Label>
-              <Select value={newProfileCategory} onValueChange={(value: any) => setNewProfileCategory(value)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="work">
-                    <div className="flex items-center gap-2">
-                      <Briefcase className="h-4 w-4" />
-                      Work
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="personal">
-                    <div className="flex items-center gap-2">
-                      <Heart className="h-4 w-4" />
-                      Personal
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="fun">
-                    <div className="flex items-center gap-2">
-                      <Folder className="h-4 w-4" />
-                      Fun
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+          ) : (
+            <div className="text-center py-4">
+              <Crown className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">
+                Upgrade your account to create multiple workspace profiles and unlock advanced features.
+              </p>
             </div>
-          </div>
+          )}
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={handleCreateProfile}>Create & Switch</Button>
+            {(userRole !== 'free' || profiles.length === 0) && (
+              <Button onClick={handleCreateProfile}>Create & Switch</Button>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './AuthContext';
@@ -14,10 +15,12 @@ interface Workspace {
 interface WorkspaceContextType {
   workspace: Workspace | null;
   workspaces: Workspace[];
+  userRole: 'free' | 'pro' | 'premium' | 'admin';
   loading: boolean;
   createWorkspace: (name: string) => Promise<Workspace | null>;
   selectWorkspace: (workspaceId: string) => Promise<void>;
   getWorkspaceNumber: (workspaceId: string) => number;
+  getUserRole: () => Promise<'free' | 'pro' | 'premium' | 'admin'>;
 }
 
 const WorkspaceContext = createContext<WorkspaceContextType | undefined>(undefined);
@@ -27,6 +30,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
+  const [userRole, setUserRole] = useState<'free' | 'pro' | 'premium' | 'admin'>('free');
   const [loading, setLoading] = useState(false);
 
   // Load or create workspace when user authenticates
@@ -35,14 +39,39 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       initializeUserWorkspace();
     } else {
       setWorkspace(null);
+      setUserRole('free');
     }
   }, [user]);
+
+  const getUserRole = async (): Promise<'free' | 'pro' | 'premium' | 'admin'> => {
+    if (!user) return 'free';
+
+    try {
+      const { data, error } = await supabase.rpc('get_user_role', {
+        _user_id: user.id
+      });
+
+      if (error) {
+        console.error('Error getting user role:', error);
+        return 'free';
+      }
+
+      return data || 'free';
+    } catch (error) {
+      console.error('Error fetching user role:', error);
+      return 'free';
+    }
+  };
 
   const initializeUserWorkspace = async () => {
     if (!user) return;
     
     setLoading(true);
     try {
+      // First get the user's role
+      const role = await getUserRole();
+      setUserRole(role);
+
       // Check if user has any workspaces
       const { data: workspaces, error } = await supabase
         .from('workspaces')
@@ -61,7 +90,9 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         setWorkspace(workspaces[0]);
       } else {
         // New user - create default workspace
-        const newWorkspace = await createWorkspace('My Workspace');
+        // For free users, they only get one default workspace
+        const workspaceName = role === 'free' ? 'Default' : 'My Workspace';
+        const newWorkspace = await createWorkspace(workspaceName);
         if (newWorkspace) {
           setWorkspace(newWorkspace);
           toast({
@@ -80,6 +111,16 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const createWorkspace = async (name: string): Promise<Workspace | null> => {
     if (!user) return null;
 
+    // Check if free user already has a workspace
+    if (userRole === 'free' && workspaces.length >= 1) {
+      toast({
+        title: "Upgrade Required",
+        description: "Free users can only have one workspace. Upgrade to Pro or Premium for multiple workspaces.",
+        variant: "destructive",
+      });
+      return null;
+    }
+
     try {
       const { data, error } = await supabase
         .from('workspaces')
@@ -94,6 +135,10 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         console.error('Error creating workspace:', error);
         return null;
       }
+
+      // Update workspaces array
+      const updatedWorkspaces = [...workspaces, data];
+      setWorkspaces(updatedWorkspaces);
 
       return data;
     } catch (error) {
@@ -135,10 +180,12 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const value: WorkspaceContextType = {
     workspace,
     workspaces,
+    userRole,
     loading,
     createWorkspace,
     selectWorkspace,
     getWorkspaceNumber,
+    getUserRole,
   };
 
   return (

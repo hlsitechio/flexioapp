@@ -1,10 +1,11 @@
+
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useWorkspace } from '@/contexts/WorkspaceContext';
 import { useWorkspaceProfile } from '@/contexts/WorkspaceProfileContext';
 
 export function WorkspaceUrlManager() {
-  const { workspace, getWorkspaceNumber } = useWorkspace();
+  const { workspace, getWorkspaceNumber, userRole } = useWorkspace();
   const { currentProfile, profiles } = useWorkspaceProfile();
   const navigate = useNavigate();
   const location = useLocation();
@@ -16,7 +17,8 @@ export function WorkspaceUrlManager() {
     const workspaceNumber = getWorkspaceNumber(workspace.id);
     const profileName = currentProfile.name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '');
     
-    return `WRK_${workspaceNumber.toString().padStart(5, '0')}-${profileName}`;
+    // Include user role in the URL format
+    return `WRK_${workspaceNumber.toString().padStart(5, '0')}-${profileName}-${userRole}`;
   };
 
   // Handle URL redirects when workspace/profile changes
@@ -42,9 +44,9 @@ export function WorkspaceUrlManager() {
       const newPath = `/workspace/${urlSegment}${matchedOldRoute}`;
       navigate(newPath, { replace: true });
     }
-  }, [workspace, currentProfile, location.pathname, navigate]);
+  }, [workspace, currentProfile, userRole, location.pathname, navigate]);
 
-  // Update URL when profile changes (for workspace switcher)
+  // Update URL when profile or role changes
   useEffect(() => {
     if (!workspace || !currentProfile) return;
 
@@ -53,7 +55,7 @@ export function WorkspaceUrlManager() {
 
     const currentPath = location.pathname;
     
-    // If already in a workspace URL, update it with new profile
+    // If already in a workspace URL, update it with new profile/role
     const workspaceMatch = currentPath.match(/^\/workspace\/WRK_\d{5}-[^\/]+(\/.*)?$/);
     if (workspaceMatch) {
       const subPath = workspaceMatch[1] || '';
@@ -62,7 +64,7 @@ export function WorkspaceUrlManager() {
         navigate(newPath, { replace: true });
       }
     }
-  }, [currentProfile?.id, navigate, location.pathname]);
+  }, [currentProfile?.id, userRole, navigate, location.pathname]);
 
   return null;
 }

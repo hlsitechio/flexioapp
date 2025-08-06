@@ -83,7 +83,7 @@ const App = () => {
           <Route path="/auth" element={user ? <Navigate to="/workspace-selection" replace /> : <AuthPage />} />
           <Route path="/workspace-selection" element={user ? <WorkspaceSelectionPage /> : <Navigate to="/auth" replace />} />
           
-          {/* Workspace-specific routes with detailed URLs */}
+          {/* Workspace-specific routes with role-based URLs */}
           <Route path="/workspace/:workspaceDetails" element={user && workspace ? <Index /> : <Navigate to="/workspace-selection" replace />} />
           <Route path="/workspace/:workspaceDetails/profile" element={user ? <ProfilePage /> : <Navigate to="/auth" replace />} />
           <Route path="/workspace/:workspaceDetails/components" element={user ? <ComponentsPage /> : <Navigate to="/auth" replace />} />
@@ -95,7 +95,7 @@ const App = () => {
           <Route path="/workspace/:workspaceDetails/admin" element={user ? <AdminDashboard /> : <Navigate to="/auth" replace />} />
           
           {/* Legacy route redirect */}
-          <Route path="/" element={user && workspace ? <Navigate to="/workspace/WRK_00001-Default" replace /> : <Navigate to="/workspace-selection" replace />} />
+          <Route path="/" element={user && workspace ? <Navigate to="/workspace/WRK_00001-Default-free" replace /> : <Navigate to="/workspace-selection" replace />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -105,4 +105,3 @@ const App = () => {
 };
 
 export default App;
-
