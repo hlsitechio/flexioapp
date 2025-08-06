@@ -8,14 +8,21 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    // Add security headers for development  
+    // Enhanced server configuration for Vite 7
     headers: {
       'X-Content-Type-Options': 'nosniff',
       'X-XSS-Protection': '1; mode=block',
     },
+    // Improved HMR performance in Vite 7
+    hmr: {
+      overlay: true,
+    },
   },
   plugins: [
-    react(),
+    react({
+      // Enhanced React SWC plugin configuration for Vite 7
+      devTarget: 'esnext',
+    }),
     mode === 'development' &&
     componentTagger(),
   ].filter(Boolean),
@@ -25,13 +32,36 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
+    // Leverage Vite 7's improved build performance
+    target: 'esnext',
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-popover'],
+          utils: ['clsx', 'tailwind-merge', 'class-variance-authority'],
+          routing: ['react-router-dom'],
         }
       }
-    }
-  }
+    },
+    // Enable source maps for better debugging
+    sourcemap: mode === 'development',
+  },
+  // Optimized dependency pre-bundling for Vite 7
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-popover',
+      'clsx',
+      'tailwind-merge',
+    ],
+  },
+  // Enhanced ESBuild configuration for Vite 7
+  esbuild: {
+    target: 'esnext',
+    logOverride: { 'this-is-undefined-in-esm': 'silent' },
+  },
 }));
