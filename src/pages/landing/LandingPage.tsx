@@ -69,10 +69,10 @@ export function LandingPage() {
               <h1 className="text-xl font-bold">FlexIO</h1>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-foreground/60 hover:text-foreground transition-colors story-link">Product</a>
-              <a href="#" className="text-foreground/60 hover:text-foreground transition-colors story-link">Solutions</a>
-              <a href="/contact" className="text-foreground/60 hover:text-foreground transition-colors story-link">Resources</a>
-              <a href="#pricing" className="text-foreground/60 hover:text-foreground transition-colors story-link">Pricing</a>
+              <a href="/features" className="text-foreground/60 hover:text-foreground transition-colors story-link">Features</a>
+              <a href="/about" className="text-foreground/60 hover:text-foreground transition-colors story-link">About</a>
+              <a href="/contact" className="text-foreground/60 hover:text-foreground transition-colors story-link">Contact</a>
+              <a href="/documentation" className="text-foreground/60 hover:text-foreground transition-colors story-link">Docs</a>
               <Button variant="ghost" className="rounded-full" asChild>
                 <a href="/auth">Sign In</a>
               </Button>
