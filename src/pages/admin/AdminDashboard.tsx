@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Crown, Users, Settings, Database, Eye, UserCheck, Trash2, Plus } from 'lucide-react';
+import { Crown, Users, Settings, Database, Eye, UserCheck, Trash2, Plus, Bug, Monitor, MessageSquare } from 'lucide-react';
 
 interface User {
   id: string;
@@ -54,6 +54,8 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
+  const [debugMode, setDebugMode] = useState(false);
+  const [realtimeUsers, setRealtimeUsers] = useState<any[]>([]);
 
   // Check if current user is admin via database
   useEffect(() => {
@@ -86,7 +88,7 @@ export default function AdminDashboard() {
   const loadUsers = async () => {
     setLoading(true);
     try {
-      // Get all users with their profiles
+      // Get all users with their profiles and roles
       const { data: profiles, error } = await supabase
         .from('profiles')
         .select(`
@@ -97,40 +99,29 @@ export default function AdminDashboard() {
 
       if (error) throw error;
 
-      // Transform to user format and add demo users
-      const usersData = profiles?.map(profile => ({
-        id: profile.user_id,
-        email: profile.full_name || `user-${profile.user_id}`, // Use full_name as email fallback
-        created_at: profile.created_at,
-        last_sign_in_at: profile.created_at,
-        profile: {
-          full_name: profile.full_name
-        }
-      })) || [];
+      // Get user roles
+      const { data: roles, error: rolesError } = await supabase
+        .from('user_roles')
+        .select('user_id, role');
 
-      // Add demo users for demonstration
-      const demoUsers = [
-        {
-          id: 'demo-user-1',
-          email: 'demo@example.com',
-          created_at: '2025-01-01T00:00:00Z',
-          last_sign_in_at: '2025-01-15T00:00:00Z',
-          profile: {
-            full_name: 'Demo User'
-          }
-        },
-        {
-          id: 'demo-user-2',
-          email: 'admin@example.com',
-          created_at: '2025-01-01T00:00:00Z',
-          last_sign_in_at: '2025-01-15T00:00:00Z',
-          profile: {
-            full_name: 'Demo Admin'
-          }
-        }
-      ];
+      if (rolesError) throw rolesError;
 
-      setUsers([...usersData, ...demoUsers]);
+      // Transform to user format with real data
+      const usersData = profiles?.map(profile => {
+        const userRole = roles?.find(r => r.user_id === profile.user_id);
+        return {
+          id: profile.user_id,
+          email: profile.full_name || `user-${profile.user_id.slice(0, 8)}`, 
+          created_at: profile.created_at,
+          last_sign_in_at: profile.created_at,
+          role: userRole?.role || 'free',
+          profile: {
+            full_name: profile.full_name
+          }
+        };
+      }) || [];
+
+      setUsers(usersData);
     } catch (error) {
       console.error('Error loading users:', error);
       toast({
@@ -424,7 +415,116 @@ export default function AdminDashboard() {
     if (users.length > 0) {
       loadUserRoles();
     }
-  }, [users.length]); // Only run when users are loaded
+  }, [users.length]);
+
+  // Real-time user activity monitoring
+  useEffect(() => {
+    if (!isAdmin) return;
+
+    const channel = supabase
+      .channel('admin-monitoring')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'user_settings'
+        },
+        (payload) => {
+          console.log('Real-time user activity:', payload);
+          if (debugMode) {
+            setRealtimeUsers(prev => [payload, ...prev.slice(0, 9)]);
+          }
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'workspaces'
+        },
+        (payload) => {
+          console.log('Workspace activity:', payload);
+          if (payload.eventType === 'INSERT') {
+            loadAllWorkspaces(); // Refresh workspaces when new ones are created
+            toast({
+              title: "New Workspace Created!",
+              description: `A user just created a new workspace: ${payload.new.name}`,
+            });
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [isAdmin, debugMode]);
+
+  const createDebugUser = async () => {
+    try {
+      // Create a test profile
+      const debugUserId = crypto.randomUUID();
+      const { error } = await supabase
+        .from('profiles')
+        .insert({
+          user_id: debugUserId,
+          full_name: `Debug User ${new Date().toLocaleDateString()}`
+        });
+
+      if (error) throw error;
+
+      await loadUsers();
+      toast({
+        title: "Debug User Created",
+        description: "A debug user has been created for testing purposes.",
+      });
+    } catch (error) {
+      console.error('Error creating debug user:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create debug user.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const createDebugWorkspace = async () => {
+    if (users.length === 0) {
+      toast({
+        title: "No Users",
+        description: "Create a debug user first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const randomUser = users[Math.floor(Math.random() * users.length)];
+      const { error } = await supabase
+        .from('workspaces')
+        .insert({
+          name: `Debug Workspace ${new Date().toLocaleTimeString()}`,
+          user_id: randomUser.id
+        });
+
+      if (error) throw error;
+
+      await loadAllWorkspaces();
+      toast({
+        title: "Debug Workspace Created",
+        description: "A debug workspace has been created for testing.",
+      });
+    } catch (error) {
+      console.error('Error creating debug workspace:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create debug workspace.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const filteredUsers = users.filter(user =>
     user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -457,10 +557,34 @@ export default function AdminDashboard() {
           </h1>
           <p className="text-muted-foreground">Manage users, workspaces, and debug templates</p>
         </div>
-        <Badge variant="secondary" className="px-4 py-2">
-          <Crown className="h-4 w-4 mr-2" />
-          Super Admin
-        </Badge>
+        <div className="flex items-center gap-4">
+          <Badge variant="secondary" className="px-4 py-2">
+            <Crown className="h-4 w-4 mr-2" />
+            Super Admin
+          </Badge>
+          <div className="flex items-center gap-2">
+            <Button
+              variant={debugMode ? "default" : "outline"}
+              size="sm"
+              onClick={() => setDebugMode(!debugMode)}
+            >
+              <Bug className="h-4 w-4 mr-2" />
+              Debug Mode
+            </Button>
+            {debugMode && (
+              <>
+                <Button variant="outline" size="sm" onClick={createDebugUser}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Debug User
+                </Button>
+                <Button variant="outline" size="sm" onClick={createDebugWorkspace}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Debug Workspace
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
       </div>
 
       <Tabs defaultValue="users" className="space-y-6">
@@ -477,6 +601,12 @@ export default function AdminDashboard() {
             <Settings className="h-4 w-4" />
             Templates
           </TabsTrigger>
+          {debugMode && (
+            <TabsTrigger value="realtime" className="flex items-center gap-2">
+              <Monitor className="h-4 w-4" />
+              Real-time Activity
+            </TabsTrigger>
+          )}
         </TabsList>
 
         <TabsContent value="users" className="space-y-6">
@@ -766,6 +896,93 @@ export default function AdminDashboard() {
             </Card>
           </div>
         </TabsContent>
+
+        {debugMode && (
+          <TabsContent value="realtime" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Monitor className="h-5 w-5" />
+                  Real-time User Activity Monitor
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Live monitoring of user actions and workspace changes for remote assistance
+                </p>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-medium">Recent Activity</h3>
+                    <Badge variant="secondary">
+                      {realtimeUsers.length} events tracked
+                    </Badge>
+                  </div>
+                  
+                  {realtimeUsers.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Monitor className="mx-auto h-12 w-12 mb-4 opacity-50" />
+                      <p>No real-time activity detected yet.</p>
+                      <p className="text-sm">User actions will appear here when debug mode is active.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2 max-h-96 overflow-y-auto">
+                      {realtimeUsers.map((activity, index) => (
+                        <div key={index} className="p-3 border rounded-lg bg-muted/50">
+                          <div className="flex items-center justify-between">
+                            <span className="font-medium">
+                              {activity.eventType} on {activity.table}
+                            </span>
+                            <span className="text-sm text-muted-foreground">
+                              {new Date().toLocaleTimeString()}
+                            </span>
+                          </div>
+                          <pre className="text-xs mt-2 bg-background p-2 rounded overflow-x-auto">
+                            {JSON.stringify(activity.new || activity.old, null, 2)}
+                          </pre>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="pt-4 border-t">
+                    <h4 className="font-medium mb-2">Remote Assistance Tools</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <Card>
+                        <CardContent className="pt-4">
+                          <div className="flex items-center gap-2 mb-2">
+                            <MessageSquare className="h-4 w-4" />
+                            <span className="font-medium">User Communication</span>
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-3">
+                            Send direct messages to users for assistance
+                          </p>
+                          <Button size="sm" variant="outline" className="w-full">
+                            Open Chat Interface
+                          </Button>
+                        </CardContent>
+                      </Card>
+                      
+                      <Card>
+                        <CardContent className="pt-4">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Eye className="h-4 w-4" />
+                            <span className="font-medium">User Session View</span>
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-3">
+                            View user's current dashboard and settings
+                          </p>
+                          <Button size="sm" variant="outline" className="w-full">
+                            View Active Sessions
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   );
