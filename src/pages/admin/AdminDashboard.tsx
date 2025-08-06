@@ -79,6 +79,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (isAdmin) {
       loadUsers();
+      loadAllWorkspaces();
     }
   }, [isAdmin]);
 
@@ -96,10 +97,10 @@ export default function AdminDashboard() {
 
       if (error) throw error;
 
-      // Transform to user format (in a real app, you'd get this from auth.users via service role)
+      // Transform to user format and add demo users
       const usersData = profiles?.map(profile => ({
         id: profile.user_id,
-        email: `user-${profile.user_id}`, // Placeholder since we can't access auth.users
+        email: profile.full_name || `user-${profile.user_id}`, // Use full_name as email fallback
         created_at: profile.created_at,
         last_sign_in_at: profile.created_at,
         profile: {
@@ -107,7 +108,29 @@ export default function AdminDashboard() {
         }
       })) || [];
 
-      setUsers(usersData);
+      // Add demo users for demonstration
+      const demoUsers = [
+        {
+          id: 'demo-user-1',
+          email: 'demo@example.com',
+          created_at: '2025-01-01T00:00:00Z',
+          last_sign_in_at: '2025-01-15T00:00:00Z',
+          profile: {
+            full_name: 'Demo User'
+          }
+        },
+        {
+          id: 'demo-user-2',
+          email: 'admin@example.com',
+          created_at: '2025-01-01T00:00:00Z',
+          last_sign_in_at: '2025-01-15T00:00:00Z',
+          profile: {
+            full_name: 'Demo Admin'
+          }
+        }
+      ];
+
+      setUsers([...usersData, ...demoUsers]);
     } catch (error) {
       console.error('Error loading users:', error);
       toast({
@@ -117,6 +140,37 @@ export default function AdminDashboard() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadAllWorkspaces = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('workspaces')
+        .select(`
+          id,
+          name,
+          created_at,
+          user_id,
+          workspace_profiles (count)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      const workspacesData = data?.map(workspace => ({
+        ...workspace,
+        profiles_count: workspace.workspace_profiles?.[0]?.count || 0
+      })) || [];
+
+      setWorkspaces(workspacesData);
+    } catch (error) {
+      console.error('Error loading all workspaces:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load workspaces.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -515,27 +569,40 @@ export default function AdminDashboard() {
         </TabsContent>
 
         <TabsContent value="workspaces" className="space-y-6">
-          {selectedUser && (
-            <Card>
-              <CardHeader>
-                <CardTitle>
-                  Workspaces for {selectedUser.profile?.full_name || selectedUser.email}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Workspace Name</TableHead>
-                      <TableHead>Created</TableHead>
-                      <TableHead>Profiles</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {workspaces.map((workspace) => (
+          <Card>
+            <CardHeader>
+              <CardTitle>All Workspaces</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                View and manage all user workspaces in the system
+              </p>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Workspace Name</TableHead>
+                    <TableHead>Owner</TableHead>
+                    <TableHead>Created</TableHead>
+                    <TableHead>Profiles</TableHead>
+                    <TableHead>Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {workspaces.map((workspace) => {
+                    const owner = users.find(u => u.id === workspace.user_id);
+                    return (
                       <TableRow key={workspace.id}>
                         <TableCell className="font-medium">{workspace.name}</TableCell>
+                        <TableCell>
+                          <div>
+                            <div className="font-medium">
+                              {owner?.profile?.full_name || 'Unknown User'}
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              {owner?.email || workspace.user_id.slice(0, 8) + '...'}
+                            </div>
+                          </div>
+                        </TableCell>
                         <TableCell>
                           {new Date(workspace.created_at).toLocaleDateString()}
                         </TableCell>
@@ -557,23 +624,25 @@ export default function AdminDashboard() {
                               <Settings className="h-4 w-4 mr-2" />
                               Manage Profiles
                             </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => createDemoTemplates(workspace.id, selectedUser.id)}
-                            >
-                              <Plus className="h-4 w-4 mr-2" />
-                              Add Demo Templates
-                            </Button>
+                            {owner && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => createDemoTemplates(workspace.id, owner.id)}
+                              >
+                                <Plus className="h-4 w-4 mr-2" />
+                                Add Demo Templates
+                              </Button>
+                            )}
                           </div>
                         </TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          )}
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
 
           {selectedWorkspace && (
             <Card>
