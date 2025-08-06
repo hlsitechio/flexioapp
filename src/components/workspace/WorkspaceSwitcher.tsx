@@ -82,6 +82,10 @@ export function WorkspaceSwitcher() {
   }
 
   const CurrentIcon = categoryIcons[currentProfile.category as keyof typeof categoryIcons];
+  
+  // Sort profiles to get consistent numbering
+  const sortedProfiles = [...profiles].sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+  const currentWorkspaceNumber = sortedProfiles.findIndex(p => p.id === currentProfile.id) + 1;
 
   // Group profiles by category
   const groupedProfiles = profiles.reduce((acc, profile) => {
@@ -99,7 +103,7 @@ export function WorkspaceSwitcher() {
           <Button variant="outline" size="sm" className="flex items-center gap-2 min-w-[180px] justify-between">
             <div className="flex items-center gap-2">
               <CurrentIcon className="h-4 w-4" />
-              <span className="truncate">{currentProfile.name}</span>
+              <span className="truncate">#{currentWorkspaceNumber} {currentProfile.name}</span>
               {currentProfile.is_default && (
                 <Star className="h-3 w-3 text-primary" />
               )}
@@ -123,6 +127,7 @@ export function WorkspaceSwitcher() {
                 {categoryProfiles.map((profile) => {
                   const ProfileIcon = categoryIcons[profile.category as keyof typeof categoryIcons];
                   const isActive = currentProfile.id === profile.id;
+                  const workspaceNumber = sortedProfiles.findIndex(p => p.id === profile.id) + 1;
                   
                   return (
                     <DropdownMenuItem
@@ -131,7 +136,7 @@ export function WorkspaceSwitcher() {
                       className={`flex items-center gap-2 ${isActive ? 'bg-primary/10' : ''}`}
                     >
                       <ProfileIcon className="h-4 w-4" />
-                      <span className="flex-1 truncate">{profile.name}</span>
+                      <span className="flex-1 truncate">#{workspaceNumber} {profile.name}</span>
                       <div className="flex items-center gap-1">
                         {profile.is_default && (
                           <Star className="h-3 w-3 text-primary" />
