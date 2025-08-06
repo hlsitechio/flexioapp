@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      active_sessions: {
+        Row: {
+          browser_info: Json | null
+          created_at: string
+          current_route: string | null
+          dashboard_state: Json | null
+          device_info: Json | null
+          id: string
+          ip_address: unknown | null
+          is_active: boolean
+          last_activity: string
+          screen_resolution: string | null
+          session_id: string
+          updated_at: string
+          user_agent: string | null
+          user_id: string
+          workspace_id: string | null
+        }
+        Insert: {
+          browser_info?: Json | null
+          created_at?: string
+          current_route?: string | null
+          dashboard_state?: Json | null
+          device_info?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          is_active?: boolean
+          last_activity?: string
+          screen_resolution?: string | null
+          session_id: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id: string
+          workspace_id?: string | null
+        }
+        Update: {
+          browser_info?: Json | null
+          created_at?: string
+          current_route?: string | null
+          dashboard_state?: Json | null
+          device_info?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          is_active?: boolean
+          last_activity?: string
+          screen_resolution?: string | null
+          session_id?: string
+          updated_at?: string
+          user_agent?: string | null
+          user_id?: string
+          workspace_id?: string | null
+        }
+        Relationships: []
+      }
       bookmarks: {
         Row: {
           created_at: string
@@ -538,6 +592,57 @@ export type Database = {
           item_type?: string
           starred_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_messages: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          message_type: string
+          metadata: Json | null
+          parent_message_id: string | null
+          priority: string
+          recipient_id: string
+          sender_id: string
+          status: string
+          subject: string | null
+          thread_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message: string
+          message_type?: string
+          metadata?: Json | null
+          parent_message_id?: string | null
+          priority?: string
+          recipient_id: string
+          sender_id: string
+          status?: string
+          subject?: string | null
+          thread_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          message_type?: string
+          metadata?: Json | null
+          parent_message_id?: string | null
+          priority?: string
+          recipient_id?: string
+          sender_id?: string
+          status?: string
+          subject?: string | null
+          thread_id?: string | null
+          updated_at?: string
         }
         Relationships: []
       }

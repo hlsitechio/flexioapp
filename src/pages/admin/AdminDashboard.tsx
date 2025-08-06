@@ -13,6 +13,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Crown, Users, Settings, Database, Eye, UserCheck, Trash2, Plus, Bug, Monitor, MessageSquare, Link, Globe, Archive, RotateCcw, Copy } from 'lucide-react';
+import UserCommunication from '@/components/admin/UserCommunication';
+import UserSessionView from '@/components/admin/UserSessionView';
 import { Label } from '@/components/ui/label';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
@@ -1457,39 +1459,9 @@ export default function AdminDashboard() {
                     </div>
                   )}
 
-                  <div className="pt-4 border-t">
-                    <h4 className="font-medium mb-2">Remote Assistance Tools</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <Card>
-                        <CardContent className="pt-4">
-                          <div className="flex items-center gap-2 mb-2">
-                            <MessageSquare className="h-4 w-4" />
-                            <span className="font-medium">User Communication</span>
-                          </div>
-                          <p className="text-sm text-muted-foreground mb-3">
-                            Send direct messages to users for assistance
-                          </p>
-                          <Button size="sm" variant="outline" className="w-full">
-                            Open Chat Interface
-                          </Button>
-                        </CardContent>
-                      </Card>
-                      
-                      <Card>
-                        <CardContent className="pt-4">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Eye className="h-4 w-4" />
-                            <span className="font-medium">User Session View</span>
-                          </div>
-                          <p className="text-sm text-muted-foreground mb-3">
-                            View user's current dashboard and settings
-                          </p>
-                          <Button size="sm" variant="outline" className="w-full">
-                            View Active Sessions
-                          </Button>
-                        </CardContent>
-                      </Card>
-                    </div>
+                  <div className="pt-4 border-t space-y-6">
+                    <UserCommunication users={users} />
+                    <UserSessionView users={users} />
                   </div>
                 </div>
               </CardContent>

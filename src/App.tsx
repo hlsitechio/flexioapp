@@ -4,6 +4,7 @@ import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useWorkspace } from "@/contexts/WorkspaceContext";
+import { useSessionTracking } from "@/hooks/useSessionTracking";
 import { initializeMonitoring } from "@/lib/monitoring";
 import { analytics } from "@/lib/analytics";
 import { useEffect } from "react";
@@ -29,6 +30,7 @@ import NotFound from "./pages/NotFound";
 const App = () => {
   const { user, loading } = useAuth();
   const { workspace, loading: workspaceLoading } = useWorkspace();
+  useSessionTracking();
 
   // Initialize monitoring and analytics once - silent success, only log errors
   useEffect(() => {
