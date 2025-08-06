@@ -1,9 +1,19 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LeadCaptureForm } from '@/components/forms';
-import { CheckCircle, ArrowRight, Star, Users, Shield, Zap, Image } from 'lucide-react';
+import { CheckCircle, ArrowRight, Star, Users, Shield, Zap, Image, Play, Clock, UserCheck } from 'lucide-react';
 
 export function LandingPage() {
+  const [showDemo, setShowDemo] = useState(false);
+
+  const scrollToDemo = () => {
+    setShowDemo(true);
+    setTimeout(() => {
+      document.getElementById('demo-section')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       {/* Navigation */}
@@ -21,8 +31,8 @@ export function LandingPage() {
               <Button variant="ghost" className="rounded-full" asChild>
                 <a href="/auth">Sign In</a>
               </Button>
-              <Button className="rounded-full" asChild>
-                <a href="/demo">Get Demo</a>
+              <Button className="rounded-full" onClick={scrollToDemo}>
+                Get Demo
               </Button>
             </div>
           </div>
@@ -50,15 +60,15 @@ export function LandingPage() {
 
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="text-lg px-8 py-4 rounded-full hover-scale" asChild>
-                  <a href="/auth">
+                  <a href="/workspace-selection">
                     <span className="flex items-center">
                       Get Started Free
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </span>
                   </a>
                 </Button>
-                <Button size="lg" variant="outline" className="text-lg px-8 py-4 rounded-full hover-scale" asChild>
-                  <a href="/demo">Try Demo</a>
+                <Button size="lg" variant="outline" className="text-lg px-8 py-4 rounded-full hover-scale" onClick={scrollToDemo}>
+                  Try Demo
                 </Button>
               </div>
 
@@ -526,120 +536,133 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* Demo Section */}
+      {showDemo && (
+        <section id="demo-section" className="py-24 px-8 sm:px-12 lg:px-16 bg-gradient-to-br from-background to-muted/20">
+          <div className="max-w-[1400px] mx-auto">
+            <div className="text-center space-y-6 mb-16">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+                <Star className="h-4 w-4" />
+                Most Popular
+              </div>
+              <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
+                See Our Platform in Action
+              </h2>
+              <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                Get a personalized demo tailored to your business needs. See exactly 
+                how our platform can transform your operations.
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-8 mb-16">
+              <Card className="border-0 shadow-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30">
+                <CardContent className="p-8 text-center space-y-4">
+                  <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto">
+                    <Play className="h-8 w-8 text-blue-600" />
+                  </div>
+                  <h3 className="text-xl font-bold">Live Demo</h3>
+                  <p className="text-muted-foreground">
+                    Interactive walkthrough of key features with real data and use cases relevant to your industry.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/30">
+                <CardContent className="p-8 text-center space-y-4">
+                  <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto">
+                    <UserCheck className="h-8 w-8 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-bold">Expert Guidance</h3>
+                  <p className="text-muted-foreground">
+                    Get insights from our product experts who understand your business challenges and goals.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/30 dark:to-purple-900/30">
+                <CardContent className="p-8 text-center space-y-4">
+                  <div className="w-16 h-16 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto">
+                    <Clock className="h-8 w-8 text-purple-600" />
+                  </div>
+                  <h3 className="text-xl font-bold">Quick Setup</h3>
+                  <p className="text-muted-foreground">
+                    Learn how fast you can get started and see results with our streamlined onboarding process.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-16 items-start">
+              <div className="space-y-6">
+                <h3 className="text-2xl font-bold">What to Expect</h3>
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-emerald-500 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold">Personalized Overview</h4>
+                      <p className="text-muted-foreground text-sm">We'll customize the demo based on your industry, company size, and specific requirements.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-emerald-500 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold">Real-World Scenarios</h4>
+                      <p className="text-muted-foreground text-sm">See how the platform handles actual business processes and workflows from your industry.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-emerald-500 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold">Q&A Session</h4>
+                      <p className="text-muted-foreground text-sm">Get all your questions answered by our product experts and implementation specialists.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="h-5 w-5 text-emerald-500 mt-1 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold">Next Steps</h4>
+                      <p className="text-muted-foreground text-sm">Learn about pricing, implementation timeline, and how to get started with a free trial.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <Card className="border border-border/50 shadow-xl">
+                <CardContent className="p-8">
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-xl font-bold mb-2">Request a Demo</h3>
+                      <p className="text-muted-foreground">See our platform in action with a personalized demo</p>
+                    </div>
+                    <LeadCaptureForm />
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Get Started Today Section */}
-      <section className="py-24 px-8 sm:px-12 lg:px-16 bg-foreground text-background">
-        <div className="max-w-[800px] mx-auto">
-          <div className="space-y-8">
-            <div className="text-center space-y-4">
+      {!showDemo && (
+        <section className="py-24 px-8 sm:px-12 lg:px-16 bg-gradient-to-br from-primary/5 to-accent/5">
+          <div className="max-w-[1200px] mx-auto text-center space-y-12">
+            <div className="space-y-6">
               <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
                 Get Started Today
               </h2>
-              <p className="text-xl opacity-80 leading-relaxed">
-                Join thousands of businesses already using our platform
+              <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                Join thousands of teams already using FlexIO to streamline their operations and boost productivity.
               </p>
             </div>
-            
-            <div className="bg-background/5 backdrop-blur-sm border border-background/20 rounded-2xl p-8">
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label htmlFor="firstName" className="text-sm font-medium text-background">
-                      First Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      placeholder="Enter your first name"
-                      className="w-full px-4 py-3 bg-background/10 border border-background/20 rounded-lg text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="lastName" className="text-sm font-medium text-background">
-                      Last Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      placeholder="Enter your last name"
-                      className="w-full px-4 py-3 bg-background/10 border border-background/20 rounded-lg text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium text-background">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    placeholder="Enter your email address"
-                    className="w-full px-4 py-3 bg-background/10 border border-background/20 rounded-lg text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  />
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label htmlFor="company" className="text-sm font-medium text-background">
-                      Company
-                    </label>
-                    <input
-                      type="text"
-                      id="company"
-                      placeholder="Your company name"
-                      className="w-full px-4 py-3 bg-background/10 border border-background/20 rounded-lg text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="jobTitle" className="text-sm font-medium text-background">
-                      Job Title
-                    </label>
-                    <input
-                      type="text"
-                      id="jobTitle"
-                      placeholder="Your job title"
-                      className="w-full px-4 py-3 bg-background/10 border border-background/20 rounded-lg text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label htmlFor="industry" className="text-sm font-medium text-background">
-                      Industry
-                    </label>
-                    <input
-                      type="text"
-                      id="industry"
-                      placeholder="Your industry"
-                      className="w-full px-4 py-3 bg-background/10 border border-background/20 rounded-lg text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="companySize" className="text-sm font-medium text-background">
-                      Company Size
-                    </label>
-                    <input
-                      type="text"
-                      id="companySize"
-                      placeholder="e.g., 1-10, 11-50, 51-200"
-                      className="w-full px-4 py-3 bg-background/10 border border-background/20 rounded-lg text-background placeholder:text-background/60 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  </div>
-                </div>
-                
-                <Button 
-                  type="submit" 
-                  size="lg" 
-                  className="w-full text-lg py-4 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg hover-scale"
-                >
-                  Get Started
-                </Button>
-              </form>
-            </div>
+            <Card className="max-w-2xl mx-auto border border-border/50 shadow-xl">
+              <CardContent className="p-8">
+                <LeadCaptureForm />
+              </CardContent>
+            </Card>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
