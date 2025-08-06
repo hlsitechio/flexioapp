@@ -13,12 +13,12 @@ export function DemoPage() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Button variant="ghost" asChild>
-                <a href="/">← Back to Home</a>
+                <a href="/landing">← Back to Home</a>
               </Button>
               <h1 className="text-xl font-bold ml-4">Request Demo</h1>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <a href="/" className="text-foreground/60 hover:text-foreground transition-colors">Home</a>
+              <a href="/landing" className="text-foreground/60 hover:text-foreground transition-colors">Home</a>
               <a href="/contact" className="text-foreground/60 hover:text-foreground transition-colors">Contact</a>
               <Button variant="outline" asChild>
                 <a href="/contact">Contact Us</a>

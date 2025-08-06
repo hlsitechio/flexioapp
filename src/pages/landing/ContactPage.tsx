@@ -7,19 +7,19 @@ export function ContactPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
       {/* Navigation */}
-      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+        <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Button variant="ghost" asChild>
-                <a href="/">← Back to Home</a>
+                <a href="/landing">← Back to Home</a>
               </Button>
               <h1 className="text-xl font-bold ml-4">Contact Us</h1>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <a href="/" className="text-foreground/60 hover:text-foreground transition-colors">Home</a>
+              <a href="/landing" className="text-foreground/60 hover:text-foreground transition-colors">Home</a>
               <a href="/demo" className="text-foreground/60 hover:text-foreground transition-colors">Demo</a>
-              <Button variant="outline" asChild>
+              <Button variant="outline" className="rounded-full" asChild>
                 <a href="/demo">Request Demo</a>
               </Button>
             </div>
@@ -28,23 +28,23 @@ export function ContactPage() {
       </nav>
 
       {/* Header */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center space-y-4">
-          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+      <section className="py-16 lg:py-24 px-8 sm:px-12 lg:px-16">
+        <div className="max-w-[1400px] mx-auto text-center space-y-6">
+          <h1 className="text-4xl lg:text-5xl font-bold tracking-tight">
             Get in Touch
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Have questions? We'd love to hear from you. Send us a message and we'll respond within 24 hours.
           </p>
         </div>
       </section>
 
       {/* Contact Info & Form */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-3 gap-8">
+      <section className="py-12 lg:py-16 px-8 sm:px-12 lg:px-16">
+        <div className="max-w-[1800px] mx-auto">
+          <div className="grid lg:grid-cols-5 gap-12 lg:gap-16">
             {/* Contact Information */}
-            <div className="lg:col-span-1 space-y-8">
+            <div className="lg:col-span-2 space-y-8">
               <div>
                 <h2 className="text-2xl font-semibold mb-6">Contact Information</h2>
                 <div className="space-y-6">
@@ -118,7 +118,7 @@ export function ContactPage() {
             </div>
 
             {/* Contact Form */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-3">
               <ContactForm />
             </div>
           </div>
@@ -126,11 +126,11 @@ export function ContactPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-muted/30">
-        <div className="max-w-4xl mx-auto">
+      <section className="py-16 lg:py-24 px-8 sm:px-12 lg:px-16 bg-muted/30">
+        <div className="max-w-[1400px] mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
-            <p className="text-muted-foreground">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-6">Frequently Asked Questions</h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Quick answers to common questions. Can't find what you're looking for? Send us a message above.
             </p>
           </div>
@@ -169,9 +169,9 @@ export function ContactPage() {
 
       {/* Footer */}
       <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16 py-8">
           <div className="text-center text-sm text-muted-foreground">
-            <p>&copy; 2024 Your Platform. All rights reserved.</p>
+            <p>&copy; 2024 FlexIO Platform. All rights reserved.</p>
           </div>
         </div>
       </footer>
