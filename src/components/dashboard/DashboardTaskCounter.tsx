@@ -1,97 +1,93 @@
-import { CheckSquare, Plus, Minus } from 'lucide-react';
+
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CheckSquare, Plus, Minus, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useGenericTool } from '@/hooks/useGenericTool';
-
-interface TaskCounterState {
-  count: number;
-  today: number;
-  total: number;
-  lastReset: string;
-}
-
-const initialState: TaskCounterState = {
-  count: 0,
-  today: 0,
-  total: 0,
-  lastReset: new Date().toDateString(),
-};
 
 export function DashboardTaskCounter() {
-  const { data: state, updateData: setState } = useGenericTool(initialState, 'dashboard-task-counter');
+  const [taskCount, setTaskCount] = useState(0);
+  const [completedTasks, setCompletedTasks] = useState(0);
 
-  // Reset daily counter if it's a new day
-  const today = new Date().toDateString();
-  if (state.lastReset !== today) {
-    setState(prev => ({
-      ...prev,
-      today: 0,
-      lastReset: today,
-    }));
-  }
-
-  const increment = () => {
-    setState(prev => ({
-      ...prev,
-      count: prev.count + 1,
-      today: prev.today + 1,
-      total: prev.total + 1,
-    }));
+  const addTask = () => {
+    setTaskCount(prev => prev + 1);
   };
 
-  const decrement = () => {
-    setState(prev => ({
-      ...prev,
-      count: Math.max(0, prev.count - 1),
-      today: Math.max(0, prev.today - 1),
-    }));
+  const completeTask = () => {
+    if (taskCount > 0) {
+      setTaskCount(prev => prev - 1);
+      setCompletedTasks(prev => prev + 1);
+    }
   };
+
+  const resetTasks = () => {
+    setTaskCount(0);
+    setCompletedTasks(0);
+  };
+
+  const totalTasks = taskCount + completedTasks;
+  const completionRate = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
   return (
-    <Card className="animate-fade-in relative overflow-hidden bg-gradient-to-br from-purple-500/15 via-violet-500/10 to-blue-500/15 border-purple-300/30 backdrop-blur-sm">
-      {/* Decorative gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-purple-600/5 via-transparent to-violet-600/5 pointer-events-none" />
-      
-      <CardHeader className="pb-3 relative z-10">
+    <Card className="h-full bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/20 dark:to-cyan-900/20 animate-fade-in">
+      <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <div className="p-1.5 rounded-lg bg-gradient-to-br from-purple-500 to-violet-500 shadow-lg">
-            <CheckSquare className="h-4 w-4 text-white" />
-          </div>
-          <span className="text-transparent bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text font-semibold">
-            Task Counter
-          </span>
+          <CheckSquare className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          Task Counter
         </CardTitle>
       </CardHeader>
-      <CardContent className="relative z-10">
-        <div className="flex items-center justify-between">
-          <div className="text-center flex-1">
-            <div className="text-4xl font-bold text-transparent bg-gradient-to-br from-purple-600 via-violet-500 to-blue-500 bg-clip-text mb-1 drop-shadow-sm">
-              {state.count}
+      <CardContent>
+        <div className="text-center space-y-4">
+          <div className="space-y-2">
+            <div className="text-3xl font-bold text-primary">
+              {taskCount}
             </div>
-            <div className="text-sm text-muted-foreground">
-              {state.count === 1 ? 'task' : 'tasks'} completed
-            </div>
-            <div className="text-xs text-muted-foreground mt-2 p-2 rounded-lg bg-gradient-to-r from-purple-500/10 to-violet-500/10 border border-purple-300/20">
-              Today: <span className="text-purple-600 font-medium">{state.today}</span> • Total: <span className="text-violet-600 font-medium">{state.total}</span>
-            </div>
+            <p className="text-sm text-muted-foreground">Active Tasks</p>
           </div>
-          <div className="flex flex-col gap-2 ml-4">
-            <Button 
-              onClick={increment}
-              size="sm"
-              className="h-9 w-9 p-0 bg-gradient-to-br from-purple-500 to-violet-500 hover:from-purple-600 hover:to-violet-600 border-0 shadow-lg hover:shadow-purple-500/25 transition-all duration-200"
-            >
-              <Plus className="h-4 w-4 text-white" />
-            </Button>
-            <Button 
-              onClick={decrement}
+          
+          <div className="flex items-center justify-center gap-2">
+            <Button
+              onClick={addTask}
               size="sm"
               variant="outline"
-              className="h-9 w-9 p-0 border-purple-300/50 hover:bg-purple-500/10 hover:border-purple-400/60 transition-all duration-200"
+              className="h-8 w-8 p-0"
             >
-              <Minus className="h-4 w-4 text-purple-600" />
+              <Plus className="h-4 w-4" />
+            </Button>
+            
+            <Button
+              onClick={completeTask}
+              size="sm"
+              variant="default"
+              className="px-4"
+              disabled={taskCount === 0}
+            >
+              <Minus className="h-4 w-4 mr-2" />
+              Complete
             </Button>
           </div>
+
+          <div className="space-y-2">
+            <div className="text-sm text-muted-foreground">
+              Completed: {completedTasks} ({completionRate}%)
+            </div>
+            
+            <div className="w-full bg-secondary rounded-full h-2">
+              <div 
+                className="h-2 rounded-full bg-primary transition-all duration-500"
+                style={{ width: `${completionRate}%` }}
+              />
+            </div>
+          </div>
+
+          <Button
+            onClick={resetTasks}
+            size="sm"
+            variant="ghost"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <RotateCcw className="h-4 w-4 mr-2" />
+            Reset
+          </Button>
         </div>
       </CardContent>
     </Card>

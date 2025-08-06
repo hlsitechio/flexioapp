@@ -1,455 +1,133 @@
-import { useState, useEffect, useRef } from 'react';
-import { Bookmark, Plus, ExternalLink, Star, Search, Tag, Upload } from 'lucide-react';
+
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Bookmark, Plus, ExternalLink, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { BookmarkImporter } from '@/lib/bookmark-import';
 
-interface BookmarkData {
-  id: string;
+interface BookmarkItem {
+  id: number;
   title: string;
   url: string;
-  description?: string;
-  tags: string[];
-  is_favorite: boolean;
-  created_at: string;
-  updated_at: string;
 }
 
 export function DashboardBookmarkManager() {
-  const { toast } = useToast();
-  const [bookmarks, setBookmarks] = useState<BookmarkData[]>([]);
-  const [filteredBookmarks, setFilteredBookmarks] = useState<BookmarkData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [importDialogOpen, setImportDialogOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [importing, setImporting] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [formData, setFormData] = useState({
-    title: '',
-    url: '',
-    description: '',
-    tags: ''
-  });
+  const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([
+    { id: 1, title: 'GitHub', url: 'https://github.com' },
+    { id: 2, title: 'Stack Overflow', url: 'https://stackoverflow.com' },
+    { id: 3, title: 'MDN Docs', url: 'https://developer.mozilla.org' },
+  ]);
+  const [isAdding, setIsAdding] = useState(false);
+  const [newTitle, setNewTitle] = useState('');
+  const [newUrl, setNewUrl] = useState('');
 
-  const loadBookmarks = async () => {
-    try {
-      const { data: user } = await supabase.auth.getUser();
-      if (!user.user) return;
-
-      const { data, error } = await supabase
-        .from('bookmarks')
-        .select('*')
-        .eq('user_id', user.user.id)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      setBookmarks(data || []);
-      setFilteredBookmarks(data || []);
-    } catch (error) {
-      console.error('Error loading bookmarks:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load bookmarks",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const saveBookmark = async () => {
-    if (!formData.title.trim() || !formData.url.trim()) {
-      toast({
-        title: "Error",
-        description: "Title and URL are required",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      const { data: user } = await supabase.auth.getUser();
-      if (!user.user) return;
-
-      const tagsArray = formData.tags
-        .split(',')
-        .map(tag => tag.trim())
-        .filter(tag => tag.length > 0);
-
-      const bookmarkData = {
-        user_id: user.user.id,
-        title: formData.title.trim(),
-        url: formData.url.trim(),
-        description: formData.description.trim() || null,
-        tags: tagsArray
+  const addBookmark = () => {
+    if (newTitle && newUrl) {
+      const newBookmark = {
+        id: Date.now(),
+        title: newTitle,
+        url: newUrl.startsWith('http') ? newUrl : `https://${newUrl}`,
       };
-
-      const { data, error } = await supabase
-        .from('bookmarks')
-        .insert([bookmarkData])
-        .select()
-        .single();
-
-      if (error) throw error;
-
-      setBookmarks(prev => [data, ...prev]);
-      setFilteredBookmarks(prev => [data, ...prev]);
-      setDialogOpen(false);
-      setFormData({ title: '', url: '', description: '', tags: '' });
-      toast({
-        title: "Success",
-        description: "Bookmark added successfully!",
-      });
-    } catch (error) {
-      console.error('Error saving bookmark:', error);
-      toast({
-        title: "Error",
-        description: "Failed to save bookmark",
-        variant: "destructive",
-      });
+      setBookmarks([...bookmarks, newBookmark]);
+      setNewTitle('');
+      setNewUrl('');
+      setIsAdding(false);
     }
   };
 
-  const toggleFavorite = async (bookmarkId: string) => {
-    try {
-      const bookmark = bookmarks.find(b => b.id === bookmarkId);
-      if (!bookmark) return;
-
-      const { error } = await supabase
-        .from('bookmarks')
-        .update({ is_favorite: !bookmark.is_favorite })
-        .eq('id', bookmarkId);
-
-      if (error) throw error;
-
-      const updateBookmarksList = (prev: BookmarkData[]) =>
-        prev.map(b => 
-          b.id === bookmarkId 
-            ? { ...b, is_favorite: !b.is_favorite }
-            : b
-        );
-
-      setBookmarks(updateBookmarksList);
-      setFilteredBookmarks(updateBookmarksList);
-    } catch (error) {
-      console.error('Error toggling favorite:', error);
-      toast({
-        title: "Error",
-        description: "Failed to update bookmark",
-        variant: "destructive",
-      });
-    }
+  const deleteBookmark = (id: number) => {
+    setBookmarks(bookmarks.filter(bookmark => bookmark.id !== id));
   };
 
-  const filterBookmarks = (query: string) => {
-    if (!query.trim()) {
-      setFilteredBookmarks(bookmarks);
-      return;
-    }
-
-    const filtered = bookmarks.filter(bookmark =>
-      bookmark.title.toLowerCase().includes(query.toLowerCase()) ||
-      bookmark.description?.toLowerCase().includes(query.toLowerCase()) ||
-      bookmark.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
-    );
-
-    setFilteredBookmarks(filtered);
+  const openBookmark = (url: string) => {
+    window.open(url, '_blank');
   };
-
-  const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    if (!file.name.endsWith('.html') && !file.name.endsWith('.htm')) {
-      toast({
-        title: "Error",
-        description: "Please select an HTML file",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setImporting(true);
-    try {
-      const { data: user } = await supabase.auth.getUser();
-      if (!user.user) return;
-
-      const htmlContent = await file.text();
-      const importedBookmarks = BookmarkImporter.parseHtmlFile(htmlContent);
-
-      if (importedBookmarks.length === 0) {
-        toast({
-          title: "No bookmarks found",
-          description: "The file doesn't contain any valid bookmarks",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      const bookmarksToInsert = await BookmarkImporter.processBookmarksForImport(
-        importedBookmarks,
-        user.user.id
-      );
-
-      const { data, error } = await supabase
-        .from('bookmarks')
-        .insert(bookmarksToInsert)
-        .select();
-
-      if (error) throw error;
-
-      setBookmarks(prev => [...(data || []), ...prev]);
-      setFilteredBookmarks(prev => [...(data || []), ...prev]);
-      setImportDialogOpen(false);
-      
-      toast({
-        title: "Success",
-        description: `Imported ${importedBookmarks.length} bookmarks successfully!`,
-      });
-    } catch (error) {
-      console.error('Error importing bookmarks:', error);
-      toast({
-        title: "Error",
-        description: "Failed to import bookmarks",
-        variant: "destructive",
-      });
-    } finally {
-      setImporting(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    }
-  };
-
-  useEffect(() => {
-    loadBookmarks();
-  }, []);
-
-  useEffect(() => {
-    filterBookmarks(searchQuery);
-  }, [searchQuery, bookmarks]);
-
-  const favoriteCount = bookmarks.filter(b => b.is_favorite).length;
-  const totalCount = bookmarks.length;
 
   return (
-    <Card className="h-full">
+    <Card className="h-full bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-900/20 dark:to-cyan-900/20 animate-fade-in">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg flex items-center space-x-2">
-          <Bookmark className="h-5 w-5 text-primary" />
-          <span>Bookmark Manager</span>
-          <div className="ml-auto flex items-center space-x-2">
-            <Badge variant="secondary" className="text-xs">
-              {totalCount} total
-            </Badge>
-            {favoriteCount > 0 && (
-              <Badge variant="outline" className="text-xs">
-                <Star className="h-3 w-3 mr-1 fill-yellow-400 text-yellow-400" />
-                {favoriteCount}
-              </Badge>
-            )}
-          </div>
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <Bookmark className="h-5 w-5 text-teal-600 dark:text-teal-400" />
+          Bookmarks
+          <Button
+            onClick={() => setIsAdding(true)}
+            size="sm"
+            variant="ghost"
+            className="ml-auto h-8 w-8 p-0"
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Search and Add */}
-        <div className="flex space-x-2">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search bookmarks..."
-              className="pl-9"
-            />
-          </div>
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button size="sm">
-                <Plus className="h-4 w-4 mr-1" />
-                Add
-              </Button>
-            </DialogTrigger>
-          </Dialog>
-          <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
-            <DialogTrigger asChild>
-              <Button size="sm" variant="outline">
-                <Upload className="h-4 w-4 mr-1" />
-                Import
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle>Import Bookmarks</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div className="text-sm text-muted-foreground">
-                  Import bookmarks from HTML files exported from Chrome, Firefox, or Edge.
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="bookmark-file">Select HTML File</Label>
-                  <Input
-                    id="bookmark-file"
-                    type="file"
-                    ref={fileInputRef}
-                    accept=".html,.htm"
-                    onChange={handleFileImport}
-                    disabled={importing}
-                  />
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  <strong>Supported browsers:</strong>
-                  <ul className="list-disc list-inside mt-1 space-y-1">
-                    <li>Chrome: Settings → Bookmarks → Bookmark manager → Export bookmarks</li>
-                    <li>Firefox: Bookmarks → Manage bookmarks → Import and Backup → Export</li>
-                    <li>Edge: Settings → Favorites → Export favorites</li>
-                  </ul>
-                </div>
-                {importing && (
-                  <div className="text-sm text-muted-foreground text-center py-2">
-                    Importing bookmarks...
-                  </div>
-                )}
+      <CardContent>
+        <div className="space-y-3">
+          {isAdding && (
+            <div className="space-y-2 p-3 bg-background/50 rounded-md border border-border/50">
+              <Input
+                placeholder="Title"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                className="text-xs"
+              />
+              <Input
+                placeholder="URL"
+                value={newUrl}
+                onChange={(e) => setNewUrl(e.target.value)}
+                className="text-xs"
+              />
+              <div className="flex gap-1">
+                <Button onClick={addBookmark} size="sm" className="text-xs">
+                  Add
+                </Button>
+                <Button onClick={() => setIsAdding(false)} size="sm" variant="outline" className="text-xs">
+                  Cancel
+                </Button>
               </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle>Add Bookmark</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Title</Label>
-                  <Input
-                    id="title"
-                    value={formData.title}
-                    onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="Bookmark title"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="url">URL</Label>
-                  <Input
-                    id="url"
-                    value={formData.url}
-                    onChange={(e) => setFormData(prev => ({ ...prev, url: e.target.value }))}
-                    placeholder="https://example.com"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="description">Description (optional)</Label>
-                  <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                    placeholder="Brief description..."
-                    rows={2}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="tags">Tags (comma separated)</Label>
-                  <Input
-                    id="tags"
-                    value={formData.tags}
-                    onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))}
-                    placeholder="work, tools, research"
-                  />
-                </div>
-                <div className="flex space-x-2">
-                  <Button onClick={saveBookmark} className="flex-1">
-                    Add Bookmark
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    onClick={() => setDialogOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            </DialogContent>
-        </Dialog>
-
-        {/* Bookmarks list */}
-        <div className="space-y-2 max-h-64 overflow-y-auto">
-          {loading ? (
-            <div className="text-sm text-muted-foreground text-center py-4">
-              Loading bookmarks...
             </div>
-          ) : filteredBookmarks.length === 0 ? (
-            <div className="text-sm text-muted-foreground text-center py-4">
-              {searchQuery ? 'No bookmarks match your search.' : 'No bookmarks yet. Add one above!'}
-            </div>
-          ) : (
-            filteredBookmarks.map((bookmark) => (
+          )}
+          
+          <div className="space-y-2 max-h-48 overflow-auto">
+            {bookmarks.map((bookmark) => (
               <div
                 key={bookmark.id}
-                className="p-3 rounded-lg border bg-muted space-y-2"
+                className="flex items-center gap-2 p-2 bg-background/30 rounded-md hover:bg-background/50 transition-colors group"
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium truncate">
-                      {bookmark.title}
-                    </div>
-                    {bookmark.description && (
-                      <div className="text-sm text-muted-foreground truncate">
-                        {bookmark.description}
-                      </div>
-                    )}
-                    <div className="text-xs text-muted-foreground truncate">
-                      {bookmark.url}
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-1 ml-2">
-                    <Button
-                      onClick={() => toggleFavorite(bookmark.id)}
-                      size="sm"
-                      variant="ghost"
-                      className="h-6 w-6 p-0"
-                    >
-                      <Star 
-                        className={`h-4 w-4 ${bookmark.is_favorite ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`} 
-                      />
-                    </Button>
-                    <Button
-                      onClick={() => window.open(bookmark.url, '_blank')}
-                      size="sm"
-                      variant="ghost"
-                      className="h-6 w-6 p-0"
-                    >
-                      <ExternalLink className="h-4 w-4" />
-                    </Button>
-                  </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground truncate">
+                    {bookmark.title}
+                  </p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {bookmark.url}
+                  </p>
                 </div>
-                {bookmark.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1">
-                    {bookmark.tags.slice(0, 3).map((tag, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs px-2 py-0">
-                        <Tag className="h-3 w-3 mr-1" />
-                        {tag}
-                      </Badge>
-                    ))}
-                    {bookmark.tags.length > 3 && (
-                      <Badge variant="outline" className="text-xs px-2 py-0">
-                        +{bookmark.tags.length - 3} more
-                      </Badge>
-                    )}
-                  </div>
-                )}
+                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Button
+                    onClick={() => openBookmark(bookmark.url)}
+                    size="sm"
+                    variant="ghost"
+                    className="h-6 w-6 p-0"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                  </Button>
+                  <Button
+                    onClick={() => deleteBookmark(bookmark.id)}
+                    size="sm"
+                    variant="ghost"
+                    className="h-6 w-6 p-0 hover:text-destructive"
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                </div>
               </div>
-            ))
+            ))}
+          </div>
+          
+          {bookmarks.length === 0 && (
+            <div className="text-center py-8">
+              <p className="text-sm text-muted-foreground">
+                No bookmarks yet. Click the + button to add one.
+              </p>
+            </div>
           )}
         </div>
       </CardContent>

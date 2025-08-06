@@ -1,42 +1,84 @@
+
 import { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Calendar, Clock } from 'lucide-react';
 
 export function DashboardDateDisplay() {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentDate(new Date());
-    }, 1000); // Update every second to keep it current
+      setCurrentTime(new Date());
+    }, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
-  const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
 
-  const month = monthNames[currentDate.getMonth()];
-  const day = currentDate.getDate();
-  const year = currentDate.getFullYear();
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+  };
+
+  const getGreeting = () => {
+    const hour = currentTime.getHours();
+    if (hour < 12) return 'Good Morning';
+    if (hour < 18) return 'Good Afternoon';
+    return 'Good Evening';
+  };
 
   return (
-    <Card className="h-full flex items-center justify-center bg-gradient-to-br from-purple-500/20 via-violet-500/10 to-blue-500/20 border-purple-300/30 backdrop-blur-sm">
-      <CardContent className="p-6 text-center">
-        <div className="space-y-2">
-          <div className="text-2xl md:text-3xl font-semibold text-transparent bg-gradient-to-r from-purple-400 to-violet-400 bg-clip-text">
-            {month}
+    <Card className="h-full bg-gradient-to-br from-pink-100 to-rose-100 dark:from-pink-900/20 dark:to-rose-900/20 animate-fade-in">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <Calendar className="h-5 w-5 text-pink-600 dark:text-pink-400" />
+          Date & Time
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="text-center space-y-4">
+          <div>
+            <p className="text-lg font-semibold text-primary mb-1">
+              {getGreeting()}
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {formatDate(currentTime)}
+            </p>
           </div>
-          <div className="text-6xl md:text-7xl font-bold text-transparent bg-gradient-to-br from-purple-600 via-violet-500 to-blue-500 bg-clip-text drop-shadow-lg">
-            {day}
+          
+          <div className="flex items-center justify-center gap-2 p-3 bg-background/50 rounded-md border border-border/50">
+            <Clock className="h-4 w-4 text-muted-foreground" />
+            <span className="text-lg font-mono font-semibold text-foreground">
+              {formatTime(currentTime)}
+            </span>
           </div>
-          <div className="text-2xl md:text-3xl font-semibold text-transparent bg-gradient-to-r from-violet-400 to-purple-400 bg-clip-text">
-            {year}
+          
+          <div className="grid grid-cols-3 gap-2 text-center">
+            <div>
+              <p className="text-xs text-muted-foreground">Day</p>
+              <p className="text-sm font-semibold">{currentTime.getDate()}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Month</p>
+              <p className="text-sm font-semibold">{currentTime.getMonth() + 1}</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">Year</p>
+              <p className="text-sm font-semibold">{currentTime.getFullYear()}</p>
+            </div>
           </div>
         </div>
-        {/* Decorative gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/5 via-transparent to-violet-500/5 rounded-lg pointer-events-none" />
       </CardContent>
     </Card>
   );

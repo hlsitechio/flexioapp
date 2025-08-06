@@ -1,162 +1,89 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { MessageSquare, Copy, Plus, Search } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
 
-interface Prompt {
-  id: string;
-  title: string;
-  description: string;
-  content: string;
-  category: string;
-  tags: string[];
-  is_favorite: boolean;
-  usage_count: number;
-  created_at: string;
-}
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Lightbulb, RefreshCw, Copy, Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+const prompts = [
+  "Write a compelling product description for a smart fitness tracker",
+  "Create a social media strategy for a local coffee shop",
+  "Draft an email to reconnect with a former colleague",
+  "Brainstorm creative team building activities for remote workers",
+  "Design a morning routine for improved productivity",
+  "Write a thank you message for excellent customer service",
+  "Create a list of interview questions for hiring a developer",
+  "Plan a surprise birthday party on a budget",
+];
 
 export function DashboardPromptsGallery() {
-  const { user } = useAuth();
-  const { toast } = useToast();
-  const [prompts, setPrompts] = useState<Prompt[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [currentPrompt, setCurrentPrompt] = useState('');
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    if (user) {
-      loadPrompts();
-    } else {
-      setLoading(false);
-    }
-  }, [user]);
-
-  const loadPrompts = async () => {
-    if (!user) return;
-    
-    try {
-      const { data, error } = await supabase
-        .from('user_prompts')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(6);
-
-      if (error) throw error;
-      setPrompts(data || []);
-    } catch (error) {
-      console.error('Error loading prompts:', error);
-    } finally {
-      setLoading(false);
-    }
+  const getRandomPrompt = () => {
+    setIsRefreshing(true);
+    setTimeout(() => {
+      const randomIndex = Math.floor(Math.random() * prompts.length);
+      setCurrentPrompt(prompts[randomIndex]);
+      setIsRefreshing(false);
+    }, 300);
   };
 
-  const copyPrompt = async (content: string) => {
-    try {
-      await navigator.clipboard.writeText(content);
-      toast({
-        title: "Copied!",
-        description: "Prompt copied to clipboard"
-      });
-    } catch (error) {
-      toast({
-        title: "Copy failed",
-        description: "Failed to copy prompt to clipboard",
-        variant: "destructive"
-      });
+  const copyPrompt = async () => {
+    if (currentPrompt) {
+      await navigator.clipboard.writeText(currentPrompt);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
     }
   };
-
-  if (loading) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <MessageSquare className="h-5 w-5" />
-            Prompts Gallery
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-16 bg-muted/50 rounded animate-pulse" />
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
 
   return (
-    <Card>
+    <Card className="h-full bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/20 dark:to-orange-900/20 animate-fade-in">
       <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <MessageSquare className="h-5 w-5" />
-            Prompts Gallery
-          </CardTitle>
-          <Button
-            variant="ghost"
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <Lightbulb className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+          Prompt Ideas
+          <Button 
+            onClick={getRandomPrompt}
             size="sm"
-            onClick={() => window.open('/components', '_blank')}
+            variant="ghost"
+            className="ml-auto h-8 w-8 p-0"
+            disabled={isRefreshing}
           >
-            <Plus className="h-4 w-4" />
+            <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
           </Button>
-        </div>
+        </CardTitle>
       </CardHeader>
-      <CardContent className="pt-0">
-        {prompts.length === 0 ? (
-          <div className="text-center py-8">
-            <MessageSquare className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-            <p className="text-sm text-muted-foreground">No prompts yet</p>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="mt-2"
-              onClick={() => window.open('/components', '_blank')}
-            >
-              Create First Prompt
-            </Button>
-          </div>
-        ) : (
-          <div className="space-y-2 max-h-64 overflow-y-auto">
-            {prompts.map((prompt) => (
-              <div key={prompt.id} className="group border rounded-lg p-3 hover:bg-muted transition-colors">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-sm font-medium truncate">{prompt.title}</h4>
-                    <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
-                      {prompt.content.length > 80 
-                        ? `${prompt.content.substring(0, 80)}...` 
-                        : prompt.content
-                      }
-                    </p>
-                    <div className="flex gap-1 mt-1">
-                      <Badge variant="secondary" className="text-xs py-0 px-1 h-4">
-                        {prompt.category}
-                      </Badge>
-                      {prompt.tags.slice(0, 2).map((tag, index) => (
-                        <Badge key={index} variant="outline" className="text-xs py-0 px-1 h-4">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => copyPrompt(prompt.content)}
-                  >
-                    <Copy className="h-3 w-3" />
-                  </Button>
-                </div>
+      <CardContent>
+        <div className="space-y-4">
+          {currentPrompt ? (
+            <>
+              <div className="p-3 bg-background/50 rounded-md border border-border/50">
+                <p className="text-sm text-foreground leading-relaxed">
+                  {currentPrompt}
+                </p>
               </div>
-            ))}
-          </div>
-        )}
+              <Button
+                onClick={copyPrompt}
+                size="sm"
+                variant="outline"
+                className="w-full"
+              >
+                {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                {copied ? 'Copied!' : 'Copy Prompt'}
+              </Button>
+            </>
+          ) : (
+            <div 
+              className="min-h-[100px] p-3 rounded-md border border-input bg-background/50 cursor-pointer hover:bg-accent transition-colors flex items-center justify-center"
+              onClick={getRandomPrompt}
+            >
+              <p className="text-sm text-muted-foreground italic text-center">
+                Click refresh to get a creative prompt idea...
+              </p>
+            </div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );
