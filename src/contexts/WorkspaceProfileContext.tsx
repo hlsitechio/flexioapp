@@ -91,6 +91,8 @@ export function WorkspaceProfileProvider({ children }: { children: React.ReactNo
     } else {
       setProfiles([]);
       setCurrentProfile(null);
+      // Clear persisted profile when workspace changes
+      localStorage.removeItem('currentWorkspaceProfile');
     }
   }, [user, workspace]);
 
@@ -114,11 +116,16 @@ export function WorkspaceProfileProvider({ children }: { children: React.ReactNo
 
       if (data && data.length > 0) {
         setProfiles(data as WorkspaceProfile[]);
-        // Only set current profile to default if no profile is currently set
+        
+        // Check if there's a persisted profile selection
+        const persistedProfileId = localStorage.getItem('currentWorkspaceProfile');
+        const persistedProfile = persistedProfileId ? data.find(p => p.id === persistedProfileId) : null;
+        
+        // Only set current profile to default if no profile is currently set AND no persisted profile
         if (!currentProfile) {
-          const defaultProfile = data.find(p => p.is_default) || data[0];
-          setCurrentProfile(defaultProfile as WorkspaceProfile);
-          loadProfileConfiguration(defaultProfile as WorkspaceProfile);
+          const targetProfile = persistedProfile || data.find(p => p.is_default) || data[0];
+          setCurrentProfile(targetProfile as WorkspaceProfile);
+          loadProfileConfiguration(targetProfile as WorkspaceProfile);
         }
       } else {
         // Create default profile for new workspace
@@ -275,6 +282,9 @@ export function WorkspaceProfileProvider({ children }: { children: React.ReactNo
 
     setCurrentProfile(profile);
     loadProfileConfiguration(profile);
+    
+    // Persist the selected profile
+    localStorage.setItem('currentWorkspaceProfile', profileId);
     
     toast({
       title: "Switched Profile",

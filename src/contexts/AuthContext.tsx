@@ -91,6 +91,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
+    // Clear persisted profile to prevent conflicts on next login
+    localStorage.removeItem('currentWorkspaceProfile');
     return { error };
   };
 
