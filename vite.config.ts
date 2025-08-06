@@ -14,19 +14,24 @@ export default defineConfig(({ mode }) => ({
       'X-XSS-Protection': '1; mode=block',
       'Cache-Control': mode === 'development' ? 'no-cache' : 'public, max-age=31536000',
     },
-    // Enhanced WebSocket configuration for Vite 7 real-time features with HTTPS support
+    // Enhanced HMR configuration following official Vite documentation
     hmr: {
+      protocol: 'wss', // Use secure WebSocket for HTTPS environments
       overlay: true,
-      port: 8080,
-      clientPort: 8080,
-      // Fix WebSocket connection issues and ensure secure connections
       timeout: 30000,
-      // Use secure WebSocket protocol for HTTPS environments
-      protocol: 'wss',
-      // Remove host to let Vite auto-detect the correct host
+      // Let Vite auto-detect host and port for better compatibility
     },
-    // Improved middleware for better performance
+    // Performance optimizations
     middlewareMode: false,
+    warmup: {
+      clientFiles: [
+        './src/components/**/*.tsx',
+        './src/pages/**/*.tsx',
+        './src/hooks/**/*.ts',
+        './src/contexts/**/*.tsx',
+        './src/lib/**/*.ts',
+      ],
+    },
     fs: {
       strict: false,
       allow: ['..'],
