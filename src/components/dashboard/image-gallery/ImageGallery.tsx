@@ -37,9 +37,12 @@ const images = [
 
 export function ImageGallery() {
   return (
-    <Card className="w-full h-full rounded-lg">
+    <Card className="w-full h-full rounded-lg bg-gradient-to-br from-rose-100 to-pink-100 dark:from-rose-900/20 dark:to-pink-900/20">
       <CardContent className="p-4 h-full flex flex-col">
-        <h3 className="text-lg font-semibold mb-4 text-foreground">Image Gallery</h3>
+        <h3 className="text-lg font-semibold mb-4 text-rose-600 dark:text-rose-400 flex items-center gap-2">
+          <span className="text-rose-600 dark:text-rose-400">🖼️</span>
+          Image Gallery
+        </h3>
         <div className="flex-1 flex items-center justify-center">
           <Carousel className="w-full max-w-xs">
             <CarouselContent>

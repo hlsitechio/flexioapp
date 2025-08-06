@@ -63,10 +63,10 @@ export function DashboardCountdownTimer() {
   const isTimeUp = timeLeft === 0;
 
   return (
-    <Card className="animate-fade-in">
+    <Card className="h-full bg-gradient-to-br from-emerald-100 to-teal-100 dark:from-emerald-900/20 dark:to-teal-900/20 animate-fade-in">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <Timer className="h-5 w-5 text-primary" />
+          <Timer className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
           Countdown Timer
         </CardTitle>
       </CardHeader>

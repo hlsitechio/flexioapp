@@ -36,10 +36,10 @@ export function DashboardRandomQuote() {
   const [quoteText, author] = currentQuote.split(' - ');
 
   return (
-    <Card className="animate-fade-in">
+    <Card className="h-full bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/20 dark:to-purple-900/20 animate-fade-in">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <Quote className="h-5 w-5 text-primary" />
+          <Quote className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
           Daily Inspiration
           <Button 
             onClick={getRandomQuote}

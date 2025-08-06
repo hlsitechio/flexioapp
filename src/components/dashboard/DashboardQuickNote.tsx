@@ -27,10 +27,10 @@ export function DashboardQuickNote() {
   };
 
   return (
-    <Card className="animate-fade-in">
+    <Card className="h-full bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900/20 dark:to-orange-900/20 animate-fade-in">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
-          <StickyNote className="h-5 w-5 text-primary" />
+          <StickyNote className="h-5 w-5 text-amber-600 dark:text-amber-400" />
           Quick Note
           <Button 
             onClick={isEditing ? handleSave : handleEdit}
