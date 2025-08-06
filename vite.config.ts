@@ -14,15 +14,13 @@ export default defineConfig(({ mode }) => ({
       'X-XSS-Protection': '1; mode=block',
       'Cache-Control': mode === 'development' ? 'no-cache' : 'public, max-age=31536000',
     },
-    // Enhanced HMR configuration for hosted environments like Lovable
-    hmr: {
-      // Use WSS for secure connections
-      protocol: 'wss',
-      // Set clientPort to 443 for HTTPS hosted environments
-      clientPort: 443,
+    // Disable HMR in hosted/iframe environments to prevent WebSocket connection errors
+    hmr: process.env.NODE_ENV === 'development' && !process.env.LOVABLE_PROJECT_ID ? {
+      // Only enable HMR in true local development
+      protocol: 'ws',
       overlay: true,
       timeout: 30000,
-    },
+    } : false, // Disable HMR in hosted environments
     // Performance optimizations
     middlewareMode: false,
     warmup: {
