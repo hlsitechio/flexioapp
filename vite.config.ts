@@ -13,10 +13,16 @@ export default defineConfig(({ mode }) => ({
       'X-Content-Type-Options': 'nosniff',
       'X-XSS-Protection': '1; mode=block',
     },
-    // Improved HMR performance in Vite 7
+    // Fix for Vite 7 WebSocket token issue
     hmr: {
       overlay: true,
+      port: 8080,
+      clientPort: 8080,
     },
+  },
+  define: {
+    // Fix for __WS_TOKEN__ undefined error in Vite 7
+    __WS_TOKEN__: JSON.stringify(process.env.WS_TOKEN || ''),
   },
   plugins: [
     react({
