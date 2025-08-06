@@ -54,9 +54,11 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    // Prevent React duplication by ensuring single instance
+    dedupe: ['react', 'react-dom', 'next-themes'],
   },
   build: {
-    // Leverage Vite 7's improved build performance with aggressive optimizations
+    // Simplified build configuration to prevent React duplication
     target: 'esnext',
     minify: 'esbuild',
     cssMinify: true,
@@ -65,33 +67,21 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
+          // Ensure React is in a single chunk to prevent duplication
+          react: ['react', 'react-dom'],
+          vendor: ['@tanstack/react-query', 'react-router-dom'],
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-popover', '@radix-ui/react-toast'],
+          themes: ['next-themes'],
           supabase: ['@supabase/supabase-js'],
           utils: ['clsx', 'tailwind-merge', 'class-variance-authority'],
-          routing: ['react-router-dom'],
           icons: ['lucide-react'],
-          animations: ['framer-motion'],
         },
-        assetFileNames: (assetInfo) => {
-          const info = assetInfo.name?.split('.') || [];
-          const ext = info[info.length - 1];
-          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(ext)) {
-            return `assets/images/[name]-[hash][extname]`;
-          }
-          if (/css/i.test(ext)) {
-            return `assets/styles/[name]-[hash][extname]`;
-          }
-          return `assets/[name]-[hash][extname]`;
-        },
-        chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/[name]-[hash].js',
       }
     },
     // Enable source maps for better debugging
     sourcemap: mode === 'development',
   },
-  // Enhanced dependency pre-bundling for Vite 7 with aggressive optimization
+  // Fixed dependency pre-bundling for Vite 7 to prevent React duplication
   optimizeDeps: {
     include: [
       'react',
@@ -105,18 +95,14 @@ export default defineConfig(({ mode }) => ({
       'tailwind-merge',
       'class-variance-authority',
       'lucide-react',
-      'framer-motion',
       'date-fns',
     ],
-    force: mode === 'development',
-    // Enhanced pre-bundling for better performance
+    // Remove force option to prevent re-bundling issues
     esbuildOptions: {
       target: 'esnext',
-      splitting: true,
-      format: 'esm',
     },
   },
-  // Advanced caching for Vite 7
+  // Simplified caching for Vite 7
   cacheDir: 'node_modules/.vite',
   // Enhanced ESBuild configuration for Vite 7 with performance optimizations
   esbuild: {

@@ -2,7 +2,7 @@ import React from 'react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { ThemeProvider } from "next-themes";
+import { SafeThemeProvider } from "@/components/providers/SafeThemeProvider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { NotificationProvider } from "@/contexts/NotificationContext";
 import { WorkspaceProvider } from "@/contexts/WorkspaceContext";
@@ -21,13 +21,7 @@ interface AppProvidersProps {
 export function AppProviders({ children }: AppProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider 
-        attribute="class" 
-        defaultTheme="system" 
-        enableSystem 
-        disableTransitionOnChange
-        storageKey="theme"
-      >
+      <SafeThemeProvider>
         <AuthProvider>
           <NotificationProvider>
             <WorkspaceProvider>
@@ -49,7 +43,7 @@ export function AppProviders({ children }: AppProvidersProps) {
             </WorkspaceProvider>
           </NotificationProvider>
         </AuthProvider>
-      </ThemeProvider>
+      </SafeThemeProvider>
     </QueryClientProvider>
   );
 }
