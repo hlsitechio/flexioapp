@@ -13,5 +13,20 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     storage: localStorage,
     persistSession: true,
     autoRefreshToken: true,
-  }
+    // Enhanced security for Vite 7
+    storageKey: 'supabase.auth.token',
+    flowType: 'pkce',
+  },
+  // Better real-time configuration
+  realtime: {
+    params: {
+      eventsPerSecond: 10,
+    },
+  },
+  // Enhanced global options
+  global: {
+    headers: {
+      'X-Client-Info': 'supabase-js-web',
+    },
+  },
 });

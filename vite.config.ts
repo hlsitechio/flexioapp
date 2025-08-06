@@ -13,17 +13,13 @@ export default defineConfig(({ mode }) => ({
       'X-Content-Type-Options': 'nosniff',
       'X-XSS-Protection': '1; mode=block',
     },
-    // Fix for Vite 7 WebSocket token issue
+    // Fix for Vite 7 WebSocket issues
     hmr: {
       overlay: true,
       port: 8080,
-      clientPort: 8080,
     },
   },
-  define: {
-    // Fix for __WS_TOKEN__ undefined error in Vite 7
-    __WS_TOKEN__: JSON.stringify(process.env.WS_TOKEN || ''),
-  },
+  envPrefix: ['VITE_'],
   plugins: [
     react({
       // Enhanced React SWC plugin configuration for Vite 7

@@ -22,6 +22,9 @@ export const stagingConfig = {
     enableDebugTools: true,
     enableMockData: false,
     enablePerformanceMetrics: true,
+    // Vite 7 specific features
+    enableFastRefresh: false,
+    enableOptimizedDeps: true,
   },
   
   monitoring: {

@@ -22,6 +22,9 @@ export const productionConfig = {
     enableDebugTools: false,
     enableMockData: false,
     enablePerformanceMetrics: true,
+    // Vite 7 specific features
+    enableFastRefresh: false,
+    enableOptimizedDeps: true,
   },
   
   monitoring: {
