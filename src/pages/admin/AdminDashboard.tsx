@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Crown, Users, Settings, Database, Eye, UserCheck, Trash2, Plus, Bug, Monitor, MessageSquare } from 'lucide-react';
+import { Crown, Users, Settings, Database, Eye, UserCheck, Trash2, Plus, Bug, Monitor, MessageSquare, Link, Globe } from 'lucide-react';
 
 interface User {
   id: string;
@@ -31,6 +31,8 @@ interface UserWorkspace {
   created_at: string;
   user_id: string;
   profiles_count: number;
+  workspace_number?: number;
+  role?: string;
 }
 
 interface WorkspaceProfile {
@@ -39,12 +41,13 @@ interface WorkspaceProfile {
   category: string;
   is_default: boolean;
   created_at: string;
+  workspace_id: string;
 }
 
 export default function AdminDashboard() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const { createEmptyDemoTemplate } = useWorkspaceProfile();
+  const { createEmptyDemoTemplate, getWorkspaceNumber } = useWorkspaceProfile();
   
   const [users, setUsers] = useState<User[]>([]);
   const [workspaces, setWorkspaces] = useState<UserWorkspace[]>([]);
@@ -134,6 +137,41 @@ export default function AdminDashboard() {
     }
   };
 
+  const getWorkspaceUrlFormat = async (workspace: UserWorkspace, userRole: string) => {
+    try {
+      // Get all workspaces for this user to determine the correct number
+      const { data: userWorkspaces, error } = await supabase
+        .from('workspaces')
+        .select('id, created_at')
+        .eq('user_id', workspace.user_id)
+        .order('created_at', { ascending: true });
+
+      if (error) throw error;
+
+      const workspaceIndex = userWorkspaces?.findIndex(w => w.id === workspace.id) ?? -1;
+      const workspaceNumber = workspaceIndex >= 0 ? workspaceIndex + 1 : 1;
+
+      // Get the default profile name for this workspace
+      const { data: profiles, error: profileError } = await supabase
+        .from('workspace_profiles')
+        .select('name, is_default')
+        .eq('workspace_id', workspace.id)
+        .order('is_default', { ascending: false })
+        .order('created_at', { ascending: true })
+        .limit(1);
+
+      if (profileError) throw profileError;
+
+      const profileName = profiles?.[0]?.name || workspace.name;
+      const cleanProfileName = profileName.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-]/g, '');
+      
+      return `WRK_${workspaceNumber.toString().padStart(5, '0')}-${cleanProfileName}-${userRole}`;
+    } catch (error) {
+      console.error('Error generating workspace URL format:', error);
+      return `WRK_00001-${workspace.name.replace(/\s+/g, '-')}-${userRole}`;
+    }
+  };
+
   const loadAllWorkspaces = async () => {
     try {
       const { data, error } = await supabase
@@ -149,10 +187,24 @@ export default function AdminDashboard() {
 
       if (error) throw error;
 
-      const workspacesData = data?.map(workspace => ({
-        ...workspace,
-        profiles_count: workspace.workspace_profiles?.[0]?.count || 0
-      })) || [];
+      // Get user roles for workspace URL formatting
+      const { data: roles, error: rolesError } = await supabase
+        .from('user_roles')
+        .select('user_id, role');
+
+      if (rolesError) throw rolesError;
+
+      const workspacesData = await Promise.all(data?.map(async workspace => {
+        const userRole = roles?.find(r => r.user_id === workspace.user_id)?.role || 'free';
+        const urlFormat = await getWorkspaceUrlFormat(workspace, userRole);
+        
+        return {
+          ...workspace,
+          profiles_count: workspace.workspace_profiles?.[0]?.count || 0,
+          role: userRole,
+          urlFormat
+        };
+      }) || []);
 
       setWorkspaces(workspacesData);
     } catch (error) {
@@ -180,10 +232,26 @@ export default function AdminDashboard() {
 
       if (error) throw error;
 
-      const workspacesData = data?.map(workspace => ({
-        ...workspace,
-        profiles_count: workspace.workspace_profiles?.[0]?.count || 0
-      })) || [];
+      // Get user role
+      const { data: userRoles, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', userId)
+        .limit(1);
+
+      if (roleError) throw roleError;
+
+      const userRole = userRoles?.[0]?.role || 'free';
+
+      const workspacesData = await Promise.all(data?.map(async workspace => {
+        const urlFormat = await getWorkspaceUrlFormat(workspace, userRole);
+        return {
+          ...workspace,
+          profiles_count: workspace.workspace_profiles?.[0]?.count || 0,
+          role: userRole,
+          urlFormat
+        };
+      }) || []);
 
       setWorkspaces(workspacesData);
     } catch (error) {
@@ -381,6 +449,7 @@ export default function AdminDashboard() {
       });
       
       await loadUsers(); // Refresh user list
+      await loadAllWorkspaces(); // Refresh workspaces to update URL formats
     } catch (error) {
       console.error('Error assigning role:', error);
       toast({
@@ -701,9 +770,15 @@ export default function AdminDashboard() {
         <TabsContent value="workspaces" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>All Workspaces</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Globe className="h-5 w-5" />
+                All Workspaces
+                <Badge variant="outline" className="ml-2">
+                  New URL Format
+                </Badge>
+              </CardTitle>
               <p className="text-sm text-muted-foreground">
-                View and manage all user workspaces in the system
+                View and manage all user workspaces with the new role-based URL format (WRK_00001-ProfileName-role)
               </p>
             </CardHeader>
             <CardContent>
@@ -712,6 +787,7 @@ export default function AdminDashboard() {
                   <TableRow>
                     <TableHead>Workspace Name</TableHead>
                     <TableHead>Owner</TableHead>
+                    <TableHead>URL Format</TableHead>
                     <TableHead>Created</TableHead>
                     <TableHead>Profiles</TableHead>
                     <TableHead>Actions</TableHead>
@@ -731,6 +807,16 @@ export default function AdminDashboard() {
                             <div className="text-sm text-muted-foreground">
                               {owner?.email || workspace.user_id.slice(0, 8) + '...'}
                             </div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <code className="text-xs bg-muted px-2 py-1 rounded">
+                              {workspace.urlFormat || `WRK_00001-${workspace.name.replace(/\s+/g, '-')}-${workspace.role || 'free'}`}
+                            </code>
+                            <Badge variant="secondary" className="text-xs">
+                              {workspace.role || 'free'}
+                            </Badge>
                           </div>
                         </TableCell>
                         <TableCell>
@@ -780,6 +866,12 @@ export default function AdminDashboard() {
                 <CardTitle>
                   Profiles in "{selectedWorkspace.name}"
                 </CardTitle>
+                <div className="flex items-center gap-2">
+                  <Link className="h-4 w-4" />
+                  <code className="text-sm bg-muted px-2 py-1 rounded">
+                    {selectedWorkspace.urlFormat}
+                  </code>
+                </div>
               </CardHeader>
               <CardContent>
                 <Table>
@@ -853,6 +945,7 @@ export default function AdminDashboard() {
                   <li>• Minimal Navigation</li>
                   <li>• Basic Clock</li>
                   <li>• No Gradients</li>
+                  <li className="font-medium text-foreground">• URL: WRK_00001-Default-free</li>
                 </ul>
               </CardContent>
             </Card>
@@ -872,6 +965,7 @@ export default function AdminDashboard() {
                   <li>• Top Navigation Widgets</li>
                   <li>• Custom Titles</li>
                   <li>• Enhanced Features</li>
+                  <li className="font-medium text-foreground">• URL: WRK_00001-Default-pro</li>
                 </ul>
               </CardContent>
             </Card>
@@ -891,6 +985,7 @@ export default function AdminDashboard() {
                   <li>• Crown Icons</li>
                   <li>• Edit Mode</li>
                   <li>• All Features</li>
+                  <li className="font-medium text-foreground">• URL: WRK_00001-Default-premium</li>
                 </ul>
               </CardContent>
             </Card>
