@@ -600,6 +600,63 @@ export default function AdminDashboard() {
     }
   };
 
+  const createDemoUser = async () => {
+    try {
+      // Create demo user profile
+      const demoUserId = crypto.randomUUID();
+      
+      // Insert demo user profile
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .insert({
+          user_id: demoUserId,
+          full_name: 'Demo User'
+        });
+
+      if (profileError) throw profileError;
+
+      // Assign premium role to demo user
+      const { error: roleError } = await supabase
+        .from('user_roles')
+        .insert({
+          user_id: demoUserId,
+          role: 'premium'
+        });
+
+      if (roleError) throw roleError;
+
+      // Create demo workspace
+      const { data: workspaceData, error: workspaceError } = await supabase
+        .from('workspaces')
+        .insert({
+          name: 'Demo Workspace',
+          user_id: demoUserId
+        })
+        .select()
+        .single();
+
+      if (workspaceError) throw workspaceError;
+
+      // Create demo templates for the workspace
+      await createDemoTemplates(workspaceData.id, demoUserId);
+
+      await loadUsers();
+      await loadAllWorkspaces();
+      
+      toast({
+        title: "Demo User Created Successfully!",
+        description: "Demo user with premium role and demo templates has been created.",
+      });
+    } catch (error) {
+      console.error('Error creating demo user:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create demo user.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const createDebugWorkspace = async () => {
     if (users.length === 0) {
       toast({
@@ -791,6 +848,10 @@ export default function AdminDashboard() {
     user.profile?.full_name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const demoUsers = users.filter(user => 
+    user.profile?.full_name?.toLowerCase().includes('demo')
+  );
+
   if (!isAdmin) {
     return (
       <div className="container mx-auto p-6">
@@ -843,6 +904,14 @@ export default function AdminDashboard() {
                 </Button>
               </>
             )}
+            <Button variant="default" size="sm" onClick={createDemoUser}>
+              <UserCheck className="h-4 w-4 mr-2" />
+              Create Demo User
+            </Button>
+            {debugMode && (
+              <>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -874,6 +943,43 @@ export default function AdminDashboard() {
         </TabsList>
 
         <TabsContent value="users" className="space-y-6">
+          {demoUsers.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <UserCheck className="h-5 w-5" />
+                  Demo Users ({demoUsers.length})
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-2">
+                  {demoUsers.map((user) => (
+                    <div key={user.id} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div>
+                          <div className="font-medium">{user.profile?.full_name}</div>
+                          <div className="text-sm text-muted-foreground">
+                            Role: {user.role} • Created: {new Date(user.created_at).toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge variant="secondary">Demo User</Badge>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSelectedUser(user)}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
