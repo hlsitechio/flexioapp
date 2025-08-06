@@ -4,7 +4,7 @@ import { ArrowLeft, Briefcase, Heart, Rocket } from 'lucide-react';
 
 export function CareersPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       {/* Navigation */}
       <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16">
