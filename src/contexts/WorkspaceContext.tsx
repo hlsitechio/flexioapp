@@ -21,6 +21,7 @@ interface WorkspaceContextType {
   selectWorkspace: (workspaceId: string) => Promise<void>;
   getWorkspaceNumber: (workspaceId: string) => number;
   getUserRole: () => Promise<'free' | 'pro' | 'premium' | 'admin'>;
+  reloadWorkspaces: () => Promise<void>;
 }
 
 const WorkspaceContext = createContext<WorkspaceContextType | undefined>(undefined);
@@ -169,6 +170,36 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const reloadWorkspaces = async () => {
+    if (!user) return;
+
+    try {
+      const { data: workspaces, error } = await supabase
+        .from('workspaces')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        console.error('Error reloading workspaces:', error);
+        return;
+      }
+
+      setWorkspaces(workspaces || []);
+
+      // If current workspace is not in the list anymore, select the first one
+      if (workspace && !workspaces?.find(w => w.id === workspace.id)) {
+        if (workspaces && workspaces.length > 0) {
+          setWorkspace(workspaces[0]);
+        } else {
+          setWorkspace(null);
+        }
+      }
+    } catch (error) {
+      console.error('Error reloading workspaces:', error);
+    }
+  };
+
   const getWorkspaceNumber = (workspaceId: string): number => {
     const sortedWorkspaces = [...workspaces].sort((a, b) => 
       new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
@@ -176,6 +207,33 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     const index = sortedWorkspaces.findIndex(w => w.id === workspaceId);
     return index + 1;
   };
+
+  // Set up realtime subscription to listen for workspace changes
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase
+      .channel('workspace-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'workspaces',
+          filter: `user_id=eq.${user.id}`
+        },
+        (payload) => {
+          console.log('Workspace change detected:', payload);
+          // Reload workspaces when changes occur
+          reloadWorkspaces();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
 
   const value: WorkspaceContextType = {
     workspace,
@@ -186,6 +244,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     selectWorkspace,
     getWorkspaceNumber,
     getUserRole,
+    reloadWorkspaces,
   };
 
   return (
