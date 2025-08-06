@@ -5,7 +5,7 @@ import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 
 export function ContactPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       {/* Navigation */}
       <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16">
@@ -29,7 +29,7 @@ export function ContactPage() {
 
       {/* Header */}
       <section className="py-16 lg:py-24 px-8 sm:px-12 lg:px-16">
-        <div className="max-w-[1400px] mx-auto text-center space-y-6">
+        <div className="max-w-[1800px] mx-auto text-center space-y-6">
           <h1 className="text-4xl lg:text-5xl font-bold tracking-tight">
             Get in Touch
           </h1>
@@ -127,7 +127,7 @@ export function ContactPage() {
 
       {/* FAQ Section */}
       <section className="py-16 lg:py-24 px-8 sm:px-12 lg:px-16 bg-muted/30">
-        <div className="max-w-[1400px] mx-auto">
+        <div className="max-w-[1800px] mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold mb-6">Frequently Asked Questions</h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">

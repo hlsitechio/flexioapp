@@ -6,10 +6,10 @@ import { CheckCircle, Play, Users, Clock, Star } from 'lucide-react';
 
 export function DemoPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       {/* Navigation */}
-      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+        <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Button variant="ghost" asChild>
@@ -29,8 +29,8 @@ export function DemoPage() {
       </nav>
 
       {/* Header */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center space-y-4">
+      <section className="py-16 lg:py-24 px-8 sm:px-12 lg:px-16">
+        <div className="max-w-[1800px] mx-auto text-center space-y-6">
           <Badge variant="secondary" className="mb-4">
             <Star className="h-3 w-3 mr-1" />
             Most Popular
@@ -45,8 +45,8 @@ export function DemoPage() {
       </section>
 
       {/* Demo Benefits */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-12 lg:py-16 px-8 sm:px-12 lg:px-16">
+        <div className="max-w-[1800px] mx-auto">
           <div className="grid md:grid-cols-3 gap-8 mb-16">
             <Card className="p-6 text-center">
               <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-4">
@@ -174,8 +174,8 @@ export function DemoPage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-muted/30">
-        <div className="max-w-4xl mx-auto">
+      <section className="py-16 lg:py-24 px-8 sm:px-12 lg:px-16 bg-muted/30">
+        <div className="max-w-[1800px] mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">What Our Customers Say</h2>
             <p className="text-muted-foreground">
@@ -221,7 +221,7 @@ export function DemoPage() {
 
       {/* Footer */}
       <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16 py-8">
           <div className="text-center text-sm text-muted-foreground">
             <p>&copy; 2024 Your Platform. All rights reserved.</p>
           </div>
