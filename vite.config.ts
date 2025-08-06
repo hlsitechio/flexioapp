@@ -14,12 +14,14 @@ export default defineConfig(({ mode }) => ({
       'X-XSS-Protection': '1; mode=block',
       'Cache-Control': mode === 'development' ? 'no-cache' : 'public, max-age=31536000',
     },
-    // Enhanced HMR configuration following official Vite documentation
+    // Enhanced HMR configuration for hosted environments like Lovable
     hmr: {
-      protocol: 'wss', // Use secure WebSocket for HTTPS environments
+      // Use WSS for secure connections
+      protocol: 'wss',
+      // Set clientPort to 443 for HTTPS hosted environments
+      clientPort: 443,
       overlay: true,
       timeout: 30000,
-      // Let Vite auto-detect host and port for better compatibility
     },
     // Performance optimizations
     middlewareMode: false,
