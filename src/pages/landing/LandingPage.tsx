@@ -51,8 +51,10 @@ export function LandingPage() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="text-lg px-8 py-4 rounded-full hover-scale" asChild>
                   <a href="/auth">
-                    Get Started Free
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <span className="flex items-center">
+                      Get Started Free
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </span>
                   </a>
                 </Button>
                 <Button size="lg" variant="outline" className="text-lg px-8 py-4 rounded-full hover-scale" asChild>
