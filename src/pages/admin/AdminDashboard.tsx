@@ -33,6 +33,7 @@ interface UserWorkspace {
   profiles_count: number;
   workspace_number?: number;
   role?: string;
+  urlFormat?: string;
 }
 
 interface WorkspaceProfile {
@@ -47,7 +48,8 @@ interface WorkspaceProfile {
 export default function AdminDashboard() {
   const { user } = useAuth();
   const { toast } = useToast();
-  const { createEmptyDemoTemplate, getWorkspaceNumber } = useWorkspaceProfile();
+  const { getWorkspaceNumber } = useWorkspace();
+  const { createEmptyDemoTemplate } = useWorkspaceProfile();
   
   const [users, setUsers] = useState<User[]>([]);
   const [workspaces, setWorkspaces] = useState<UserWorkspace[]>([]);
@@ -196,12 +198,21 @@ export default function AdminDashboard() {
 
       const workspacesData = await Promise.all(data?.map(async workspace => {
         const userRole = roles?.find(r => r.user_id === workspace.user_id)?.role || 'free';
-        const urlFormat = await getWorkspaceUrlFormat(workspace, userRole);
+        const profiles_count = workspace.workspace_profiles?.[0]?.count || 0;
+        
+        const workspaceWithCount: UserWorkspace = {
+          id: workspace.id,
+          name: workspace.name,
+          created_at: workspace.created_at,
+          user_id: workspace.user_id,
+          profiles_count,
+          role: userRole
+        };
+        
+        const urlFormat = await getWorkspaceUrlFormat(workspaceWithCount, userRole);
         
         return {
-          ...workspace,
-          profiles_count: workspace.workspace_profiles?.[0]?.count || 0,
-          role: userRole,
+          ...workspaceWithCount,
           urlFormat
         };
       }) || []);
@@ -244,11 +255,21 @@ export default function AdminDashboard() {
       const userRole = userRoles?.[0]?.role || 'free';
 
       const workspacesData = await Promise.all(data?.map(async workspace => {
-        const urlFormat = await getWorkspaceUrlFormat(workspace, userRole);
+        const profiles_count = workspace.workspace_profiles?.[0]?.count || 0;
+        
+        const workspaceWithCount: UserWorkspace = {
+          id: workspace.id,
+          name: workspace.name,
+          created_at: workspace.created_at,
+          user_id: workspace.user_id,
+          profiles_count,
+          role: userRole
+        };
+        
+        const urlFormat = await getWorkspaceUrlFormat(workspaceWithCount, userRole);
+        
         return {
-          ...workspace,
-          profiles_count: workspace.workspace_profiles?.[0]?.count || 0,
-          role: userRole,
+          ...workspaceWithCount,
           urlFormat
         };
       }) || []);
