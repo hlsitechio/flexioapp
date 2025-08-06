@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LeadCaptureForm } from '@/components/forms';
@@ -14,10 +15,54 @@ export function LandingPage() {
     }, 100);
   };
 
+  // Animation variants
+  const fadeInUp = {
+    initial: { opacity: 0, y: 60 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, ease: "easeOut" }
+  };
+
+  const fadeIn = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    transition: { duration: 0.8 }
+  };
+
+  const staggerContainer = {
+    animate: {
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const slideInLeft = {
+    initial: { opacity: 0, x: -60 },
+    animate: { opacity: 1, x: 0 },
+    transition: { duration: 0.7, ease: "easeOut" }
+  };
+
+  const slideInRight = {
+    initial: { opacity: 0, x: 60 },
+    animate: { opacity: 1, x: 0 },
+    transition: { duration: 0.7, ease: "easeOut" }
+  };
+
+  const scaleIn = {
+    initial: { opacity: 0, scale: 0.8 },
+    animate: { opacity: 1, scale: 1 },
+    transition: { duration: 0.6, ease: "easeOut" }
+  };
+
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       {/* Navigation */}
-      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+      <motion.nav 
+        className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50"
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
         <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -37,28 +82,45 @@ export function LandingPage() {
             </div>
           </div>
         </div>
-      </nav>
+      </motion.nav>
 
       {/* Hero Section */}
       <section className="py-16 lg:py-24 px-8 sm:px-12 lg:px-16">
         <div className="max-w-[1800px] mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center min-h-[700px]">
-            <div className="space-y-8">
+            <motion.div 
+              className="space-y-8"
+              initial="initial"
+              animate="animate"
+              variants={staggerContainer}
+            >
               <div className="space-y-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+                <motion.div 
+                  className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium"
+                  variants={fadeInUp}
+                >
                   <Zap className="h-4 w-4" />
                   Introducing FlexIO Platform
-                </div>
-                <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]">
+                </motion.div>
+                <motion.h1 
+                  className="text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]"
+                  variants={fadeInUp}
+                >
                   The productivity platform{' '}
                   <span className="text-primary">for everyone</span>
-                </h1>
-                <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-2xl">
+                </motion.h1>
+                <motion.p 
+                  className="text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-2xl"
+                  variants={fadeInUp}
+                >
                   Streamline operations, boost productivity, and accelerate growth with our innovative platform that adapts to your workflow.
-                </p>
+                </motion.p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
+              <motion.div 
+                className="flex flex-col sm:flex-row gap-4"
+                variants={fadeInUp}
+              >
                 <Button size="lg" className="text-lg px-8 py-4 rounded-full hover-scale" asChild>
                   <a href="/workspace-selection">
                     <span className="flex items-center">
@@ -70,9 +132,12 @@ export function LandingPage() {
                 <Button size="lg" variant="outline" className="text-lg px-8 py-4 rounded-full hover-scale" onClick={scrollToDemo}>
                   Try Demo
                 </Button>
-              </div>
+              </motion.div>
 
-              <div className="flex items-center flex-wrap gap-8 text-sm text-muted-foreground">
+              <motion.div 
+                className="flex items-center flex-wrap gap-8 text-sm text-muted-foreground"
+                variants={fadeInUp}
+              >
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="h-4 w-4 text-emerald-500" />
                   <span>Free forever plan</span>
@@ -85,10 +150,15 @@ export function LandingPage() {
                   <CheckCircle className="h-4 w-4 text-emerald-500" />
                   <span>Cancel anytime</span>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-            <div className="relative">
+            <motion.div 
+              className="relative"
+              initial="initial"
+              animate="animate"
+              variants={slideInRight}
+            >
               <div className="relative bg-gradient-to-br from-muted/30 to-muted/10 rounded-2xl p-8 border border-border/50 backdrop-blur-sm">
                 <div className="bg-background rounded-xl p-6 shadow-2xl">
                   <div className="flex items-center gap-3 mb-6">
@@ -106,39 +176,68 @@ export function LandingPage() {
                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/20 rounded-full blur-xl"></div>
                 <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-accent/20 rounded-full blur-2xl"></div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Social Proof */}
-      <section className="py-12 px-8 sm:px-12 lg:px-16 border-y bg-muted/20">
+      <motion.section 
+        className="py-12 px-8 sm:px-12 lg:px-16 border-y bg-muted/20"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+      >
         <div className="max-w-[1800px] mx-auto">
           <div className="text-center space-y-8">
-            <p className="text-muted-foreground font-medium">Trusted by innovative companies worldwide</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-12 items-center opacity-60">
+            <motion.p 
+              className="text-muted-foreground font-medium"
+              variants={fadeIn}
+            >
+              Trusted by innovative companies worldwide
+            </motion.p>
+            <motion.div 
+              className="grid grid-cols-2 md:grid-cols-4 gap-12 items-center opacity-60"
+              variants={staggerContainer}
+            >
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-16 bg-muted rounded-lg flex items-center justify-center hover-scale">
+                <motion.div 
+                  key={i} 
+                  className="h-16 bg-muted rounded-lg flex items-center justify-center hover-scale"
+                  variants={scaleIn}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
+                >
                   <span className="text-lg font-semibold">Company {i}</span>
-                </div>
+                </motion.div>
               ))}
-            </div>
-            <div className="flex justify-center items-center space-x-2">
+            </motion.div>
+            <motion.div 
+              className="flex justify-center items-center space-x-2"
+              variants={fadeInUp}
+            >
               <div className="flex">
                 {[1, 2, 3, 4, 5].map((i) => (
                   <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                 ))}
               </div>
               <span className="text-lg font-semibold">4.9/5 from 2,500+ reviews</span>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Productivity for Everyone Section */}
-      <section className="py-24 px-8 sm:px-12 lg:px-16 bg-background">
+      <motion.section 
+        className="py-24 px-8 sm:px-12 lg:px-16 bg-background"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+      >
         <div className="max-w-[1400px] mx-auto text-center space-y-12">
-          <div className="space-y-6">
+          <motion.div className="space-y-6" variants={fadeInUp}>
             <div className="w-16 h-1 bg-primary mx-auto rounded-full"></div>
             <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
               Productivity for the rest of us
@@ -147,15 +246,21 @@ export function LandingPage() {
               FlexIO makes productivity tools accessible to everyone—not just experts. With FlexIO as your 
               dedicated productivity platform, you can streamline workflows and drive meaningful outcomes in your business.
             </p>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Any Task, Any Question Section */}
-      <section className="py-24 px-8 sm:px-12 lg:px-16 bg-muted/20">
+      <motion.section 
+        className="py-24 px-8 sm:px-12 lg:px-16 bg-muted/20"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+      >
         <div className="max-w-[1800px] mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            <div className="relative">
+            <motion.div className="relative" variants={slideInLeft}>
               <div className="bg-gradient-to-br from-background to-muted/30 rounded-2xl p-8 border border-border/50 shadow-2xl">
                 <div className="bg-background rounded-xl p-6">
                   <div className="flex items-center gap-3 mb-6">
@@ -216,9 +321,9 @@ export function LandingPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
             
-            <div className="space-y-6">
+            <motion.div className="space-y-6" variants={slideInRight}>
               <div className="space-y-4">
                 <div className="w-16 h-1 bg-primary rounded-full"></div>
                 <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
@@ -231,15 +336,21 @@ export function LandingPage() {
                   your workflow with natural language queries.
                 </p>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Features Showcase Section with Images */}
-      <section className="py-24 px-8 sm:px-12 lg:px-16 bg-background">
+      <motion.section 
+        className="py-24 px-8 sm:px-12 lg:px-16 bg-background"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+      >
         <div className="max-w-[1800px] mx-auto">
-          <div className="text-center space-y-6 mb-20">
+          <motion.div className="text-center space-y-6 mb-20" variants={fadeInUp}>
             <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
               Everything you need in one platform
             </h2>
@@ -247,10 +358,14 @@ export function LandingPage() {
               From project management to productivity tracking, FlexIO combines all your essential tools 
               in one intelligent workspace.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-            <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30 hover-scale">
+          <motion.div 
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12"
+            variants={staggerContainer}
+          >
+            <motion.div variants={scaleIn}>
+              <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop&crop=center" 
@@ -268,9 +383,11 @@ export function LandingPage() {
                   Kanban boards, task counters, and habit trackers to keep your projects organized and on track.
                 </p>
               </div>
-            </Card>
+              </Card>
+            </motion.div>
 
-            <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/30 hover-scale">
+            <motion.div variants={scaleIn}>
+              <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop&crop=center" 
@@ -288,9 +405,11 @@ export function LandingPage() {
                   Advanced calendar with mini views, event management, and intelligent scheduling.
                 </p>
               </div>
-            </Card>
+              </Card>
+            </motion.div>
 
-            <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/30 dark:to-purple-900/30 hover-scale">
+            <motion.div variants={scaleIn}>
+              <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/30 dark:to-purple-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=600&fit=crop&crop=center" 
@@ -308,9 +427,11 @@ export function LandingPage() {
                   Quick notes, code snippets, and prompts gallery for capturing and organizing your ideas.
                 </p>
               </div>
-            </Card>
+              </Card>
+            </motion.div>
 
-            <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/30 hover-scale">
+            <motion.div variants={scaleIn}>
+              <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop&crop=center" 
@@ -328,9 +449,11 @@ export function LandingPage() {
                   Organize and access your important links with smart categorization and quick search.
                 </p>
               </div>
-            </Card>
+              </Card>
+            </motion.div>
 
-            <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/30 hover-scale">
+            <motion.div variants={scaleIn}>
+              <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&crop=center" 
@@ -348,9 +471,11 @@ export function LandingPage() {
                   Countdown timers, productivity analytics, and time management tools to optimize your workflow.
                 </p>
               </div>
-            </Card>
+              </Card>
+            </motion.div>
 
-            <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-950/30 dark:to-cyan-900/30 hover-scale">
+            <motion.div variants={scaleIn}>
+              <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-950/30 dark:to-cyan-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
                 <img 
                   src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop&crop=center" 
@@ -368,16 +493,23 @@ export function LandingPage() {
                   Built-in calculator, image gallery, and utilities for instant productivity boosts.
                 </p>
               </div>
-            </Card>
-          </div>
+              </Card>
+            </motion.div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Multi-Purpose Dashboard Section with Image */}
-      <section className="py-24 px-8 sm:px-12 lg:px-16 bg-muted/20">
+      <motion.section 
+        className="py-24 px-8 sm:px-12 lg:px-16 bg-muted/20"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+      >
         <div className="max-w-[1800px] mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            <div className="space-y-6">
+            <motion.div className="space-y-6" variants={slideInLeft}>
               <div className="space-y-4">
                 <div className="w-16 h-1 bg-primary rounded-full"></div>
                 <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
@@ -421,9 +553,9 @@ export function LandingPage() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
             
-            <div className="relative group hover-scale">
+            <motion.div className="relative group hover-scale" variants={slideInRight}>
               <img 
                 src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&crop=center" 
                 alt="Multi-purpose Dashboard Interface Placeholder" 
@@ -433,10 +565,10 @@ export function LandingPage() {
               <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-sm rounded-lg p-2">
                 <span className="text-sm font-medium text-foreground">Live Dashboard</span>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Dashboard Gallery Section */}
       <section className="py-24 px-8 sm:px-12 lg:px-16 bg-background">
