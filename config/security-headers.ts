@@ -27,7 +27,7 @@ export const productionSecurityHeaders = {
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https:",
-    "connect-src 'self' wss: ws: https://*.supabase.co wss://*.supabase.co https://*.vercel-analytics.com https://*.googleanalytics.com https://px.ads.linkedin.com https://www.facebook.com",
+    "connect-src 'self' wss: ws: https://*.supabase.co wss://*.supabase.co https://*.vercel-analytics.com https://*.googleanalytics.com https://px.ads.linkedin.com https://www.facebook.com https://lovable-api.com https://*.lovable.dev",
     "frame-src 'none'",
     "object-src 'none'",
     "base-uri 'self'",
