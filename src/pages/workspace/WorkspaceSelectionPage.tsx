@@ -23,13 +23,18 @@ export function WorkspaceSelectionPage() {
   const { toast } = useToast();
 
   // Only redirect if we have a current profile AND we're not in a loading state
+  // But allow users to manually navigate to workspace selection to switch profiles
   useEffect(() => {
     if (currentProfile && !loading && profiles.length > 0) {
-      // Use setTimeout to avoid immediate redirect during initial load
-      const timer = setTimeout(() => {
-        navigate('/', { replace: true });
-      }, 100);
-      return () => clearTimeout(timer);
+      // Only auto-redirect if there's a persisted profile preference
+      const persistedProfileId = localStorage.getItem('currentWorkspaceProfile');
+      if (persistedProfileId && currentProfile.id === persistedProfileId) {
+        // Use setTimeout to avoid immediate redirect during initial load
+        const timer = setTimeout(() => {
+          navigate('/', { replace: true });
+        }, 500); // Increased delay to allow profile switching
+        return () => clearTimeout(timer);
+      }
     }
   }, [currentProfile, loading, profiles.length, navigate]);
 
