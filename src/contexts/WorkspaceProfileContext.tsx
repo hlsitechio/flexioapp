@@ -121,9 +121,11 @@ export function WorkspaceProfileProvider({ children }: { children: React.ReactNo
         const persistedProfileId = localStorage.getItem('currentWorkspaceProfile');
         const persistedProfile = persistedProfileId ? data.find(p => p.id === persistedProfileId) : null;
         
-        // Only set current profile to default if no profile is currently set AND no persisted profile
-        if (!currentProfile) {
-          const targetProfile = persistedProfile || data.find(p => p.is_default) || data[0];
+        // Prioritize persisted profile, then default, then first available
+        const targetProfile = persistedProfile || data.find(p => p.is_default) || data[0];
+        
+        // Only load if the target profile is different from current or if no current profile
+        if (!currentProfile || currentProfile.id !== targetProfile.id) {
           setCurrentProfile(targetProfile as WorkspaceProfile);
           loadProfileConfiguration(targetProfile as WorkspaceProfile);
         }
