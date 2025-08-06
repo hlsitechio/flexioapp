@@ -1,17 +1,40 @@
 import { useState, useEffect, useRef } from 'react'; // Fixed ComponentShowcase reference error
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from '@/components/ui/carousel';
-import { LayoutDashboard, Plus, Clock, Calculator, CalendarDays, NotebookPen, MessageSquareQuote, Timer, Target, Image, Sparkles, Code, Bookmark } from 'lucide-react';
+import { 
+  LayoutDashboard, 
+  Plus, 
+  Clock, 
+  Calculator, 
+  CalendarDays, 
+  NotebookPen, 
+  MessageSquareQuote, 
+  Timer, 
+  Target, 
+  Image, 
+  Sparkles, 
+  Code, 
+  Bookmark,
+  TrendingUp,
+  MessageSquare,
+  Settings,
+  Music,
+  Cloud,
+  FolderOpen,
+  QrCode,
+  Newspaper,
+  DollarSign
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useSettings } from '@/contexts/SettingsContext';
 import { Calendar } from '@/components/calendar';
-import { 
-  DashboardTaskCounter, 
-  DashboardQuickNote, 
-  DashboardRandomQuote, 
+import {
+  DashboardTaskCounter,
+  DashboardQuickNote,
+  DashboardRandomQuote,
   DashboardCountdownTimer,
   DashboardPromptsGallery,
   DashboardCodeBlock,
@@ -19,7 +42,16 @@ import {
   DashboardQuickCalculator,
   DashboardBookmarkManager,
   DashboardDateDisplay,
-  ImageGallery
+  ImageGallery,
+  DashboardWeatherWidget,
+  DashboardStockTicker,
+  DashboardMessageCenter,
+  DashboardFileManager,
+  DashboardQRCodeGenerator,
+  DashboardMusicPlayer,
+  DashboardNewsReader,
+  DashboardTimeTracker,
+  DashboardExpenseTracker
 } from '@/components/dashboard';
 
 // Component categories
@@ -28,14 +60,42 @@ const componentCategories = [
     id: 'all',
     name: 'All Components',
     icon: LayoutDashboard,
-    count: 12
+    count: 22
   },
   {
     id: 'productivity',
     name: 'Productivity',
     icon: Target,
-    count: 6,
-    components: ['Task Counter', 'Quick Note', 'Habit Tracker', 'Bookmark Manager', 'Quick Calculator', 'Countdown Timer']
+    count: 8,
+    components: ['Task Counter', 'Quick Note', 'Habit Tracker', 'Bookmark Manager', 'Quick Calculator', 'Countdown Timer', 'Time Tracker', 'Expense Tracker']
+  },
+  {
+    id: 'data',
+    name: 'Data & Analytics',
+    icon: TrendingUp,
+    count: 2,
+    components: ['Weather Widget', 'Stock Ticker']
+  },
+  {
+    id: 'communication',
+    name: 'Communication',
+    icon: MessageSquare,
+    count: 1,
+    components: ['Message Center']
+  },
+  {
+    id: 'utility',
+    name: 'Utility',
+    icon: Settings,
+    count: 2,
+    components: ['File Manager', 'QR Generator']
+  },
+  {
+    id: 'entertainment',
+    name: 'Entertainment',
+    icon: Music,
+    count: 2,
+    components: ['Music Player', 'News Reader']
   },
   {
     id: 'time',
@@ -62,6 +122,7 @@ const componentCategories = [
 
 // All available components with their metadata
 const allComponents = [
+  // Existing components
   { name: 'Calendar', category: 'time', icon: CalendarDays },
   { name: 'Task Counter', category: 'productivity', icon: Target },
   { name: 'Quick Note', category: 'productivity', icon: NotebookPen },
@@ -73,7 +134,26 @@ const allComponents = [
   { name: 'Habit Tracker', category: 'productivity', icon: Target },
   { name: 'Quick Calculator', category: 'productivity', icon: Calculator },
   { name: 'Bookmark Manager', category: 'productivity', icon: Bookmark },
-  { name: 'Date Display', category: 'time', icon: Clock }
+  { name: 'Date Display', category: 'time', icon: Clock },
+  
+  // Data & Analytics
+  { name: 'Weather Widget', category: 'data', icon: Cloud },
+  { name: 'Stock Ticker', category: 'data', icon: TrendingUp },
+  
+  // Communication
+  { name: 'Message Center', category: 'communication', icon: MessageSquare },
+  
+  // Utility
+  { name: 'File Manager', category: 'utility', icon: FolderOpen },
+  { name: 'QR Generator', category: 'utility', icon: QrCode },
+  
+  // Entertainment
+  { name: 'Music Player', category: 'entertainment', icon: Music },
+  { name: 'News Reader', category: 'entertainment', icon: Newspaper },
+  
+  // Productivity Enhancements
+  { name: 'Time Tracker', category: 'productivity', icon: Clock },
+  { name: 'Expense Tracker', category: 'productivity', icon: DollarSign }
 ];
 
 // Dashboard component wrapper with hover add button
@@ -275,6 +355,15 @@ export function DashboardWidgets({ targetSlot, gridSize }: { targetSlot?: string
                   {component.name === 'Quick Calculator' && <DashboardQuickCalculator />}
                   {component.name === 'Bookmark Manager' && <DashboardBookmarkManager />}
                   {component.name === 'Date Display' && <DashboardDateDisplay />}
+                  {component.name === 'Weather Widget' && <DashboardWeatherWidget />}
+                  {component.name === 'Stock Ticker' && <DashboardStockTicker />}
+                  {component.name === 'Message Center' && <DashboardMessageCenter />}
+                  {component.name === 'File Manager' && <DashboardFileManager />}
+                  {component.name === 'QR Generator' && <DashboardQRCodeGenerator />}
+                  {component.name === 'Music Player' && <DashboardMusicPlayer />}
+                  {component.name === 'News Reader' && <DashboardNewsReader />}
+                  {component.name === 'Time Tracker' && <DashboardTimeTracker />}
+                  {component.name === 'Expense Tracker' && <DashboardExpenseTracker />}
                 </DashboardComponentShowcase>
               </CarouselItem>
             ))}
