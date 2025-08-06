@@ -571,9 +571,15 @@ export function LandingPage() {
       </motion.section>
 
       {/* Dashboard Gallery Section */}
-      <section className="py-24 px-8 sm:px-12 lg:px-16 bg-background">
+      <motion.section 
+        className="py-24 px-8 sm:px-12 lg:px-16 bg-background"
+        initial="initial"
+        whileInView="animate"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={staggerContainer}
+      >
         <div className="max-w-[1800px] mx-auto">
-          <div className="text-center space-y-6 mb-20">
+          <motion.div className="text-center space-y-6 mb-20" variants={fadeInUp}>
             <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
               See FlexIO in action
             </h2>
@@ -581,12 +587,18 @@ export function LandingPage() {
               Explore how FlexIO transforms your workspace with intelligent dashboards, 
               comprehensive analytics, and seamless project management.
             </p>
-          </div>
+          </motion.div>
 
           <div className="space-y-16">
             {/* Main Dashboard */}
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
-              <div className="space-y-6">
+            <motion.div 
+              className="grid lg:grid-cols-2 gap-16 items-center"
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
+            >
+              <motion.div className="space-y-6" variants={slideInLeft}>
                 <div className="space-y-4">
                   <div className="w-16 h-1 bg-blue-500 rounded-full"></div>
                   <h3 className="text-3xl lg:text-4xl font-bold">Complete Dashboard Overview</h3>
@@ -600,20 +612,26 @@ export function LandingPage() {
                   <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-sm">Calendar Integration</span>
                   <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm">Quick Notes</span>
                 </div>
-              </div>
-              <div className="relative group hover-scale">
+              </motion.div>
+              <motion.div className="relative group hover-scale" variants={slideInRight}>
                 <img 
                   src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=800&h=600&fit=crop&crop=center" 
                   alt="Complete Dashboard Overview Placeholder" 
                   className="rounded-2xl shadow-2xl border border-border/50"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Analytics Dashboard */}
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
-              <div className="lg:order-2 space-y-6">
+            <motion.div 
+              className="grid lg:grid-cols-2 gap-16 items-center"
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
+            >
+              <motion.div className="lg:order-2 space-y-6" variants={slideInRight}>
                 <div className="space-y-4">
                   <div className="w-16 h-1 bg-green-500 rounded-full"></div>
                   <h3 className="text-3xl lg:text-4xl font-bold">Advanced Analytics</h3>
@@ -627,20 +645,26 @@ export function LandingPage() {
                   <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm">Time Tracking</span>
                   <span className="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full text-sm">Reports</span>
                 </div>
-              </div>
-              <div className="lg:order-1 relative group hover-scale">
+              </motion.div>
+              <motion.div className="lg:order-1 relative group hover-scale" variants={slideInLeft}>
                 <img 
                   src="/lovable-uploads/79fcf154-2cea-4690-a606-1b838ab3b07d.png" 
                   alt="Advanced Analytics" 
                   className="rounded-2xl shadow-2xl border border-border/50"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Project Management */}
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
-              <div className="space-y-6">
+            <motion.div 
+              className="grid lg:grid-cols-2 gap-16 items-center"
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
+            >
+              <motion.div className="space-y-6" variants={slideInLeft}>
                 <div className="space-y-4">
                   <div className="w-16 h-1 bg-purple-500 rounded-full"></div>
                   <h3 className="text-3xl lg:text-4xl font-bold">Project Management Suite</h3>
@@ -654,19 +678,19 @@ export function LandingPage() {
                   <span className="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full text-sm">Team Collaboration</span>
                   <span className="px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-full text-sm">Timeline View</span>
                 </div>
-              </div>
-              <div className="relative group hover-scale">
+              </motion.div>
+              <motion.div className="relative group hover-scale" variants={slideInRight}>
                 <img 
                   src="https://images.unsplash.com/photo-1473091534298-04dcbce3278c?w=800&h=600&fit=crop&crop=center" 
                   alt="Project Management Suite Placeholder" 
                   className="rounded-2xl shadow-2xl border border-border/50"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Demo Section */}
       {showDemo && (
@@ -777,23 +801,31 @@ export function LandingPage() {
 
       {/* Get Started Today Section */}
       {!showDemo && (
-        <section className="py-24 px-8 sm:px-12 lg:px-16 bg-gradient-to-br from-primary/5 to-accent/5">
+        <motion.section 
+          className="py-24 px-8 sm:px-12 lg:px-16 bg-gradient-to-br from-primary/5 to-accent/5"
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
           <div className="max-w-[1200px] mx-auto text-center space-y-12">
-            <div className="space-y-6">
+            <motion.div className="space-y-6" variants={fadeInUp}>
               <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
                 Get Started Today
               </h2>
               <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 Join thousands of teams already using FlexIO to streamline their operations and boost productivity.
               </p>
-            </div>
-            <Card className="max-w-2xl mx-auto border border-border/50 shadow-xl">
-              <CardContent className="p-8">
-                <LeadCaptureForm />
-              </CardContent>
-            </Card>
+            </motion.div>
+            <motion.div variants={scaleIn}>
+              <Card className="max-w-2xl mx-auto border border-border/50 shadow-xl">
+                <CardContent className="p-8">
+                  <LeadCaptureForm />
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
       )}
 
       {/* Footer */}
