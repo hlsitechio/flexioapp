@@ -16,6 +16,7 @@ import { CustomizationPage } from "./pages/customization";
 import { PromptsGalleryPage } from "./pages/prompts-gallery";
 import { CodeSnippetsPage } from "./pages/code-snippets";
 import { WorkspaceProfilesPage, WorkspaceSelectionPage } from "./pages/workspace";
+import { WorkspaceHashNavigator } from "./components/workspace/WorkspaceHashNavigator";
 import { LandingPage, ContactPage, DemoPage } from "./pages/landing";
 import { AboutPage, CareersPage, BlogPage } from "./pages/company";
 import { FeaturesPage, PricingPage, IntegrationsPage } from "./pages/product";
@@ -59,6 +60,7 @@ const App = () => {
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <WorkspaceHashNavigator />
         <Routes>
           {/* Public routes - no authentication required */}
           <Route path="/landing" element={<LandingPage />} />
