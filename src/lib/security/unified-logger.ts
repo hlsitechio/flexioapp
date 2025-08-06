@@ -30,8 +30,10 @@ class UnifiedSecurityLogger {
       info: console.info.bind(console)
     };
     
-    // Override console methods to capture security-related logs
-    this.interceptConsoleLogs();
+    // Only intercept in development mode to reduce performance impact
+    if (import.meta.env.DEV) {
+      this.interceptConsoleLogs();
+    }
   }
 
   private interceptConsoleLogs() {

@@ -54,7 +54,10 @@ class EnhancedSecurityMonitoring {
     this.setupRealTimeMonitoring();
     this.exposeDevToolsInterface();
     
-    console.log('%c🔍 Enhanced Security Monitoring Active', 'color: #dc2626; font-weight: bold;');
+    // Only log in development mode to reduce console noise
+    if (import.meta.env.DEV) {
+      console.log('%c🔍 Enhanced Security Monitoring Active', 'color: #dc2626; font-weight: bold;');
+    }
   }
 
   private setupSecurityObservers() {

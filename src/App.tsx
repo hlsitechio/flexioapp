@@ -1,5 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useWorkspace } from "@/contexts/WorkspaceContext";
@@ -50,7 +51,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <ErrorBoundary>
       <Toaster />
       <Sonner />
       <BrowserRouter>
@@ -76,7 +77,7 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </ErrorBoundary>
   );
 };
 
