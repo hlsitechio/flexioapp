@@ -20,6 +20,10 @@ export default defineConfig(({ mode }) => ({
     },
   },
   envPrefix: ['VITE_'],
+  define: {
+    // Fix for __WS_TOKEN__ undefined error in Vite 7
+    __WS_TOKEN__: JSON.stringify(process.env.WS_TOKEN || ''),
+  },
   plugins: [
     react({
       // Enhanced React SWC plugin configuration for Vite 7
