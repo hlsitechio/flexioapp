@@ -575,7 +575,7 @@ export function LandingPage() {
         className="py-24 px-8 sm:px-12 lg:px-16 bg-background"
         initial="initial"
         whileInView="animate"
-        viewport={{ once: true, margin: "0px" }}
+        viewport={{ once: true, margin: "100px" }}
         variants={staggerContainer}
       >
         <div className="max-w-[1800px] mx-auto">
@@ -595,7 +595,7 @@ export function LandingPage() {
               className="grid lg:grid-cols-2 gap-16 items-center"
               initial="initial"
               whileInView="animate"
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true, margin: "150px" }}
               variants={staggerContainer}
             >
               <motion.div className="space-y-6" variants={slideInLeft}>
@@ -628,7 +628,7 @@ export function LandingPage() {
               className="grid lg:grid-cols-2 gap-16 items-center"
               initial="initial"
               whileInView="animate"
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true, margin: "150px" }}
               variants={staggerContainer}
             >
               <motion.div className="lg:order-2 space-y-6" variants={slideInRight}>
@@ -661,7 +661,7 @@ export function LandingPage() {
               className="grid lg:grid-cols-2 gap-16 items-center"
               initial="initial"
               whileInView="animate"
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true, margin: "150px" }}
               variants={staggerContainer}
             >
               <motion.div className="space-y-6" variants={slideInLeft}>
@@ -805,7 +805,7 @@ export function LandingPage() {
           className="py-24 px-8 sm:px-12 lg:px-16 bg-gradient-to-br from-primary/5 to-accent/5"
           initial="initial"
           whileInView="animate"
-          viewport={{ once: true, margin: "-50px" }}
+          viewport={{ once: true, margin: "150px" }}
           variants={staggerContainer}
         >
           <div className="max-w-[1200px] mx-auto text-center space-y-12">
