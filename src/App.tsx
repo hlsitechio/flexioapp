@@ -17,6 +17,10 @@ import { PromptsGalleryPage } from "./pages/prompts-gallery";
 import { CodeSnippetsPage } from "./pages/code-snippets";
 import { WorkspaceProfilesPage, WorkspaceSelectionPage } from "./pages/workspace";
 import { LandingPage, ContactPage, DemoPage } from "./pages/landing";
+import { AboutPage, CareersPage, BlogPage } from "./pages/company";
+import { FeaturesPage, PricingPage, IntegrationsPage } from "./pages/product";
+import { DocumentationPage, HelpCenterPage } from "./pages/resources";
+import { PrivacyPolicyPage, TermsOfServicePage } from "./pages/legal";
 import { AdminDashboard } from "./pages/admin";
 import NotFound from "./pages/NotFound";
 
@@ -60,6 +64,16 @@ const App = () => {
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/demo" element={<DemoPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/careers" element={<CareersPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/features" element={<FeaturesPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/integrations" element={<IntegrationsPage />} />
+          <Route path="/documentation" element={<DocumentationPage />} />
+          <Route path="/help-center" element={<HelpCenterPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms-of-service" element={<TermsOfServicePage />} />
           
           {/* Protected routes - authentication required */}
           <Route path="/auth" element={user ? <Navigate to="/workspace-selection" replace /> : <AuthPage />} />
