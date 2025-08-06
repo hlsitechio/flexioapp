@@ -13,9 +13,11 @@ interface Workspace {
 
 interface WorkspaceContextType {
   workspace: Workspace | null;
+  workspaces: Workspace[];
   loading: boolean;
   createWorkspace: (name: string) => Promise<Workspace | null>;
   selectWorkspace: (workspaceId: string) => Promise<void>;
+  getWorkspaceNumber: (workspaceId: string) => number;
 }
 
 const WorkspaceContext = createContext<WorkspaceContextType | undefined>(undefined);
@@ -24,6 +26,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
   const { toast } = useToast();
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
+  const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [loading, setLoading] = useState(false);
 
   // Load or create workspace when user authenticates
@@ -53,6 +56,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (workspaces && workspaces.length > 0) {
+        setWorkspaces(workspaces);
         // User has workspaces, select the first one
         setWorkspace(workspaces[0]);
       } else {
@@ -120,11 +124,21 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const getWorkspaceNumber = (workspaceId: string): number => {
+    const sortedWorkspaces = [...workspaces].sort((a, b) => 
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    );
+    const index = sortedWorkspaces.findIndex(w => w.id === workspaceId);
+    return index + 1;
+  };
+
   const value: WorkspaceContextType = {
     workspace,
+    workspaces,
     loading,
     createWorkspace,
     selectWorkspace,
+    getWorkspaceNumber,
   };
 
   return (

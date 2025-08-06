@@ -10,3 +10,4 @@ export { useIsMobile } from './use-mobile';
 export { useToast } from './use-toast';
 export { useActivityTracking } from './useActivityTracking';
 export { usePrompts } from './usePrompts';
+export { useWorkspaceUrl } from './useWorkspaceUrl';
