@@ -103,6 +103,21 @@ class UnifiedSecurityLogger {
   }
 
   private shouldSuppressConsole(message: string): boolean {
+    // Suppress ALL console output on production public pages
+    const isPublicPage = typeof window !== 'undefined' && (
+      window.location.pathname === '/' ||
+      window.location.pathname.startsWith('/landing') ||
+      window.location.pathname.startsWith('/contact') ||
+      window.location.pathname.startsWith('/demo') ||
+      window.location.pathname.startsWith('/about') ||
+      window.location.pathname.startsWith('/features') ||
+      window.location.pathname.startsWith('/pricing')
+    );
+    
+    if (import.meta.env.PROD && isPublicPage) {
+      return true; // Suppress all console output on production public pages
+    }
+
     // Suppress duplicate messages within 1 second
     const key = this.cleanMessage(message);
     if (this.suppressDuplicates && this.lastMessages.has(key)) {

@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ProductionErrorBoundary } from "@/components/ui/production-error-boundary";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { useSafeAuth } from "@/hooks/useSafeAuth";
 import { useSafeWorkspace } from "@/hooks/useSafeWorkspace";
 import { useSessionTracking } from "@/hooks/useSessionTracking";
 import { initializeMonitoring } from "@/lib/monitoring";
@@ -30,22 +30,23 @@ import NotFound from "./pages/NotFound";
 
 
 const App = () => {
-  const { user, loading } = useAuth();
+  const { user, loading } = useSafeAuth();
   
   // Check if we're on a public page that doesn't need workspace context
-  const isPublicPage = window.location.pathname.startsWith('/landing') ||
-                      window.location.pathname.startsWith('/contact') ||
-                      window.location.pathname.startsWith('/demo') ||
-                      window.location.pathname.startsWith('/about') ||
-                      window.location.pathname.startsWith('/careers') ||
-                      window.location.pathname.startsWith('/blog') ||
-                      window.location.pathname.startsWith('/features') ||
-                      window.location.pathname.startsWith('/pricing') ||
-                      window.location.pathname.startsWith('/integrations') ||
-                      window.location.pathname.startsWith('/documentation') ||
-                      window.location.pathname.startsWith('/help-center') ||
-                      window.location.pathname.startsWith('/privacy-policy') ||
-                      window.location.pathname.startsWith('/terms-of-service');
+  const isPublicPage = window.location.pathname === '/' ||                      // Root path
+                       window.location.pathname.startsWith('/landing') ||
+                       window.location.pathname.startsWith('/contact') ||
+                       window.location.pathname.startsWith('/demo') ||
+                       window.location.pathname.startsWith('/about') ||
+                       window.location.pathname.startsWith('/careers') ||
+                       window.location.pathname.startsWith('/blog') ||
+                       window.location.pathname.startsWith('/features') ||
+                       window.location.pathname.startsWith('/pricing') ||
+                       window.location.pathname.startsWith('/integrations') ||
+                       window.location.pathname.startsWith('/documentation') ||
+                       window.location.pathname.startsWith('/help-center') ||
+                       window.location.pathname.startsWith('/privacy-policy') ||
+                       window.location.pathname.startsWith('/terms-of-service');
 
   // Use safe workspace hook that handles provider absence gracefully
   const workspaceHookResult = useSafeWorkspace();

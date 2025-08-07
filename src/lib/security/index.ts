@@ -32,6 +32,7 @@ export function initializeSecuritySuite() {
   try {
     // Check if we're on a public page - minimal security for performance
     const isPublicPage = typeof window !== 'undefined' && (
+      window.location.pathname === '/' ||                      // Root path
       window.location.pathname.startsWith('/landing') ||
       window.location.pathname.startsWith('/contact') ||
       window.location.pathname.startsWith('/demo') ||

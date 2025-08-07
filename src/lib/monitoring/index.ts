@@ -119,6 +119,7 @@ export const initializeMonitoring = () => {
 
   // Only initialize heavy monitoring in development or for authenticated users
   const isPublicPage = typeof window !== 'undefined' && (
+    window.location.pathname === '/' ||                        // Root path
     window.location.pathname.startsWith('/landing') ||
     window.location.pathname.startsWith('/contact') ||
     window.location.pathname.startsWith('/demo') ||

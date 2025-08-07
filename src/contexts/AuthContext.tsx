@@ -25,6 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Skip auth initialization on public pages for performance
     const isPublicPage = typeof window !== 'undefined' && (
+      window.location.pathname === '/' ||                      // Root path
       window.location.pathname.startsWith('/landing') ||
       window.location.pathname.startsWith('/contact') ||
       window.location.pathname.startsWith('/demo') ||

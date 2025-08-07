@@ -50,6 +50,7 @@ interface AppProvidersProps {
 export function AppProviders({ children }: AppProvidersProps) {
   // Check if we're on a public page that doesn't need authentication contexts
   const isPublicPage = typeof window !== 'undefined' && (
+    window.location.pathname === '/' ||                    // Root path that redirects to landing
     window.location.pathname.startsWith('/landing') ||
     window.location.pathname.startsWith('/contact') ||
     window.location.pathname.startsWith('/demo') ||
@@ -69,17 +70,23 @@ export function AppProviders({ children }: AppProvidersProps) {
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>
         <SafeThemeProvider>
-          <AuthProvider>
+          {isPublicPage ? (
+            // No AuthProvider on public pages to prevent Supabase calls
             <TooltipProvider>
               <SidebarProvider defaultOpen={true}>
-                {isPublicPage ? (
-                  <PublicProviders>{children}</PublicProviders>
-                ) : (
-                  <AuthenticatedProviders>{children}</AuthenticatedProviders>
-                )}
+                <PublicProviders>{children}</PublicProviders>
               </SidebarProvider>
             </TooltipProvider>
-          </AuthProvider>
+          ) : (
+            // Full providers for authenticated pages
+            <AuthProvider>
+              <TooltipProvider>
+                <SidebarProvider defaultOpen={true}>
+                  <AuthenticatedProviders>{children}</AuthenticatedProviders>
+                </SidebarProvider>
+              </TooltipProvider>
+            </AuthProvider>
+          )}
         </SafeThemeProvider>
       </HelmetProvider>
     </QueryClientProvider>
