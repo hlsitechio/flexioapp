@@ -132,7 +132,7 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
       <AnimatePresence>
         {showBackground && children && (
           <motion.div
-            className="fixed inset-0 z-[9990]"
+            className="min-h-screen w-full z-[9990]"
             variants={backgroundVariants}
             initial="hidden"
             animate="visible"
