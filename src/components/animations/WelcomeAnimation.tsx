@@ -4,13 +4,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface WelcomeAnimationProps {
   onComplete?: () => void;
   duration?: number;
+  children?: React.ReactNode;
 }
 
-export function WelcomeAnimation({ onComplete, duration = 6000 }: WelcomeAnimationProps) {
+export function WelcomeAnimation({ onComplete, duration = 6000, children }: WelcomeAnimationProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [isDisappearing, setIsDisappearing] = useState(false);
   const [disappearLetterIndex, setDisappearLetterIndex] = useState(0);
+  const [showBackground, setShowBackground] = useState(false);
   
   const fullText = "Welcome to FlexIO!";
   const letters = fullText.split('');
@@ -31,6 +33,7 @@ export function WelcomeAnimation({ onComplete, duration = 6000 }: WelcomeAnimati
     // Start disappearing animation after viewing time
     const disappearStartTimer = setTimeout(() => {
       setIsDisappearing(true);
+      setShowBackground(true);
       
       const disappearTimer = setInterval(() => {
         setDisappearLetterIndex(prev => {
@@ -91,37 +94,71 @@ export function WelcomeAnimation({ onComplete, duration = 6000 }: WelcomeAnimati
     }
   };
 
+  const backgroundVariants = {
+    hidden: { 
+      opacity: 0,
+      filter: "blur(20px)",
+      scale: 1.1
+    },
+    visible: { 
+      opacity: 1,
+      filter: "blur(0px)",
+      scale: 1,
+      transition: { 
+        duration: 2,
+        ease: [0.22, 1, 0.36, 1] as const
+      }
+    }
+  };
+
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black"
-          variants={overlayVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-        >
-          <div className="text-center">
-            <div className="text-6xl md:text-8xl lg:text-9xl font-bold text-white tracking-wider">
-              {letters.map((letter, index) => (
-                <motion.span
-                  key={index}
-                  className={letter === ' ' ? 'inline-block w-8' : 'inline-block'}
-                  variants={letterVariants}
-                  initial="hidden"
-                  animate={
-                    isDisappearing 
-                      ? (index < disappearLetterIndex ? "disappearing" : "visible")
-                      : (index < currentLetterIndex ? "visible" : "hidden")
-                  }
-                >
-                  {letter === ' ' ? '\u00A0' : letter}
-                </motion.span>
-              ))}
+    <>
+      {/* Background website content */}
+      <AnimatePresence>
+        {showBackground && children && (
+          <motion.div
+            className="fixed inset-0 z-[9990]"
+            variants={backgroundVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Welcome animation overlay */}
+      <AnimatePresence>
+        {isVisible && (
+          <motion.div
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black"
+            variants={overlayVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+          >
+            <div className="text-center">
+              <div className="text-6xl md:text-8xl lg:text-9xl font-bold text-white tracking-wider">
+                {letters.map((letter, index) => (
+                  <motion.span
+                    key={index}
+                    className={letter === ' ' ? 'inline-block w-8' : 'inline-block'}
+                    variants={letterVariants}
+                    initial="hidden"
+                    animate={
+                      isDisappearing 
+                        ? (index < disappearLetterIndex ? "disappearing" : "visible")
+                        : (index < currentLetterIndex ? "visible" : "hidden")
+                    }
+                  >
+                    {letter === ' ' ? '\u00A0' : letter}
+                  </motion.span>
+                ))}
+              </div>
             </div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
