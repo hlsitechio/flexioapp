@@ -185,52 +185,6 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Social Proof */}
-      <motion.section 
-        className="py-12 px-8 sm:px-12 lg:px-16 border-y bg-muted/20"
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={staggerContainer}
-      >
-        <div className="max-w-[1800px] mx-auto">
-          <div className="text-center space-y-8">
-            <motion.p 
-              className="text-muted-foreground font-medium"
-              variants={fadeIn}
-            >
-              Trusted by innovative companies worldwide
-            </motion.p>
-            <motion.div 
-              className="grid grid-cols-2 md:grid-cols-4 gap-12 items-center opacity-60"
-              variants={staggerContainer}
-            >
-              {[1, 2, 3, 4].map((i) => (
-                <motion.div 
-                  key={i} 
-                  className="h-16 bg-muted rounded-lg flex items-center justify-center hover-scale"
-                  variants={scaleIn}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <span className="text-lg font-semibold">Company {i}</span>
-                </motion.div>
-              ))}
-            </motion.div>
-            <motion.div 
-              className="flex justify-center items-center space-x-2"
-              variants={fadeInUp}
-            >
-              <div className="flex">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <span className="text-lg font-semibold">4.9/5 from 2,500+ reviews</span>
-            </motion.div>
-          </div>
-        </div>
-      </motion.section>
 
       {/* Productivity for Everyone Section */}
       <motion.section 
