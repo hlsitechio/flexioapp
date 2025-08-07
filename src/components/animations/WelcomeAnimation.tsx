@@ -6,23 +6,22 @@ interface WelcomeAnimationProps {
   duration?: number;
 }
 
-export function WelcomeAnimation({ onComplete, duration = 8000 }: WelcomeAnimationProps) {
+export function WelcomeAnimation({ onComplete, duration = 12000 }: WelcomeAnimationProps) {
   const [isVisible, setIsVisible] = useState(true);
-  const [currentWord, setCurrentWord] = useState(0);
+  const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   
-  const words = ["Welcome", "to", "FlexIO"];
-  const wordDuration = duration / words.length;
+  const fullText = "Welcome to FlexIO";
+  const letters = fullText.split('');
+  const letterDelay = duration / letters.length;
 
   useEffect(() => {
     const timers: NodeJS.Timeout[] = [];
 
-    // Schedule word transitions
-    words.forEach((_, index) => {
-      if (index < words.length - 1) {
-        timers.push(
-          setTimeout(() => setCurrentWord(index + 1), (index + 1) * wordDuration)
-        );
-      }
+    // Schedule letter transitions
+    letters.forEach((_, index) => {
+      timers.push(
+        setTimeout(() => setCurrentLetterIndex(index + 1), index * letterDelay)
+      );
     });
 
     // Schedule completion
@@ -36,16 +35,14 @@ export function WelcomeAnimation({ onComplete, duration = 8000 }: WelcomeAnimati
     return () => timers.forEach(clearTimeout);
   }, [duration, onComplete]);
 
-  const textVariants = {
+  const letterVariants = {
     hidden: { 
       opacity: 0,
-      y: 20,
-      filter: "blur(10px)",
+      filter: "blur(20px)",
       textShadow: "0 0 0px rgba(255, 255, 255, 0)"
     },
-    visible: { 
+    visible: (i: number) => ({ 
       opacity: 1,
-      y: 0,
       filter: "blur(0px)",
       textShadow: [
         "0 0 20px rgba(255, 255, 255, 0.3)",
@@ -53,26 +50,17 @@ export function WelcomeAnimation({ onComplete, duration = 8000 }: WelcomeAnimati
         "0 0 60px rgba(255, 255, 255, 0.1)"
       ],
       transition: {
-        duration: 2,
+        delay: i * (letterDelay / 1000),
+        duration: 1.5,
         ease: "easeOut" as const,
         textShadow: {
-          duration: 3,
+          duration: 2,
           repeat: Infinity,
           repeatType: "reverse" as const,
           ease: "easeInOut" as const
         }
       }
-    },
-    exit: { 
-      opacity: 0,
-      y: -20,
-      filter: "blur(10px)",
-      textShadow: "0 0 0px rgba(255, 255, 255, 0)",
-      transition: { 
-        duration: 2,
-        ease: "easeIn" as const
-      }
-    }
+    })
   };
 
   const overlayVariants = {
@@ -97,20 +85,22 @@ export function WelcomeAnimation({ onComplete, duration = 8000 }: WelcomeAnimati
           animate="visible"
           exit="exit"
         >
-          {/* Simple text sequence */}
+          {/* Letter by letter animation */}
           <div className="text-center">
-            <AnimatePresence mode="wait">
-              <motion.h1
-                key={currentWord}
-                className="text-6xl md:text-8xl lg:text-9xl font-bold text-white"
-                variants={textVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                {words[currentWord]}
-              </motion.h1>
-            </AnimatePresence>
+            <div className="text-6xl md:text-8xl lg:text-9xl font-bold text-white tracking-wider">
+              {letters.map((letter, index) => (
+                <motion.span
+                  key={index}
+                  className={letter === ' ' ? 'inline-block w-8' : 'inline-block'}
+                  custom={index}
+                  variants={letterVariants}
+                  initial="hidden"
+                  animate={index < currentLetterIndex ? "visible" : "hidden"}
+                >
+                  {letter === ' ' ? '\u00A0' : letter}
+                </motion.span>
+              ))}
+            </div>
           </div>
         </motion.div>
       )}
