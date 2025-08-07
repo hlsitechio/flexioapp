@@ -32,7 +32,15 @@ import NotFound from "./pages/NotFound";
 const App = () => {
   const { user, loading } = useAuth();
   const { workspace, loading: workspaceLoading } = useWorkspace();
-  useSessionTracking();
+  
+  // Only track sessions for authenticated users on protected routes
+  const isProtectedRoute = window.location.pathname.startsWith('/workspace') || 
+                          window.location.pathname.startsWith('/auth') ||
+                          window.location.pathname === '/workspace-selection';
+  
+  // Only enable session tracking for authenticated users on protected routes
+  const shouldTrackSession = user && isProtectedRoute;
+  useSessionTracking(shouldTrackSession);
 
   // Initialize monitoring and analytics once - silent success, only log errors
   useEffect(() => {

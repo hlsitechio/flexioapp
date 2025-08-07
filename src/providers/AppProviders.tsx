@@ -12,6 +12,36 @@ import { DashboardSettingsProvider } from "@/contexts/DashboardSettingsContext";
 import { NavigationSettingsProvider } from "@/contexts/NavigationSettingsContext";
 import { SettingsProvider } from "@/contexts/SettingsContext";
 
+// Wrapper for authenticated-only providers
+function AuthenticatedProviders({ children }: { children: React.ReactNode }) {
+  return (
+    <NotificationProvider>
+      <WorkspaceProvider>
+        <WorkspaceProfileProvider>
+          <SettingsProvider>
+            <UISettingsProvider>
+              <DashboardSettingsProvider>
+                <NavigationSettingsProvider>
+                  {children}
+                </NavigationSettingsProvider>
+              </DashboardSettingsProvider>
+            </UISettingsProvider>
+          </SettingsProvider>
+        </WorkspaceProfileProvider>
+      </WorkspaceProvider>
+    </NotificationProvider>
+  );
+}
+
+// Minimal providers for public pages
+function PublicProviders({ children }: { children: React.ReactNode }) {
+  return (
+    <UISettingsProvider>
+      {children}
+    </UISettingsProvider>
+  );
+}
+
 const queryClient = new QueryClient();
 
 interface AppProvidersProps {
@@ -19,29 +49,36 @@ interface AppProvidersProps {
 }
 
 export function AppProviders({ children }: AppProvidersProps) {
+  // Check if we're on a public page that doesn't need authentication contexts
+  const isPublicPage = typeof window !== 'undefined' && (
+    window.location.pathname.startsWith('/landing') ||
+    window.location.pathname.startsWith('/contact') ||
+    window.location.pathname.startsWith('/demo') ||
+    window.location.pathname.startsWith('/about') ||
+    window.location.pathname.startsWith('/careers') ||
+    window.location.pathname.startsWith('/blog') ||
+    window.location.pathname.startsWith('/features') ||
+    window.location.pathname.startsWith('/pricing') ||
+    window.location.pathname.startsWith('/integrations') ||
+    window.location.pathname.startsWith('/documentation') ||
+    window.location.pathname.startsWith('/help-center') ||
+    window.location.pathname.startsWith('/privacy-policy') ||
+    window.location.pathname.startsWith('/terms-of-service')
+  );
+
   return (
     <QueryClientProvider client={queryClient}>
       <SafeThemeProvider>
         <AuthProvider>
-          <NotificationProvider>
-            <WorkspaceProvider>
-              <WorkspaceProfileProvider>
-                <SettingsProvider>
-                  <UISettingsProvider>
-                    <DashboardSettingsProvider>
-                      <NavigationSettingsProvider>
-                        <TooltipProvider>
-                          <SidebarProvider defaultOpen={true}>
-                            {children}
-                          </SidebarProvider>
-                        </TooltipProvider>
-                      </NavigationSettingsProvider>
-                    </DashboardSettingsProvider>
-                  </UISettingsProvider>
-                </SettingsProvider>
-              </WorkspaceProfileProvider>
-            </WorkspaceProvider>
-          </NotificationProvider>
+          <TooltipProvider>
+            <SidebarProvider defaultOpen={true}>
+              {isPublicPage ? (
+                <PublicProviders>{children}</PublicProviders>
+              ) : (
+                <AuthenticatedProviders>{children}</AuthenticatedProviders>
+              )}
+            </SidebarProvider>
+          </TooltipProvider>
         </AuthProvider>
       </SafeThemeProvider>
     </QueryClientProvider>

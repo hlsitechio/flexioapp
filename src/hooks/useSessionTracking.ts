@@ -11,14 +11,14 @@ interface SessionData {
   is_active?: boolean;
 }
 
-export function useSessionTracking() {
+export function useSessionTracking(enabled: boolean = true) {
   const { user } = useAuth();
   const { workspace } = useWorkspace();
   const sessionIdRef = useRef<string>(crypto.randomUUID());
   const lastUpdateRef = useRef<number>(0);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !enabled) return;
 
     const updateSession = async (data: Partial<SessionData> = {}) => {
       const now = Date.now();
