@@ -1,17 +1,36 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { WelcomeAnimation } from '@/components/animations/WelcomeAnimation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { LazyImage } from '@/components/ui/lazy-image';
+import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { LeadCaptureForm } from '@/components/forms';
 import { CheckCircle, ArrowRight, Star, Users, Shield, Zap, Image, Play, Clock, UserCheck } from 'lucide-react';
 import { SEOHead, StructuredData, AIFeatureSection, AIBenefitsSection } from '@/components/seo';
 import { AISearchOptimization } from '@/components/seo/AISearchOptimization';
+import { CriticalCSS } from '@/components/performance/CriticalCSS';
+import { usePerformanceMonitor, markPerformance } from '@/hooks/usePerformanceMonitor';
 
 export function LandingPage() {
   const [showDemo, setShowDemo] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
+  const { trackMetric } = usePerformanceMonitor();
+
+  useEffect(() => {
+    markPerformance('landing-page-start');
+    
+    // Track when landing page is ready
+    const timer = setTimeout(() => {
+      markPerformance('landing-page-interactive');
+      trackMetric({ 
+        landingPageLoadTime: performance.now()
+      });
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [trackMetric]);
 
   const features = [
     {
@@ -97,6 +116,7 @@ export function LandingPage() {
 
   return (
     <>
+      <CriticalCSS />
       <SEOHead
         title="FlexIO - Advanced Business Intelligence Dashboard Platform"
         description="Transform your business with FlexIO's powerful analytics dashboard. Real-time data visualization, customizable widgets, and enterprise-grade business intelligence tools for data-driven decisions."
@@ -145,10 +165,11 @@ export function LandingPage() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Link to="/landing" className="flex items-center hover:opacity-80 transition-opacity">
-                <img 
+                <LazyImage 
                   src="/lovable-uploads/801f0a89-558e-4fd0-8e4e-102d5c5d2d3e.png" 
                   alt="FlexIO Logo" 
                   className="h-16 w-auto"
+                  eager={true}
                 />
               </Link>
             </div>
@@ -251,10 +272,11 @@ export function LandingPage() {
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
                     <span className="ml-4 text-sm text-muted-foreground">FlexIO Dashboard</span>
                   </div>
-                  <img 
+                  <LazyImage 
                     src="/lovable-uploads/1e4e07cd-139c-439e-953b-8928b1dad0e1.png" 
-                    alt="FlexIO Dashboard Preview" 
+                    alt="FlexIO Dashboard Preview - Real-time analytics and customizable widgets" 
                     className="w-full rounded-lg shadow-lg"
+                    eager={true}
                   />
                 </div>
                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/20 rounded-full blur-xl"></div>

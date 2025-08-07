@@ -58,7 +58,7 @@ export default defineConfig(({ mode }) => ({
     dedupe: ['react', 'react-dom', 'next-themes'],
   },
   build: {
-    // Simplified build configuration to prevent React duplication
+    // Optimized build configuration for performance
     target: 'esnext',
     minify: 'esbuild',
     cssMinify: true,
@@ -66,16 +66,48 @@ export default defineConfig(({ mode }) => ({
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Ensure React is in a single chunk to prevent duplication
-          react: ['react', 'react-dom'],
-          vendor: ['@tanstack/react-query', 'react-router-dom'],
-          ui: ['@radix-ui/react-dialog', '@radix-ui/react-popover', '@radix-ui/react-toast'],
-          themes: ['next-themes'],
-          supabase: ['@supabase/supabase-js'],
-          utils: ['clsx', 'tailwind-merge', 'class-variance-authority'],
-          icons: ['lucide-react'],
+        manualChunks: (id) => {
+          // Vendor chunk for React ecosystem
+          if (id.includes('react') || id.includes('react-dom')) {
+            return 'react-vendor';
+          }
+          
+          // UI library chunk
+          if (id.includes('@radix-ui') || id.includes('lucide-react')) {
+            return 'ui-vendor';
+          }
+          
+          // Animation and motion chunk
+          if (id.includes('framer-motion') || id.includes('animation')) {
+            return 'animation-vendor';
+          }
+          
+          // Utilities chunk
+          if (id.includes('clsx') || id.includes('tailwind-merge') || id.includes('class-variance-authority')) {
+            return 'utils-vendor';
+          }
+          
+          // Data fetching chunk
+          if (id.includes('@tanstack/react-query') || id.includes('@supabase/supabase-js')) {
+            return 'data-vendor';
+          }
+          
+          // Router chunk
+          if (id.includes('react-router')) {
+            return 'router-vendor';
+          }
+          
+          // Node modules vendor chunk for everything else
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
         },
+        // Optimize chunk naming
+        chunkFileNames: (chunkInfo) => {
+          const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId.split('/').pop() : 'chunk';
+          return `assets/[name]-[hash].js`;
+        },
+        assetFileNames: 'assets/[name]-[hash].[ext]'
       }
     },
     // Enable source maps for better debugging
