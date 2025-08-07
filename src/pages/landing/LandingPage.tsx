@@ -154,43 +154,71 @@ export function LandingPage() {
       
       <WelcomeAnimation onComplete={() => setAnimationComplete(true)}>
         <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
-      {/* Navigation */}
-      <motion.nav 
-        className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50"
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
+      {/* Floating Navigation */}
+      <motion.div
+        className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50"
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link to="/landing" className="flex items-center hover:opacity-80 transition-opacity">
-                <LazyImage 
-                  src="/lovable-uploads/801f0a89-558e-4fd0-8e4e-102d5c5d2d3e.png" 
-                  alt="FlexIO Logo" 
-                  className="h-16 w-auto"
-                  eager={true}
-                />
+        <nav className="bg-background/95 backdrop-blur-md border border-border/50 rounded-full px-6 py-3 shadow-lg">
+          <div className="flex items-center justify-center space-x-8">
+            {/* Logo */}
+            <Link to="/landing" className="flex items-center hover:opacity-80 transition-opacity">
+              <LazyImage 
+                src="/lovable-uploads/801f0a89-558e-4fd0-8e4e-102d5c5d2d3e.png" 
+                alt="FlexIO Logo" 
+                className="h-10 w-auto"
+                eager={true}
+              />
+            </Link>
+            
+            {/* Navigation Links */}
+            <div className="hidden md:flex items-center space-x-6">
+              <Link 
+                to="/features" 
+                className="text-foreground/70 hover:text-foreground transition-colors font-medium px-3 py-2 rounded-full hover:bg-muted/50"
+              >
+                Features
+              </Link>
+              <Link 
+                to="/about" 
+                className="text-foreground/70 hover:text-foreground transition-colors font-medium px-3 py-2 rounded-full hover:bg-muted/50"
+              >
+                About
+              </Link>
+              <Link 
+                to="/contact" 
+                className="text-foreground/70 hover:text-foreground transition-colors font-medium px-3 py-2 rounded-full hover:bg-muted/50"
+              >
+                Contact
+              </Link>
+              <Link 
+                to="/documentation" 
+                className="text-foreground/70 hover:text-foreground transition-colors font-medium px-3 py-2 rounded-full hover:bg-muted/50"
+              >
+                Docs
               </Link>
             </div>
-            <div className="hidden md:flex items-center space-x-8">
-              <Link to="/features" className="text-foreground/60 hover:text-foreground transition-colors story-link">Features</Link>
-              <Link to="/about" className="text-foreground/60 hover:text-foreground transition-colors story-link">About</Link>
-              <Link to="/contact" className="text-foreground/60 hover:text-foreground transition-colors story-link">Contact</Link>
-              <Link to="/documentation" className="text-foreground/60 hover:text-foreground transition-colors story-link">Docs</Link>
-              <Button variant="ghost" className="rounded-full" asChild>
+            
+            {/* Action Buttons */}
+            <div className="flex items-center space-x-3">
+              <Button variant="ghost" className="rounded-full font-medium" asChild>
                 <Link to="/auth">Sign In</Link>
               </Button>
-              <Button className="rounded-full" onClick={scrollToDemo}>
+              <Button 
+                className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-md hover:shadow-lg transition-all duration-200" 
+                onClick={scrollToDemo}
+              >
                 Get Demo
               </Button>
             </div>
           </div>
-        </div>
-      </motion.nav>
+        </nav>
+      </motion.div>
 
       {/* Hero Section */}
-      <section className="py-16 lg:py-24 px-8 sm:px-12 lg:px-16">
+      <section className="py-24 lg:py-32 px-8 sm:px-12 lg:px-16 pt-32">
         <div className="max-w-[1800px] mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center min-h-[700px]">
             <motion.div 
