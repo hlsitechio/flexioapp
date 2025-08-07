@@ -1,9 +1,9 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import { AppProviders } from "@/providers/AppProviders";
 import App from "./App.tsx";
 import "./index.css";
-
 
 // Initialize production-ready features
 if (typeof window !== 'undefined') {
@@ -18,11 +18,12 @@ if (typeof window !== 'undefined') {
   }).catch(console.error);
 }
 
-
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <AppProviders>
-      <App />
-    </AppProviders>
+    <BrowserRouter>
+      <AppProviders>
+        <App />
+      </AppProviders>
+    </BrowserRouter>
   </StrictMode>
 );

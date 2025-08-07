@@ -12,6 +12,7 @@ import { UISettingsProvider } from "@/contexts/UISettingsContext";
 import { DashboardSettingsProvider } from "@/contexts/DashboardSettingsContext";
 import { NavigationSettingsProvider } from "@/contexts/NavigationSettingsContext";
 import { SettingsProvider } from "@/contexts/SettingsContext";
+import { useLocation } from 'react-router-dom';
 import { isPublicPath } from "@/lib/routes/publicPaths";
 
 // Wrapper for authenticated-only providers
@@ -49,8 +50,9 @@ interface AppProvidersProps {
 }
 
 export function AppProviders({ children }: AppProvidersProps) {
+  const location = useLocation();
   // Check if we're on a public page that doesn't need authentication contexts
-  const isPublicPage = typeof window !== 'undefined' && isPublicPath(window.location.pathname);
+  const isPublicPage = isPublicPath(location.pathname);
 
   return (
     <QueryClientProvider client={queryClient}>

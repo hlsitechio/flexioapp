@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ProductionErrorBoundary } from "@/components/ui/production-error-boundary";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useSafeAuth } from "@/hooks/useSafeAuth";
 import { useSafeWorkspace } from "@/hooks/useSafeWorkspace";
 import { useSessionTracking } from "@/hooks/useSessionTracking";
@@ -99,56 +99,54 @@ const App = () => {
     <ProductionErrorBoundary>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          {!isPublicPage && <WorkspaceHashNavigator />}
-          {!isPublicPage && <WorkspaceUrlManager />}
-          <Routes>
-            {/* Public routes - no authentication required */}
-            <Route path="/landing" element={<LandingPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/demo" element={<DemoPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/careers" element={<CareersPage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/features" element={<FeaturesPage />} />
-            <Route path="/pricing" element={<PricingPage />} />
-            <Route path="/integrations" element={<IntegrationsPage />} />
-            <Route path="/documentation" element={<DocumentationPage />} />
-            <Route path="/help-center" element={<HelpCenterPage />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-            <Route path="/terms-of-service" element={<TermsOfServicePage />} />
-            
-            {/* Protected routes - authentication required */}
-            <Route path="/auth" element={user ? <Navigate to="/workspace-selection" replace /> : <AuthPage />} />
-            <Route path="/workspace-selection" element={user ? <WorkspaceSelectionPage /> : <Navigate to="/auth" replace />} />
-            
-            {/* Workspace-specific routes with role-based URLs */}
-            <Route path="/workspace/:workspaceDetails" element={
-              (() => {
-                console.log("Workspace route check - user:", !!user, "workspace:", !!workspace);
-                return user && workspace ? <Index /> : <Navigate to="/workspace-selection" replace />;
-              })()
-            } />
-            <Route path="/workspace/:workspaceDetails/profile" element={user ? <ProfilePage /> : <Navigate to="/auth" replace />} />
-            <Route path="/workspace/:workspaceDetails/components" element={user ? <ComponentsPage /> : <Navigate to="/auth" replace />} />
-            <Route path="/workspace/:workspaceDetails/settings" element={user ? <Settings /> : <Navigate to="/auth" replace />} />
-            <Route path="/workspace/:workspaceDetails/settings/email-test" element={user ? <EmailTest /> : <Navigate to="/auth" replace />} />
-            <Route path="/workspace/:workspaceDetails/customization" element={user ? <CustomizationPage /> : <Navigate to="/auth" replace />} />
-            <Route path="/workspace/:workspaceDetails/prompts-gallery" element={user ? <PromptsGalleryPage /> : <Navigate to="/auth" replace />} />
-            <Route path="/workspace/:workspaceDetails/code-snippets" element={user ? <CodeSnippetsPage /> : <Navigate to="/auth" replace />} />
-            <Route path="/workspace/:workspaceDetails/analytics" element={user ? <AnalyticsPage /> : <Navigate to="/auth" replace />} />
-            <Route path="/workspace/:workspaceDetails/workspace-profiles" element={user ? <WorkspaceProfilesPage /> : <Navigate to="/auth" replace />} />
-            <Route path="/workspace/:workspaceDetails/admin" element={user ? <AdminDashboard /> : <Navigate to="/auth" replace />} />
-            
-            {/* Home route */}
-            <Route path="/" element={(() => {
-              console.log("🏠 Root route: Rendering LandingPage");
-              return <LandingPage />;
-            })()} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        {!isPublicPage && <WorkspaceHashNavigator />}
+        {!isPublicPage && <WorkspaceUrlManager />}
+        <Routes>
+          {/* Public routes - no authentication required */}
+          <Route path="/landing" element={<LandingPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/demo" element={<DemoPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/careers" element={<CareersPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/features" element={<FeaturesPage />} />
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/integrations" element={<IntegrationsPage />} />
+          <Route path="/documentation" element={<DocumentationPage />} />
+          <Route path="/help-center" element={<HelpCenterPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+          
+          {/* Protected routes - authentication required */}
+          <Route path="/auth" element={user ? <Navigate to="/workspace-selection" replace /> : <AuthPage />} />
+          <Route path="/workspace-selection" element={user ? <WorkspaceSelectionPage /> : <Navigate to="/auth" replace />} />
+          
+          {/* Workspace-specific routes with role-based URLs */}
+          <Route path="/workspace/:workspaceDetails" element={
+            (() => {
+              console.log("Workspace route check - user:", !!user, "workspace:", !!workspace);
+              return user && workspace ? <Index /> : <Navigate to="/workspace-selection" replace />;
+            })()
+          } />
+          <Route path="/workspace/:workspaceDetails/profile" element={user ? <ProfilePage /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/components" element={user ? <ComponentsPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/settings" element={user ? <Settings /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/settings/email-test" element={user ? <EmailTest /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/customization" element={user ? <CustomizationPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/prompts-gallery" element={user ? <PromptsGalleryPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/code-snippets" element={user ? <CodeSnippetsPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/analytics" element={user ? <AnalyticsPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/workspace-profiles" element={user ? <WorkspaceProfilesPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/admin" element={user ? <AdminDashboard /> : <Navigate to="/auth" replace />} />
+          
+          {/* Home route */}
+          <Route path="/" element={(() => {
+            console.log("🏠 Root route: Rendering LandingPage");
+            return <LandingPage />;
+          })()} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </ProductionErrorBoundary>
   );
 };
