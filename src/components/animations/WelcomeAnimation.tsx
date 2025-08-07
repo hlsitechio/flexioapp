@@ -101,16 +101,22 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
   const backgroundVariants = {
     hidden: { 
       opacity: 0,
-      filter: "blur(20px)",
-      scale: 1.02
+      filter: "blur(30px)",
+      scale: 1.05,
+      y: 20
     },
     visible: { 
       opacity: 1,
       filter: "blur(0px)",
       scale: 1,
+      y: 0,
       transition: { 
-        duration: 1.5,
-        ease: [0.25, 0.46, 0.45, 0.94] as const
+        duration: 2.5,
+        ease: [0.16, 1, 0.3, 1] as const,
+        opacity: { duration: 2.0, ease: "easeOut" },
+        filter: { duration: 2.5, ease: [0.16, 1, 0.3, 1] },
+        scale: { duration: 2.5, ease: [0.16, 1, 0.3, 1] },
+        y: { duration: 2.0, ease: [0.16, 1, 0.3, 1] }
       }
     }
   };
