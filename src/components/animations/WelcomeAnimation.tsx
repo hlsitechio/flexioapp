@@ -14,7 +14,7 @@ export function WelcomeAnimation({ onComplete, duration = 6000 }: WelcomeAnimati
   
   const fullText = "Welcome to FlexIO!";
   const letters = fullText.split('');
-  const letterDelay = 150; // Slower delay between letters
+  const letterDelay = 120; // Smoother delay between letters
 
   useEffect(() => {
     // Start letter animation immediately
@@ -48,7 +48,7 @@ export function WelcomeAnimation({ onComplete, duration = 6000 }: WelcomeAnimati
       }, letterDelay);
 
       return () => clearInterval(disappearTimer);
-    }, letters.length * letterDelay + 2000);
+    }, letters.length * letterDelay + 1500);
 
     return () => {
       clearInterval(letterTimer);
@@ -65,16 +65,16 @@ export function WelcomeAnimation({ onComplete, duration = 6000 }: WelcomeAnimati
       opacity: 1,
       filter: "blur(0px)",
       transition: {
-        duration: 1.5,
-        ease: [0.25, 0.1, 0.25, 1] as const
+        duration: 1.2,
+        ease: [0.22, 1, 0.36, 1] as const
       }
     },
     disappearing: {
       opacity: 0,
       filter: "blur(15px)",
       transition: {
-        duration: 1.5,
-        ease: [0.25, 0.1, 0.25, 1] as const
+        duration: 1.2,
+        ease: [0.22, 1, 0.36, 1] as const
       }
     }
   };
