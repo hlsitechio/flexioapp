@@ -9,10 +9,12 @@ interface WelcomeAnimationProps {
 export function WelcomeAnimation({ onComplete, duration = 6000 }: WelcomeAnimationProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
+  const [isDisappearing, setIsDisappearing] = useState(false);
+  const [disappearLetterIndex, setDisappearLetterIndex] = useState(0);
   
   const fullText = "Welcome to FlexIO!";
   const letters = fullText.split('');
-  const letterDelay = 200; // Fixed delay between letters
+  const letterDelay = 150; // Fixed delay between letters
 
   useEffect(() => {
     // Start letter animation immediately
@@ -26,15 +28,31 @@ export function WelcomeAnimation({ onComplete, duration = 6000 }: WelcomeAnimati
       });
     }, letterDelay);
 
-    // Complete animation after all letters + some viewing time
-    const completeTimer = setTimeout(() => {
-      setIsVisible(false);
-      setTimeout(() => onComplete?.(), 1000); // Add fade out time
+    // Start disappearing animation after viewing time
+    const disappearStartTimer = setTimeout(() => {
+      setIsDisappearing(true);
+      
+      const disappearTimer = setInterval(() => {
+        setDisappearLetterIndex(prev => {
+          if (prev >= letters.length) {
+            clearInterval(disappearTimer);
+            // Complete animation after all letters disappeared
+            setTimeout(() => {
+              setIsVisible(false);
+              onComplete?.();
+            }, 500);
+            return prev;
+          }
+          return prev + 1;
+        });
+      }, letterDelay);
+
+      return () => clearInterval(disappearTimer);
     }, letters.length * letterDelay + 2000);
 
     return () => {
       clearInterval(letterTimer);
-      clearTimeout(completeTimer);
+      clearTimeout(disappearStartTimer);
     };
   }, [onComplete, letters.length]);
 
@@ -83,7 +101,11 @@ export function WelcomeAnimation({ onComplete, duration = 6000 }: WelcomeAnimati
                   className={letter === ' ' ? 'inline-block w-8' : 'inline-block'}
                   variants={letterVariants}
                   initial="hidden"
-                  animate={index < currentLetterIndex ? "visible" : "hidden"}
+                  animate={
+                    isDisappearing 
+                      ? (index < disappearLetterIndex ? "hidden" : "visible")
+                      : (index < currentLetterIndex ? "visible" : "hidden")
+                  }
                 >
                   {letter === ' ' ? '\u00A0' : letter}
                 </motion.span>
