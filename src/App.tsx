@@ -152,8 +152,8 @@ const App = () => {
             <Route path="/workspace/:workspaceDetails/workspace-profiles" element={user ? <WorkspaceProfilesPage /> : <Navigate to="/auth" replace />} />
             <Route path="/workspace/:workspaceDetails/admin" element={user ? <AdminDashboard /> : <Navigate to="/auth" replace />} />
             
-            {/* Legacy route redirect */}
-            <Route path="/" element={<Navigate to="/landing" replace />} />
+            {/* Home route */}
+            <Route path="/" element={<LandingPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
