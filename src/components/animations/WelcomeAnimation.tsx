@@ -37,8 +37,8 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
       
       const disappearTimer = setInterval(() => {
         setDisappearLetterIndex(prev => {
-          // Show background when we're halfway through disappearing
-          if (prev === Math.floor(letters.length / 2)) {
+          // Show background when we start disappearing any letter
+          if (prev === 0) {
             setShowBackground(true);
           }
           
