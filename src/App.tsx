@@ -47,9 +47,11 @@ const App = () => {
                       window.location.pathname.startsWith('/privacy-policy') ||
                       window.location.pathname.startsWith('/terms-of-service');
 
-  // Only use workspace context when not on public pages
-  const workspaceContext = isPublicPage ? { workspace: null, loading: false } : useWorkspace();
-  const { workspace, loading: workspaceLoading } = workspaceContext;
+  // Always call useWorkspace hook but conditionally use its values
+  const workspaceHookResult = useWorkspace();
+  const { workspace, loading: workspaceLoading } = isPublicPage 
+    ? { workspace: null, loading: false } 
+    : workspaceHookResult;
   
   // Only track sessions for authenticated users on protected routes
   const isProtectedRoute = window.location.pathname.startsWith('/workspace') || 
