@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ProductionErrorBoundary } from "@/components/ui/production-error-boundary";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useSafeAuth } from "@/hooks/useSafeAuth";
 import { useSafeWorkspace } from "@/hooks/useSafeWorkspace";
 import { useSessionTracking } from "@/hooks/useSessionTracking";
@@ -38,6 +38,7 @@ const App = () => {
   
   // Check if we're on a public page that doesn't need workspace context
   const isPublicPage = typeof window !== 'undefined' && isPublicPath(window.location.pathname);
+  const location = useLocation();
 
   // Use safe workspace hook that handles provider absence gracefully
   const { workspace, loading: workspaceLoading } = useSafeWorkspace();

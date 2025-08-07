@@ -2,11 +2,18 @@ import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
+import { ErrorTracker } from '@/lib/monitoring';
+import { securityLog } from '@/lib/security';
 
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
+  fallbackRender?: (error: Error, reset: () => void) => ReactNode;
+  resetKeys?: unknown[];
+  name?: string;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
+  onReset?: () => void;
+  onResetKeysChange?: (prevResetKeys?: unknown[], nextResetKeys?: unknown[]) => void;
 }
 
 interface State {
@@ -29,12 +36,41 @@ export class ErrorBoundary extends Component<Props, State> {
     if (import.meta.env.DEV || import.meta.env.VITE_DEBUG === 'true') {
       console.error('Error Boundary caught an error:', error, errorInfo);
     }
+
+    // Track via monitoring and security logger
+    try {
+      ErrorTracker.getInstance().trackError(error, this.props.name || 'ErrorBoundary');
+      securityLog.error({
+        category: 'monitoring',
+        message: `ErrorBoundary (${this.props.name || 'global'}) caught: ${error.message}`,
+        metadata: { componentStack: errorInfo.componentStack, stack: (error as any).stack }
+      });
+    } catch {}
+
     this.props.onError?.(error, errorInfo);
   }
 
   handleReset = () => {
     this.setState({ hasError: false, error: undefined });
+    this.props.onReset?.();
   };
+
+  componentDidUpdate(prevProps: Readonly<Props>) {
+    if (this.props.resetKeys && prevProps.resetKeys && !this.areArraysEqual(prevProps.resetKeys, this.props.resetKeys)) {
+      this.props.onResetKeysChange?.(prevProps.resetKeys, this.props.resetKeys);
+      this.handleReset();
+    }
+  }
+
+  private areArraysEqual(a?: unknown[], b?: unknown[]) {
+    if (a === b) return true;
+    if (!a || !b) return false;
+    if (a.length !== b.length) return false;
+    for (let i = 0; i < a.length; i++) {
+      if (a[i] !== b[i]) return false;
+    }
+    return true;
+  }
 
   render() {
     if (this.state.hasError) {
