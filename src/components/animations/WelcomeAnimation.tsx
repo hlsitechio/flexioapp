@@ -8,28 +8,46 @@ interface WelcomeAnimationProps {
 
 export function WelcomeAnimation({ onComplete, duration = 6000 }: WelcomeAnimationProps) {
   const [isVisible, setIsVisible] = useState(true);
+  const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
+  
+  const fullText = "Welcome to FlexIO!";
+  const letters = fullText.split('');
+  const letterDelay = 200; // Fixed delay between letters
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    // Start letter animation immediately
+    const letterTimer = setInterval(() => {
+      setCurrentLetterIndex(prev => {
+        if (prev >= letters.length) {
+          clearInterval(letterTimer);
+          return prev;
+        }
+        return prev + 1;
+      });
+    }, letterDelay);
+
+    // Complete animation after all letters + some viewing time
+    const completeTimer = setTimeout(() => {
       setIsVisible(false);
-      onComplete?.();
-    }, duration);
+      setTimeout(() => onComplete?.(), 1000); // Add fade out time
+    }, letters.length * letterDelay + 2000);
 
-    return () => clearTimeout(timer);
-  }, [duration, onComplete]);
+    return () => {
+      clearInterval(letterTimer);
+      clearTimeout(completeTimer);
+    };
+  }, [onComplete, letters.length]);
 
-  const textVariants = {
+  const letterVariants = {
     hidden: { 
       opacity: 0,
-      scale: 0.8,
-      filter: "blur(10px)"
+      filter: "blur(15px)",
     },
     visible: { 
       opacity: 1,
-      scale: 1,
       filter: "blur(0px)",
       transition: {
-        duration: 1,
+        duration: 0.8,
         ease: "easeOut" as const
       }
     }
@@ -43,7 +61,7 @@ export function WelcomeAnimation({ onComplete, duration = 6000 }: WelcomeAnimati
     },
     exit: { 
       opacity: 0,
-      transition: { duration: 1, ease: "easeInOut" as const }
+      transition: { duration: 1, ease: "easeOut" as const }
     }
   };
 
@@ -58,14 +76,19 @@ export function WelcomeAnimation({ onComplete, duration = 6000 }: WelcomeAnimati
           exit="exit"
         >
           <div className="text-center">
-            <motion.h1
-              className="text-6xl md:text-8xl lg:text-9xl font-bold text-white tracking-wider"
-              variants={textVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              Welcome to FlexIO!
-            </motion.h1>
+            <div className="text-6xl md:text-8xl lg:text-9xl font-bold text-white tracking-wider">
+              {letters.map((letter, index) => (
+                <motion.span
+                  key={index}
+                  className={letter === ' ' ? 'inline-block w-8' : 'inline-block'}
+                  variants={letterVariants}
+                  initial="hidden"
+                  animate={index < currentLetterIndex ? "visible" : "hidden"}
+                >
+                  {letter === ' ' ? '\u00A0' : letter}
+                </motion.span>
+              ))}
+            </div>
           </div>
         </motion.div>
       )}
