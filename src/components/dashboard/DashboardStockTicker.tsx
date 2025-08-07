@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState } from 'react';
+import { WidgetShell } from './WidgetShell';
 import { TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 
 export function DashboardStockTicker() {
@@ -11,32 +11,27 @@ export function DashboardStockTicker() {
   ]);
 
   return (
-    <Card className="h-full">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <DollarSign className="h-5 w-5" />
-          Stock Ticker
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        {stocks.map((stock) => (
-          <div key={stock.symbol} className="flex items-center justify-between text-sm">
-            <div className="font-medium">{stock.symbol}</div>
-            <div className="text-right">
-              <div className="font-mono">${stock.price}</div>
-              <div className={`flex items-center gap-1 text-xs ${
-                stock.change >= 0 ? 'text-green-600' : 'text-red-600'
-              }`}>
-                {stock.change >= 0 ? 
-                  <TrendingUp className="h-3 w-3" /> : 
-                  <TrendingDown className="h-3 w-3" />
-                }
-                {stock.change >= 0 ? '+' : ''}{stock.change} ({stock.changePercent}%)
+    <WidgetShell title="Stock Ticker" icon={<DollarSign className="h-5 w-5" />} variant="glass" size="md">
+      <div className="space-y-3">
+        {stocks.map((stock) => {
+          const isUp = stock.change >= 0;
+          return (
+            <div key={stock.symbol} className="flex items-center justify-between text-sm hover-scale">
+              <div className="font-medium">{stock.symbol}</div>
+              <div className="text-right">
+                <div className="font-mono tabular-nums">${stock.price}</div>
+                <div className={`flex items-center gap-1 justify-end text-xs ${isUp ? 'text-primary' : 'text-destructive'}`}>
+                  {isUp ? 
+                    <TrendingUp className="h-3 w-3" /> : 
+                    <TrendingDown className="h-3 w-3" />
+                  }
+                  {isUp ? '+' : ''}{stock.change} ({stock.changePercent}%)
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </CardContent>
-    </Card>
+          );
+        })}
+      </div>
+    </WidgetShell>
   );
 }

@@ -1,18 +1,18 @@
-import { ToolContainer } from '@/components/shared/ToolContainer';
+import { WidgetShell } from './WidgetShell';
 import { Progress } from '@/components/ui/progress';
 import { Search, Share2, Globe, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const miniTrafficSources = [
-  { source: "Organic", percentage: 42.5, icon: Search, color: "text-green-500" },
-  { source: "Direct", percentage: 27.2, icon: Globe, color: "text-blue-500" },
-  { source: "Social", percentage: 17.6, icon: Share2, color: "text-purple-500" },
-  { source: "Email", percentage: 8.4, icon: Mail, color: "text-orange-500" }
+  { source: "Organic", percentage: 42.5, icon: Search },
+  { source: "Direct", percentage: 27.2, icon: Globe },
+  { source: "Social", percentage: 17.6, icon: Share2 },
+  { source: "Email", percentage: 8.4, icon: Mail }
 ];
 
 export function DashboardTrafficSources() {
   return (
-    <ToolContainer title="Traffic Sources" icon={Globe}>
+    <WidgetShell title="Traffic Sources" icon={<Globe className="h-5 w-5" />} variant="default" size="sm">
       <div className="space-y-2">
         {miniTrafficSources.map((source, index) => (
           <motion.div
@@ -24,10 +24,10 @@ export function DashboardTrafficSources() {
           >
             <div className="flex items-center justify-between text-xs">
               <div className="flex items-center gap-1">
-                <source.icon className={`h-3 w-3 ${source.color}`} />
+                <source.icon className="h-3 w-3 text-primary" />
                 <span className="font-medium">{source.source}</span>
               </div>
-              <span className="font-medium">{source.percentage}%</span>
+              <span className="font-medium tabular-nums">{source.percentage}%</span>
             </div>
             <Progress value={source.percentage} className="h-1" />
           </motion.div>
@@ -36,8 +36,8 @@ export function DashboardTrafficSources() {
       
       <div className="mt-3 p-2 bg-primary/5 rounded-lg border border-primary/10">
         <div className="text-xs font-medium text-primary">Total Visitors</div>
-        <div className="text-sm font-bold">106,435</div>
+        <div className="text-sm font-bold tabular-nums">106,435</div>
       </div>
-    </ToolContainer>
+    </WidgetShell>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { WidgetShell } from './WidgetShell';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { QrCode, Download, Share } from 'lucide-react';
@@ -13,14 +13,8 @@ export function DashboardQRCodeGenerator() {
   };
 
   return (
-    <Card className="h-full">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <QrCode className="h-5 w-5" />
-          QR Generator
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
+    <WidgetShell title="QR Generator" icon={<QrCode className="h-5 w-5" />} variant="glass" size="md">
+      <div className="space-y-4">
         <div className="space-y-2">
           <Input
             placeholder="Enter text or URL"
@@ -34,10 +28,10 @@ export function DashboardQRCodeGenerator() {
         </div>
         
         {generated && (
-          <div className="space-y-3">
-            <div className="bg-white p-4 rounded-lg border mx-auto w-fit">
-              <div className="w-24 h-24 bg-black/10 rounded flex items-center justify-center">
-                <QrCode className="h-16 w-16 text-black/50" />
+          <div className="space-y-3 animate-fade-in">
+            <div className="bg-background p-4 rounded-lg border border-border mx-auto w-fit">
+              <div className="w-24 h-24 bg-foreground/10 rounded flex items-center justify-center">
+                <QrCode className="h-16 w-16 text-foreground/50" aria-hidden />
               </div>
             </div>
             
@@ -53,7 +47,7 @@ export function DashboardQRCodeGenerator() {
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </WidgetShell>
   );
 }

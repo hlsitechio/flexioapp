@@ -1,4 +1,4 @@
-import { ToolContainer } from '@/components/shared/ToolContainer';
+import { WidgetShell } from './WidgetShell';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import { TrendingUp } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -15,7 +15,7 @@ const miniChartData = [
 
 export function DashboardAnalyticsChart() {
   return (
-    <ToolContainer title="Weekly Trend" icon={TrendingUp}>
+    <WidgetShell title="Weekly Trend" icon={<TrendingUp className="h-5 w-5" />} variant="subtle" size="sm">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -47,8 +47,8 @@ export function DashboardAnalyticsChart() {
       </motion.div>
       <div className="mt-2 flex items-center justify-between text-xs">
         <span className="text-muted-foreground">This week</span>
-        <span className="text-green-500 font-medium">+23%</span>
+        <span className="text-primary font-medium">+23%</span>
       </div>
-    </ToolContainer>
+    </WidgetShell>
   );
 }
