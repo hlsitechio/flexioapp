@@ -90,13 +90,17 @@ const App = () => {
   }, [user, workspace, loading, workspaceLoading]);
 
   if (loading || (user && workspaceLoading)) {
+    console.log("App loading state:", { loading, user: !!user, workspaceLoading });
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-background z-50">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+        <p className="mt-4 text-sm text-muted-foreground">Loading...</p>
       </div>
     );
   }
 
+  console.log("App rendering routes - current path:", window.location.pathname);
+  
   return (
     <ProductionErrorBoundary>
         <Toaster />

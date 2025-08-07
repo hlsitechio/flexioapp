@@ -28,9 +28,18 @@ export function useSafeAuth(): AuthContextType {
     window.location.pathname.startsWith('/contact') ||
     window.location.pathname.startsWith('/demo') ||
     window.location.pathname.startsWith('/about') ||
+    window.location.pathname.startsWith('/careers') ||
+    window.location.pathname.startsWith('/blog') ||
     window.location.pathname.startsWith('/features') ||
-    window.location.pathname.startsWith('/pricing')
+    window.location.pathname.startsWith('/pricing') ||
+    window.location.pathname.startsWith('/integrations') ||
+    window.location.pathname.startsWith('/documentation') ||
+    window.location.pathname.startsWith('/help-center') ||
+    window.location.pathname.startsWith('/privacy-policy') ||
+    window.location.pathname.startsWith('/terms-of-service')
   );
+
+  console.log("useSafeAuth called for path:", window.location.pathname, "isPublicPage:", isPublicPage);
 
   if (isPublicPage) {
     // Return safe defaults for public pages
