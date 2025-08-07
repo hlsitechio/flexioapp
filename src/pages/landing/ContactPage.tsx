@@ -2,6 +2,7 @@ import { ContactForm } from '@/components/forms';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export function ContactPage() {
   return (
@@ -12,21 +13,21 @@ export function ContactPage() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-4">
               <Button variant="ghost" asChild>
-                <a href="/landing">← Back to Home</a>
+                <Link to="/landing">← Back to Home</Link>
               </Button>
-              <a href="/landing" className="flex items-center hover:opacity-80 transition-opacity">
+              <Link to="/landing" className="flex items-center hover:opacity-80 transition-opacity">
                 <img 
                   src="/lovable-uploads/801f0a89-558e-4fd0-8e4e-102d5c5d2d3e.png" 
                   alt="FlexIO Logo" 
                   className="h-12 w-auto"
                 />
-              </a>
+              </Link>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <a href="/landing" className="text-foreground/60 hover:text-foreground transition-colors">Home</a>
-              <a href="/demo" className="text-foreground/60 hover:text-foreground transition-colors">Demo</a>
+              <Link to="/landing" className="text-foreground/60 hover:text-foreground transition-colors">Home</Link>
+              <Link to="/demo" className="text-foreground/60 hover:text-foreground transition-colors">Demo</Link>
               <Button variant="outline" className="rounded-full" asChild>
-                <a href="/demo">Request Demo</a>
+                <Link to="/demo">Request Demo</Link>
               </Button>
             </div>
           </div>

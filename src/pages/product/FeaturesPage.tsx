@@ -1,40 +1,11 @@
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowLeft, Zap, Settings, BarChart } from 'lucide-react';
+import { Zap, Settings, BarChart } from 'lucide-react';
+import { PublicPageNav } from '@/components/shared';
 
 export function FeaturesPage() {
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
-      {/* Navigation */}
-      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" asChild>
-                <a href="/landing" className="flex items-center gap-2">
-                  <ArrowLeft className="h-4 w-4" />
-                  Back to Home
-                </a>
-              </Button>
-              <a href="/landing" className="flex items-center hover:opacity-80 transition-opacity">
-                <img 
-                  src="/lovable-uploads/801f0a89-558e-4fd0-8e4e-102d5c5d2d3e.png" 
-                  alt="FlexIO Logo" 
-                  className="h-12 w-auto"
-                />
-              </a>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" asChild>
-                <a href="/auth">Sign In</a>
-              </Button>
-              <Button asChild>
-                <a href="/workspace-selection">Get Started</a>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <PublicPageNav />
 
       {/* Hero Section */}
       <section className="py-24 px-8 sm:px-12 lg:px-16">

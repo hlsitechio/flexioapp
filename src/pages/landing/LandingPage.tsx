@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { WelcomeAnimation } from '@/components/animations/WelcomeAnimation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -143,21 +144,21 @@ export function LandingPage() {
         <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <a href="/landing" className="flex items-center hover:opacity-80 transition-opacity">
+              <Link to="/landing" className="flex items-center hover:opacity-80 transition-opacity">
                 <img 
                   src="/lovable-uploads/801f0a89-558e-4fd0-8e4e-102d5c5d2d3e.png" 
                   alt="FlexIO Logo" 
                   className="h-16 w-auto"
                 />
-              </a>
+              </Link>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <a href="/features" className="text-foreground/60 hover:text-foreground transition-colors story-link">Features</a>
-              <a href="/about" className="text-foreground/60 hover:text-foreground transition-colors story-link">About</a>
-              <a href="/contact" className="text-foreground/60 hover:text-foreground transition-colors story-link">Contact</a>
-              <a href="/documentation" className="text-foreground/60 hover:text-foreground transition-colors story-link">Docs</a>
+              <Link to="/features" className="text-foreground/60 hover:text-foreground transition-colors story-link">Features</Link>
+              <Link to="/about" className="text-foreground/60 hover:text-foreground transition-colors story-link">About</Link>
+              <Link to="/contact" className="text-foreground/60 hover:text-foreground transition-colors story-link">Contact</Link>
+              <Link to="/documentation" className="text-foreground/60 hover:text-foreground transition-colors story-link">Docs</Link>
               <Button variant="ghost" className="rounded-full" asChild>
-                <a href="/auth">Sign In</a>
+                <Link to="/auth">Sign In</Link>
               </Button>
               <Button className="rounded-full" onClick={scrollToDemo}>
                 Get Demo
@@ -205,12 +206,12 @@ export function LandingPage() {
                 variants={fadeInUp}
               >
                 <Button size="lg" className="text-lg px-8 py-4 rounded-full hover-scale" asChild>
-                  <a href="/workspace-selection">
+                  <Link to="/workspace-selection">
                     <span className="flex items-center">
                       Get Started Free
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </span>
-                  </a>
+                  </Link>
                 </Button>
                 <Button size="lg" variant="outline" className="text-lg px-8 py-4 rounded-full hover-scale" onClick={scrollToDemo}>
                   Try Demo
@@ -878,28 +879,28 @@ export function LandingPage() {
             <div className="space-y-6">
               <h4 className="font-semibold">Product</h4>
               <ul className="space-y-3 text-muted-foreground">
-                <li><a href="/features" className="hover:text-foreground transition-colors">Features</a></li>
-                <li><a href="/pricing" className="hover:text-foreground transition-colors">Pricing</a></li>
-                <li><a href="/landing" className="hover:text-foreground transition-colors">Demo</a></li>
-                <li><a href="/integrations" className="hover:text-foreground transition-colors">Integrations</a></li>
+                <li><Link to="/features" className="hover:text-foreground transition-colors">Features</Link></li>
+                <li><Link to="/pricing" className="hover:text-foreground transition-colors">Pricing</Link></li>
+                <li><Link to="/demo" className="hover:text-foreground transition-colors">Demo</Link></li>
+                <li><Link to="/integrations" className="hover:text-foreground transition-colors">Integrations</Link></li>
               </ul>
             </div>
             <div className="space-y-6">
               <h4 className="font-semibold">Company</h4>
               <ul className="space-y-3 text-muted-foreground">
-                <li><a href="/about" className="hover:text-foreground transition-colors">About</a></li>
-                <li><a href="/contact" className="hover:text-foreground transition-colors">Contact</a></li>
-                <li><a href="/careers" className="hover:text-foreground transition-colors">Careers</a></li>
-                <li><a href="/blog" className="hover:text-foreground transition-colors">Blog</a></li>
+                <li><Link to="/about" className="hover:text-foreground transition-colors">About</Link></li>
+                <li><Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link></li>
+                <li><Link to="/careers" className="hover:text-foreground transition-colors">Careers</Link></li>
+                <li><Link to="/blog" className="hover:text-foreground transition-colors">Blog</Link></li>
               </ul>
             </div>
             <div className="space-y-6">
               <h4 className="font-semibold">Resources</h4>
               <ul className="space-y-3 text-muted-foreground">
-                <li><a href="/documentation" className="hover:text-foreground transition-colors">Documentation</a></li>
-                <li><a href="/help-center" className="hover:text-foreground transition-colors">Help Center</a></li>
-                <li><a href="/privacy-policy" className="hover:text-foreground transition-colors">Privacy Policy</a></li>
-                <li><a href="/terms-of-service" className="hover:text-foreground transition-colors">Terms of Service</a></li>
+                <li><Link to="/documentation" className="hover:text-foreground transition-colors">Documentation</Link></li>
+                <li><Link to="/help-center" className="hover:text-foreground transition-colors">Help Center</Link></li>
+                <li><Link to="/privacy-policy" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms-of-service" className="hover:text-foreground transition-colors">Terms of Service</Link></li>
               </ul>
             </div>
           </div>
