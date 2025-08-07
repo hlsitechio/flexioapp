@@ -3,12 +3,10 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LeadCaptureForm } from '@/components/forms';
-import { WelcomeAnimation } from '@/components/animations';
 import { CheckCircle, ArrowRight, Star, Users, Shield, Zap, Image, Play, Clock, UserCheck } from 'lucide-react';
 
 export function LandingPage() {
   const [showDemo, setShowDemo] = useState(false);
-  const [showWelcome, setShowWelcome] = useState(true);
 
   const scrollToDemo = () => {
     setShowDemo(true);
@@ -57,16 +55,7 @@ export function LandingPage() {
   };
 
   return (
-    <>
-      {/* Welcome Animation Overlay */}
-      {showWelcome && (
-        <WelcomeAnimation 
-          onComplete={() => setShowWelcome(false)}
-          duration={4000}
-        />
-      )}
-      
-      <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       {/* Navigation */}
       <motion.nav 
         className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50"
@@ -882,7 +871,6 @@ export function LandingPage() {
           </div>
         </div>
       </footer>
-      </div>
-    </>
+    </div>
   );
 }
