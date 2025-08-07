@@ -30,9 +30,25 @@ console.log('📦 Security instances imported:', { cspMonitor, gdprCompliance, d
  */
 export function initializeSecuritySuite() {
   try {
+    // Check if we're on a public page - minimal security for performance
+    const isPublicPage = typeof window !== 'undefined' && (
+      window.location.pathname.startsWith('/landing') ||
+      window.location.pathname.startsWith('/contact') ||
+      window.location.pathname.startsWith('/demo') ||
+      window.location.pathname.startsWith('/about') ||
+      window.location.pathname.startsWith('/features') ||
+      window.location.pathname.startsWith('/pricing')
+    );
+    
     const isProduction = window.location.hostname.includes('lovableproject.com') || 
                         window.location.hostname.includes('vercel.app') ||
                         process.env.NODE_ENV === 'production';
+    
+    // Skip heavy security monitoring on public pages in production
+    if (isPublicPage && isProduction) {
+      console.log('%c🔒 Minimal Security (Public Page)', 'color: #10b981; font-weight: bold;');
+      return;
+    }
     
     if (isProduction) {
       console.log('%c🔒 Production Security Suite Active', 'color: #10b981; font-weight: bold;');

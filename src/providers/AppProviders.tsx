@@ -34,12 +34,10 @@ function AuthenticatedProviders({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Minimal providers for public pages
+// Minimal providers for public pages - NO auth-related contexts
 function PublicProviders({ children }: { children: React.ReactNode }) {
   return (
-    <UISettingsProvider>
-      {children}
-    </UISettingsProvider>
+    <>{children}</>
   );
 }
 

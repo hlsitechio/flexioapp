@@ -32,6 +32,10 @@ export function usePerformanceMonitor() {
   const trackMetric = useCallback((metric: PerformanceMetrics) => {
     if (!isEnabled) return;
     
+    // Don't log performance metrics in production public pages
+    const isPublicPage = typeof window !== 'undefined' && window.location.pathname.startsWith('/landing');
+    if (isPublicPage && import.meta.env.PROD) return;
+    
     // Only log in development to avoid console noise in production
     if (import.meta.env.DEV) {
       console.log('Performance Metric:', metric);
@@ -101,9 +105,11 @@ export function usePerformanceMonitor() {
       for (const entry of list.getEntries()) {
         const resource = entry as PerformanceResourceTiming;
         
-        // Track slow resources (only in development)
+        // Don't track slow resources on production public pages to reduce console noise
+        const isPublicPage = typeof window !== 'undefined' && window.location.pathname.startsWith('/landing');
         const loadTime = resource.responseEnd - resource.requestStart;
-        if (loadTime > 1000 && import.meta.env.DEV) { // Resources taking more than 1s
+        
+        if (loadTime > 1000 && import.meta.env.DEV && !(isPublicPage && import.meta.env.PROD)) {
           console.warn('Slow resource:', {
             name: resource.name,
             loadTime,

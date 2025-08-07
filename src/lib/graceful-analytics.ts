@@ -175,11 +175,11 @@ class GracefulAnalytics {
   }
 }
 
-// Initialize graceful analytics
+// Initialize graceful analytics - optimized for public pages
 export const gracefulAnalytics = new GracefulAnalytics({
-  googleAnalytics: { enabled: true },
-  facebookPixel: { enabled: true },
-  linkedInInsight: { enabled: true }
+  googleAnalytics: { enabled: false }, // Disabled on public pages for performance
+  facebookPixel: { enabled: false },   // Disabled to avoid preload warnings
+  linkedInInsight: { enabled: false }  // Disabled on public pages for performance
 });
 
 // Export for use in components
