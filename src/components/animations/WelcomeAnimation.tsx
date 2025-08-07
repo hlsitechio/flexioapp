@@ -34,7 +34,7 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
   const fullText = "Welcome to FlexIO!";
   const letters = fullText.split('');
   const toWordIndex = fullText.indexOf('to'); // Index 8
-  const letterDelay = 120; // Smoother delay between letters
+  const letterDelay = 80; // Faster delay between letters to reduce total duration
 
   // Check if animation should be shown on component mount
   useEffect(() => {
@@ -68,15 +68,12 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
 
     // Start disappearing animation after viewing time
     const disappearStartTimer = setTimeout(() => {
+      // Reveal background immediately when starting fade-out
+      setShowBackground(true);
       setIsDisappearing(true);
       
       const disappearTimer = setInterval(() => {
         setDisappearLetterIndex(prev => {
-          // Show background when we start disappearing the first letter
-          if (prev === 0) {
-            setShowBackground(true);
-          }
-          
           if (prev >= letters.length) {
             clearInterval(disappearTimer);
             // Complete animation faster with no delay
@@ -85,15 +82,15 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
               // Set cookie to prevent animation on subsequent visits
               setCookie(ANIMATION_COOKIE_NAME, 'true');
               onComplete?.();
-            }, 200);
+            }, 150);
             return prev;
           }
           return prev + 1;
         });
-      }, letterDelay);
+      }, Math.max(40, Math.floor(letterDelay * 0.6)));
 
       return () => clearInterval(disappearTimer);
-    }, letters.length * letterDelay + 1500);
+    }, letters.length * letterDelay + 300);
 
     return () => {
       clearInterval(letterTimer);
@@ -188,6 +185,7 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
                 : "visible"
             }
             exit="exit"
+            style={{ pointerEvents: isDisappearing ? 'none' : 'auto' }}
           >
             <div className="text-center">
               <div className="text-6xl md:text-8xl lg:text-9xl font-bold text-white tracking-wider">
