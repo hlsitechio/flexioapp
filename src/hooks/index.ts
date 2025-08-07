@@ -11,5 +11,5 @@ export { useToast } from './use-toast';
 export { useActivityTracking } from './useActivityTracking';
 export { usePrompts } from './usePrompts';
 export { useWorkspaceUrl } from './useWorkspaceUrl';
-export { useVercelIntegrations } from './useVercelIntegrations';
+
 export { usePerformanceMonitor } from './usePerformanceMonitor';

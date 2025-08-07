@@ -23,11 +23,11 @@ export const productionSecurityHeaders = {
   // Content Security Policy
   'Content-Security-Policy': [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://vercel.live https://*.vercel-analytics.com",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https:",
-    "connect-src 'self' wss: ws: https://*.supabase.co wss://*.supabase.co https://*.vercel-analytics.com https://lovable-api.com https://*.lovable.dev",
+    "connect-src 'self' wss: ws: https://*.supabase.co wss://*.supabase.co https://lovable-api.com https://*.lovable.dev",
     "frame-src 'none'",
     "object-src 'none'",
     "base-uri 'self'",

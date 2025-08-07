@@ -16,36 +16,6 @@ export interface AnalyticsProvider {
   page(name: string, properties?: Record<string, any>): void;
 }
 
-// Vercel Analytics Provider
-class VercelAnalyticsProvider implements AnalyticsProvider {
-  private initialized = false;
-
-  initialize() {
-    if (this.initialized || !integrationsConfig.analytics.vercel.enabled) return;
-    
-    // Vercel Analytics is automatically initialized
-    this.initialized = true;
-    // Silent initialization
-  }
-
-  track(event: AnalyticsEvent) {
-    if (!this.initialized) return;
-    
-    // Vercel Analytics doesn't have custom event tracking in the free tier
-    // This would be implemented with their Pro features
-    // Silent tracking
-  }
-
-  identify(userId: string, traits?: Record<string, any>) {
-    // Vercel Analytics doesn't support user identification
-    // Silent identify
-  }
-
-  page(name: string, properties?: Record<string, any>) {
-    // Page views are automatically tracked by Vercel Analytics
-    // Silent page tracking
-  }
-}
 
 // Google Analytics Provider
 class GoogleAnalyticsProvider implements AnalyticsProvider {
@@ -129,7 +99,6 @@ export class AnalyticsManager {
 
     // Initialize providers
     this.providers = [
-      new VercelAnalyticsProvider(),
       new GoogleAnalyticsProvider(),
     ];
 

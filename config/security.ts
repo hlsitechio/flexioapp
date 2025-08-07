@@ -37,7 +37,7 @@ export const securityConfig = {
         "https://api.supabase.co",
         "https://*.supabase.co",
         "wss://*.supabase.co",
-        "https://vitals.vercel-insights.com",
+        
         "https://sentry.io",
         "https://www.google-analytics.com",
       ],
