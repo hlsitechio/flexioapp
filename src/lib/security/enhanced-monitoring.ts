@@ -41,6 +41,8 @@ class EnhancedSecurityMonitoring {
   private alerts: SecurityAlert[] = [];
   private monitoring = false;
   private reportingEndpoint?: string;
+  private lastSlowEventAt = 0;
+  private lastSlowEventKey = '';
 
   constructor() {
     this.initialize();
@@ -261,14 +263,29 @@ class EnhancedSecurityMonitoring {
         list.getEntries().forEach((entry) => {
           // Detect unusually slow responses that might indicate attacks
           if (entry.duration > 5000) { // 5 seconds
+            const name = (entry as any).name as string | undefined;
+            const entryType = (entry as any).entryType as string | undefined;
+            const isLovablePreview =
+              (typeof window !== 'undefined' && window.location.search.includes('__lovable_token')) ||
+              (typeof name === 'string' && name.includes('__lovable_token'));
+
+            // Ignore Lovable preview navigations and throttle duplicates (30s) per entry
+            const key = `${entryType}:${name}`;
+            const now = Date.now();
+            if (isLovablePreview || (this.lastSlowEventKey === key && now - this.lastSlowEventAt < 30000)) {
+              return;
+            }
+            this.lastSlowEventKey = key;
+            this.lastSlowEventAt = now;
+
             this.recordEvent({
-              type: 'unauthorized_access',
-              severity: 'medium',
+              type: 'monitoring',
+              severity: 'low',
               description: 'Unusually slow response detected',
               metadata: {
-                entryName: entry.name,
-                duration: entry.duration,
-                entryType: entry.entryType
+                entryName: name,
+                duration: (entry as any).duration,
+                entryType
               }
             });
           }
