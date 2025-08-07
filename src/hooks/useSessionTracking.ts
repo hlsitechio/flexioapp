@@ -52,12 +52,11 @@ export function useSessionTracking() {
           ...data
         };
 
-        // Upsert session data
+        // Upsert session data using the correct syntax
         const { error } = await supabase
           .from('active_sessions')
           .upsert(sessionData, { 
-            onConflict: 'session_id',
-            ignoreDuplicates: false 
+            onConflict: 'session_id'
           });
 
         if (error) {
