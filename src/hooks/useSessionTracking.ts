@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
+import { useSafeAuth } from '@/hooks/useSafeAuth';
 
 interface SessionData {
   user_agent?: string;
@@ -11,7 +11,7 @@ interface SessionData {
 }
 
 export function useSessionTracking(enabled: boolean = true, workspace?: any) {
-  const { user } = useAuth();
+  const { user } = useSafeAuth();
   const sessionIdRef = useRef<string>(crypto.randomUUID());
   const lastUpdateRef = useRef<number>(0);
 
