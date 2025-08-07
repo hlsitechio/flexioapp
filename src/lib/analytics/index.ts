@@ -27,7 +27,6 @@ class GoogleAnalyticsProvider implements AnalyticsProvider {
     const { measurementId, config } = integrationsConfig.analytics.googleAnalytics;
     
     if (!measurementId) {
-      console.warn('Google Analytics measurement ID not configured');
       return;
     }
 

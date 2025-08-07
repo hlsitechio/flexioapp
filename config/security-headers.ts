@@ -23,11 +23,11 @@ export const productionSecurityHeaders = {
   // Content Security Policy
   'Content-Security-Policy': [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://cdn.gpteng.co",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https:",
-    "connect-src 'self' wss: ws: https://*.supabase.co wss://*.supabase.co https://lovable-api.com https://*.lovable.dev https://www.google-analytics.com https://www.googletagmanager.com",
+    "connect-src 'self' wss: ws: https://*.supabase.co wss://*.supabase.co https://lovable-api.com https://*.lovable.dev https://www.google-analytics.com https://www.googletagmanager.com https://cdn.gpteng.co",
     "frame-src 'none'",
     "object-src 'none'",
     "base-uri 'self'",

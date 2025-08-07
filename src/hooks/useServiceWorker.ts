@@ -16,7 +16,8 @@ export function useServiceWorker() {
   });
 
   useEffect(() => {
-    if (!state.isSupported) return;
+    // Avoid registering SW in development to prevent HMR reload loops
+    if (!state.isSupported || import.meta.env.DEV) return;
 
     async function registerServiceWorker() {
       try {
