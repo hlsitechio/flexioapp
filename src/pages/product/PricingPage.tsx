@@ -16,7 +16,13 @@ export function PricingPage() {
                   Back to Home
                 </a>
               </Button>
-              <h1 className="text-xl font-bold">FlexIO</h1>
+              <a href="/landing" className="flex items-center hover:opacity-80 transition-opacity">
+                <img 
+                  src="/lovable-uploads/801f0a89-558e-4fd0-8e4e-102d5c5d2d3e.png" 
+                  alt="FlexIO Logo" 
+                  className="h-8 w-auto"
+                />
+              </a>
             </div>
             <div className="flex items-center space-x-4">
               <Button variant="ghost" asChild>

@@ -70,7 +70,13 @@ export function LandingPage() {
         <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <h1 className="text-xl font-bold">FlexIO</h1>
+              <a href="/landing" className="flex items-center hover:opacity-80 transition-opacity">
+                <img 
+                  src="/lovable-uploads/801f0a89-558e-4fd0-8e4e-102d5c5d2d3e.png" 
+                  alt="FlexIO Logo" 
+                  className="h-10 w-auto"
+                />
+              </a>
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <a href="/features" className="text-foreground/60 hover:text-foreground transition-colors story-link">Features</a>
