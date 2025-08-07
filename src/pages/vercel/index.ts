@@ -1,0 +1,1 @@
+export { VercelIntegrationsPage } from './VercelIntegrationsPage';
