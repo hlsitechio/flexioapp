@@ -33,6 +33,10 @@ import NotFound from "./pages/NotFound";
 const App = () => {
   const { user, loading } = useSafeAuth();
   
+  console.log("App.tsx - Current path:", window.location.pathname);
+  console.log("App.tsx - User:", user?.email || 'No user');
+  console.log("App.tsx - Loading:", loading);
+  
   // Check if we're on a public page that doesn't need workspace context
   const isPublicPage = window.location.pathname === '/' ||                      // Root path
                        window.location.pathname.startsWith('/landing') ||
@@ -50,10 +54,11 @@ const App = () => {
                        window.location.pathname.startsWith('/terms-of-service');
 
   // Use safe workspace hook that handles provider absence gracefully
-  const workspaceHookResult = useSafeWorkspace();
-  const { workspace, loading: workspaceLoading } = isPublicPage 
-    ? { workspace: null, loading: false } 
-    : workspaceHookResult;
+  const { workspace, loading: workspaceLoading } = useSafeWorkspace();
+  
+  console.log("App.tsx - Workspace:", workspace?.name || 'No workspace');
+  console.log("App.tsx - Workspace loading:", workspaceLoading);
+  console.log("App.tsx - Should render workspace content:", !isPublicPage && user && !loading);
   
   // Only track sessions for authenticated users on protected routes
   const isProtectedRoute = window.location.pathname.startsWith('/workspace') || 
@@ -130,7 +135,12 @@ const App = () => {
             <Route path="/workspace-selection" element={user ? <WorkspaceSelectionPage /> : <Navigate to="/auth" replace />} />
             
             {/* Workspace-specific routes with role-based URLs */}
-            <Route path="/workspace/:workspaceDetails" element={user && workspace ? <Index /> : <Navigate to="/workspace-selection" replace />} />
+            <Route path="/workspace/:workspaceDetails" element={
+              (() => {
+                console.log("Workspace route check - user:", !!user, "workspace:", !!workspace);
+                return user && workspace ? <Index /> : <Navigate to="/workspace-selection" replace />;
+              })()
+            } />
             <Route path="/workspace/:workspaceDetails/profile" element={user ? <ProfilePage /> : <Navigate to="/auth" replace />} />
             <Route path="/workspace/:workspaceDetails/components" element={user ? <ComponentsPage /> : <Navigate to="/auth" replace />} />
             <Route path="/workspace/:workspaceDetails/settings" element={user ? <Settings /> : <Navigate to="/auth" replace />} />
