@@ -18,12 +18,12 @@ export const integrationsConfig = {
   // Analytics Integrations
   analytics: {
     vercel: {
-      enabled: true,
+      enabled: false,
       debug: false,
     },
     googleAnalytics: {
-      enabled: false, // Will be enabled when GA4 is set up
-      measurementId: '', // GA4 Measurement ID
+      enabled: true, // Enable GA4 when measurement ID is provided
+      measurementId: import.meta.env.VITE_GA_MEASUREMENT_ID || '', // GA4 Measurement ID
       config: {
         send_page_view: true,
         anonymize_ip: true,

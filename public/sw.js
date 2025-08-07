@@ -2,8 +2,6 @@ const CACHE_NAME = 'flexio-v3';
 const CRITICAL_RESOURCES = [
   '/',
   '/index.html',
-  '/src/main.tsx',
-  '/src/index.css',
   '/lovable-uploads/801f0a89-558e-4fd0-8e4e-102d5c5d2d3e.png' // Logo
 ];
 

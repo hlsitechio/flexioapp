@@ -12,6 +12,7 @@ import { SEOHead, StructuredData, AIFeatureSection, AIBenefitsSection } from '@/
 import { AISearchOptimization } from '@/components/seo/AISearchOptimization';
 import { CriticalCSS } from '@/components/performance/CriticalCSS';
 import { usePerformanceMonitor, markPerformance } from '@/hooks/usePerformanceMonitor';
+import { PrefetchLink } from '@/components/navigation/PrefetchLink';
 
 export function LandingPage() {
   console.log("🏠 LandingPage: Component rendering");
@@ -175,6 +176,8 @@ export function LandingPage() {
                 alt="FlexIO Logo" 
                 className="h-10 w-auto"
                 eager={true}
+                width={80}
+                height={40}
               />
             </Link>
             
@@ -209,7 +212,7 @@ export function LandingPage() {
             {/* Action Buttons */}
             <div className="flex items-center space-x-2">
               <Button variant="ghost" className="rounded-full font-medium text-foreground/80 hover:text-foreground" asChild>
-                <Link to="/auth">Sign In</Link>
+                <PrefetchLink to="/auth">Sign In</PrefetchLink>
               </Button>
               <Button 
                 className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-md hover:shadow-lg transition-all duration-200" 
@@ -260,12 +263,12 @@ export function LandingPage() {
                 variants={fadeInUp}
               >
                 <Button size="lg" className="text-lg px-8 py-4 rounded-full hover-scale" asChild>
-                  <Link to="/workspace-selection">
+                  <PrefetchLink to="/workspace-selection">
                     <span className="flex items-center">
                       Get Started Free
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </span>
-                  </Link>
+                  </PrefetchLink>
                 </Button>
                 <Button size="lg" variant="outline" className="text-lg px-8 py-4 rounded-full hover-scale" onClick={scrollToDemo}>
                   Try Demo
@@ -310,6 +313,8 @@ export function LandingPage() {
                     alt="FlexIO Dashboard Preview - Real-time analytics and customizable widgets" 
                     className="w-full rounded-lg shadow-lg"
                     eager={true}
+                    width={1200}
+                    height={675}
                   />
                 </div>
                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/20 rounded-full blur-xl"></div>

@@ -62,11 +62,9 @@ const App = () => {
       // Always initialize basic monitoring
       initializeMonitoring();
       
-      // Only initialize full analytics on non-public pages or in development
-      if (!isPublicPage || import.meta.env.DEV) {
-        analytics.initialize();
-        analytics.trackPageView(window.location.pathname);
-      }
+      // Initialize analytics across all routes
+      analytics.initialize();
+      analytics.trackPageView(window.location.pathname);
     } catch (error) {
       // Only log errors in development or debug mode
       if (import.meta.env.DEV || import.meta.env.VITE_DEBUG === 'true') {
@@ -74,6 +72,11 @@ const App = () => {
       }
     }
   }, [isPublicPage]);
+
+  // Track SPA route changes
+  useEffect(() => {
+    analytics.trackPageView(location.pathname);
+  }, [location.pathname]);
 
   const { isUpdateAvailable, updateServiceWorker } = useServiceWorker();
 

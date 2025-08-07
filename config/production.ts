@@ -28,7 +28,7 @@ export const productionConfig = {
   },
   
   monitoring: {
-    enableSentry: true,
+    enableSentry: false,
     enableAnalytics: true,
     enableErrorReporting: true,
   },
