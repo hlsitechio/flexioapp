@@ -10,6 +10,9 @@ export { DashboardBookmarkManager } from './DashboardBookmarkManager';
 export { DashboardDateDisplay } from './DashboardDateDisplay';
 export { ImageGallery } from './image-gallery';
 
+// Unified shell for dashboard widgets
+export { WidgetShell } from './WidgetShell';
+
 // Data & Analytics
 export { DashboardWeatherWidget } from './DashboardWeatherWidget';
 export { DashboardStockTicker } from './DashboardStockTicker';
