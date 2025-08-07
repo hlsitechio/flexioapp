@@ -1,4 +1,4 @@
-const CACHE_NAME = 'flexio-v1';
+const CACHE_NAME = 'flexio-v3';
 const CRITICAL_RESOURCES = [
   '/',
   '/index.html',
@@ -7,7 +7,7 @@ const CRITICAL_RESOURCES = [
   '/lovable-uploads/801f0a89-558e-4fd0-8e4e-102d5c5d2d3e.png' // Logo
 ];
 
-const RUNTIME_CACHE = 'flexio-runtime-v1';
+const RUNTIME_CACHE = 'flexio-runtime-v3';
 
 // Install event - cache critical resources
 self.addEventListener('install', (event) => {
@@ -51,55 +51,48 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Handle navigation requests (HTML pages)
+  // Handle navigation requests (HTML pages) with network-first to avoid stale HTML
   if (request.mode === 'navigate') {
     event.respondWith(
-      caches.match(request)
+      fetch(request)
         .then((response) => {
-          if (response) {
-            return response;
+          // Cache successful navigation responses
+          if (response.status === 200) {
+            const responseClone = response.clone();
+            caches.open(RUNTIME_CACHE)
+              .then((cache) => cache.put(request, responseClone));
           }
-          return fetch(request)
-            .then((response) => {
-              // Cache successful navigation responses
-              if (response.status === 200) {
-                const responseClone = response.clone();
-                caches.open(RUNTIME_CACHE)
-                  .then((cache) => cache.put(request, responseClone));
-              }
-              return response;
-            })
-            .catch(() => {
-              // Return cached fallback for offline navigation
-              return caches.match('/') || caches.match('/index.html');
-            });
+          return response;
+        })
+        .catch(async () => {
+          // Fallback to cache if offline
+          return (await caches.match(request)) || (await caches.match('/index.html')) || Response.error();
         })
     );
     return;
   }
 
-  // Handle static assets
-  if (request.destination === 'image' || request.destination === 'script' || request.destination === 'style') {
+  // For JS and CSS, bypass cache to prevent stale chunks
+  if (request.destination === 'script' || request.destination === 'style') {
     event.respondWith(
-      caches.match(request)
-        .then((response) => {
-          if (response) {
-            return response;
+      fetch(request).catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  // Cache-first for images
+  if (request.destination === 'image') {
+    event.respondWith(
+      caches.match(request).then((response) => {
+        if (response) return response;
+        return fetch(request).then((networkResponse) => {
+          if (networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, responseClone));
           }
-          
-          return fetch(request)
-            .then((response) => {
-              // Only cache successful responses
-              if (response.status === 200) {
-                const responseClone = response.clone();
-                caches.open(RUNTIME_CACHE)
-                  .then((cache) => {
-                    cache.put(request, responseClone);
-                  });
-              }
-              return response;
-            });
-        })
+          return networkResponse;
+        });
+      })
     );
     return;
   }

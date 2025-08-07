@@ -36,6 +36,12 @@ export function WorkspaceUrlManager() {
       return;
     }
 
+    // If on workspace-selection, auto-forward to workspace dashboard
+    if (currentPath === '/workspace-selection') {
+      navigate(`/workspace/${urlSegment}`, { replace: true });
+      return;
+    }
+
     // If on old format URLs, redirect to new format
     const oldRoutes = ['/profile', '/components', '/settings', '/customization', '/prompts-gallery', '/code-snippets', '/workspace-profiles', '/admin'];
     const matchedOldRoute = oldRoutes.find(route => currentPath.startsWith(route));
