@@ -23,6 +23,9 @@ interface State {
 }
 
 export class ErrorBoundary extends Component<Props, State> {
+  private lastErrorSig?: string;
+  private lastErrorAt = 0;
+
   constructor(props: Props) {
     super(props);
     this.state = { hasError: false };
@@ -33,6 +36,15 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    // De-duplicate identical errors occurring within 5s (helps with StrictMode double-invoke)
+    const signature = `${error.message}|${errorInfo.componentStack?.slice(0, 200) || ''}`;
+    const now = Date.now();
+    if (this.lastErrorSig === signature && now - this.lastErrorAt < 5000) {
+      return; // Skip duplicate logging/tracking
+    }
+    this.lastErrorSig = signature;
+    this.lastErrorAt = now;
+
     // Only log in development or when debugging is enabled, and when not in quiet mode
     if (!this.props.quiet && (import.meta.env.DEV || import.meta.env.VITE_DEBUG === 'true')) {
       console.error('Error Boundary caught an error:', error, errorInfo);
