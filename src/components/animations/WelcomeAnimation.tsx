@@ -33,10 +33,14 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
     // Start disappearing animation after viewing time
     const disappearStartTimer = setTimeout(() => {
       setIsDisappearing(true);
-      setShowBackground(true);
       
       const disappearTimer = setInterval(() => {
         setDisappearLetterIndex(prev => {
+          // Show background when we're halfway through disappearing
+          if (prev === Math.floor(letters.length / 2)) {
+            setShowBackground(true);
+          }
+          
           if (prev >= letters.length) {
             clearInterval(disappearTimer);
             // Complete animation after all letters disappeared
@@ -98,15 +102,15 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
     hidden: { 
       opacity: 0,
       filter: "blur(20px)",
-      scale: 1.1
+      scale: 1.02
     },
     visible: { 
       opacity: 1,
       filter: "blur(0px)",
       scale: 1,
       transition: { 
-        duration: 2,
-        ease: [0.22, 1, 0.36, 1] as const
+        duration: 1.5,
+        ease: [0.25, 0.46, 0.45, 0.94] as const
       }
     }
   };
