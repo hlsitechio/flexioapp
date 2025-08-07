@@ -14,13 +14,8 @@ export default defineConfig(({ mode }) => ({
       'X-XSS-Protection': '1; mode=block',
       'Cache-Control': mode === 'development' ? 'no-cache' : 'public, max-age=31536000',
     },
-    // Disable HMR in hosted/iframe environments to prevent WebSocket connection errors
-    hmr: process.env.NODE_ENV === 'development' && !process.env.LOVABLE_PROJECT_ID ? {
-      // Only enable HMR in true local development
-      protocol: 'ws',
-      overlay: true,
-      timeout: 30000,
-    } : false, // Completely disable HMR in hosted environments
+    // Completely disable HMR in hosted/production environments
+    hmr: false, // Disable HMR to prevent WebSocket connection errors in hosted environments
     // Performance optimizations
     middlewareMode: false,
     warmup: {
