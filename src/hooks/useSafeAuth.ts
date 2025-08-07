@@ -1,6 +1,5 @@
 import { User, Session } from '@supabase/supabase-js';
 import { useAuth } from '@/contexts/AuthContext';
-import { isPublicPath } from '@/lib/routes/publicPaths';
 
 interface AuthContextType {
   user: User | null;
@@ -12,20 +11,8 @@ interface AuthContextType {
 }
 
 export function useSafeAuth(): AuthContextType {
-  const isPublicPage = typeof window !== 'undefined' && isPublicPath(window.location.pathname);
-
-  if (isPublicPage) {
-    return {
-      user: null,
-      session: null,
-      signUp: async () => ({ error: null }),
-      signIn: async () => ({ error: null }),
-      signOut: async () => ({ error: null }),
-      loading: false,
-    };
-  }
-
   try {
+    // Always use real auth context; provider handles performance internally
     return useAuth();
   } catch {
     // Fallback if context is not available

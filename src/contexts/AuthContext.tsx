@@ -24,15 +24,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const authRateLimiter = createRateLimiter(5, 60000);
 
   useEffect(() => {
-    // Skip auth initialization on public pages for performance
-    const isPublicPage = typeof window !== 'undefined' && isPublicPath(window.location.pathname);
+    // Initialize auth state on all pages to avoid navigation loops
 
-    if (isPublicPage) {
-      setLoading(false);
-      return;
-    }
-
-    // Set up auth state listener for authenticated pages only
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
