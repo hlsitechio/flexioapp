@@ -153,7 +153,10 @@ const App = () => {
             <Route path="/workspace/:workspaceDetails/admin" element={user ? <AdminDashboard /> : <Navigate to="/auth" replace />} />
             
             {/* Home route */}
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={(() => {
+              console.log("🏠 Root route: Rendering LandingPage");
+              return <LandingPage />;
+            })()} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

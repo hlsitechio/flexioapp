@@ -14,6 +14,7 @@ import { CriticalCSS } from '@/components/performance/CriticalCSS';
 import { usePerformanceMonitor, markPerformance } from '@/hooks/usePerformanceMonitor';
 
 export function LandingPage() {
+  console.log("🏠 LandingPage: Component rendering");
   const [showDemo, setShowDemo] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
   const { trackMetric } = usePerformanceMonitor();
@@ -117,6 +118,7 @@ export function LandingPage() {
     transition: { duration: 0.6, ease: "easeOut" }
   };
 
+  console.log("🏠 LandingPage: About to return JSX");
   return (
     <>
       <CriticalCSS />
