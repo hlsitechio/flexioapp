@@ -68,6 +68,14 @@ export function WelcomeAnimation({ onComplete, duration = 6000 }: WelcomeAnimati
         duration: 0.8,
         ease: "easeOut" as const
       }
+    },
+    disappearing: {
+      opacity: 0,
+      filter: "blur(15px)",
+      transition: {
+        duration: 0.8,
+        ease: "easeIn" as const
+      }
     }
   };
 
@@ -103,7 +111,7 @@ export function WelcomeAnimation({ onComplete, duration = 6000 }: WelcomeAnimati
                   initial="hidden"
                   animate={
                     isDisappearing 
-                      ? (index < disappearLetterIndex ? "hidden" : "visible")
+                      ? (index < disappearLetterIndex ? "disappearing" : "visible")
                       : (index < currentLetterIndex ? "visible" : "hidden")
                   }
                 >
