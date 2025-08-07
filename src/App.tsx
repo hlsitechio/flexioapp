@@ -101,7 +101,7 @@ const App = () => {
             <Route path="/workspace/:workspaceDetails/admin" element={user ? <AdminDashboard /> : <Navigate to="/auth" replace />} />
             
             {/* Legacy route redirect */}
-            <Route path="/" element={user && workspace ? <Navigate to="/workspace/WRK_00001-Default-free" replace /> : <Navigate to="/workspace-selection" replace />} />
+            <Route path="/" element={<Navigate to="/landing" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
