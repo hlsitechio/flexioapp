@@ -18,6 +18,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/co
 import { BarChart3, Activity, Globe, TrendingUp, Users, Settings, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { GridSize } from '@/components/grid-layouts';
 
 interface AnalyticsWidget {
   id: string;
@@ -29,6 +30,12 @@ interface AnalyticsWidget {
 
 export function AnalyticsPage() {
   const { editMode } = useSettings();
+  
+  // Grid size state for each tab
+  const [overviewGridSize, setOverviewGridSize] = useState<GridSize>('3x3');
+  const [trafficGridSize, setTrafficGridSize] = useState<GridSize>('2x2');
+  const [realtimeGridSize, setRealtimeGridSize] = useState<GridSize>('3x3');
+  const [insightsGridSize, setInsightsGridSize] = useState<GridSize>('2x2');
   
   // Default widgets for each tab
   const [overviewWidgets, setOverviewWidgets] = useState<AnalyticsWidget[]>([
@@ -261,6 +268,8 @@ export function AnalyticsPage() {
                   widgets={overviewWidgets}
                   editMode={editMode}
                   onWidgetsChange={setOverviewWidgets}
+                  gridSize={overviewGridSize}
+                  onGridSizeChange={setOverviewGridSize}
                 />
               </TabsContent>
 
@@ -291,6 +300,8 @@ export function AnalyticsPage() {
                   widgets={trafficWidgets}
                   editMode={editMode}
                   onWidgetsChange={setTrafficWidgets}
+                  gridSize={trafficGridSize}
+                  onGridSizeChange={setTrafficGridSize}
                 />
               </TabsContent>
 
@@ -321,6 +332,8 @@ export function AnalyticsPage() {
                   widgets={realtimeWidgets}
                   editMode={editMode}
                   onWidgetsChange={setRealtimeWidgets}
+                  gridSize={realtimeGridSize}
+                  onGridSizeChange={setRealtimeGridSize}
                 />
               </TabsContent>
 
@@ -351,6 +364,8 @@ export function AnalyticsPage() {
                   widgets={insightsWidgets}
                   editMode={editMode}
                   onWidgetsChange={setInsightsWidgets}
+                  gridSize={insightsGridSize}
+                  onGridSizeChange={setInsightsGridSize}
                 />
               </TabsContent>
             </Tabs>

@@ -20,8 +20,10 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { GripVertical, Settings } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { GripVertical, Settings, MoreVertical, Grid3X3 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { GridSize, getGridDimensions, isVerticalGrid, isSquareGrid } from '@/components/grid-layouts';
 
 interface AnalyticsWidget {
   id: string;
@@ -104,12 +106,16 @@ interface AnalyticsGridLayoutProps {
   widgets: AnalyticsWidget[];
   editMode: boolean;
   onWidgetsChange: (widgets: AnalyticsWidget[]) => void;
+  gridSize?: GridSize;
+  onGridSizeChange?: (size: GridSize) => void;
 }
 
 export function AnalyticsGridLayout({ 
   widgets, 
   editMode, 
-  onWidgetsChange 
+  onWidgetsChange,
+  gridSize = '3x3',
+  onGridSizeChange
 }: AnalyticsGridLayoutProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -133,27 +139,106 @@ export function AnalyticsGridLayout({
     onWidgetsChange(widgets.filter(widget => widget.id !== id));
   }
 
+  const getGridIcon = (size: GridSize) => {
+    if (isVerticalGrid(size)) {
+      return <MoreVertical className="h-4 w-4 text-primary" />;
+    }
+    return <Grid3X3 className="h-4 w-4 text-primary" />;
+  };
+
+  const getGridClasses = (size: GridSize) => {
+    const dimensions = getGridDimensions(size);
+    const { rows, cols } = dimensions;
+    
+    // Use responsive grid for analytics
+    if (cols === 1) {
+      return 'grid grid-cols-1 gap-6 auto-rows-fr';
+    } else if (cols === 2) {
+      return 'grid grid-cols-1 lg:grid-cols-2 gap-6 auto-rows-fr';
+    } else {
+      return 'grid grid-cols-1 lg:grid-cols-3 gap-6 auto-rows-fr';
+    }
+  };
+
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext
-        items={widgets.map(w => w.id)}
-        strategy={rectSortingStrategy}
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 auto-rows-fr">
-          {widgets.map((widget) => (
-            <SortableWidget
-              key={widget.id}
-              widget={widget}
-              editMode={editMode}
-              onRemove={handleRemoveWidget}
-            />
-          ))}
+    <div className="w-full">
+      {/* Grid Size Selector */}
+      {editMode && onGridSizeChange && (
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-2">
+              {getGridIcon(gridSize)}
+              <span className="text-sm font-medium text-foreground">Grid Size</span>
+            </div>
+            
+            {/* Vertical Grids Dropdown */}
+            <div className="flex items-center space-x-2">
+              <MoreVertical className="h-4 w-4 text-muted-foreground" />
+              <span className="text-xs font-medium text-muted-foreground">Vertical</span>
+              <Select 
+                value={isVerticalGrid(gridSize) ? gridSize : ''} 
+                onValueChange={onGridSizeChange}
+              >
+                <SelectTrigger className="w-24 bg-background border-border z-50">
+                  <SelectValue placeholder="1x" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border-border shadow-lg z-50">
+                  <SelectItem value="1x2">1×2</SelectItem>
+                  <SelectItem value="1x3">1×3</SelectItem>
+                  <SelectItem value="1x4">1×4</SelectItem>
+                  <SelectItem value="1x6">1×6</SelectItem>
+                  <SelectItem value="1x8">1×8</SelectItem>
+                  <SelectItem value="1x12">1×12</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Square Grids Dropdown */}
+            <div className="flex items-center space-x-2">
+              <Grid3X3 className="h-4 w-4 text-muted-foreground" />
+              <span className="text-xs font-medium text-muted-foreground">Square</span>
+              <Select 
+                value={isSquareGrid(gridSize) ? gridSize : ''} 
+                onValueChange={onGridSizeChange}
+              >
+                <SelectTrigger className="w-24 bg-background border-border z-50">
+                  <SelectValue placeholder="NxN" />
+                </SelectTrigger>
+                <SelectContent className="bg-background border-border shadow-lg z-50">
+                  <SelectItem value="2x2">2×2</SelectItem>
+                  <SelectItem value="3x3">3×3</SelectItem>
+                  <SelectItem value="4x4">4×4</SelectItem>
+                  <SelectItem value="6x6">6×6</SelectItem>
+                  <SelectItem value="9x9">9×9</SelectItem>
+                  <SelectItem value="12x12">12×12</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
         </div>
-      </SortableContext>
-    </DndContext>
+      )}
+
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={widgets.map(w => w.id)}
+          strategy={rectSortingStrategy}
+        >
+          <div className={getGridClasses(gridSize)}>
+            {widgets.map((widget) => (
+              <SortableWidget
+                key={widget.id}
+                widget={widget}
+                editMode={editMode}
+                onRemove={handleRemoveWidget}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
+    </div>
   );
 }
