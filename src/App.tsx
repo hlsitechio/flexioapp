@@ -58,8 +58,8 @@ const App = () => {
                           window.location.pathname.startsWith('/auth') ||
                           window.location.pathname === '/workspace-selection';
   
-  // Only enable session tracking for authenticated users on protected routes
-  const shouldTrackSession = user && isProtectedRoute;
+  // Only enable session tracking for authenticated users on protected routes - not on public pages
+  const shouldTrackSession = !isPublicPage && user && isProtectedRoute;
   useSessionTracking(shouldTrackSession, workspace);
 
   // Initialize monitoring and analytics - optimized for public pages

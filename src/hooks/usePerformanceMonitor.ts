@@ -26,8 +26,9 @@ interface PerformanceEntry extends globalThis.PerformanceEntry {
 }
 
 export function usePerformanceMonitor() {
-  // Only enable detailed monitoring in development or when explicitly enabled
-  const isEnabled = import.meta.env.DEV || import.meta.env.VITE_ENABLE_PERFORMANCE_MONITORING === 'true';
+  // Only enable detailed monitoring in development AND not on public pages in production
+  const isPublicPage = typeof window !== 'undefined' && window.location.pathname.startsWith('/landing');
+  const isEnabled = import.meta.env.DEV && !(isPublicPage && import.meta.env.PROD);
   
   const trackMetric = useCallback((metric: PerformanceMetrics) => {
     if (!isEnabled) return;
@@ -131,6 +132,9 @@ export function usePerformanceMonitor() {
   }, [isEnabled]);
 
   useEffect(() => {
+    // Skip all performance monitoring on production public pages
+    if (!isEnabled) return;
+    
     const cleanupVitals = measureCoreWebVitals();
     const cleanupResources = measureResourceLoading();
 
@@ -138,7 +142,7 @@ export function usePerformanceMonitor() {
       cleanupVitals();
       cleanupResources();
     };
-  }, [measureCoreWebVitals, measureResourceLoading]);
+  }, [measureCoreWebVitals, measureResourceLoading, isEnabled]);
 
   return {
     trackMetric,

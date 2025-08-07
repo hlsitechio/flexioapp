@@ -23,7 +23,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const authRateLimiter = createRateLimiter(5, 60000);
 
   useEffect(() => {
-    // Set up auth state listener
+    // Skip auth initialization on public pages for performance
+    const isPublicPage = typeof window !== 'undefined' && (
+      window.location.pathname.startsWith('/landing') ||
+      window.location.pathname.startsWith('/contact') ||
+      window.location.pathname.startsWith('/demo') ||
+      window.location.pathname.startsWith('/about') ||
+      window.location.pathname.startsWith('/features') ||
+      window.location.pathname.startsWith('/pricing')
+    );
+
+    if (isPublicPage) {
+      setLoading(false);
+      return;
+    }
+
+    // Set up auth state listener for authenticated pages only
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);

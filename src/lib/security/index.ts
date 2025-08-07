@@ -47,7 +47,7 @@ export function initializeSecuritySuite() {
     // Skip heavy security monitoring on public pages in production
     if (isPublicPage && isProduction) {
       console.log('%c🔒 Minimal Security (Public Page)', 'color: #10b981; font-weight: bold;');
-      return;
+      return; // Exit early - no security monitoring needed
     }
     
     if (isProduction) {
@@ -56,7 +56,8 @@ export function initializeSecuritySuite() {
       console.log('%c🔒 Development Security Suite Active', 'color: #f59e0b; font-weight: bold;');
     }
     
-    // Start security monitoring
+    // Skip the rest of initialization for public pages
+    if (isPublicPage) return;
     securityMonitoring.startMonitoring();
     
     // Initialize DevTools integration only in development

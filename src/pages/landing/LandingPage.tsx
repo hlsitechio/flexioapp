@@ -19,9 +19,12 @@ export function LandingPage() {
   const { trackMetric } = usePerformanceMonitor();
 
   useEffect(() => {
+    // Skip performance tracking on production landing page
+    if (import.meta.env.PROD) return;
+    
     markPerformance('landing-page-start');
     
-    // Track when landing page is ready
+    // Track when landing page is ready (development only)
     const timer = setTimeout(() => {
       markPerformance('landing-page-interactive');
       trackMetric({ 
