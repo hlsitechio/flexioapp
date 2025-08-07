@@ -16,6 +16,7 @@ import { ComponentsPage } from "./pages/components";
 import { CustomizationPage } from "./pages/customization";
 import { PromptsGalleryPage } from "./pages/prompts-gallery";
 import { CodeSnippetsPage } from "./pages/code-snippets";
+import { AnalyticsPage } from "./pages/analytics";
 import { WorkspaceProfilesPage, WorkspaceSelectionPage } from "./pages/workspace";
 import { WorkspaceHashNavigator } from "./components/workspace/WorkspaceHashNavigator";
 import { WorkspaceUrlManager } from "./components/workspace/WorkspaceUrlManager";
@@ -93,6 +94,7 @@ const App = () => {
           <Route path="/workspace/:workspaceDetails/customization" element={user ? <CustomizationPage /> : <Navigate to="/auth" replace />} />
           <Route path="/workspace/:workspaceDetails/prompts-gallery" element={user ? <PromptsGalleryPage /> : <Navigate to="/auth" replace />} />
           <Route path="/workspace/:workspaceDetails/code-snippets" element={user ? <CodeSnippetsPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/analytics" element={user ? <AnalyticsPage /> : <Navigate to="/auth" replace />} />
           <Route path="/workspace/:workspaceDetails/workspace-profiles" element={user ? <WorkspaceProfilesPage /> : <Navigate to="/auth" replace />} />
           <Route path="/workspace/:workspaceDetails/admin" element={user ? <AdminDashboard /> : <Navigate to="/auth" replace />} />
           

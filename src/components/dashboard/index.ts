@@ -13,6 +13,10 @@ export { ImageGallery } from './image-gallery';
 // Data & Analytics
 export { DashboardWeatherWidget } from './DashboardWeatherWidget';
 export { DashboardStockTicker } from './DashboardStockTicker';
+export { DashboardAnalyticsOverview } from './DashboardAnalyticsOverview';
+export { DashboardAnalyticsChart } from './DashboardAnalyticsChart';
+export { DashboardRealtimeMetrics } from './DashboardRealtimeMetrics';
+export { DashboardTrafficSources } from './DashboardTrafficSources';
 
 // Communication
 export { DashboardMessageCenter } from './DashboardMessageCenter';

@@ -51,7 +51,11 @@ import {
   DashboardMusicPlayer,
   DashboardNewsReader,
   DashboardTimeTracker,
-  DashboardExpenseTracker
+  DashboardExpenseTracker,
+  DashboardAnalyticsOverview,
+  DashboardAnalyticsChart,
+  DashboardRealtimeMetrics,
+  DashboardTrafficSources
 } from '@/components/dashboard';
 
 // Component categories
@@ -73,8 +77,8 @@ const componentCategories = [
     id: 'data',
     name: 'Data & Analytics',
     icon: TrendingUp,
-    count: 2,
-    components: ['Weather Widget', 'Stock Ticker']
+    count: 6,
+    components: ['Weather Widget', 'Stock Ticker', 'Analytics Overview', 'Analytics Chart', 'Realtime Metrics', 'Traffic Sources']
   },
   {
     id: 'communication',
@@ -139,6 +143,10 @@ const allComponents = [
   // Data & Analytics
   { name: 'Weather Widget', category: 'data', icon: Cloud },
   { name: 'Stock Ticker', category: 'data', icon: TrendingUp },
+  { name: 'Analytics Overview', category: 'data', icon: TrendingUp },
+  { name: 'Analytics Chart', category: 'data', icon: TrendingUp },
+  { name: 'Realtime Metrics', category: 'data', icon: TrendingUp },
+  { name: 'Traffic Sources', category: 'data', icon: TrendingUp },
   
   // Communication
   { name: 'Message Center', category: 'communication', icon: MessageSquare },
@@ -364,6 +372,10 @@ export function DashboardWidgets({ targetSlot, gridSize }: { targetSlot?: string
                   {component.name === 'News Reader' && <DashboardNewsReader />}
                   {component.name === 'Time Tracker' && <DashboardTimeTracker />}
                   {component.name === 'Expense Tracker' && <DashboardExpenseTracker />}
+                  {component.name === 'Analytics Overview' && <DashboardAnalyticsOverview />}
+                  {component.name === 'Analytics Chart' && <DashboardAnalyticsChart />}
+                  {component.name === 'Realtime Metrics' && <DashboardRealtimeMetrics />}
+                  {component.name === 'Traffic Sources' && <DashboardTrafficSources />}
                 </DashboardComponentShowcase>
               </CarouselItem>
             ))}

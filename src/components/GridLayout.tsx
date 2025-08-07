@@ -30,7 +30,11 @@ import {
   DashboardHabitTracker,
   DashboardQuickCalculator,
   DashboardDateDisplay,
-  ImageGallery
+  ImageGallery,
+  DashboardAnalyticsOverview,
+  DashboardAnalyticsChart,
+  DashboardRealtimeMetrics,
+  DashboardTrafficSources
 } from '@/components/dashboard';
 import { 
   GridSize,
@@ -132,6 +136,14 @@ export function GridLayout({ editMode }: GridLayoutProps) {
         return <DashboardCodeBlock />;
       case 'Date Display':
         return <DashboardDateDisplay />;
+      case 'Analytics Overview':
+        return <DashboardAnalyticsOverview />;
+      case 'Analytics Chart':
+        return <DashboardAnalyticsChart />;
+      case 'Realtime Metrics':
+        return <DashboardRealtimeMetrics />;
+      case 'Traffic Sources':
+        return <DashboardTrafficSources />;
       default:
         return null;
     }

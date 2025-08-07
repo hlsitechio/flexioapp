@@ -9,7 +9,8 @@ import {
   BookOpen,
   Star,
   Bell,
-  Menu
+  Menu,
+  BarChart3
 } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 
@@ -31,6 +32,7 @@ import {
 const mainItems = [
   { title: "Dashboard", url: "/", icon: Home },
   { title: "Components", url: "/components", icon: Layout },
+  { title: "Analytics", url: "/analytics", icon: BarChart3 },
   { title: "Customization", url: "/customization", icon: Palette },
   { title: "Code Snippets", url: "/code-snippets", icon: Code },
   { title: "Prompts Gallery", url: "/prompts-gallery", icon: BookOpen },
