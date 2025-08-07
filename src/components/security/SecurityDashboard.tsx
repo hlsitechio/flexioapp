@@ -3,7 +3,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { AlertTriangle, Shield, Lock, Eye, Download, RefreshCw } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AlertTriangle, Shield, Lock, Eye, Download, RefreshCw, Activity, Users, FileText } from 'lucide-react';
+import { AdminAuditLog } from './AdminAuditLog';
+import { SecurityEventsMonitor } from './SecurityEventsMonitor';
+import { AccountLockoutStatus } from './AccountLockoutStatus';
 
 // Import security modules directly to avoid export issues
 const getSecurityModules = async () => {
@@ -176,6 +180,28 @@ export function SecurityDashboard() {
         </div>
       </div>
 
+      <Tabs defaultValue="overview" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="overview" className="flex items-center gap-2">
+            <Shield className="h-4 w-4" />
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="events" className="flex items-center gap-2">
+            <Activity className="h-4 w-4" />
+            Security Events
+          </TabsTrigger>
+          <TabsTrigger value="audit" className="flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            Audit Log
+          </TabsTrigger>
+          <TabsTrigger value="lockouts" className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            Account Lockouts
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-6">
+
       {/* Security Score */}
       <Card>
         <CardHeader>
@@ -297,6 +323,20 @@ export function SecurityDashboard() {
           </CardContent>
         </Card>
       )}
+        </TabsContent>
+
+        <TabsContent value="events">
+          <SecurityEventsMonitor />
+        </TabsContent>
+
+        <TabsContent value="audit">
+          <AdminAuditLog />
+        </TabsContent>
+
+        <TabsContent value="lockouts">
+          <AccountLockoutStatus />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

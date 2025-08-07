@@ -98,10 +98,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { error: { message: 'Too many sign in attempts. Please try again later.' } };
     }
     
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+    
+    if (error && data?.user) {
+      // Track failed login attempt
+      await supabase.rpc('track_failed_login', {
+        _user_id: data.user.id
+      });
+    } else if (data?.user && !error) {
+      // Reset failed attempts on successful login
+      await supabase.rpc('reset_failed_login_attempts', {
+        _user_id: data.user.id
+      });
+    }
+    
     return { error };
   };
 

@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_lockouts: {
+        Row: {
+          created_at: string
+          failed_attempts: number
+          id: string
+          ip_address: unknown | null
+          locked_until: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          failed_attempts?: number
+          id?: string
+          ip_address?: unknown | null
+          locked_until?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          failed_attempts?: number
+          id?: string
+          ip_address?: unknown | null
+          locked_until?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       active_sessions: {
         Row: {
           browser_info: Json | null
@@ -65,6 +95,45 @@ export type Database = {
           user_agent?: string | null
           user_id?: string
           workspace_id?: string | null
+        }
+        Relationships: []
+      }
+      admin_audit_log: {
+        Row: {
+          action: string
+          admin_user_id: string
+          created_at: string
+          id: string
+          ip_address: unknown | null
+          metadata: Json | null
+          severity: string | null
+          target_id: string | null
+          target_resource: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          admin_user_id: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          severity?: string | null
+          target_id?: string | null
+          target_resource?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          admin_user_id?: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          severity?: string | null
+          target_id?: string | null
+          target_resource?: string | null
+          user_agent?: string | null
         }
         Relationships: []
       }
@@ -565,6 +634,48 @@ export type Database = {
           id?: string
           metadata?: Json | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      security_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          ip_address: unknown | null
+          metadata: Json | null
+          resolved: boolean | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string | null
+          user_agent?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -1118,9 +1229,30 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_account_locked: {
+        Args: { _user_id: string }
+        Returns: boolean
+      }
+      log_admin_action: {
+        Args: {
+          _action: string
+          _target_resource?: string
+          _target_id?: string
+          _metadata?: Json
+        }
+        Returns: undefined
+      }
+      reset_failed_login_attempts: {
+        Args: { _user_id: string }
+        Returns: undefined
+      }
       restore_workspace: {
         Args: { _workspace_id: string }
         Returns: undefined
+      }
+      track_failed_login: {
+        Args: { _user_id: string; _ip_address?: unknown }
+        Returns: boolean
       }
     }
     Enums: {
