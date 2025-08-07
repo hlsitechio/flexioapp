@@ -26,19 +26,28 @@ interface PerformanceEntry extends globalThis.PerformanceEntry {
 }
 
 export function usePerformanceMonitor() {
+  // Only enable detailed monitoring in development or when explicitly enabled
+  const isEnabled = import.meta.env.DEV || import.meta.env.VITE_ENABLE_PERFORMANCE_MONITORING === 'true';
+  
   const trackMetric = useCallback((metric: PerformanceMetrics) => {
-    // Send to analytics service (implement based on your needs)
-    console.log('Performance Metric:', metric);
+    if (!isEnabled) return;
     
-    // Store in localStorage for development debugging
-    if (process.env.NODE_ENV === 'development') {
+    // Only log in development to avoid console noise in production
+    if (import.meta.env.DEV) {
+      console.log('Performance Metric:', metric);
+    }
+    
+    // Store in localStorage for development debugging only
+    if (import.meta.env.DEV) {
       const stored = JSON.parse(localStorage.getItem('performance-metrics') || '[]');
       stored.push({ ...metric, timestamp: Date.now() });
       localStorage.setItem('performance-metrics', JSON.stringify(stored.slice(-50))); // Keep last 50
     }
-  }, []);
+  }, [isEnabled]);
 
   const measureCoreWebVitals = useCallback(() => {
+    if (!isEnabled) return () => {}; // Return empty cleanup function
+    
     // Measure FCP (First Contentful Paint)
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
@@ -77,20 +86,24 @@ export function usePerformanceMonitor() {
     try {
       observer.observe({ entryTypes: ['paint', 'largest-contentful-paint', 'first-input', 'layout-shift', 'navigation'] });
     } catch (e) {
-      console.warn('Performance Observer not fully supported:', e);
+      if (import.meta.env.DEV) {
+        console.warn('Performance Observer not fully supported:', e);
+      }
     }
 
     return () => observer.disconnect();
-  }, [trackMetric]);
+  }, [trackMetric, isEnabled]);
 
   const measureResourceLoading = useCallback(() => {
+    if (!isEnabled) return () => {}; // Return empty cleanup function
+    
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
         const resource = entry as PerformanceResourceTiming;
         
-        // Track slow resources
+        // Track slow resources (only in development)
         const loadTime = resource.responseEnd - resource.requestStart;
-        if (loadTime > 1000) { // Resources taking more than 1s
+        if (loadTime > 1000 && import.meta.env.DEV) { // Resources taking more than 1s
           console.warn('Slow resource:', {
             name: resource.name,
             loadTime,
@@ -103,11 +116,13 @@ export function usePerformanceMonitor() {
     try {
       observer.observe({ entryTypes: ['resource'] });
     } catch (e) {
-      console.warn('Resource timing not supported:', e);
+      if (import.meta.env.DEV) {
+        console.warn('Resource timing not supported:', e);
+      }
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [isEnabled]);
 
   useEffect(() => {
     const cleanupVitals = measureCoreWebVitals();

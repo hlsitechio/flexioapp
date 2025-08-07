@@ -1,6 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { ProductionErrorBoundary } from "@/components/ui/production-error-boundary";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSafeWorkspace } from "@/hooks/useSafeWorkspace";
@@ -62,16 +62,24 @@ const App = () => {
   const shouldTrackSession = user && isProtectedRoute;
   useSessionTracking(shouldTrackSession, workspace);
 
-  // Initialize monitoring and analytics once - silent success, only log errors
+  // Initialize monitoring and analytics - optimized for public pages
   useEffect(() => {
     try {
+      // Always initialize basic monitoring
       initializeMonitoring();
-      analytics.initialize();
-      analytics.trackPageView(window.location.pathname);
+      
+      // Only initialize full analytics on non-public pages or in development
+      if (!isPublicPage || import.meta.env.DEV) {
+        analytics.initialize();
+        analytics.trackPageView(window.location.pathname);
+      }
     } catch (error) {
-      console.error("❌ App initialization failed:", error);
+      // Only log errors in development or debug mode
+      if (import.meta.env.DEV || import.meta.env.VITE_DEBUG === 'true') {
+        console.error("❌ App initialization failed:", error);
+      }
     }
-  }, []);
+  }, [isPublicPage]);
 
   // Only log final authenticated state once
   useEffect(() => {
@@ -89,7 +97,7 @@ const App = () => {
   }
 
   return (
-    <ErrorBoundary>
+    <ProductionErrorBoundary>
         <Toaster />
         <Sonner />
         <BrowserRouter>
@@ -133,7 +141,7 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
-      </ErrorBoundary>
+      </ProductionErrorBoundary>
   );
 };
 

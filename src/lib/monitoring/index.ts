@@ -112,28 +112,51 @@ class ErrorTracker {
   }
 }
 
-// Initialize global error tracking
+// Initialize global error tracking with environment-aware settings
 export const initializeMonitoring = () => {
   const errorTracker = ErrorTracker.getInstance();
   const performanceMonitor = PerformanceMonitor.getInstance();
 
-  // Global error handler
+  // Only initialize heavy monitoring in development or for authenticated users
+  const isPublicPage = typeof window !== 'undefined' && (
+    window.location.pathname.startsWith('/landing') ||
+    window.location.pathname.startsWith('/contact') ||
+    window.location.pathname.startsWith('/demo') ||
+    window.location.pathname.startsWith('/about') ||
+    window.location.pathname.startsWith('/features') ||
+    window.location.pathname.startsWith('/pricing')
+  );
+
+  // Lightweight error handling for public pages
+  if (isPublicPage && import.meta.env.PROD) {
+    // Minimal error tracking for production public pages
+    window.addEventListener('error', (event) => {
+      // Only track critical errors that would break the page
+      if (event.message.includes('ChunkLoadError') || event.message.includes('Loading chunk')) {
+        errorTracker.trackError(new Error(event.message), 'Critical Load Error');
+      }
+    });
+    return { errorTracker, performanceMonitor };
+  }
+
+  // Full monitoring for development and authenticated areas
   window.addEventListener('error', (event) => {
     errorTracker.trackError(new Error(event.message), 'Global Error Handler');
   });
 
-  // Unhandled promise rejection handler
   window.addEventListener('unhandledrejection', (event) => {
     errorTracker.trackError(new Error(event.reason), 'Unhandled Promise Rejection');
   });
 
-  // Track initial page load
-  if (document.readyState === 'complete') {
-    performanceMonitor.trackPageLoad('initial');
-  } else {
-    window.addEventListener('load', () => {
+  // Track initial page load (only if performance monitoring is enabled)
+  if (config.features.enablePerformanceMetrics) {
+    if (document.readyState === 'complete') {
       performanceMonitor.trackPageLoad('initial');
-    });
+    } else {
+      window.addEventListener('load', () => {
+        performanceMonitor.trackPageLoad('initial');
+      });
+    }
   }
 
   return { errorTracker, performanceMonitor };
