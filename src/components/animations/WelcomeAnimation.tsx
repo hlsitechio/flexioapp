@@ -7,8 +7,25 @@ interface WelcomeAnimationProps {
   children?: React.ReactNode;
 }
 
+// Cookie utility functions
+const getCookie = (name: string): string | null => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+  return null;
+};
+
+const setCookie = (name: string, value: string, days: number = 365): void => {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+};
+
+const ANIMATION_COOKIE_NAME = 'flexio_welcome_shown';
+
 export function WelcomeAnimation({ onComplete, duration = 6000, children }: WelcomeAnimationProps) {
-  const [isVisible, setIsVisible] = useState(true);
+  const [shouldShowAnimation, setShouldShowAnimation] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [isDisappearing, setIsDisappearing] = useState(false);
   const [disappearLetterIndex, setDisappearLetterIndex] = useState(0);
@@ -19,7 +36,25 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
   const toWordIndex = fullText.indexOf('to'); // Index 8
   const letterDelay = 120; // Smoother delay between letters
 
+  // Check if animation should be shown on component mount
   useEffect(() => {
+    const hasSeenAnimation = getCookie(ANIMATION_COOKIE_NAME);
+    
+    if (!hasSeenAnimation) {
+      setShouldShowAnimation(true);
+      setIsVisible(true);
+    } else {
+      // Skip animation, show content immediately
+      setShouldShowAnimation(false);
+      setShowBackground(true);
+      onComplete?.();
+    }
+  }, [onComplete]);
+
+  // Animation logic - only runs if shouldShowAnimation is true
+  useEffect(() => {
+    if (!shouldShowAnimation) return;
+
     // Start letter animation immediately
     const letterTimer = setInterval(() => {
       setCurrentLetterIndex(prev => {
@@ -47,6 +82,8 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
             // Complete animation after all letters disappeared
             setTimeout(() => {
               setIsVisible(false);
+              // Set cookie to prevent animation on subsequent visits
+              setCookie(ANIMATION_COOKIE_NAME, 'true');
               onComplete?.();
             }, 500);
             return prev;
@@ -62,7 +99,7 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
       clearInterval(letterTimer);
       clearTimeout(disappearStartTimer);
     };
-  }, [onComplete, letters.length]);
+  }, [shouldShowAnimation, onComplete, letters.length]);
 
   const letterVariants = {
     hidden: { 
