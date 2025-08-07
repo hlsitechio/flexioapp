@@ -1,12 +1,13 @@
-# FlexIO Robots.txt - Optimized for SEO & Fast Google Ranking
-# Updated: 2025
+# FlexIO Robots.txt - Enterprise SEO Optimized
+# Updated: 2025-01-07 - Comprehensive crawling strategy for maximum search visibility
 
-# Allow all major search engines full access
+# === PREMIUM SEARCH ENGINES ===
+# Major search engines with optimized crawl rates
 User-agent: Googlebot
 Allow: /
-Crawl-delay: 1
+Crawl-delay: 0.5
 
-User-agent: Bingbot
+User-agent: Bingbot  
 Allow: /
 Crawl-delay: 1
 
@@ -22,7 +23,8 @@ User-agent: Baiduspider
 Allow: /
 Crawl-delay: 2
 
-# Social media crawlers for rich previews
+# === SOCIAL MEDIA CRAWLERS ===
+# Rich preview optimization for social platforms
 User-agent: Twitterbot
 Allow: /
 
@@ -38,51 +40,97 @@ Allow: /
 User-agent: TelegramBot
 Allow: /
 
-# Allow all other bots with general rules
+User-agent: Slackbot
+Allow: /
+
+User-agent: DiscordBot
+Allow: /
+
+# === ALL OTHER BOTS ===
 User-agent: *
 Allow: /
 
-# Block access to authentication and workspace routes (private areas)
-Disallow: /auth
-Disallow: /workspace/
-Disallow: /admin/
-Disallow: /api/
+# === SECURITY & PRIVACY RESTRICTIONS ===
+# Block sensitive routes and private areas
+Disallow: /auth*
+Disallow: /workspace/*
+Disallow: /admin/*
+Disallow: /api/*
+Disallow: /settings*
+Disallow: /profile*
 
-# Block access to technical files
+# Block technical and development files
 Disallow: /*.json$
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /*.map$
 Disallow: /src/
 Disallow: /node_modules/
 Disallow: /_next/
 Disallow: /config/
+Disallow: /.env*
+Disallow: /scripts/
 
-# Encourage crawling of important SEO pages
-Allow: /landing
-Allow: /features
-Allow: /pricing
-Allow: /demo
-Allow: /about
-Allow: /contact
-Allow: /careers
-Allow: /blog
-Allow: /integrations
-Allow: /documentation
-Allow: /help-center
-Allow: /privacy-policy
-Allow: /terms-of-service
+# Block query parameters that create duplicate content
+Disallow: /*?*utm_*
+Disallow: /*?*fbclid*
+Disallow: /*?*gclid*
+Disallow: /*?*ref=*
+Disallow: /*?*source=*
 
-# Sitemap location (helps search engines find all pages quickly)
+# === HIGH-VALUE SEO PAGES ===
+# Explicitly encourage crawling of marketing pages
+Allow: /landing*
+Allow: /features*
+Allow: /pricing*
+Allow: /demo*
+Allow: /contact*
+Allow: /about*
+Allow: /careers*
+Allow: /blog*
+Allow: /integrations*
+Allow: /documentation*
+Allow: /help-center*
+Allow: /resources*
+Allow: /privacy-policy*
+Allow: /terms-of-service*
+
+# Allow important assets and media
+Allow: /assets/
+Allow: /images/
+Allow: /lovable-uploads/
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.webp$
+Allow: /*.svg$
+Allow: /*.ico$
+
+# === SEO OPTIMIZATION DIRECTIVES ===
+# Sitemap location for search engine discovery
 Sitemap: https://www.flexioapp.com/sitemap.xml
 
-# Additional SEO directives
-# Request indexing frequency for better rankings
-Request-rate: 1/10s
+# Request optimal indexing frequency
+Request-rate: 1/8s
 
-# Clean URL handling
+# Clean URL parameters for better SEO
 Clean-param: utm_source
-Clean-param: utm_medium  
+Clean-param: utm_medium
 Clean-param: utm_campaign
+Clean-param: utm_content
+Clean-param: utm_term
 Clean-param: fbclid
 Clean-param: gclid
+Clean-param: msclkid
+Clean-param: ref
+Clean-param: source
+Clean-param: campaign_id
 
-# Host directive for primary domain
+# Primary domain specification
 Host: https://www.flexioapp.com
+
+# === PERFORMANCE HINTS ===
+# Crawl-delay optimization for server performance
+# Googlebot: 0.5s (premium treatment)
+# Bing: 1s (standard)
+# Others: 1-2s (conservative)
