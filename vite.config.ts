@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => ({
       protocol: 'ws',
       overlay: true,
       timeout: 30000,
-    } : false, // Disable HMR in hosted environments
+    } : false, // Completely disable HMR in hosted environments
     // Performance optimizations
     middlewareMode: false,
     warmup: {
