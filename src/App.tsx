@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import Index from "./pages/Index";
 import { AuthPage } from "./pages/auth";
 import { Settings } from "./pages/settings";
+import { EmailTest } from "./pages/settings/EmailTest";
 import { ProfilePage } from "./pages/profile";
 import { ComponentsPage } from "./pages/components";
 import { CustomizationPage } from "./pages/customization";
@@ -133,6 +134,7 @@ const App = () => {
             <Route path="/workspace/:workspaceDetails/profile" element={user ? <ProfilePage /> : <Navigate to="/auth" replace />} />
             <Route path="/workspace/:workspaceDetails/components" element={user ? <ComponentsPage /> : <Navigate to="/auth" replace />} />
             <Route path="/workspace/:workspaceDetails/settings" element={user ? <Settings /> : <Navigate to="/auth" replace />} />
+            <Route path="/workspace/:workspaceDetails/settings/email-test" element={user ? <EmailTest /> : <Navigate to="/auth" replace />} />
             <Route path="/workspace/:workspaceDetails/customization" element={user ? <CustomizationPage /> : <Navigate to="/auth" replace />} />
             <Route path="/workspace/:workspaceDetails/prompts-gallery" element={user ? <PromptsGalleryPage /> : <Navigate to="/auth" replace />} />
             <Route path="/workspace/:workspaceDetails/code-snippets" element={user ? <CodeSnippetsPage /> : <Navigate to="/auth" replace />} />
