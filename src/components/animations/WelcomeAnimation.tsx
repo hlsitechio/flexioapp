@@ -39,21 +39,37 @@ export function WelcomeAnimation({ onComplete, duration = 8000 }: WelcomeAnimati
   const textVariants = {
     hidden: { 
       opacity: 0,
-      y: 20
+      y: 20,
+      filter: "blur(10px)",
+      textShadow: "0 0 0px rgba(255, 255, 255, 0)"
     },
     visible: { 
       opacity: 1,
       y: 0,
+      filter: "blur(0px)",
+      textShadow: [
+        "0 0 20px rgba(255, 255, 255, 0.3)",
+        "0 0 40px rgba(255, 255, 255, 0.2)",
+        "0 0 60px rgba(255, 255, 255, 0.1)"
+      ],
       transition: {
-        duration: 1.5,
-        ease: "easeOut" as const
+        duration: 2,
+        ease: "easeOut" as const,
+        textShadow: {
+          duration: 3,
+          repeat: Infinity,
+          repeatType: "reverse" as const,
+          ease: "easeInOut" as const
+        }
       }
     },
     exit: { 
       opacity: 0,
       y: -20,
+      filter: "blur(10px)",
+      textShadow: "0 0 0px rgba(255, 255, 255, 0)",
       transition: { 
-        duration: 1.5,
+        duration: 2,
         ease: "easeIn" as const
       }
     }
