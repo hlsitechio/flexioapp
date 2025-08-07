@@ -16,6 +16,7 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
   
   const fullText = "Welcome to FlexIO!";
   const letters = fullText.split('');
+  const toWordIndex = fullText.indexOf('to'); // Index 8
   const letterDelay = 120; // Smoother delay between letters
 
   useEffect(() => {
@@ -92,6 +93,10 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
       opacity: 1,
       transition: { duration: 0.5 }
     },
+    fading: {
+      opacity: 0.5,
+      transition: { duration: 0.8, ease: "easeOut" as const }
+    },
     exit: { 
       opacity: 0,
       transition: { duration: 1, ease: "easeOut" as const }
@@ -144,7 +149,11 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
             className="fixed inset-0 z-[9999] flex items-center justify-center bg-black"
             variants={overlayVariants}
             initial="hidden"
-            animate="visible"
+            animate={
+              isDisappearing && disappearLetterIndex >= toWordIndex 
+                ? "fading" 
+                : "visible"
+            }
             exit="exit"
           >
             <div className="text-center">
