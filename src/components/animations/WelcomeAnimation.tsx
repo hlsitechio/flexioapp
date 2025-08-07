@@ -6,7 +6,7 @@ interface WelcomeAnimationProps {
   duration?: number;
 }
 
-export function WelcomeAnimation({ onComplete, duration = 12000 }: WelcomeAnimationProps) {
+export function WelcomeAnimation({ onComplete, duration = 9000 }: WelcomeAnimationProps) {
   const [isVisible, setIsVisible] = useState(true);
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   
