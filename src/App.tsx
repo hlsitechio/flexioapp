@@ -27,6 +27,7 @@ import { DocumentationPage, HelpCenterPage } from "./pages/resources";
 import { PrivacyPolicyPage, TermsOfServicePage } from "./pages/legal";
 import { AdminDashboard } from "./pages/admin";
 import NotFound from "./pages/NotFound";
+import { WelcomeAnimation } from "./components/animations";
 
 const App = () => {
   const { user, loading } = useAuth();
@@ -60,51 +61,53 @@ const App = () => {
   }
 
   return (
-    <ErrorBoundary>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <WorkspaceHashNavigator />
-        <WorkspaceUrlManager />
-        <Routes>
-          {/* Public routes - no authentication required */}
-          <Route path="/landing" element={<LandingPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/demo" element={<DemoPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/careers" element={<CareersPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/features" element={<FeaturesPage />} />
-          <Route path="/pricing" element={<PricingPage />} />
-          <Route path="/integrations" element={<IntegrationsPage />} />
-          <Route path="/documentation" element={<DocumentationPage />} />
-          <Route path="/help-center" element={<HelpCenterPage />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-          <Route path="/terms-of-service" element={<TermsOfServicePage />} />
-          
-          {/* Protected routes - authentication required */}
-          <Route path="/auth" element={user ? <Navigate to="/workspace-selection" replace /> : <AuthPage />} />
-          <Route path="/workspace-selection" element={user ? <WorkspaceSelectionPage /> : <Navigate to="/auth" replace />} />
-          
-          {/* Workspace-specific routes with role-based URLs */}
-          <Route path="/workspace/:workspaceDetails" element={user && workspace ? <Index /> : <Navigate to="/workspace-selection" replace />} />
-          <Route path="/workspace/:workspaceDetails/profile" element={user ? <ProfilePage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/components" element={user ? <ComponentsPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/settings" element={user ? <Settings /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/customization" element={user ? <CustomizationPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/prompts-gallery" element={user ? <PromptsGalleryPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/code-snippets" element={user ? <CodeSnippetsPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/analytics" element={user ? <AnalyticsPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/workspace-profiles" element={user ? <WorkspaceProfilesPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/admin" element={user ? <AdminDashboard /> : <Navigate to="/auth" replace />} />
-          
-          {/* Legacy route redirect */}
-          <Route path="/" element={user && workspace ? <Navigate to="/workspace/WRK_00001-Default-free" replace /> : <Navigate to="/workspace-selection" replace />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </ErrorBoundary>
+    <WelcomeAnimation>
+      <ErrorBoundary>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <WorkspaceHashNavigator />
+          <WorkspaceUrlManager />
+          <Routes>
+            {/* Public routes - no authentication required */}
+            <Route path="/landing" element={<LandingPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/demo" element={<DemoPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/careers" element={<CareersPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/features" element={<FeaturesPage />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/integrations" element={<IntegrationsPage />} />
+            <Route path="/documentation" element={<DocumentationPage />} />
+            <Route path="/help-center" element={<HelpCenterPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+            <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+            
+            {/* Protected routes - authentication required */}
+            <Route path="/auth" element={user ? <Navigate to="/workspace-selection" replace /> : <AuthPage />} />
+            <Route path="/workspace-selection" element={user ? <WorkspaceSelectionPage /> : <Navigate to="/auth" replace />} />
+            
+            {/* Workspace-specific routes with role-based URLs */}
+            <Route path="/workspace/:workspaceDetails" element={user && workspace ? <Index /> : <Navigate to="/workspace-selection" replace />} />
+            <Route path="/workspace/:workspaceDetails/profile" element={user ? <ProfilePage /> : <Navigate to="/auth" replace />} />
+            <Route path="/workspace/:workspaceDetails/components" element={user ? <ComponentsPage /> : <Navigate to="/auth" replace />} />
+            <Route path="/workspace/:workspaceDetails/settings" element={user ? <Settings /> : <Navigate to="/auth" replace />} />
+            <Route path="/workspace/:workspaceDetails/customization" element={user ? <CustomizationPage /> : <Navigate to="/auth" replace />} />
+            <Route path="/workspace/:workspaceDetails/prompts-gallery" element={user ? <PromptsGalleryPage /> : <Navigate to="/auth" replace />} />
+            <Route path="/workspace/:workspaceDetails/code-snippets" element={user ? <CodeSnippetsPage /> : <Navigate to="/auth" replace />} />
+            <Route path="/workspace/:workspaceDetails/analytics" element={user ? <AnalyticsPage /> : <Navigate to="/auth" replace />} />
+            <Route path="/workspace/:workspaceDetails/workspace-profiles" element={user ? <WorkspaceProfilesPage /> : <Navigate to="/auth" replace />} />
+            <Route path="/workspace/:workspaceDetails/admin" element={user ? <AdminDashboard /> : <Navigate to="/auth" replace />} />
+            
+            {/* Legacy route redirect */}
+            <Route path="/" element={user && workspace ? <Navigate to="/workspace/WRK_00001-Default-free" replace /> : <Navigate to="/workspace-selection" replace />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </ErrorBoundary>
+    </WelcomeAnimation>
   );
 };
 
