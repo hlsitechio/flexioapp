@@ -27,7 +27,7 @@ import { DocumentationPage, HelpCenterPage } from "./pages/resources";
 import { PrivacyPolicyPage, TermsOfServicePage } from "./pages/legal";
 import { AdminDashboard } from "./pages/admin";
 import NotFound from "./pages/NotFound";
-import { WelcomeAnimation } from "./components/animations";
+
 
 const App = () => {
   const { user, loading } = useAuth();
@@ -61,8 +61,7 @@ const App = () => {
   }
 
   return (
-    <WelcomeAnimation>
-      <ErrorBoundary>
+    <ErrorBoundary>
         <Toaster />
         <Sonner />
         <BrowserRouter>
@@ -107,7 +106,6 @@ const App = () => {
           </Routes>
         </BrowserRouter>
       </ErrorBoundary>
-    </WelcomeAnimation>
   );
 };
 
