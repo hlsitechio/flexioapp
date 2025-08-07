@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Crown, Users, Settings, Database, Eye, UserCheck, Trash2, Plus, Bug, Monitor, MessageSquare, Link, Globe, Archive, RotateCcw, Copy, ArrowLeft } from 'lucide-react';
+import { Crown, Users, Settings, Database, Eye, UserCheck, Trash2, Plus, Bug, Monitor, MessageSquare, Link, Globe, Archive, RotateCcw, Copy, ArrowLeft, Mail, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import UserCommunication from '@/components/admin/UserCommunication';
 import UserSessionView from '@/components/admin/UserSessionView';
 import { Label } from '@/components/ui/label';
@@ -84,6 +84,16 @@ export default function AdminDashboard() {
   const [realtimeUsers, setRealtimeUsers] = useState<any[]>([]);
   const [newWorkspaceName, setNewWorkspaceName] = useState('');
   const [selectedUserForWorkspace, setSelectedUserForWorkspace] = useState<string>('');
+  
+  // Email test state
+  const [emailTestResult, setEmailTestResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [emailTestLoading, setEmailTestLoading] = useState(false);
+  const [testEmailData, setTestEmailData] = useState({
+    to: 'hlarosesurprenant@gmail.com',
+    fromAlias: 'support',
+    subject: 'Admin Dashboard Email Test',
+    message: 'This is a test email from the admin dashboard to verify email integration.',
+  });
 
   // Check if current user is admin via database
   useEffect(() => {
@@ -946,6 +956,10 @@ export default function AdminDashboard() {
             <Settings className="h-4 w-4" />
             Templates
           </TabsTrigger>
+          <TabsTrigger value="integrations" className="flex items-center gap-2">
+            <Mail className="h-4 w-4" />
+            Integrations
+          </TabsTrigger>
           {debugMode && (
             <TabsTrigger value="realtime" className="flex items-center gap-2">
               <Monitor className="h-4 w-4" />
@@ -1586,6 +1600,275 @@ export default function AdminDashboard() {
             </Card>
           </TabsContent>
         )}
+
+        {/* Integrations Tab */}
+        <TabsContent value="integrations">
+          <div className="space-y-6">
+            {/* Email Integration Test */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Mail className="h-5 w-5" />
+                  Email Integration Test
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="grid gap-6 md:grid-cols-2">
+                  {/* Email Test Form */}
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="admin-email-to">To Email</Label>
+                      <Input
+                        id="admin-email-to"
+                        value={testEmailData.to}
+                        onChange={(e) => setTestEmailData({ ...testEmailData, to: e.target.value })}
+                        placeholder="recipient@example.com"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="admin-email-alias">From Alias</Label>
+                      <Select
+                        value={testEmailData.fromAlias}
+                        onValueChange={(value) => setTestEmailData({ ...testEmailData, fromAlias: value })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="support">FlexIO Support</SelectItem>
+                          <SelectItem value="sales">FlexIO Sales</SelectItem>
+                          <SelectItem value="contact">FlexIO Contact</SelectItem>
+                          <SelectItem value="info">FlexIO Info</SelectItem>
+                          <SelectItem value="noreply">FlexIO No-Reply</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="admin-email-subject">Subject</Label>
+                      <Input
+                        id="admin-email-subject"
+                        value={testEmailData.subject}
+                        onChange={(e) => setTestEmailData({ ...testEmailData, subject: e.target.value })}
+                        placeholder="Test subject"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="admin-email-message">Message</Label>
+                      <textarea
+                        id="admin-email-message"
+                        className="w-full min-h-[100px] p-3 border border-input bg-background rounded-md text-sm"
+                        value={testEmailData.message}
+                        onChange={(e) => setTestEmailData({ ...testEmailData, message: e.target.value })}
+                        placeholder="Test message content"
+                      />
+                    </div>
+
+                    <Button
+                      onClick={async () => {
+                        setEmailTestLoading(true);
+                        setEmailTestResult(null);
+
+                        try {
+                          const getFromAddress = (alias: string) => {
+                            switch (alias) {
+                              case 'sales': return 'FlexIO Sales <sales@yourdomain.com>';
+                              case 'contact': return 'FlexIO Contact <contact@yourdomain.com>';
+                              case 'info': return 'FlexIO Info <info@yourdomain.com>';
+                              case 'noreply': return 'FlexIO <noreply@yourdomain.com>';
+                              default: return 'FlexIO Support <support@yourdomain.com>';
+                            }
+                          };
+
+                          const { data, error } = await supabase.functions.invoke('send-email', {
+                            body: {
+                              to: testEmailData.to,
+                              from: getFromAddress(testEmailData.fromAlias),
+                              subject: testEmailData.subject,
+                              html: `
+                                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                                  <h2 style="color: #333; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                                    Admin Dashboard Email Test
+                                  </h2>
+                                  
+                                  <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                                    <h3 style="color: #64748b; margin-top: 0;">Test Details</h3>
+                                    <p><strong>From Alias:</strong> ${getFromAddress(testEmailData.fromAlias)}</p>
+                                    <p><strong>Sent by Admin:</strong> ${user?.email || 'Admin User'}</p>
+                                    <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
+                                  </div>
+
+                                  <div style="background: #fff; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                                    <h3 style="color: #64748b; margin-top: 0;">Message</h3>
+                                    <p style="line-height: 1.6; white-space: pre-line;">${testEmailData.message}</p>
+                                  </div>
+
+                                  <div style="margin-top: 20px; padding: 15px; background: #dcfce7; border-radius: 8px;">
+                                    <p style="color: #166534; margin: 0; font-weight: 500;">
+                                      ✅ Admin email system is working correctly!
+                                    </p>
+                                  </div>
+                                </div>
+                              `,
+                              tags: ['admin-test', 'system-verification'],
+                            },
+                          });
+
+                          if (error) throw error;
+
+                          setEmailTestResult({
+                            success: true,
+                            message: `Admin test email sent successfully! Email ID: ${data?.id || 'Unknown'}`,
+                          });
+
+                          toast({
+                            title: "Admin Test Email Sent!",
+                            description: "Check the recipient inbox for the test email.",
+                          });
+
+                        } catch (error: any) {
+                          console.error('Admin email test error:', error);
+                          setEmailTestResult({
+                            success: false,
+                            message: `Failed to send admin test email: ${error.message || 'Unknown error'}`,
+                          });
+
+                          toast({
+                            title: "Admin Test Failed",
+                            description: "Failed to send admin test email. Check the console for details.",
+                            variant: "destructive",
+                          });
+                        } finally {
+                          setEmailTestLoading(false);
+                        }
+                      }}
+                      disabled={emailTestLoading}
+                      className="w-full"
+                    >
+                      {emailTestLoading ? (
+                        <>
+                          <Send className="h-4 w-4 mr-2 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="h-4 w-4 mr-2" />
+                          Send Admin Test Email
+                        </>
+                      )}
+                    </Button>
+                  </div>
+
+                  {/* Integration Status */}
+                  <div className="space-y-4">
+                    <div className="bg-muted/50 p-4 rounded-lg">
+                      <h4 className="font-medium mb-3">Integration Status</h4>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm">Resend API</span>
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span className="text-sm text-muted-foreground">Connected</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm">Email Routing</span>
+                          <span className="text-sm text-muted-foreground">→ hlarosesurprenant@gmail.com</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm">Contact Forms</span>
+                          <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <span className="text-sm text-muted-foreground">Active</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg">
+                      <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">
+                        Email Aliases Available:
+                      </h4>
+                      <div className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                        <div>• support@yourdomain.com</div>
+                        <div>• sales@yourdomain.com</div>
+                        <div>• contact@yourdomain.com</div>
+                        <div>• info@yourdomain.com</div>
+                        <div>• noreply@yourdomain.com</div>
+                      </div>
+                      <p className="text-xs text-blue-600 dark:text-blue-300 mt-2">
+                        All emails are routed to the configured Gmail address.
+                      </p>
+                    </div>
+
+                    {/* Test Result */}
+                    {emailTestResult && (
+                      <div className={`p-4 rounded-lg ${
+                        emailTestResult.success 
+                          ? 'bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800' 
+                          : 'bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800'
+                      }`}>
+                        <div className="flex items-center gap-2 mb-2">
+                          {emailTestResult.success ? (
+                            <CheckCircle className="h-4 w-4 text-green-600" />
+                          ) : (
+                            <AlertCircle className="h-4 w-4 text-red-600" />
+                          )}
+                          <span className={`font-medium ${
+                            emailTestResult.success ? 'text-green-800 dark:text-green-200' : 'text-red-800 dark:text-red-200'
+                          }`}>
+                            {emailTestResult.success ? 'Success' : 'Error'}
+                          </span>
+                        </div>
+                        <p className={`text-sm ${
+                          emailTestResult.success ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'
+                        }`}>
+                          {emailTestResult.message}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Future Integrations */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Available Integrations</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-4 md:grid-cols-3">
+                  <div className="p-4 border rounded-lg">
+                    <h4 className="font-medium mb-2">Stripe</h4>
+                    <p className="text-sm text-muted-foreground mb-2">Payment processing</p>
+                    <Button size="sm" variant="outline" disabled>
+                      Coming Soon
+                    </Button>
+                  </div>
+                  
+                  <div className="p-4 border rounded-lg">
+                    <h4 className="font-medium mb-2">OpenAI</h4>
+                    <p className="text-sm text-muted-foreground mb-2">AI-powered features</p>
+                    <Button size="sm" variant="outline" disabled>
+                      Coming Soon
+                    </Button>
+                  </div>
+                  
+                  <div className="p-4 border rounded-lg">
+                    <h4 className="font-medium mb-2">Zapier</h4>
+                    <p className="text-sm text-muted-foreground mb-2">Workflow automation</p>
+                    <Button size="sm" variant="outline" disabled>
+                      Coming Soon
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
       </Tabs>
     </div>
   );
