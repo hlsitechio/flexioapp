@@ -72,20 +72,20 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
       
       const disappearTimer = setInterval(() => {
         setDisappearLetterIndex(prev => {
-          // Show background when we start disappearing any letter
+          // Show background when we start disappearing the first letter
           if (prev === 0) {
             setShowBackground(true);
           }
           
           if (prev >= letters.length) {
             clearInterval(disappearTimer);
-            // Complete animation after all letters disappeared
+            // Complete animation faster with no delay
             setTimeout(() => {
               setIsVisible(false);
               // Set cookie to prevent animation on subsequent visits
               setCookie(ANIMATION_COOKIE_NAME, 'true');
               onComplete?.();
-            }, 500);
+            }, 200);
             return prev;
           }
           return prev + 1;
@@ -131,34 +131,29 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
       transition: { duration: 0.5 }
     },
     fading: {
-      opacity: 0.5,
-      transition: { duration: 0.8, ease: "easeOut" as const }
+      opacity: 0.3,
+      transition: { duration: 0.6, ease: "easeOut" as const }
     },
     exit: { 
       opacity: 0,
-      transition: { duration: 1, ease: "easeOut" as const }
+      transition: { duration: 0.8, ease: "easeOut" as const }
     }
   };
 
   const backgroundVariants = {
     hidden: { 
       opacity: 0,
-      filter: "blur(30px)",
-      scale: 1.05,
-      y: 20
+      scale: 1,
+      y: 0
     },
     visible: { 
       opacity: 1,
-      filter: "blur(0px)",
       scale: 1,
       y: 0,
       transition: { 
-        duration: 2.5,
+        duration: 1.2,
         ease: [0.16, 1, 0.3, 1] as const,
-        opacity: { duration: 2.0, ease: "easeOut" },
-        filter: { duration: 2.5, ease: [0.16, 1, 0.3, 1] },
-        scale: { duration: 2.5, ease: [0.16, 1, 0.3, 1] },
-        y: { duration: 2.0, ease: [0.16, 1, 0.3, 1] }
+        opacity: { duration: 1.0, ease: "easeOut" }
       }
     }
   };
@@ -169,10 +164,11 @@ export function WelcomeAnimation({ onComplete, duration = 6000, children }: Welc
       <AnimatePresence>
         {showBackground && children && (
           <motion.div
-            className="min-h-screen w-full z-[9990]"
+            className="min-h-screen w-full"
             variants={backgroundVariants}
             initial="hidden"
             animate="visible"
+            style={{ position: 'relative', zIndex: 1 }}
           >
             {children}
           </motion.div>
