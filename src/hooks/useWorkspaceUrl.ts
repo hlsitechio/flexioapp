@@ -34,15 +34,6 @@ export function useWorkspaceUrl() {
     return `/workspace/${workspaceInfo.urlSegment}${path}`;
   };
 
-  // Auto-redirect to correct URL format when workspace/profile/role changes
-  useEffect(() => {
-    if (workspace && currentProfile && location.pathname === '/') {
-      const workspaceInfo = getWorkspaceInfo();
-      if (workspaceInfo) {
-        navigate(buildWorkspaceUrl(), { replace: true });
-      }
-    }
-  }, [workspace, currentProfile, userRole, location.pathname]);
 
   return {
     getWorkspaceInfo,

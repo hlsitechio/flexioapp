@@ -8,18 +8,17 @@ import { useSessionTracking } from "@/hooks/useSessionTracking";
 import { initializeMonitoring } from "@/lib/monitoring";
 import { analytics } from "@/lib/analytics";
 import { useEffect } from "react";
+import { useServiceWorker } from "@/hooks/useServiceWorker";
+import { toast } from "@/components/ui/sonner";
 import Index from "./pages/Index";
-import { AuthPage } from "./pages/auth";
+// Use lazy-loaded heavy pages
+import { LazyAuthPage, LazyWorkspacePage, LazyAnalyticsPage, LazySettingsPage, LazyAdminDashboard, LazyCodeSnippetsPage, LazyPromptsGalleryPage } from "@/lib/code-splitting";
 import { isPublicPath } from "@/lib/routes/publicPaths";
-import { Settings } from "./pages/settings";
 import { EmailTest } from "./pages/settings/EmailTest";
 import { ProfilePage } from "./pages/profile";
 import { ComponentsPage } from "./pages/components";
 import { CustomizationPage } from "./pages/customization";
-import { PromptsGalleryPage } from "./pages/prompts-gallery";
-import { CodeSnippetsPage } from "./pages/code-snippets";
-import { AnalyticsPage } from "./pages/analytics";
-import { WorkspaceProfilesPage, WorkspaceSelectionPage } from "./pages/workspace";
+import { WorkspaceProfilesPage } from "./pages/workspace";
 import { WorkspaceHashNavigator } from "./components/workspace/WorkspaceHashNavigator";
 import { WorkspaceUrlManager } from "./components/workspace/WorkspaceUrlManager";
 import { LandingPage, ContactPage, DemoPage } from "./pages/landing";
@@ -27,7 +26,6 @@ import { AboutPage, CareersPage, BlogPage } from "./pages/company";
 import { FeaturesPage, PricingPage, IntegrationsPage } from "./pages/product";
 import { DocumentationPage, HelpCenterPage } from "./pages/resources";
 import { PrivacyPolicyPage, TermsOfServicePage } from "./pages/legal";
-import { AdminDashboard } from "./pages/admin";
 import NotFound from "./pages/NotFound";
 
 
@@ -76,6 +74,19 @@ const App = () => {
     }
   }, [isPublicPage]);
 
+  const { isUpdateAvailable, updateServiceWorker } = useServiceWorker();
+
+  useEffect(() => {
+    if (isUpdateAvailable) {
+      toast("A new version is available", {
+        action: {
+          label: "Update",
+          onClick: updateServiceWorker
+        }
+      });
+    }
+  }, [isUpdateAvailable]);
+
   // Only log final authenticated state once
   useEffect(() => {
     if (!loading && !workspaceLoading && user && workspace) {
@@ -118,8 +129,8 @@ const App = () => {
           <Route path="/terms-of-service" element={<TermsOfServicePage />} />
           
           {/* Protected routes - authentication required */}
-          <Route path="/auth" element={user ? <Navigate to="/workspace-selection" replace /> : <AuthPage />} />
-          <Route path="/workspace-selection" element={user ? <WorkspaceSelectionPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/auth" element={user ? <Navigate to="/workspace-selection" replace /> : <LazyAuthPage />} />
+          <Route path="/workspace-selection" element={user ? <LazyWorkspacePage /> : <Navigate to="/auth" replace />} />
           
           {/* Workspace-specific routes with role-based URLs */}
           <Route path="/workspace/:workspaceDetails" element={
@@ -130,14 +141,14 @@ const App = () => {
           } />
           <Route path="/workspace/:workspaceDetails/profile" element={user ? <ProfilePage /> : <Navigate to="/auth" replace />} />
           <Route path="/workspace/:workspaceDetails/components" element={user ? <ComponentsPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/settings" element={user ? <Settings /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/settings" element={user ? <LazySettingsPage /> : <Navigate to="/auth" replace />} />
           <Route path="/workspace/:workspaceDetails/settings/email-test" element={user ? <EmailTest /> : <Navigate to="/auth" replace />} />
           <Route path="/workspace/:workspaceDetails/customization" element={user ? <CustomizationPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/prompts-gallery" element={user ? <PromptsGalleryPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/code-snippets" element={user ? <CodeSnippetsPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/analytics" element={user ? <AnalyticsPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/prompts-gallery" element={user ? <LazyPromptsGalleryPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/code-snippets" element={user ? <LazyCodeSnippetsPage /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/analytics" element={user ? <LazyAnalyticsPage /> : <Navigate to="/auth" replace />} />
           <Route path="/workspace/:workspaceDetails/workspace-profiles" element={user ? <WorkspaceProfilesPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/admin" element={user ? <AdminDashboard /> : <Navigate to="/auth" replace />} />
+          <Route path="/workspace/:workspaceDetails/admin" element={user ? <LazyAdminDashboard /> : <Navigate to="/auth" replace />} />
           
           {/* Home route */}
           <Route path="/" element={(() => {

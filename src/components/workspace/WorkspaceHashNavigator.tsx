@@ -8,9 +8,9 @@ export function WorkspaceHashNavigator() {
     const handleHashChange = () => {
       const hash = window.location.hash;
       
-      // Force full page reload when navigating to workspace-related hashes
+      // Normalize workspace-related hashes without full reload
       if (hash === '#workspace' || hash.startsWith('#workspace-')) {
-        window.location.reload();
+        history.replaceState(null, '', window.location.pathname + window.location.search);
       }
     };
 
@@ -25,14 +25,12 @@ export function WorkspaceHashNavigator() {
     };
   }, [location]);
 
-  // Also handle direct navigation to hash URLs
+  // Also handle direct navigation to hash URLs without reload
   useEffect(() => {
     const hash = window.location.hash;
     if (hash === '#workspace' || hash.startsWith('#workspace-')) {
-      // Small delay to ensure the page is fully loaded before reload
-      setTimeout(() => {
-        window.location.reload();
-      }, 100);
+      // Remove hash to avoid full reloads and keep SPA navigation
+      history.replaceState(null, '', window.location.pathname + window.location.search);
     }
   }, []);
 
