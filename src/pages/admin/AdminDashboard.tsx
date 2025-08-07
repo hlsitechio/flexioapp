@@ -12,11 +12,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Crown, Users, Settings, Database, Eye, UserCheck, Trash2, Plus, Bug, Monitor, MessageSquare, Link, Globe, Archive, RotateCcw, Copy } from 'lucide-react';
+import { Crown, Users, Settings, Database, Eye, UserCheck, Trash2, Plus, Bug, Monitor, MessageSquare, Link, Globe, Archive, RotateCcw, Copy, ArrowLeft } from 'lucide-react';
 import UserCommunication from '@/components/admin/UserCommunication';
 import UserSessionView from '@/components/admin/UserSessionView';
 import { Label } from '@/components/ui/label';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { useWorkspaceUrl } from '@/hooks/useWorkspaceUrl';
+import { useNavigate } from 'react-router-dom';
 
 interface User {
   id: string;
@@ -66,6 +68,8 @@ export default function AdminDashboard() {
   const { toast } = useToast();
   const { getWorkspaceNumber } = useWorkspace();
   const { createEmptyDemoTemplate } = useWorkspaceProfile();
+  const { buildWorkspaceUrl } = useWorkspaceUrl();
+  const navigate = useNavigate();
   
   const [users, setUsers] = useState<User[]>([]);
   const [workspaces, setWorkspaces] = useState<UserWorkspace[]>([]);
@@ -884,6 +888,14 @@ export default function AdminDashboard() {
             Super Admin
           </Badge>
           <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate(buildWorkspaceUrl())}
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Dashboard
+            </Button>
             <Button
               variant={debugMode ? "default" : "outline"}
               size="sm"
