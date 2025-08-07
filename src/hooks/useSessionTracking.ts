@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { useWorkspace } from '@/contexts/WorkspaceContext';
 
 interface SessionData {
   user_agent?: string;
@@ -11,9 +10,8 @@ interface SessionData {
   is_active?: boolean;
 }
 
-export function useSessionTracking(enabled: boolean = true) {
+export function useSessionTracking(enabled: boolean = true, workspace?: any) {
   const { user } = useAuth();
-  const { workspace } = useWorkspace();
   const sessionIdRef = useRef<string>(crypto.randomUUID());
   const lastUpdateRef = useRef<number>(0);
 
