@@ -4,8 +4,14 @@ import { AppProviders } from "@/providers/AppProviders";
 import App from "./App.tsx";
 import "./index.css";
 
-// Initialize enhanced security suite asynchronously
+// Initialize enhanced security suite and fonts asynchronously
 if (typeof window !== 'undefined') {
+  // Load fonts
+  import("@/lib/fonts").then(({ loadInterFont }) => {
+    loadInterFont();
+  }).catch(console.error);
+  
+  // Load security suite
   import("@/lib/security/index").then(({ initializeSecuritySuite }) => {
     initializeSecuritySuite();
   }).catch(console.error);
