@@ -156,13 +156,13 @@ export function LandingPage() {
         <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       {/* Floating Navigation */}
       <motion.div
-        className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50"
+        className="fixed top-6 left-0 right-0 flex justify-center z-50 px-4"
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <nav className="bg-background/95 backdrop-blur-md border border-border/50 rounded-full px-6 py-3 shadow-lg">
-          <div className="flex items-center justify-center space-x-8">
+        <nav className="bg-background/95 backdrop-blur-md border border-border/50 rounded-full px-8 py-4 shadow-xl mx-auto">
+          <div className="flex items-center justify-center space-x-6 max-w-fit">
             {/* Logo */}
             <Link to="/landing" className="flex items-center hover:opacity-80 transition-opacity">
               <LazyImage 
@@ -174,36 +174,36 @@ export function LandingPage() {
             </Link>
             
             {/* Navigation Links */}
-            <div className="hidden md:flex items-center space-x-6">
-              <Link 
+            <div className="hidden md:flex items-center space-x-4">
+              <Link
                 to="/features" 
-                className="text-foreground/70 hover:text-foreground transition-colors font-medium px-3 py-2 rounded-full hover:bg-muted/50"
+                className="text-foreground/80 hover:text-foreground transition-colors font-medium px-4 py-2 rounded-full hover:bg-muted/40"
               >
                 Features
               </Link>
               <Link 
                 to="/about" 
-                className="text-foreground/70 hover:text-foreground transition-colors font-medium px-3 py-2 rounded-full hover:bg-muted/50"
+                className="text-foreground/80 hover:text-foreground transition-colors font-medium px-4 py-2 rounded-full hover:bg-muted/40"
               >
                 About
               </Link>
               <Link 
                 to="/contact" 
-                className="text-foreground/70 hover:text-foreground transition-colors font-medium px-3 py-2 rounded-full hover:bg-muted/50"
+                className="text-foreground/80 hover:text-foreground transition-colors font-medium px-4 py-2 rounded-full hover:bg-muted/40"
               >
                 Contact
               </Link>
               <Link 
                 to="/documentation" 
-                className="text-foreground/70 hover:text-foreground transition-colors font-medium px-3 py-2 rounded-full hover:bg-muted/50"
+                className="text-foreground/80 hover:text-foreground transition-colors font-medium px-4 py-2 rounded-full hover:bg-muted/40"
               >
                 Docs
               </Link>
             </div>
             
             {/* Action Buttons */}
-            <div className="flex items-center space-x-3">
-              <Button variant="ghost" className="rounded-full font-medium" asChild>
+            <div className="flex items-center space-x-2">
+              <Button variant="ghost" className="rounded-full font-medium text-foreground/80 hover:text-foreground" asChild>
                 <Link to="/auth">Sign In</Link>
               </Button>
               <Button 
