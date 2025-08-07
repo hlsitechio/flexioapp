@@ -54,11 +54,10 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-    // Critical: Prevent React duplication by ensuring single instance
-    dedupe: ['react', 'react-dom', 'react-dom/client', 'scheduler', 'next-themes'],
+    // Prevent React duplication
+    dedupe: ['react', 'react-dom'],
   },
   build: {
-    // Optimized build configuration for performance
     target: 'esnext',
     minify: 'esbuild',
     cssMinify: true,
@@ -66,79 +65,27 @@ export default defineConfig(({ mode }) => ({
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        manualChunks: (id) => {
-          // Critical: Ensure React is in a single, consistent chunk
-          if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
-            return 'react-core';
-          }
-          
-          // UI library chunk - separate from React
-          if (id.includes('@radix-ui') || id.includes('lucide-react')) {
-            return 'ui-libs';
-          }
-          
-          // Animation libraries
-          if (id.includes('framer-motion')) {
-            return 'animation';
-          }
-          
-          // Utilities - keep small and separate
-          if (id.includes('clsx') || id.includes('tailwind-merge') || id.includes('class-variance-authority')) {
-            return 'utils';
-          }
-          
-          // Data fetching
-          if (id.includes('@tanstack/react-query')) {
-            return 'query';
-          }
-          
-          // Supabase
-          if (id.includes('@supabase/supabase-js')) {
-            return 'supabase';
-          }
-          
-          // Router
-          if (id.includes('react-router')) {
-            return 'router';
-          }
-          
-          // Everything else from node_modules
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
-        },
-        // Optimize chunk naming
-        chunkFileNames: (chunkInfo) => {
-          const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId.split('/').pop() : 'chunk';
-          return `assets/[name]-[hash].js`;
-        },
-        assetFileNames: 'assets/[name]-[hash].[ext]'
+        manualChunks: {
+          // Simple, proven chunk strategy
+          'react': ['react', 'react-dom'],
+          'vendor': ['@tanstack/react-query', 'react-router-dom', '@supabase/supabase-js'],
+          'ui': ['@radix-ui/react-dialog', '@radix-ui/react-popover', '@radix-ui/react-toast', 'lucide-react'],
+        }
       }
     },
-    // Enable source maps for better debugging
     sourcemap: mode === 'development',
   },
-  // Enhanced dependency pre-bundling to prevent React duplication
+  // Simplified dependency optimization
   optimizeDeps: {
     include: [
       'react',
       'react-dom',
-      'react-dom/client',
-      'react/jsx-runtime',
       'react-router-dom',
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-popover',
-      '@radix-ui/react-toast',
       '@supabase/supabase-js',
       'clsx',
       'tailwind-merge',
-      'class-variance-authority',
-      'lucide-react',
-      'date-fns',
-      'framer-motion'
+      'lucide-react'
     ],
-    // Force pre-bundling to prevent React duplication
-    force: false,
     esbuildOptions: {
       target: 'esnext',
     },
