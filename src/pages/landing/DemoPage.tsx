@@ -19,7 +19,7 @@ export function DemoPage() {
                 <img 
                   src="/lovable-uploads/801f0a89-558e-4fd0-8e4e-102d5c5d2d3e.png" 
                   alt="FlexIO Logo" 
-                  className="h-8 w-auto"
+                  className="h-12 w-auto"
                 />
               </a>
             </div>
