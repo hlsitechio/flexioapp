@@ -30,14 +30,21 @@ console.log('📦 Security instances imported:', { cspMonitor, gdprCompliance, d
  */
 export function initializeSecuritySuite() {
   try {
-    // Initialize monitoring in the correct order
-    console.log('%c🔒 Initializing Enhanced Security Suite...', 'color: #10b981; font-weight: bold; font-size: 14px;');
+    const isProduction = window.location.hostname.includes('lovableproject.com') || 
+                        window.location.hostname.includes('vercel.app') ||
+                        process.env.NODE_ENV === 'production';
     
-    // Start security monitoring first
+    if (isProduction) {
+      console.log('%c🔒 Production Security Suite Active', 'color: #10b981; font-weight: bold;');
+    } else {
+      console.log('%c🔒 Development Security Suite Active', 'color: #f59e0b; font-weight: bold;');
+    }
+    
+    // Start security monitoring
     securityMonitoring.startMonitoring();
     
-    // Initialize DevTools integration if enabled
-    if (isDevelopment) {
+    // Initialize DevTools integration only in development
+    if (!isProduction) {
       console.log('%c🛠️ DevTools Security Integration Active', 'color: #3b82f6; font-weight: bold;');
     }
     

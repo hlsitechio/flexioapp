@@ -176,17 +176,23 @@ class EnhancedSecurityMonitoring {
           }
         });
       } else {
-        // Log as debug info for trusted environments
-        this.recordEvent({
-          type: 'monitoring',
-          severity: 'low',
-          description: 'Page running in trusted iframe environment (development)',
-          metadata: {
-            parentOrigin,
-            frameLocation: window.location.href,
-            trustedEnvironment: true
-          }
-        });
+        // Only log in development environments
+        const isProduction = window.location.hostname.includes('lovableproject.com') || 
+                            window.location.hostname.includes('vercel.app') ||
+                            process.env.NODE_ENV === 'production';
+        
+        if (!isProduction) {
+          this.recordEvent({
+            type: 'monitoring',
+            severity: 'low',
+            description: 'Page running in trusted iframe environment (development)',
+            metadata: {
+              parentOrigin,
+              frameLocation: window.location.href,
+              trustedEnvironment: true
+            }
+          });
+        }
       }
     }
   }

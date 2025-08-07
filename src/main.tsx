@@ -5,11 +5,16 @@ import App from "./App.tsx";
 import "./index.css";
 
 
-// Initialize only essential features
+// Initialize production-ready features
 if (typeof window !== 'undefined') {
   // Load fonts
   import("@/lib/fonts").then(({ loadInterFont }) => {
     loadInterFont();
+  }).catch(console.error);
+  
+  // Initialize security suite (production-aware)
+  import("@/lib/security/index").then(({ initializeSecuritySuite }) => {
+    initializeSecuritySuite();
   }).catch(console.error);
 }
 
