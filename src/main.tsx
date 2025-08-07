@@ -4,6 +4,9 @@ import { AppProviders } from "@/providers/AppProviders";
 import App from "./App.tsx";
 import "./index.css";
 
+// Import React Scheduler fix before anything else
+import "@/lib/react-scheduler-fix";
+
 // Mark performance measurement start
 if (typeof window !== 'undefined' && 'performance' in window) {
   performance.mark('app-start');

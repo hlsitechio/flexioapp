@@ -54,8 +54,8 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-    // Prevent React duplication by ensuring single instance
-    dedupe: ['react', 'react-dom', 'next-themes'],
+    // Critical: Prevent React duplication by ensuring single instance
+    dedupe: ['react', 'react-dom', 'react-dom/client', 'scheduler', 'next-themes'],
   },
   build: {
     // Optimized build configuration for performance
@@ -67,37 +67,42 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: (id) => {
-          // Vendor chunk for React ecosystem
-          if (id.includes('react') || id.includes('react-dom')) {
-            return 'react-vendor';
+          // Critical: Ensure React is in a single, consistent chunk
+          if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
+            return 'react-core';
           }
           
-          // UI library chunk
+          // UI library chunk - separate from React
           if (id.includes('@radix-ui') || id.includes('lucide-react')) {
-            return 'ui-vendor';
+            return 'ui-libs';
           }
           
-          // Animation and motion chunk
-          if (id.includes('framer-motion') || id.includes('animation')) {
-            return 'animation-vendor';
+          // Animation libraries
+          if (id.includes('framer-motion')) {
+            return 'animation';
           }
           
-          // Utilities chunk
+          // Utilities - keep small and separate
           if (id.includes('clsx') || id.includes('tailwind-merge') || id.includes('class-variance-authority')) {
-            return 'utils-vendor';
+            return 'utils';
           }
           
-          // Data fetching chunk
-          if (id.includes('@tanstack/react-query') || id.includes('@supabase/supabase-js')) {
-            return 'data-vendor';
+          // Data fetching
+          if (id.includes('@tanstack/react-query')) {
+            return 'query';
           }
           
-          // Router chunk
+          // Supabase
+          if (id.includes('@supabase/supabase-js')) {
+            return 'supabase';
+          }
+          
+          // Router
           if (id.includes('react-router')) {
-            return 'router-vendor';
+            return 'router';
           }
           
-          // Node modules vendor chunk for everything else
+          // Everything else from node_modules
           if (id.includes('node_modules')) {
             return 'vendor';
           }
@@ -113,11 +118,13 @@ export default defineConfig(({ mode }) => ({
     // Enable source maps for better debugging
     sourcemap: mode === 'development',
   },
-  // Fixed dependency pre-bundling for Vite 7 to prevent React duplication
+  // Enhanced dependency pre-bundling to prevent React duplication
   optimizeDeps: {
     include: [
       'react',
       'react-dom',
+      'react-dom/client',
+      'react/jsx-runtime',
       'react-router-dom',
       '@radix-ui/react-dialog',
       '@radix-ui/react-popover',
@@ -128,8 +135,10 @@ export default defineConfig(({ mode }) => ({
       'class-variance-authority',
       'lucide-react',
       'date-fns',
+      'framer-motion'
     ],
-    // Remove force option to prevent re-bundling issues
+    // Force pre-bundling to prevent React duplication
+    force: false,
     esbuildOptions: {
       target: 'esnext',
     },
