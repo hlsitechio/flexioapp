@@ -30,7 +30,8 @@ interface AnalyticsWidget {
 export function AnalyticsPage() {
   const { editMode } = useSettings();
   
-  const [widgets, setWidgets] = useState<AnalyticsWidget[]>([
+  // Default widgets for each tab
+  const [overviewWidgets, setOverviewWidgets] = useState<AnalyticsWidget[]>([
     {
       id: 'analytics-overview-1',
       title: 'Analytics Overview',
@@ -52,7 +53,86 @@ export function AnalyticsPage() {
     }
   ]);
 
-  const handleAddWidget = (widgetType: any) => {
+  const [trafficWidgets, setTrafficWidgets] = useState<AnalyticsWidget[]>([
+    {
+      id: 'pageviews-chart-1',
+      title: 'Page Views Trend',
+      component: AnalyticsChart,
+      props: { title: "Page Views Trend", type: "line", dataKey: "pageViews", color: "#10b981" },
+      size: 'medium'
+    },
+    {
+      id: 'revenue-chart-1',
+      title: 'Revenue Analytics',
+      component: AnalyticsChart,
+      props: { title: "Revenue Analytics", type: "area", dataKey: "revenue", color: "#f59e0b" },
+      size: 'medium'
+    },
+    {
+      id: 'traffic-sources-2',
+      title: 'Traffic Sources',
+      component: TrafficSources,
+      size: 'medium'
+    },
+    {
+      id: 'geographic-insights-1',
+      title: 'Geographic Insights',
+      component: GeographicInsights,
+      size: 'medium'
+    }
+  ]);
+
+  const [realtimeWidgets, setRealtimeWidgets] = useState<AnalyticsWidget[]>([
+    {
+      id: 'realtime-metrics-1',
+      title: 'Real-time Metrics',
+      component: RealtimeMetrics,
+      size: 'medium'
+    },
+    {
+      id: 'live-activity-chart-1',
+      title: 'Live Activity',
+      component: AnalyticsChart,
+      props: { title: "Live Activity", type: "line", dataKey: "users", color: "#8b5cf6" },
+      size: 'medium'
+    },
+    {
+      id: 'analytics-overview-2',
+      title: 'Analytics Overview',
+      component: AnalyticsOverview,
+      size: 'full'
+    }
+  ]);
+
+  const [insightsWidgets, setInsightsWidgets] = useState<AnalyticsWidget[]>([
+    {
+      id: 'geographic-insights-2',
+      title: 'Geographic Insights',
+      component: GeographicInsights,
+      size: 'medium'
+    },
+    {
+      id: 'realtime-metrics-2',
+      title: 'Real-time Metrics',
+      component: RealtimeMetrics,
+      size: 'medium'
+    },
+    {
+      id: 'user-engagement-chart-1',
+      title: 'User Engagement',
+      component: AnalyticsChart,
+      props: { title: "User Engagement", type: "area", dataKey: "pageViews", color: "#ef4444" },
+      size: 'medium'
+    },
+    {
+      id: 'traffic-sources-3',
+      title: 'Traffic Sources',
+      component: TrafficSources,
+      size: 'medium'
+    }
+  ]);
+
+  const handleAddWidget = (widgetType: any, tabType: string) => {
     const newWidget: AnalyticsWidget = {
       id: `${widgetType.id}-${Date.now()}`,
       title: widgetType.title,
@@ -60,7 +140,26 @@ export function AnalyticsPage() {
       props: widgetType.defaultProps,
       size: widgetType.size
     };
-    setWidgets([...widgets, newWidget]);
+
+    switch (tabType) {
+      case 'overview':
+        setOverviewWidgets([...overviewWidgets, newWidget]);
+        break;
+      case 'traffic':
+        setTrafficWidgets([...trafficWidgets, newWidget]);
+        break;
+      case 'realtime':
+        setRealtimeWidgets([...realtimeWidgets, newWidget]);
+        break;
+      case 'insights':
+        setInsightsWidgets([...insightsWidgets, newWidget]);
+        break;
+    }
+  };
+
+  const getAllUsedWidgetIds = () => {
+    const allWidgets = [...overviewWidgets, ...trafficWidgets, ...realtimeWidgets, ...insightsWidgets];
+    return allWidgets.map(w => w.id.split('-').slice(0, -1).join('-'));
   };
 
   return (
@@ -105,8 +204,8 @@ export function AnalyticsPage() {
                       </SheetHeader>
                       <div className="mt-6">
                         <AnalyticsWidgetPalette 
-                          onAddWidget={handleAddWidget}
-                          usedWidgetIds={widgets.map(w => w.id.split('-').slice(0, -1).join('-'))}
+                          onAddWidget={(widget) => handleAddWidget(widget, 'overview')}
+                          usedWidgetIds={getAllUsedWidgetIds()}
                         />
                       </div>
                     </SheetContent>
@@ -115,11 +214,11 @@ export function AnalyticsPage() {
               </div>
             </motion.div>
 
-            <Tabs defaultValue="dashboard" className="space-y-6">
+            <Tabs defaultValue="overview" className="space-y-6">
               <TabsList className="grid w-full grid-cols-4 lg:w-[400px]">
-                <TabsTrigger value="dashboard" className="flex items-center gap-2">
-                  <Settings className="h-4 w-4" />
-                  <span className="hidden sm:inline">Dashboard</span>
+                <TabsTrigger value="overview" className="flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4" />
+                  <span className="hidden sm:inline">Overview</span>
                 </TabsTrigger>
                 <TabsTrigger value="traffic" className="flex items-center gap-2">
                   <Globe className="h-4 w-4" />
@@ -135,65 +234,124 @@ export function AnalyticsPage() {
                 </TabsTrigger>
               </TabsList>
 
-              <TabsContent value="dashboard" className="space-y-6">
+              <TabsContent value="overview" className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-semibold">Overview Dashboard</h2>
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Widget
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent className="w-[400px]">
+                      <SheetHeader>
+                        <SheetTitle>Add Overview Widget</SheetTitle>
+                      </SheetHeader>
+                      <div className="mt-6">
+                        <AnalyticsWidgetPalette 
+                          onAddWidget={(widget) => handleAddWidget(widget, 'overview')}
+                          usedWidgetIds={getAllUsedWidgetIds()}
+                        />
+                      </div>
+                    </SheetContent>
+                  </Sheet>
+                </div>
                 <AnalyticsGridLayout 
-                  widgets={widgets}
+                  widgets={overviewWidgets}
                   editMode={editMode}
-                  onWidgetsChange={setWidgets}
+                  onWidgetsChange={setOverviewWidgets}
                 />
               </TabsContent>
 
               <TabsContent value="traffic" className="space-y-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <AnalyticsChart 
-                    title="Page Views Trend" 
-                    type="line"
-                    dataKey="pageViews" 
-                    color="#10b981" 
-                  />
-                  <AnalyticsChart 
-                    title="Revenue Analytics" 
-                    type="area"
-                    dataKey="revenue" 
-                    color="#f59e0b" 
-                  />
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-semibold">Traffic Analytics</h2>
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Widget
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent className="w-[400px]">
+                      <SheetHeader>
+                        <SheetTitle>Add Traffic Widget</SheetTitle>
+                      </SheetHeader>
+                      <div className="mt-6">
+                        <AnalyticsWidgetPalette 
+                          onAddWidget={(widget) => handleAddWidget(widget, 'traffic')}
+                          usedWidgetIds={getAllUsedWidgetIds()}
+                        />
+                      </div>
+                    </SheetContent>
+                  </Sheet>
                 </div>
-                
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <TrafficSources />
-                  <GeographicInsights />
-                </div>
+                <AnalyticsGridLayout 
+                  widgets={trafficWidgets}
+                  editMode={editMode}
+                  onWidgetsChange={setTrafficWidgets}
+                />
               </TabsContent>
 
               <TabsContent value="realtime" className="space-y-6">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <RealtimeMetrics />
-                  <AnalyticsChart 
-                    title="Live Activity" 
-                    type="line"
-                    dataKey="users" 
-                    color="#8b5cf6" 
-                  />
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-semibold">Real-time Monitoring</h2>
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Widget
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent className="w-[400px]">
+                      <SheetHeader>
+                        <SheetTitle>Add Real-time Widget</SheetTitle>
+                      </SheetHeader>
+                      <div className="mt-6">
+                        <AnalyticsWidgetPalette 
+                          onAddWidget={(widget) => handleAddWidget(widget, 'realtime')}
+                          usedWidgetIds={getAllUsedWidgetIds()}
+                        />
+                      </div>
+                    </SheetContent>
+                  </Sheet>
                 </div>
-                
-                <AnalyticsOverview />
+                <AnalyticsGridLayout 
+                  widgets={realtimeWidgets}
+                  editMode={editMode}
+                  onWidgetsChange={setRealtimeWidgets}
+                />
               </TabsContent>
 
               <TabsContent value="insights" className="space-y-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <GeographicInsights />
-                  <RealtimeMetrics />
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-semibold">User Insights</h2>
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Widget
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent className="w-[400px]">
+                      <SheetHeader>
+                        <SheetTitle>Add Insights Widget</SheetTitle>
+                      </SheetHeader>
+                      <div className="mt-6">
+                        <AnalyticsWidgetPalette 
+                          onAddWidget={(widget) => handleAddWidget(widget, 'insights')}
+                          usedWidgetIds={getAllUsedWidgetIds()}
+                        />
+                      </div>
+                    </SheetContent>
+                  </Sheet>
                 </div>
-                
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <AnalyticsChart 
-                    title="User Engagement" 
-                    type="area"
-                    dataKey="pageViews" 
-                    color="#ef4444" 
-                  />
-                  <TrafficSources />
-                </div>
+                <AnalyticsGridLayout 
+                  widgets={insightsWidgets}
+                  editMode={editMode}
+                  onWidgetsChange={setInsightsWidgets}
+                />
               </TabsContent>
             </Tabs>
           </div>
