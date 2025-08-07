@@ -25,38 +25,45 @@ export class VercelKVService {
     return VercelKVService.instance;
   }
 
-  async set(): Promise<void> {
+  // Basic cache operations with browser-safe no-ops
+  async set(key: string, value: any, options?: CacheOptions): Promise<void> {
     // No-op in browser
+    return;
   }
 
-  async get<T = any>(): Promise<T | null> {
+  async get<T = any>(key: string): Promise<T | null> {
     return null;
   }
 
-  async del(): Promise<void> {
+  async del(key: string): Promise<void> {
     // No-op in browser
   }
 
-  async exists(): Promise<boolean> {
+  async exists(key: string): Promise<boolean> {
     return false;
   }
 
-  async setSession(): Promise<void> {}
-  async getSession(): Promise<SessionData | null> { return null; }
-  async deleteSession(): Promise<void> {}
-  async extendSession(): Promise<void> {}
+  // Session management
+  async setSession(sessionId: string, data: SessionData, expirationSeconds = 86400): Promise<void> { return; }
+  async getSession(sessionId: string): Promise<SessionData | null> { return null; }
+  async deleteSession(sessionId: string): Promise<void> { return; }
+  async extendSession(sessionId: string, expirationSeconds = 86400): Promise<void> { return; }
 
-  async checkRateLimit(): Promise<{ allowed: boolean; remaining: number; resetTime: number }> {
-    return { allowed: true, remaining: 1, resetTime: Date.now() + 60000 };
+  // Rate limiting
+  async checkRateLimit(identifier: string, limit: number, windowSeconds: number): Promise<{ allowed: boolean; remaining: number; resetTime: number }> {
+    return { allowed: true, remaining: limit, resetTime: Date.now() + windowSeconds * 1000 };
   }
 
-  async invalidatePattern(): Promise<void> {}
+  // Cache invalidation patterns
+  async invalidatePattern(pattern: string): Promise<void> { return; }
 
-  async trackUpdate(): Promise<void> {}
-  async getLatestUpdate(): Promise<{ data: any; timestamp: number } | null> { return null; }
+  // Real-time updates tracking
+  async trackUpdate(resource: string, updateData: any): Promise<void> { return; }
+  async getLatestUpdate(resource: string): Promise<{ data: any; timestamp: number } | null> { return null; }
 
-  async cacheMetrics(): Promise<void> {}
-  async getCachedMetrics(): Promise<any | null> { return null; }
+  // Performance metrics caching
+  async cacheMetrics(metricsId: string, metrics: any, cacheDurationSeconds = 300): Promise<void> { return; }
+  async getCachedMetrics(metricsId: string): Promise<any | null> { return null; }
 }
 
 export const vercelKV = VercelKVService.getInstance();
