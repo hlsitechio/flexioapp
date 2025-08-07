@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { VercelAnalyticsDashboard, VercelBlobManager, VercelPerformanceMonitor } from '@/components/vercel';
 import { useVercelIntegrations } from '@/hooks/useVercelIntegrations';
-import { Sidebar } from '@/components/sidebar/Sidebar';
+import { DashboardSidebar } from '@/components/sidebar';
 import { TopNavigation } from '@/components/top-navigation/TopNavigation';
 import { NotificationSidebar } from '@/components/sidebar/notifications/NotificationSidebar';
 
@@ -64,7 +64,7 @@ export function VercelIntegrationsPage() {
 
   return (
     <div className="flex h-screen bg-background">
-      <Sidebar />
+      <DashboardSidebar />
       
       <div className="flex-1 flex flex-col overflow-hidden">
         <TopNavigation />
