@@ -31,7 +31,25 @@ import NotFound from "./pages/NotFound";
 
 const App = () => {
   const { user, loading } = useAuth();
-  const { workspace, loading: workspaceLoading } = useWorkspace();
+  
+  // Check if we're on a public page that doesn't need workspace context
+  const isPublicPage = window.location.pathname.startsWith('/landing') ||
+                      window.location.pathname.startsWith('/contact') ||
+                      window.location.pathname.startsWith('/demo') ||
+                      window.location.pathname.startsWith('/about') ||
+                      window.location.pathname.startsWith('/careers') ||
+                      window.location.pathname.startsWith('/blog') ||
+                      window.location.pathname.startsWith('/features') ||
+                      window.location.pathname.startsWith('/pricing') ||
+                      window.location.pathname.startsWith('/integrations') ||
+                      window.location.pathname.startsWith('/documentation') ||
+                      window.location.pathname.startsWith('/help-center') ||
+                      window.location.pathname.startsWith('/privacy-policy') ||
+                      window.location.pathname.startsWith('/terms-of-service');
+
+  // Only use workspace context when not on public pages
+  const workspaceContext = isPublicPage ? { workspace: null, loading: false } : useWorkspace();
+  const { workspace, loading: workspaceLoading } = workspaceContext;
   
   // Only track sessions for authenticated users on protected routes
   const isProtectedRoute = window.location.pathname.startsWith('/workspace') || 
