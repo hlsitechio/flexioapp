@@ -1,5 +1,6 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { HelmetProvider } from 'react-helmet-async';
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { SafeThemeProvider } from "@/components/providers/SafeThemeProvider";
@@ -68,19 +69,21 @@ export function AppProviders({ children }: AppProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SafeThemeProvider>
-        <AuthProvider>
-          <TooltipProvider>
-            <SidebarProvider defaultOpen={true}>
-              {isPublicPage ? (
-                <PublicProviders>{children}</PublicProviders>
-              ) : (
-                <AuthenticatedProviders>{children}</AuthenticatedProviders>
-              )}
-            </SidebarProvider>
-          </TooltipProvider>
-        </AuthProvider>
-      </SafeThemeProvider>
+      <HelmetProvider>
+        <SafeThemeProvider>
+          <AuthProvider>
+            <TooltipProvider>
+              <SidebarProvider defaultOpen={true}>
+                {isPublicPage ? (
+                  <PublicProviders>{children}</PublicProviders>
+                ) : (
+                  <AuthenticatedProviders>{children}</AuthenticatedProviders>
+                )}
+              </SidebarProvider>
+            </TooltipProvider>
+          </AuthProvider>
+        </SafeThemeProvider>
+      </HelmetProvider>
     </QueryClientProvider>
   );
 }

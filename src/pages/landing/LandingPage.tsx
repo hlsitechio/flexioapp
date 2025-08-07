@@ -5,10 +5,48 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LeadCaptureForm } from '@/components/forms';
 import { CheckCircle, ArrowRight, Star, Users, Shield, Zap, Image, Play, Clock, UserCheck } from 'lucide-react';
+import { SEOHead, StructuredData, AIFeatureSection, AIBenefitsSection } from '@/components/seo';
+import { AISearchOptimization } from '@/components/seo/AISearchOptimization';
 
 export function LandingPage() {
   const [showDemo, setShowDemo] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
+
+  const features = [
+    {
+      name: "Real-time Analytics Dashboard",
+      description: "Monitor your business metrics with live data visualization and interactive charts",
+      benefit: "Increase decision-making speed by 75%"
+    },
+    {
+      name: "Customizable Widgets",
+      description: "Create personalized dashboards with drag-and-drop widget customization",
+      benefit: "Reduce setup time by 80%"
+    },
+    {
+      name: "Multi-source Data Integration",
+      description: "Connect and visualize data from multiple sources in one unified dashboard",
+      benefit: "Improve data accuracy by 90%"
+    }
+  ];
+
+  const benefits = [
+    {
+      title: "Boost Productivity",
+      description: "Streamline your workflow with intelligent automation and real-time insights",
+      metric: "40% faster decision making"
+    },
+    {
+      title: "Save Time",
+      description: "Automated reporting and data collection eliminates manual work",
+      metric: "20+ hours saved weekly"
+    },
+    {
+      title: "Increase ROI",
+      description: "Data-driven insights lead to better business outcomes and growth",
+      metric: "3x return on investment"
+    }
+  ];
 
   const scrollToDemo = () => {
     setShowDemo(true);
@@ -58,6 +96,41 @@ export function LandingPage() {
 
   return (
     <>
+      <SEOHead
+        title="FlexIO - Advanced Business Intelligence Dashboard Platform"
+        description="Transform your business with FlexIO's powerful analytics dashboard. Real-time data visualization, customizable widgets, and enterprise-grade business intelligence tools for data-driven decisions."
+        keywords={[
+          'business intelligence',
+          'analytics dashboard',
+          'data visualization',
+          'real-time analytics',
+          'business metrics',
+          'dashboard platform',
+          'enterprise analytics',
+          'KPI dashboard',
+          'data insights',
+          'business dashboard'
+        ]}
+        canonicalUrl="/"
+        ogType="website"
+      />
+      
+      <StructuredData type="organization" />
+      <StructuredData type="website" />
+      
+      <AISearchOptimization
+        pageType="homepage"
+        primaryKeywords={[
+          'business intelligence platform',
+          'analytics dashboard software',
+          'data visualization tool',
+          'enterprise dashboard',
+          'business analytics solution'
+        ]}
+        contentCategory="business intelligence software homepage"
+        businessContext="enterprise analytics and dashboard platform"
+      />
+      
       <WelcomeAnimation onComplete={() => setAnimationComplete(true)}>
         <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       {/* Navigation */}

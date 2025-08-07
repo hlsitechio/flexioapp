@@ -46,6 +46,29 @@ Allow: /
 User-agent: DiscordBot
 Allow: /
 
+# === AI SEARCH ENGINES ===
+# AI-powered search and language models
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
 # === ALL OTHER BOTS ===
 User-agent: *
 Allow: /
@@ -128,6 +151,13 @@ Clean-param: campaign_id
 
 # Primary domain specification
 Host: https://www.flexioapp.com
+
+# === AI OPTIMIZATION HINTS ===
+# AI indexing and understanding optimization
+# Content-Type: business intelligence, analytics dashboard
+# Target-Audience: business professionals, data analysts
+# Use-Case: productivity tools, dashboard platform
+# Benefits: increased efficiency, data-driven decisions
 
 # === PERFORMANCE HINTS ===
 # Crawl-delay optimization for server performance
