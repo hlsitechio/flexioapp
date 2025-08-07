@@ -19,6 +19,24 @@ interface ContactFormRequest {
   utmData?: Record<string, string>;
 }
 
+// Professional email alias mapping
+function getFromAddress(inquiryType: string): string {
+  switch (inquiryType) {
+    case 'sales':
+    case 'pricing':
+    case 'demo':
+      return 'FlexIO Sales <sales@yourdomain.com>'
+    case 'support':
+    case 'technical':
+      return 'FlexIO Support <support@yourdomain.com>'
+    case 'partnership':
+    case 'business':
+      return 'FlexIO Business <contact@yourdomain.com>'
+    default:
+      return 'FlexIO Contact <contact@yourdomain.com>'
+  }
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -185,8 +203,9 @@ serve(async (req) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            to: 'sales@yourdomain.com', // Update with your sales email
-            subject: `🚨 High Priority Contact Form Submission - ${body.inquiryType}`,
+            from: getFromAddress(body.inquiryType || 'general'),
+            to: 'hlarosesurprenant@gmail.com', // Your actual email (hidden from users)
+            subject: `🚨 High Priority Contact - ${body.inquiryType} from ${body.name}`,
             html: `
               <h2>New High Priority Contact Form Submission</h2>
               <p><strong>Type:</strong> ${body.inquiryType}</p>
@@ -222,11 +241,12 @@ serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          from: getFromAddress(body.inquiryType || 'general'),
           to: body.email,
           subject: 'Thank you for contacting us!',
           html: `
             <h2>Thank you for reaching out, ${body.name}!</h2>
-            <p>We have received your ${body.inquiryType || 'general'} inquiry and will get back to you as soon as possible.</p>
+            <p>We have received your ${body.inquiryType || 'general'} inquiry and will respond within 24 hours.</p>
             
             <h3>Your Message Details:</h3>
             <p><strong>Subject:</strong> ${body.subject || `${body.inquiryType || 'General'} Inquiry`}</p>
@@ -240,7 +260,7 @@ serve(async (req) => {
               '<p>We typically respond within 1-2 business days.</p>'
             }
             
-            <p>Best regards,<br>The BI Platform Team</p>
+            <p>Best regards,<br>The FlexIO Team</p>
             
             <hr>
             <p><small>Reference ID: ${submission.id}</small></p>

@@ -66,8 +66,17 @@ export const integrationsConfig = {
     resend: {
       enabled: true, // Enable Resend by default
       apiKey: '', // Resend API Key (configured in Supabase Edge Functions)
-      fromEmail: 'noreply@yourdomain.com',
-      fromName: 'Your BI Platform',
+      fromEmail: 'support@yourdomain.com', // Professional from address
+      fromName: 'FlexIO Support',
+      // Email routing - all emails go to your Gmail
+      routingEmail: 'hlarosesurprenant@gmail.com',
+      aliases: {
+        support: 'FlexIO Support <support@yourdomain.com>',
+        sales: 'FlexIO Sales <sales@yourdomain.com>',
+        contact: 'FlexIO Contact <contact@yourdomain.com>', 
+        info: 'FlexIO Info <info@yourdomain.com>',
+        noreply: 'FlexIO <noreply@yourdomain.com>'
+      },
       templates: {
         welcome: '',
         resetPassword: '',
