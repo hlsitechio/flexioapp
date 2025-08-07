@@ -3,7 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, RefreshCw } from 'lucide-react';
 import { ErrorTracker } from '@/lib/monitoring';
-import { securityLog } from '@/lib/security';
+import { securityLog } from '@/lib/security/index';
 
 interface Props {
   children: ReactNode;
@@ -40,11 +40,11 @@ export class ErrorBoundary extends Component<Props, State> {
     // Track via monitoring and security logger
     try {
       ErrorTracker.getInstance().trackError(error, this.props.name || 'ErrorBoundary');
-      securityLog.error({
-        category: 'monitoring',
-        message: `ErrorBoundary (${this.props.name || 'global'}) caught: ${error.message}`,
-        metadata: { componentStack: errorInfo.componentStack, stack: (error as any).stack }
-      });
+      securityLog.error(
+        'monitoring',
+        `ErrorBoundary (${this.props.name || 'global'}) caught: ${error.message}`,
+        { componentStack: errorInfo.componentStack, stack: (error as any).stack }
+      );
     } catch {}
 
     this.props.onError?.(error, errorInfo);
