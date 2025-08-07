@@ -91,8 +91,8 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <WorkspaceHashNavigator />
-          <WorkspaceUrlManager />
+          {!isPublicPage && <WorkspaceHashNavigator />}
+          {!isPublicPage && <WorkspaceUrlManager />}
           <Routes>
             {/* Public routes - no authentication required */}
             <Route path="/landing" element={<LandingPage />} />
