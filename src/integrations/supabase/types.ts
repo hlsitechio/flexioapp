@@ -275,6 +275,57 @@ export type Database = {
         }
         Relationships: []
       }
+      csp_violations: {
+        Row: {
+          blocked_uri: string | null
+          created_at: string
+          disposition: string | null
+          document_uri: string | null
+          effective_directive: string | null
+          id: string
+          ip_address: unknown | null
+          original_policy: string | null
+          referrer: string | null
+          reported_at: string | null
+          status_code: number | null
+          timestamp: string | null
+          user_agent: string | null
+          violated_directive: string | null
+        }
+        Insert: {
+          blocked_uri?: string | null
+          created_at?: string
+          disposition?: string | null
+          document_uri?: string | null
+          effective_directive?: string | null
+          id?: string
+          ip_address?: unknown | null
+          original_policy?: string | null
+          referrer?: string | null
+          reported_at?: string | null
+          status_code?: number | null
+          timestamp?: string | null
+          user_agent?: string | null
+          violated_directive?: string | null
+        }
+        Update: {
+          blocked_uri?: string | null
+          created_at?: string
+          disposition?: string | null
+          document_uri?: string | null
+          effective_directive?: string | null
+          id?: string
+          ip_address?: unknown | null
+          original_policy?: string | null
+          referrer?: string | null
+          reported_at?: string | null
+          status_code?: number | null
+          timestamp?: string | null
+          user_agent?: string | null
+          violated_directive?: string | null
+        }
+        Relationships: []
+      }
       demo_requests: {
         Row: {
           company: string
@@ -634,6 +685,42 @@ export type Database = {
           id?: string
           metadata?: Json | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      security_alerts: {
+        Row: {
+          acknowledged: boolean | null
+          created_at: string
+          event_id: string | null
+          event_type: string
+          id: string
+          message: string
+          metadata: Json | null
+          severity: string | null
+          user_id: string | null
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          created_at?: string
+          event_id?: string | null
+          event_type: string
+          id?: string
+          message: string
+          metadata?: Json | null
+          severity?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          acknowledged?: boolean | null
+          created_at?: string
+          event_id?: string | null
+          event_type?: string
+          id?: string
+          message?: string
+          metadata?: Json | null
+          severity?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }

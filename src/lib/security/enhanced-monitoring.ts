@@ -177,9 +177,7 @@ class EnhancedSecurityMonitoring {
         });
       } else {
         // Only log in development environments
-        const isProduction = window.location.hostname.includes('lovableproject.com') || 
-                            window.location.hostname.includes('vercel.app') ||
-                            process.env.NODE_ENV === 'production';
+        const isProduction = import.meta.env.PROD;
         
         if (!isProduction) {
           this.recordEvent({

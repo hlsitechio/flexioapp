@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => ({
       'Cache-Control': mode === 'development' ? 'no-cache' : 'public, max-age=31536000',
     },
     // Completely disable HMR in hosted/production environments
-    hmr: false, // Disable HMR to prevent WebSocket connection errors in hosted environments
+    hmr: mode === 'development', // Enable HMR in development, disable elsewhere
     // Performance optimizations
     middlewareMode: false,
     warmup: {

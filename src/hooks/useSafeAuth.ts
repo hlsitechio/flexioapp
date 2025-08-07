@@ -1,5 +1,6 @@
-import { createContext, useContext } from 'react';
 import { User, Session } from '@supabase/supabase-js';
+import { useAuth } from '@/contexts/AuthContext';
+import { isPublicPath } from '@/lib/routes/publicPaths';
 
 interface AuthContextType {
   user: User | null;
@@ -10,39 +11,10 @@ interface AuthContextType {
   loading: boolean;
 }
 
-// Safe auth context that returns null user for public pages
-const SafeAuthContext = createContext<AuthContextType>({
-  user: null,
-  session: null,
-  signUp: async () => ({ error: null }),
-  signIn: async () => ({ error: null }),
-  signOut: async () => ({ error: null }),
-  loading: false,
-});
-
 export function useSafeAuth(): AuthContextType {
-  // Check if we're on a public page
-  const isPublicPage = typeof window !== 'undefined' && (
-    window.location.pathname === '/' ||
-    window.location.pathname.startsWith('/landing') ||
-    window.location.pathname.startsWith('/contact') ||
-    window.location.pathname.startsWith('/demo') ||
-    window.location.pathname.startsWith('/about') ||
-    window.location.pathname.startsWith('/careers') ||
-    window.location.pathname.startsWith('/blog') ||
-    window.location.pathname.startsWith('/features') ||
-    window.location.pathname.startsWith('/pricing') ||
-    window.location.pathname.startsWith('/integrations') ||
-    window.location.pathname.startsWith('/documentation') ||
-    window.location.pathname.startsWith('/help-center') ||
-    window.location.pathname.startsWith('/privacy-policy') ||
-    window.location.pathname.startsWith('/terms-of-service')
-  );
-
-  console.log("useSafeAuth called for path:", window.location.pathname, "isPublicPage:", isPublicPage);
+  const isPublicPage = typeof window !== 'undefined' && isPublicPath(window.location.pathname);
 
   if (isPublicPage) {
-    // Return safe defaults for public pages
     return {
       user: null,
       session: null,
@@ -53,10 +25,8 @@ export function useSafeAuth(): AuthContextType {
     };
   }
 
-  // For non-public pages, try to get the real auth context
   try {
-    const context = useContext(SafeAuthContext);
-    return context;
+    return useAuth();
   } catch {
     // Fallback if context is not available
     return {

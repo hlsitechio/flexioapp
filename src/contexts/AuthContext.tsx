@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { createRateLimiter } from '@/lib/security';
+import { isPublicPath } from '@/lib/routes/publicPaths';
 
 interface AuthContextType {
   user: User | null;
@@ -24,15 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Skip auth initialization on public pages for performance
-    const isPublicPage = typeof window !== 'undefined' && (
-      window.location.pathname === '/' ||                      // Root path
-      window.location.pathname.startsWith('/landing') ||
-      window.location.pathname.startsWith('/contact') ||
-      window.location.pathname.startsWith('/demo') ||
-      window.location.pathname.startsWith('/about') ||
-      window.location.pathname.startsWith('/features') ||
-      window.location.pathname.startsWith('/pricing')
-    );
+    const isPublicPage = typeof window !== 'undefined' && isPublicPath(window.location.pathname);
 
     if (isPublicPage) {
       setLoading(false);

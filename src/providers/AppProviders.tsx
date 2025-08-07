@@ -12,6 +12,7 @@ import { UISettingsProvider } from "@/contexts/UISettingsContext";
 import { DashboardSettingsProvider } from "@/contexts/DashboardSettingsContext";
 import { NavigationSettingsProvider } from "@/contexts/NavigationSettingsContext";
 import { SettingsProvider } from "@/contexts/SettingsContext";
+import { isPublicPath } from "@/lib/routes/publicPaths";
 
 // Wrapper for authenticated-only providers
 function AuthenticatedProviders({ children }: { children: React.ReactNode }) {
@@ -49,22 +50,7 @@ interface AppProvidersProps {
 
 export function AppProviders({ children }: AppProvidersProps) {
   // Check if we're on a public page that doesn't need authentication contexts
-  const isPublicPage = typeof window !== 'undefined' && (
-    window.location.pathname === '/' ||                    // Root path that redirects to landing
-    window.location.pathname.startsWith('/landing') ||
-    window.location.pathname.startsWith('/contact') ||
-    window.location.pathname.startsWith('/demo') ||
-    window.location.pathname.startsWith('/about') ||
-    window.location.pathname.startsWith('/careers') ||
-    window.location.pathname.startsWith('/blog') ||
-    window.location.pathname.startsWith('/features') ||
-    window.location.pathname.startsWith('/pricing') ||
-    window.location.pathname.startsWith('/integrations') ||
-    window.location.pathname.startsWith('/documentation') ||
-    window.location.pathname.startsWith('/help-center') ||
-    window.location.pathname.startsWith('/privacy-policy') ||
-    window.location.pathname.startsWith('/terms-of-service')
-  );
+  const isPublicPage = typeof window !== 'undefined' && isPublicPath(window.location.pathname);
 
   return (
     <QueryClientProvider client={queryClient}>

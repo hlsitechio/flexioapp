@@ -1,4 +1,5 @@
 const isDevelopment = import.meta.env.DEV;
+import { supabase } from '@/integrations/supabase/client';
 
 export interface CSPViolation {
   documentURI: string;
@@ -112,13 +113,8 @@ class CSPMonitor {
 
   private async reportViolation(violation: CSPViolation) {
     try {
-      // Send to monitoring endpoint
-      await fetch('/api/security/csp-report', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(violation)
+      await supabase.functions.invoke('csp-report', {
+        body: violation,
       });
     } catch (error) {
       console.error('Failed to report CSP violation:', error);

@@ -20,6 +20,7 @@ import { gdprCompliance } from './gdpr-compliance';
 import { devToolsIntegration } from './devtools-integration';
 import { securityMonitoring } from './enhanced-monitoring';
 import { securityLogger, securityLog } from './unified-logger';
+import { isPublicPath } from '@/lib/routes/publicPaths';
 
 const isDevelopment = import.meta.env.DEV;
 
@@ -31,19 +32,9 @@ console.log('📦 Security instances imported:', { cspMonitor, gdprCompliance, d
 export function initializeSecuritySuite() {
   try {
     // Check if we're on a public page - minimal security for performance
-    const isPublicPage = typeof window !== 'undefined' && (
-      window.location.pathname === '/' ||                      // Root path
-      window.location.pathname.startsWith('/landing') ||
-      window.location.pathname.startsWith('/contact') ||
-      window.location.pathname.startsWith('/demo') ||
-      window.location.pathname.startsWith('/about') ||
-      window.location.pathname.startsWith('/features') ||
-      window.location.pathname.startsWith('/pricing')
-    );
+    const isPublicPage = typeof window !== 'undefined' && isPublicPath(window.location.pathname);
     
-    const isProduction = window.location.hostname.includes('lovableproject.com') || 
-                        window.location.hostname.includes('vercel.app') ||
-                        process.env.NODE_ENV === 'production';
+    const isProduction = import.meta.env.PROD;
     
     // Skip heavy security monitoring on public pages in production
     if (isPublicPage && isProduction) {
