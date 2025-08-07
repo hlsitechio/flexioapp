@@ -1,14 +1,88 @@
+# FlexIO Robots.txt - Optimized for SEO & Fast Google Ranking
+# Updated: 2025
+
+# Allow all major search engines full access
 User-agent: Googlebot
 Allow: /
+Crawl-delay: 1
 
 User-agent: Bingbot
 Allow: /
+Crawl-delay: 1
 
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 2
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 2
+
+# Social media crawlers for rich previews
 User-agent: Twitterbot
 Allow: /
 
 User-agent: facebookexternalhit
 Allow: /
 
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+# Allow all other bots with general rules
 User-agent: *
 Allow: /
+
+# Block access to authentication and workspace routes (private areas)
+Disallow: /auth
+Disallow: /workspace/
+Disallow: /admin/
+Disallow: /api/
+
+# Block access to technical files
+Disallow: /*.json$
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /_next/
+Disallow: /config/
+
+# Encourage crawling of important SEO pages
+Allow: /landing
+Allow: /features
+Allow: /pricing
+Allow: /demo
+Allow: /about
+Allow: /contact
+Allow: /careers
+Allow: /blog
+Allow: /integrations
+Allow: /documentation
+Allow: /help-center
+Allow: /privacy-policy
+Allow: /terms-of-service
+
+# Sitemap location (helps search engines find all pages quickly)
+Sitemap: https://www.flexioapp.com/sitemap.xml
+
+# Additional SEO directives
+# Request indexing frequency for better rankings
+Request-rate: 1/10s
+
+# Clean URL handling
+Clean-param: utm_source
+Clean-param: utm_medium  
+Clean-param: utm_campaign
+Clean-param: fbclid
+Clean-param: gclid
+
+# Host directive for primary domain
+Host: https://www.flexioapp.com
