@@ -20,6 +20,7 @@ class UnifiedSecurityLogger {
   };
   private suppressDuplicates = true;
   private lastMessages = new Set<string>();
+  private intercepted = false;
 
   constructor() {
     // Store original console methods
@@ -30,13 +31,15 @@ class UnifiedSecurityLogger {
       info: console.info.bind(console)
     };
     
-    // Only intercept in development mode to reduce performance impact
-    if (import.meta.env.DEV) {
+    // Only intercept in development mode and when debug is enabled
+    if (import.meta.env.DEV && this.isDebugEnabled()) {
       this.interceptConsoleLogs();
     }
   }
 
   private interceptConsoleLogs() {
+    if (this.intercepted) return;
+    this.intercepted = true;
     console.log = (...args) => {
       const message = this.formatMessage(args);
       if (this.isSecurityMessage(message)) {
@@ -261,6 +264,7 @@ class UnifiedSecurityLogger {
     console.warn = this.originalConsole.warn;
     console.error = this.originalConsole.error;
     console.info = this.originalConsole.info;
+    this.intercepted = false;
   }
 
   public getConsoleStats() {
@@ -297,6 +301,37 @@ class UnifiedSecurityLogger {
     };
   }
 
+  public setDebug(enabled: boolean) {
+    try {
+      if (enabled) {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('security:debug', '1');
+        }
+        if (import.meta.env.DEV) this.interceptConsoleLogs();
+      } else {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('security:debug', '0');
+        }
+        this.restoreConsole();
+      }
+    } catch {}
+  }
+
+  public isDebug(): boolean {
+    return this.intercepted;
+  }
+
+  private isDebugEnabled(): boolean {
+    try {
+      if (typeof window === 'undefined') return false;
+      if (window.location.search.includes('secdebug=1')) return true;
+      const stored = localStorage.getItem('security:debug');
+      return stored === '1' || stored === 'true';
+    } catch {
+      return false;
+    }
+  }
+
   private generateId(): string {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
@@ -330,6 +365,9 @@ if (typeof window !== 'undefined') {
     clear: () => securityLogger.clearMessages(),
     enableSuppression: (enabled: boolean) => securityLogger.enableConsoleSupression(enabled),
     restore: () => securityLogger.restoreConsole(),
-    stats: () => securityLogger.getConsoleStats()
+    stats: () => securityLogger.getConsoleStats(),
+    enableDebug: () => securityLogger.setDebug(true),
+    disableDebug: () => securityLogger.setDebug(false),
+    isDebug: () => securityLogger.isDebug()
   };
 }

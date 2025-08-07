@@ -28,7 +28,9 @@ export function ProductionErrorBoundary({ children, fallback }: ProductionErrorB
 
     return (
       <ErrorBoundary 
+        name="AppBoundary"
         fallback={isPublic ? minimalFallback : enhancedFallback}
+        resetKeys={[pathname]}
         onError={() => {
           // Quiet in production; tracking handled centrally
         }}
@@ -38,9 +40,10 @@ export function ProductionErrorBoundary({ children, fallback }: ProductionErrorB
     );
   }
 
-  // In development, use full error boundary with detailed logging
+  // In development, keep boundary but quiet logging and reset on route change
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
   return (
-    <ErrorBoundary>
+    <ErrorBoundary name="DevBoundary" resetKeys={[pathname]} quiet onError={() => {}}>
       {children}
     </ErrorBoundary>
   );

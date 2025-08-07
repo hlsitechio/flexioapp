@@ -11,6 +11,7 @@ interface Props {
   fallbackRender?: (error: Error, reset: () => void) => ReactNode;
   resetKeys?: unknown[];
   name?: string;
+  quiet?: boolean;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
   onReset?: () => void;
   onResetKeysChange?: (prevResetKeys?: unknown[], nextResetKeys?: unknown[]) => void;
@@ -32,19 +33,25 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Only log in development or when debugging is enabled
-    if (import.meta.env.DEV || import.meta.env.VITE_DEBUG === 'true') {
+    // Only log in development or when debugging is enabled, and when not in quiet mode
+    if (!this.props.quiet && (import.meta.env.DEV || import.meta.env.VITE_DEBUG === 'true')) {
       console.error('Error Boundary caught an error:', error, errorInfo);
     }
 
     // Track via monitoring and security logger
     try {
-      ErrorTracker.getInstance().trackError(error, this.props.name || 'ErrorBoundary');
-      securityLog.error(
-        'monitoring',
-        `ErrorBoundary (${this.props.name || 'global'}) caught: ${error.message}`,
-        { componentStack: errorInfo.componentStack, stack: (error as any).stack }
-      );
+      // Always track in production; in dev respect quiet mode
+      if (import.meta.env.PROD || !this.props.quiet) {
+        ErrorTracker.getInstance().trackError(error, this.props.name || 'ErrorBoundary');
+      }
+      // Only send security logs in production unless explicitly debugging and not quiet
+      if (import.meta.env.PROD || (!this.props.quiet && import.meta.env.VITE_DEBUG === 'true')) {
+        securityLog.error(
+          'monitoring',
+          `ErrorBoundary (${this.props.name || 'global'}) caught: ${error.message}`,
+          { componentStack: errorInfo.componentStack, stack: (error as any).stack }
+        );
+      }
     } catch {}
 
     this.props.onError?.(error, errorInfo);
