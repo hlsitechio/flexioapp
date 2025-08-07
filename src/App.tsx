@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { useWorkspace } from "@/contexts/WorkspaceContext";
+import { useSafeWorkspace } from "@/hooks/useSafeWorkspace";
 import { useSessionTracking } from "@/hooks/useSessionTracking";
 import { initializeMonitoring } from "@/lib/monitoring";
 import { analytics } from "@/lib/analytics";
@@ -47,8 +47,8 @@ const App = () => {
                       window.location.pathname.startsWith('/privacy-policy') ||
                       window.location.pathname.startsWith('/terms-of-service');
 
-  // Always call useWorkspace hook but conditionally use its values
-  const workspaceHookResult = useWorkspace();
+  // Use safe workspace hook that handles provider absence gracefully
+  const workspaceHookResult = useSafeWorkspace();
   const { workspace, loading: workspaceLoading } = isPublicPage 
     ? { workspace: null, loading: false } 
     : workspaceHookResult;
