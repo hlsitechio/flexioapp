@@ -44,6 +44,7 @@ serve(async (req) => {
     return new Response(JSON.stringify({ error: 'Too many requests' }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 
+  try {
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get('VITE_SUPABASE_URL')!
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
