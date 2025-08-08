@@ -16,7 +16,6 @@ export * from './unified-logger';
 
 slog.info('✅ Enhanced security modules exported');
 
-import { createLogger } from '@/lib/logger';
 import { cspMonitor } from './csp-monitor';
 import { gdprCompliance } from './gdpr-compliance';
 import { devToolsIntegration } from './devtools-integration';
@@ -25,7 +24,6 @@ import { securityLogger, securityLog } from './unified-logger';
 import { isPublicPath } from '@/lib/routes/publicPaths';
 
 const isDevelopment = import.meta.env.DEV;
-const slog = createLogger('security:index');
 
 slog.info('📦 Security instances imported:', { cspMonitor, gdprCompliance, devToolsIntegration, securityMonitoring });
 
