@@ -13,6 +13,7 @@ import { UserNavigation } from './UserNavigation';
 import { WorkspaceSwitcher } from '@/components/workspace/WorkspaceSwitcher';
 import { useSettings } from '@/contexts/SettingsContext';
 import { useState, useCallback } from 'react';
+import { useScrollVisibility } from '@/hooks/useScrollVisibility';
 import {
   DndContext,
   closestCenter,
@@ -137,16 +138,27 @@ export function DashboardSidebar() {
 
   const activeSection = activeId ? sections.find(section => section.id === activeId) : null;
 
+  const { atTop, scrollingDown, progress } = useScrollVisibility();
+  // Compute visual intensity based on scroll position and direction
+  const intensity = atTop ? 0 : progress; // 0..1
+  const blurPx = Math.round(intensity * (scrollingDown ? 14 : 8));
+  const opacity = 1 - intensity * (scrollingDown ? 0.45 : 0.25);
+  const x = scrollingDown && !atTop ? -6 : 0;
+
   return (
     <motion.div
       initial={false}
       animate={{
         width: isCollapsed ? 64 : 280,
+        filter: `blur(${blurPx}px)`,
+        opacity,
+        x,
       }}
       transition={{
-        duration: 0.3,
+        duration: 0.25,
         ease: [0.4, 0, 0.2, 1],
       }}
+      style={{ willChange: 'width, filter, opacity, transform' }}
       className="relative"
     >
       <Sidebar 
@@ -155,7 +167,7 @@ export function DashboardSidebar() {
         data-sidebar="sidebar"
       >
 
-        <SidebarHeader className={`p-4 space-y-3 ${hideDividers ? '' : 'border-b border-sidebar-border'}`}>
+        <SidebarHeader className={`${hideDividers ? '' : 'border-b border-sidebar-border'} p-4 space-y-3`}>
           <DashboardTitle editMode={editMode} />
           {!isCollapsed && <WorkspaceSwitcher />}
         </SidebarHeader>
