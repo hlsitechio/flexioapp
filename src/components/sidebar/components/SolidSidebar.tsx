@@ -23,11 +23,11 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
   useSidebar,
   SidebarHeader,
   SidebarFooter,
 } from "@/components/ui/sidebar";
+import { useWorkspaceUrl } from "@/hooks/useWorkspaceUrl";
 
 const mainItems = [
   { title: "Dashboard", url: "/", icon: Home },
@@ -48,6 +48,7 @@ export function SolidSidebar() {
   const location = useLocation();
   const currentPath = location.pathname;
   const collapsed = state === "collapsed";
+  const { buildWorkspaceUrl } = useWorkspaceUrl();
 
   const isActive = (path: string) => {
     if (path === "/") {
@@ -101,7 +102,7 @@ export function SolidSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
-                      to={item.url} 
+                      to={buildWorkspaceUrl(item.url === "/" ? "" : item.url)} 
                       end={item.url === "/"}
                       className={getNavCls}
                     >
@@ -125,7 +126,7 @@ export function SolidSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
-                      to={item.url} 
+                      to={buildWorkspaceUrl(item.url)} 
                       className={getNavCls}
                     >
                       <item.icon className="h-4 w-4" />
