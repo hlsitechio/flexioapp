@@ -12,8 +12,8 @@ export function FeaturesPage() {
       />
 
       {/* Hero Section */}
-      <section className="py-16 sm:py-20 lg:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-10">
+      <section className="py-16 sm:py-20 lg:py-24 px-8 sm:px-12 lg:px-16">
+        <div className="max-w-[1800px] mx-auto text-center space-y-10">
           <div className="space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
               Powerful Features
@@ -24,7 +24,7 @@ export function FeaturesPage() {
           </div>
 
           {/* Coming Soon Card */}
-          <Card className="max-w-2xl mx-auto border border-border/50 shadow-xl">
+          <Card className="max-w-2xl mx-auto shadow-xl">
             <CardContent className="p-8 sm:p-10 text-center space-y-6">
               <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
                 <Zap className="h-10 w-10 text-primary" />
