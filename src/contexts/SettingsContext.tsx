@@ -267,6 +267,8 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     if (data.sidebar_title !== undefined) {
       setCustomSidebarTitle(data.sidebar_title);
     }
+    // Ensure dashboards never auto-start in edit mode on load
+    setEditMode(false);
   };
 
   // Initialize settings based on authentication state
@@ -293,6 +295,13 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       resetToDefaultSettings();
     }
   }, [user?.id]);
+
+  // Ensure profile loads never force edit mode on
+  useEffect(() => {
+    const handler = () => setEditMode(false);
+    window.addEventListener('profileConfigurationChanged', handler as any);
+    return () => window.removeEventListener('profileConfigurationChanged', handler as any);
+  }, []);
 
   const resetToDefaultSettings = () => {
     setClockPosition('left');
