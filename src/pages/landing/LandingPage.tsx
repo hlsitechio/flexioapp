@@ -7,7 +7,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { LazyImage } from '@/components/ui/lazy-image';
 import { LoadingSkeleton } from '@/components/ui/loading-skeleton';
 import { LeadCaptureForm } from '@/components/forms';
-import { CheckCircle, ArrowRight, Star, Users, Shield, Zap, Image, Play, Clock, UserCheck } from 'lucide-react';
+import { CheckCircle, ArrowRight, Star, Users, Shield, Zap, Image, Play, Clock, UserCheck, Crown, DollarSign } from 'lucide-react';
 import { SEOHead, StructuredData, AIFeatureSection, AIBenefitsSection } from '@/components/seo';
 import { AISearchOptimization } from '@/components/seo/AISearchOptimization';
 import { CriticalCSS } from '@/components/performance/CriticalCSS';
@@ -813,6 +813,49 @@ export function LandingPage() {
           </div>
         </motion.section>}
 
+      <section className="py-20 lg:py-28 border-t border-border/50">
+        <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16">
+          <div className="text-center mb-10 space-y-3">
+            <h2 className="text-3xl lg:text-4xl font-bold tracking-tight">Simple, transparent pricing</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">Free to start. Upgrade to Pro when you need more. Premium for organizations.</p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            <Card className="border border-border/50 shadow-xl">
+              <CardContent className="p-6 space-y-3">
+                <div className="flex items-center gap-2 font-semibold"><Star className="h-5 w-5 text-primary" /> Free</div>
+                <div className="text-3xl font-bold">$0</div>
+                <ul className="text-sm text-muted-foreground space-y-2">
+                  <li>Core widgets and dashboards</li>
+                  <li>Up to 2 workspaces</li>
+                </ul>
+                <Button asChild size="sm" className="mt-2"><Link to="/workspace-selection">Get started</Link></Button>
+              </CardContent>
+            </Card>
+            <Card className="border border-border/50 shadow-2xl ring-1 ring-primary/20">
+              <CardContent className="p-6 space-y-3">
+                <div className="flex items-center gap-2 font-semibold"><Crown className="h-5 w-5 text-primary" /> Pro</div>
+                <div className="text-3xl font-bold">$12<span className="text-base font-medium text-muted-foreground">/user/mo</span></div>
+                <ul className="text-sm text-muted-foreground space-y-2">
+                  <li>Unlimited workspaces</li>
+                  <li>Advanced analytics widgets</li>
+                </ul>
+                <Button asChild size="sm" className="mt-2"><Link to="/pricing">View full pricing</Link></Button>
+              </CardContent>
+            </Card>
+            <Card className="border border-border/50 shadow-xl">
+              <CardContent className="p-6 space-y-3">
+                <div className="flex items-center gap-2 font-semibold"><DollarSign className="h-5 w-5 text-primary" /> Premium</div>
+                <div className="text-3xl font-bold">Custom</div>
+                <ul className="text-sm text-muted-foreground space-y-2">
+                  <li>Enterprise security & SSO</li>
+                  <li>Custom integrations</li>
+                </ul>
+                <Button asChild size="sm" variant="outline" className="mt-2"><Link to="/contact">Contact sales</Link></Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
       {/* Footer */}
       <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16 py-16">
