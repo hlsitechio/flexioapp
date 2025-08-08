@@ -1,13 +1,10 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Zap, Settings, BarChart } from 'lucide-react';
-import { PublicPageNav } from '@/components/shared';
 import { SEOHead } from '@/components/seo/SEOHead';
 
 export function FeaturesPage() {
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
-      <PublicPageNav />
-
       <SEOHead
         title="FlexIO Features — Powerful Productivity Tools"
         description="Explore FlexIO features: core tools, customization, and analytics for modern teams."
