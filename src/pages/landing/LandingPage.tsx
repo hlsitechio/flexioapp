@@ -13,12 +13,18 @@ import { AISearchOptimization } from '@/components/seo/AISearchOptimization';
 import { CriticalCSS } from '@/components/performance/CriticalCSS';
 import { usePerformanceMonitor, markPerformance } from '@/hooks/usePerformanceMonitor';
 import { PrefetchLink } from '@/components/navigation/PrefetchLink';
+import { useScrollVisibility } from '@/hooks/useScrollVisibility';
 
 export function LandingPage() {
   console.log("🏠 LandingPage: Component rendering");
   const [showDemo, setShowDemo] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
   const { trackMetric } = usePerformanceMonitor();
+  const { atTop, scrollingDown, progress } = useScrollVisibility();
+  const intensity = atTop ? 0 : progress;
+  const blurPx = Math.round(intensity * (scrollingDown ? 20 : 10));
+  const navOpacity = Math.max(0.5, 1 - intensity * (scrollingDown ? 0.9 : 0.5));
+  const y = scrollingDown && !atTop ? -Math.round(32 * intensity) : 0;
 
   useEffect(() => {
     // Skip performance tracking on production landing page
@@ -167,7 +173,13 @@ export function LandingPage() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <nav className="bg-background/95 backdrop-blur-md border border-border/50 rounded-full px-8 py-4 shadow-xl mx-auto">
+        <motion.nav
+          className="bg-background/95 backdrop-blur-md border border-border/50 rounded-full px-8 py-4 shadow-xl mx-auto"
+          initial={false}
+          animate={{ filter: `blur(${blurPx}px)`, opacity: navOpacity, y }}
+          transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+          style={{ willChange: 'filter, opacity, transform' }}
+        >
           <div className="flex items-center justify-center space-x-6 max-w-fit">
             {/* Logo */}
             <Link to="/landing" className="flex items-center hover:opacity-80 transition-opacity">
@@ -222,7 +234,7 @@ export function LandingPage() {
               </Button>
             </div>
           </div>
-        </nav>
+        </motion.nav>
       </motion.div>
 
       {/* Hero Section */}
