@@ -4,7 +4,7 @@ import { SEOHead } from '@/components/seo/SEOHead';
 
 export function FeaturesPage() {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20">
       <SEOHead
         title="FlexIO Features — Powerful Productivity Tools"
         description="Explore FlexIO features: core tools, customization, and analytics for modern teams."
@@ -12,8 +12,8 @@ export function FeaturesPage() {
       />
 
       {/* Hero Section */}
-      <section className="py-16 sm:py-20 lg:py-24 px-8 sm:px-12 lg:px-16">
-        <div className="max-w-[1800px] mx-auto text-center space-y-10">
+      <section className="py-20 lg:py-32">
+        <div className="container mx-auto px-6 lg:px-8 max-w-6xl text-center space-y-12">
           <div className="space-y-6">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
               Powerful Features
