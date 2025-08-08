@@ -4,7 +4,7 @@ import { PublicPageNav } from '@/components/shared';
 
 export function DocumentationPage() {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
+    <div className="min-h-screen w-screen bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       <PublicPageNav showLogo={false} />
 
       {/* Hero Section */}

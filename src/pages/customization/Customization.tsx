@@ -12,7 +12,7 @@ export function Customization() {
   const { editMode } = useSettings();
   
   return (
-    <div className="min-h-screen flex w-full bg-gradient-to-br from-background to-muted/20">
+    <div className="min-h-screen flex w-screen bg-gradient-to-br from-background to-muted/20">
       <DashboardSidebar />
       
       <div className="flex-1 flex flex-col">

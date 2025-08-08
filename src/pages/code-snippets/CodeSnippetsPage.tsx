@@ -9,7 +9,7 @@ export function CodeSnippetsPage() {
   const { editMode } = useSettings();
 
   return (
-    <div className="min-h-screen flex w-full bg-background">
+    <div className="min-h-screen flex w-screen bg-background overflow-x-hidden">
       <DashboardSidebar />
       
       <div className="flex-1 flex flex-col">
