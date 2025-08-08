@@ -24,7 +24,7 @@ import { WorkspaceUrlManager } from "./components/workspace/WorkspaceUrlManager"
 import { LandingPage, ContactPage, DemoPage } from "./pages/landing";
 import { AboutPage, CareersPage, BlogPage } from "./pages/company";
 import { FeaturesPage, PricingPage, IntegrationsPage } from "./pages/product";
-import { DocumentationPage, HelpCenterPage } from "./pages/resources";
+import { DocumentationPage, HelpCenterPage, EmailDeliverabilityGuide } from "./pages/resources";
 import { PrivacyPolicyPage, TermsOfServicePage } from "./pages/legal";
 import NotFound from "./pages/NotFound";
 import WebsiteLayout from "@/layouts/WebsiteLayout";
@@ -134,6 +134,7 @@ const App = () => {
             <Route path="/integrations" element={<IntegrationsPage />} />
             <Route path="/documentation" element={<DocumentationPage />} />
             <Route path="/help-center" element={<HelpCenterPage />} />
+            <Route path="/email-deliverability" element={<EmailDeliverabilityGuide />} />
             <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
             <Route path="/terms-of-service" element={<TermsOfServicePage />} />
             <Route path="/auth" element={user ? <Navigate to="/workspace-selection" replace /> : <LazyAuthPage />} />
