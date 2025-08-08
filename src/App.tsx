@@ -30,14 +30,16 @@ import NotFound from "./pages/NotFound";
 import WebsiteLayout from "@/layouts/WebsiteLayout";
 import AppLayout from "@/layouts/AppLayout";
 import AdminLayout from "@/layouts/AdminLayout";
+import { createLogger } from '@/lib/logger';
 
 
 const App = () => {
+  const log = createLogger('app');
   const { user, loading } = useSafeAuth();
   
-  console.log("App.tsx - Current path:", window.location.pathname);
-  console.log("App.tsx - User:", user?.email || 'No user');
-  console.log("App.tsx - Loading:", loading);
+  log.debug('Current path:', window.location.pathname);
+  log.debug('User:', user?.email || 'No user');
+  log.debug('Loading:', loading);
   
   // Check if we're on a public page that doesn't need workspace context
   const isPublicPage = typeof window !== 'undefined' && isPublicPath(window.location.pathname);
@@ -46,9 +48,9 @@ const App = () => {
   // Use safe workspace hook that handles provider absence gracefully
   const { workspace, loading: workspaceLoading } = useSafeWorkspace();
   
-  console.log("App.tsx - Workspace:", workspace?.name || 'No workspace');
-  console.log("App.tsx - Workspace loading:", workspaceLoading);
-  console.log("App.tsx - Should render workspace content:", !isPublicPage && user && !loading);
+  log.debug('Workspace:', workspace?.name || 'No workspace');
+  log.debug('Workspace loading:', workspaceLoading);
+  log.debug('Should render workspace content:', !isPublicPage && user && !loading);
   
   // Only track sessions for authenticated users on protected routes
   const isProtectedRoute = window.location.pathname.startsWith('/workspace') || 
@@ -71,7 +73,7 @@ const App = () => {
     } catch (error) {
       // Only log errors in development or debug mode
       if (import.meta.env.DEV || import.meta.env.VITE_DEBUG === 'true') {
-        console.error("❌ App initialization failed:", error);
+        log.error('App initialization failed:', error);
       }
     }
   }, [isPublicPage]);
@@ -97,12 +99,12 @@ const App = () => {
   // Only log final authenticated state once
   useEffect(() => {
     if (!loading && !workspaceLoading && user && workspace) {
-      console.log("✅ App ready - User authenticated & workspace loaded");
+      log.info('App ready - User authenticated & workspace loaded');
     }
   }, [user, workspace, loading, workspaceLoading]);
 
   if (loading || (user && workspaceLoading)) {
-    console.log("App loading state:", { loading, user: !!user, workspaceLoading });
+    log.debug('App loading state:', { loading, user: !!user, workspaceLoading });
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-background z-50">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
@@ -111,7 +113,7 @@ const App = () => {
     );
   }
 
-  console.log("App rendering routes - current path:", window.location.pathname);
+  log.debug('Rendering routes - current path:', window.location.pathname);
   
   return (
     <ProductionErrorBoundary>

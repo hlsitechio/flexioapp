@@ -1,4 +1,6 @@
 import { sanitizeHtml, sanitizeText } from '../security';
+import { createLogger } from '@/lib/logger';
+const slog = createLogger('security:gdpr');
 
 export interface GDPRConsent {
   analytics: boolean;
@@ -67,7 +69,7 @@ class GDPRCompliance {
         }
       }
     } catch (error) {
-      console.error('Error loading GDPR consent:', error);
+      slog.error('Error loading GDPR consent:', error);
     }
   }
 
@@ -257,7 +259,7 @@ class GDPRCompliance {
     this.processingRecords.push(processingRecord);
 
     // In a real app, this would be sent to a secure backend
-    console.log('Data processing recorded:', processingRecord);
+    slog.info('Data processing recorded:', processingRecord);
   }
 
   private getCurrentUserId(): string | undefined {
@@ -325,7 +327,7 @@ class GDPRCompliance {
     this.clearUserData();
     
     // In a real app, this would also send a deletion request to the backend
-    console.log('User data deletion requested');
+    slog.info('User data deletion requested');
     
     // Record the deletion request
     this.recordProcessing({

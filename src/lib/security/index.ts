@@ -1,10 +1,11 @@
+import { createLogger } from '@/lib/logger';
+const slog = createLogger('security:index');
 // Enhanced Security Suite - 2025 Edition
-console.log('🔍 Loading security index.ts...');
-
+slog.info('🔍 Loading security index.ts...');
 // Re-export original security utilities first
 export * from '../security';
 
-console.log('✅ Original security utilities exported');
+slog.info('✅ Original security utilities exported');
 
 // Export enhanced modules
 export * from './csp-monitor';
@@ -13,8 +14,9 @@ export * from './devtools-integration';
 export * from './enhanced-monitoring';
 export * from './unified-logger';
 
-console.log('✅ Enhanced security modules exported');
+slog.info('✅ Enhanced security modules exported');
 
+import { createLogger } from '@/lib/logger';
 import { cspMonitor } from './csp-monitor';
 import { gdprCompliance } from './gdpr-compliance';
 import { devToolsIntegration } from './devtools-integration';
@@ -23,8 +25,9 @@ import { securityLogger, securityLog } from './unified-logger';
 import { isPublicPath } from '@/lib/routes/publicPaths';
 
 const isDevelopment = import.meta.env.DEV;
+const slog = createLogger('security:index');
 
-console.log('📦 Security instances imported:', { cspMonitor, gdprCompliance, devToolsIntegration, securityMonitoring });
+slog.info('📦 Security instances imported:', { cspMonitor, gdprCompliance, devToolsIntegration, securityMonitoring });
 
 /**
  * Initialize the complete security suite with Chrome DevTools integration
@@ -38,14 +41,14 @@ export function initializeSecuritySuite() {
     
     // Skip heavy security monitoring on public pages in production
     if (isPublicPage && isProduction) {
-      console.log('%c🔒 Minimal Security (Public Page)', 'color: #10b981; font-weight: bold;');
+      slog.info('🔒 Minimal Security (Public Page)');
       return; // Exit early - no security monitoring needed
     }
     
     if (isProduction) {
-      console.log('%c🔒 Production Security Suite Active', 'color: #10b981; font-weight: bold;');
+      slog.info('🔒 Production Security Suite Active');
     } else {
-      console.log('%c🔒 Development Security Suite Active', 'color: #f59e0b; font-weight: bold;');
+      slog.info('🔒 Development Security Suite Active');
     }
     
     // Skip the rest of initialization for public pages
@@ -54,7 +57,7 @@ export function initializeSecuritySuite() {
     
     // Initialize DevTools integration only in development
     if (!isProduction) {
-      console.log('%c🛠️ DevTools Security Integration Active', 'color: #3b82f6; font-weight: bold;');
+      slog.info('🛠️ DevTools Security Integration Active');
     }
     
     // Set up global error handling for security events
@@ -95,36 +98,17 @@ export function initializeSecuritySuite() {
       }, 5 * 60 * 1000); // Every 5 minutes
     }
     
-    console.log('%c✅ Security Suite Initialized Successfully', 'color: #10b981; font-weight: bold;');
+    slog.info('✅ Security Suite Initialized Successfully');
     
     // Log available tools for developers
     if (isDevelopment) {
       setTimeout(() => {
-        console.log(`
-%c🔒 Security DevTools Available:
-%c• security.audit()%c - Run security audit
-%c• security.violations()%c - Show CSP violations  
-%c• security.gdpr()%c - GDPR compliance report
-%c• __SECURITY_DEVTOOLS__%c - Full API access
-%c• __SECURITY_MONITORING__%c - Real-time monitoring
-%c• __GDPR_CONTROLS__%c - Privacy management
-
-%cType security.help() for more commands
-`, 
-          'color: #10b981; font-weight: bold; font-size: 12px;',
-          'color: #3b82f6; font-family: monospace;', 'color: #6b7280;',
-          'color: #3b82f6; font-family: monospace;', 'color: #6b7280;',
-          'color: #3b82f6; font-family: monospace;', 'color: #6b7280;',
-          'color: #8b5cf6; font-family: monospace;', 'color: #6b7280;',
-          'color: #8b5cf6; font-family: monospace;', 'color: #6b7280;',
-          'color: #8b5cf6; font-family: monospace;', 'color: #6b7280;',
-          'color: #f59e0b; font-weight: bold;'
-        );
+        slog.info('Security DevTools Available: type security.help() for more commands');
       }, 2000);
     }
     
   } catch (error) {
-    console.error('Failed to initialize security suite:', error);
+    slog.error('Failed to initialize security suite:', error);
     
     // Record the initialization failure
     securityMonitoring.recordEvent({
@@ -148,7 +132,7 @@ function validateSecurityHeaders() {
   
   if (isProduction) {
     // In production, assume headers are properly configured via server
-    console.log('✅ Security headers configured via server (production)');
+    slog.debug('Security headers configured via server (production)');
     return;
   }
   

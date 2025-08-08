@@ -1,6 +1,8 @@
 import { cspMonitor } from './csp-monitor';
 import { gdprCompliance } from './gdpr-compliance';
 const isDevelopment = import.meta.env.DEV;
+import { createLogger } from '@/lib/logger';
+const slog = createLogger('security:monitoring');
 
 export interface SecurityEvent {
   id: string;
@@ -58,7 +60,7 @@ class EnhancedSecurityMonitoring {
     
     // Only log in development mode to reduce console noise
     if (import.meta.env.DEV) {
-      console.log('%c🔍 Enhanced Security Monitoring Active', 'color: #dc2626; font-weight: bold;');
+      slog.info('🔍 Enhanced Security Monitoring Active');
     }
   }
 
@@ -372,7 +374,7 @@ class EnhancedSecurityMonitoring {
 
     // Log to console in development
     if (isDevelopment) {
-      console.warn(`🚨 Security Event [${event.severity.toUpperCase()}]:`, event);
+      slog.warn(`🚨 Security Event [${event.severity.toUpperCase()}]:`, event);
     }
 
     // Report to monitoring service
@@ -532,12 +534,12 @@ class EnhancedSecurityMonitoring {
   public startMonitoring() {
     this.monitoring = true;
     this.monitorSecurityFeeds();
-    console.log('Security monitoring started');
+    slog.info('Security monitoring started');
   }
 
   public stopMonitoring() {
     this.monitoring = false;
-    console.log('Security monitoring stopped');
+    slog.info('Security monitoring stopped');
   }
 
   public setReportingEndpoint(endpoint: string) {

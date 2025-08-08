@@ -1,6 +1,8 @@
 import { cspMonitor, type SecurityReport, type SecurityAuditResult } from './csp-monitor';
 import { gdprCompliance, type PrivacyReport } from './gdpr-compliance';
 const isDevelopment = import.meta.env.DEV;
+import { createLogger } from '@/lib/logger';
+const slog = createLogger('security:devtools');
 
 export interface DevToolsSecurityPanel {
   name: string;
@@ -55,7 +57,7 @@ class DevToolsIntegration {
     this.initializeExtensionBridge();
     
     this.isInitialized = true;
-    console.log('%c🛠️ DevTools Security Integration Ready', 'color: #3b82f6; font-weight: bold;');
+    slog.info('🛠️ DevTools Security Integration Ready');
   }
 
   private setupDevToolsAPI() {
@@ -175,7 +177,7 @@ class DevToolsIntegration {
 
     // Show initial help
     setTimeout(() => {
-      console.log('%cType security.help() for available commands', 'color: #10b981;');
+      slog.info('Type security.help() for available commands');
     }, 1000);
   }
 
@@ -186,7 +188,7 @@ class DevToolsIntegration {
         const entries = list.getEntries();
         entries.forEach((entry) => {
           if (entry.name.includes('security') || entry.name.includes('csp')) {
-            console.log(`Security Performance: ${entry.name} took ${entry.duration}ms`);
+            slog.debug(`Security Performance: ${entry.name} took ${entry.duration}ms`);
           }
         });
       });

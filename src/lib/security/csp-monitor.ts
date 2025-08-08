@@ -1,6 +1,8 @@
 const isDevelopment = import.meta.env.DEV;
 import { supabase } from '@/integrations/supabase/client';
+import { createLogger } from '@/lib/logger';
 
+const slog = createLogger('security:csp');
 export interface CSPViolation {
   documentURI: string;
   referrer: string;
@@ -75,8 +77,8 @@ class CSPMonitor {
       };
 
       // Console integration for developers
-      console.log('%c🔒 Security Monitor Initialized', 'color: #10b981; font-weight: bold;');
-      console.log('Use __SECURITY_MONITOR__ to access security tools');
+      slog.info('🔒 Security Monitor Initialized');
+      slog.info('Use __SECURITY_MONITOR__ to access security tools');
     }
   }
 
@@ -86,7 +88,7 @@ class CSPMonitor {
 
     // Log in development
     if (isDevelopment) {
-      console.warn('CSP Violation:', violation);
+      slog.warn('CSP Violation:', violation);
       this.suggestCSPFix(violation);
     }
 
@@ -107,7 +109,7 @@ class CSPMonitor {
 
     const suggestion = suggestions[violation.effectiveDirective];
     if (suggestion) {
-      console.info(`💡 CSP Fix Suggestion: ${suggestion}`);
+      slog.info(`💡 CSP Fix Suggestion: ${suggestion}`);
     }
   }
 
@@ -117,7 +119,7 @@ class CSPMonitor {
         body: violation,
       });
     } catch (error) {
-      console.error('Failed to report CSP violation:', error);
+      slog.error('Failed to report CSP violation:', error);
     }
   }
 
