@@ -15,7 +15,7 @@ import { usePerformanceMonitor, markPerformance } from '@/hooks/usePerformanceMo
 import { PrefetchLink } from '@/components/navigation/PrefetchLink';
 import { useScrollVisibility } from '@/hooks/useScrollVisibility';
 export function LandingPage() {
-  console.log("🏠 LandingPage: Component rendering");
+  
   const [showDemo, setShowDemo] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
   const {
@@ -154,7 +154,7 @@ export function LandingPage() {
       ease: "easeOut"
     }
   };
-  console.log("🏠 LandingPage: About to return JSX");
+  
   return <>
       <CriticalCSS />
       <SEOHead title="FlexIO - Advanced Business Intelligence Dashboard Platform" description="Transform your business with FlexIO's powerful analytics dashboard. Real-time data visualization, customizable widgets, and enterprise-grade business intelligence tools for data-driven decisions." keywords={['business intelligence', 'analytics dashboard', 'data visualization', 'real-time analytics', 'business metrics', 'dashboard platform', 'enterprise analytics', 'KPI dashboard', 'data insights', 'business dashboard']} canonicalUrl="/" ogType="website" />
