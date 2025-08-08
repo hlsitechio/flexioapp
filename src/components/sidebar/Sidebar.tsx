@@ -141,9 +141,9 @@ export function DashboardSidebar() {
   const { atTop, scrollingDown, progress } = useScrollVisibility();
   // Compute visual intensity based on scroll position and direction
   const intensity = atTop ? 0 : progress; // 0..1
-  const blurPx = Math.round(intensity * (scrollingDown ? 14 : 8));
-  const opacity = 1 - intensity * (scrollingDown ? 0.45 : 0.25);
-  const x = scrollingDown && !atTop ? -6 : 0;
+  const blurPx = Math.round(intensity * (scrollingDown ? 24 : 16));
+  const opacity = Math.max(0, 1 - intensity * (scrollingDown ? 1 : 0.7));
+  const x = scrollingDown && !atTop ? Math.round(-32 * intensity) : 0;
 
   return (
     <motion.div
@@ -155,7 +155,7 @@ export function DashboardSidebar() {
         x,
       }}
       transition={{
-        duration: 0.25,
+        duration: 0.35,
         ease: [0.4, 0, 0.2, 1],
       }}
       style={{ willChange: 'width, filter, opacity, transform' }}

@@ -69,15 +69,15 @@ export function SolidSidebar() {
 
   const { atTop, scrollingDown, progress } = useScrollVisibility();
   const intensity = atTop ? 0 : progress;
-  const blurPx = Math.round(intensity * (scrollingDown ? 14 : 8));
-  const opacity = 1 - intensity * (scrollingDown ? 0.45 : 0.25);
-  const x = scrollingDown && !atTop ? -6 : 0;
+  const blurPx = Math.round(intensity * (scrollingDown ? 24 : 16));
+  const opacity = Math.max(0, 1 - intensity * (scrollingDown ? 1 : 0.7));
+  const x = scrollingDown && !atTop ? Math.round(-32 * intensity) : 0;
 
   return (
     <motion.div
       initial={false}
       animate={{ filter: `blur(${blurPx}px)`, opacity, x }}
-      transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+      transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
       style={{ willChange: 'filter, opacity, transform' }}
     >
       <Sidebar
