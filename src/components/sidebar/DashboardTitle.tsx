@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useState } from 'react';
 import { useSettings } from '@/contexts/SettingsContext';
+import { useWorkspaceUrl } from '@/hooks/useWorkspaceUrl';
 
 interface DashboardTitleProps {
   editMode?: boolean;
@@ -18,6 +19,7 @@ export function DashboardTitle({ editMode = false }: DashboardTitleProps) {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
   const navigate = useNavigate();
+  const { buildWorkspaceUrl } = useWorkspaceUrl();
   const { 
     showSidebarCrown, 
     setShowSidebarCrown, 
@@ -32,7 +34,7 @@ export function DashboardTitle({ editMode = false }: DashboardTitleProps) {
         <motion.button 
           initial={{ opacity: 0, scale: 0.8 }} 
           animate={{ opacity: 1, scale: 1 }} 
-          onClick={() => navigate('/')} 
+          onClick={() => navigate(buildWorkspaceUrl())} 
           className="w-10 h-10 p-0 rounded-lg text-sidebar-foreground hover:text-sidebar-primary hover:bg-sidebar-accent transition-all cursor-pointer flex items-center justify-center"
         >
           {showSidebarCrown && <Crown className="h-4 w-4" />}
@@ -43,7 +45,7 @@ export function DashboardTitle({ editMode = false }: DashboardTitleProps) {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.2 }}
-            onClick={() => navigate('/')} 
+            onClick={() => navigate(buildWorkspaceUrl())} 
             className="text-lg font-semibold text-sidebar-foreground hover:text-sidebar-primary transition-colors cursor-pointer flex items-center space-x-2"
           >
             {showSidebarCrown && <Crown className="h-5 w-5" />}

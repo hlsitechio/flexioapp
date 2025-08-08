@@ -27,6 +27,9 @@ import { FeaturesPage, PricingPage, IntegrationsPage } from "./pages/product";
 import { DocumentationPage, HelpCenterPage } from "./pages/resources";
 import { PrivacyPolicyPage, TermsOfServicePage } from "./pages/legal";
 import NotFound from "./pages/NotFound";
+import WebsiteLayout from "@/layouts/WebsiteLayout";
+import AppLayout from "@/layouts/AppLayout";
+import AdminLayout from "@/layouts/AdminLayout";
 
 
 const App = () => {
