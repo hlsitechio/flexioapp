@@ -120,49 +120,50 @@ const App = () => {
         {!isPublicPage && <WorkspaceHashNavigator />}
         {!isPublicPage && <WorkspaceUrlManager />}
         <Routes>
-          {/* Public routes - no authentication required */}
-          <Route path="/landing" element={<LandingPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/demo" element={<DemoPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/careers" element={<CareersPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/features" element={<FeaturesPage />} />
-          <Route path="/pricing" element={<PricingPage />} />
-          <Route path="/integrations" element={<IntegrationsPage />} />
-          <Route path="/documentation" element={<DocumentationPage />} />
-          <Route path="/help-center" element={<HelpCenterPage />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-          <Route path="/terms-of-service" element={<TermsOfServicePage />} />
-          
-          {/* Protected routes - authentication required */}
-          <Route path="/auth" element={user ? <Navigate to="/workspace-selection" replace /> : <LazyAuthPage />} />
-          <Route path="/workspace-selection" element={user ? <LazyWorkspacePage /> : <Navigate to="/auth" replace />} />
-          
-          {/* Workspace-specific routes with role-based URLs */}
-          <Route path="/workspace/:workspaceDetails" element={
-            (() => {
-              console.log("Workspace route check - user:", !!user, "workspace:", !!workspace);
-              return user && workspace ? <Index /> : <Navigate to="/workspace-selection" replace />;
-            })()
-          } />
-          <Route path="/workspace/:workspaceDetails/profile" element={user ? <ProfilePage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/components" element={user ? <ComponentsPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/settings" element={user ? <LazySettingsPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/settings/email-test" element={user ? <EmailTest /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/customization" element={user ? <CustomizationPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/prompts-gallery" element={user ? <LazyPromptsGalleryPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/code-snippets" element={user ? <LazyCodeSnippetsPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/analytics" element={user ? <LazyAnalyticsPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/workspace-profiles" element={user ? <WorkspaceProfilesPage /> : <Navigate to="/auth" replace />} />
-          <Route path="/workspace/:workspaceDetails/admin" element={user ? <LazyAdminDashboard /> : <Navigate to="/auth" replace />} />
-          
-          {/* Home route */}
-          <Route path="/" element={(() => {
-            console.log("🏠 Root route: Rendering LandingPage");
-            return <LandingPage />;
-          })()} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          {/* Public routes under WebsiteLayout */}
+          <Route element={<WebsiteLayout />}>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/landing" element={<LandingPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/demo" element={<DemoPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/careers" element={<CareersPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/features" element={<FeaturesPage />} />
+            <Route path="/pricing" element={<PricingPage />} />
+            <Route path="/integrations" element={<IntegrationsPage />} />
+            <Route path="/documentation" element={<DocumentationPage />} />
+            <Route path="/help-center" element={<HelpCenterPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+            <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+            <Route path="/auth" element={user ? <Navigate to="/workspace-selection" replace /> : <LazyAuthPage />} />
+          </Route>
+
+          {/* App routes under AppLayout */}
+          <Route element={<AppLayout />}>
+            <Route path="/workspace-selection" element={user ? <LazyWorkspacePage /> : <Navigate to="/auth" replace />} />
+
+            {/* Workspace-specific nested routes */}
+            <Route path="/workspace/:workspaceDetails">
+              <Route index element={user && workspace ? <Index /> : <Navigate to="/workspace-selection" replace />} />
+              <Route path="profile" element={user ? <ProfilePage /> : <Navigate to="/auth" replace />} />
+              <Route path="components" element={user ? <ComponentsPage /> : <Navigate to="/auth" replace />} />
+              <Route path="settings" element={user ? <LazySettingsPage /> : <Navigate to="/auth" replace />} />
+              <Route path="settings/email-test" element={user ? <EmailTest /> : <Navigate to="/auth" replace />} />
+              <Route path="customization" element={user ? <CustomizationPage /> : <Navigate to="/auth" replace />} />
+              <Route path="prompts-gallery" element={user ? <LazyPromptsGalleryPage /> : <Navigate to="/auth" replace />} />
+              <Route path="code-snippets" element={user ? <LazyCodeSnippetsPage /> : <Navigate to="/auth" replace />} />
+              <Route path="analytics" element={user ? <LazyAnalyticsPage /> : <Navigate to="/auth" replace />} />
+              <Route path="workspace-profiles" element={user ? <WorkspaceProfilesPage /> : <Navigate to="/auth" replace />} />
+            </Route>
+          </Route>
+
+          {/* Admin routes under AdminLayout */}
+          <Route element={<AdminLayout />}>
+            <Route path="/workspace/:workspaceDetails/admin" element={user ? <LazyAdminDashboard /> : <Navigate to="/auth" replace />} />
+          </Route>
+
+          {/* Catch-all route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </ProductionErrorBoundary>

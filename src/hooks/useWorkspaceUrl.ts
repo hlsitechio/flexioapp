@@ -1,14 +1,18 @@
 
-import { useWorkspace } from '@/contexts/WorkspaceContext';
+import { useSafeWorkspace } from '@/hooks/useSafeWorkspace';
 import { useWorkspaceProfile } from '@/contexts/WorkspaceProfileContext';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
 
 export function useWorkspaceUrl() {
-  const { workspace, getWorkspaceNumber, userRole } = useWorkspace();
-  const { currentProfile, profiles } = useWorkspaceProfile();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { workspace, getWorkspaceNumber, userRole } = useSafeWorkspace();
+  
+  // Safely access workspace profile context if available
+  let currentProfile: any = null;
+  try {
+    const profileCtx = useWorkspaceProfile();
+    currentProfile = profileCtx.currentProfile;
+  } catch {
+    currentProfile = null;
+  }
 
   const getWorkspaceInfo = () => {
     if (!workspace || !currentProfile) return null;
@@ -29,11 +33,10 @@ export function useWorkspaceUrl() {
 
   const buildWorkspaceUrl = (path: string = '') => {
     const workspaceInfo = getWorkspaceInfo();
-    if (!workspaceInfo) return path;
-    
-    return `/workspace/${workspaceInfo.urlSegment}${path}`;
+    if (!workspaceInfo) return path || '/';
+    const safePath = path ? (path.startsWith('/') ? path : `/${path}`) : '';
+    return `/workspace/${workspaceInfo.urlSegment}${safePath}`;
   };
-
 
   return {
     getWorkspaceInfo,
