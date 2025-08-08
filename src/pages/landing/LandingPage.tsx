@@ -852,7 +852,7 @@ export function LandingPage() {
             </div>
           </div>
           <div className="border-t mt-12 pt-12 text-center text-muted-foreground">
-            <p>© 20245 FlexIO. All rights reserved.</p>
+            <p>© 2025 FlexIO. All rights reserved.</p>
           </div>
         </div>
       </footer>
