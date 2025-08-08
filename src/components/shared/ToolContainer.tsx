@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LucideIcon } from 'lucide-react';
 import { useSidebar } from '@/components/ui/sidebar';
+import { useMountAnimation } from '@/hooks/useMountAnimation';
 
 interface ToolContainerProps {
   title: string;
@@ -21,6 +22,7 @@ export function ToolContainer({
 }: ToolContainerProps) {
   const { state } = useSidebar();
   const isCollapsed = state === 'collapsed';
+  const mounted = useMountAnimation();
 
   if (isCollapsed && collapsedContent) {
     return (
@@ -59,7 +61,7 @@ export function ToolContainer({
         exit={{ opacity: 0, y: 10 }}
         transition={{ duration: 0.2 }}
       >
-        <Card className={`animate-fade-in ${className}`}>
+        <Card className={`${mounted ? 'animate-fade-in' : ''} ${className}`}>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-lg">
               <Icon className="h-5 w-5 text-primary" />

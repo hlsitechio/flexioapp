@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ReactNode } from 'react';
+import { useMountAnimation } from '@/hooks/useMountAnimation';
 
 export type WidgetStatus = 'default' | 'loading' | 'empty' | 'error';
 export type WidgetVariant = 'default' | 'subtle' | 'primary' | 'accent' | 'glass';
@@ -76,8 +77,10 @@ export function WidgetShell({
 }: WidgetShellProps) {
   const s = sizeCls[size];
 
+  const mounted = useMountAnimation();
+
   return (
-    <Card className={cn('h-full card-premium animate-fade-in', variantCls[variant], className)}>
+    <Card className={cn('h-full card-premium', mounted && 'animate-fade-in', variantCls[variant], className)}>
       <CardHeader className={cn('pb-3 flex flex-row items-start gap-3', s.header)}>
         {icon && <div className="mt-0.5" aria-hidden>{icon}</div>}
         <div className="flex-1 min-w-0">

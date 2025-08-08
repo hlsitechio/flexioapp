@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useSettings } from '@/contexts/SettingsContext';
 import { useSidebarState } from '@/hooks/useSidebarState';
+import { useMountAnimation } from '@/hooks/useMountAnimation';
 
 interface TopNavigationProps {
   editMode?: boolean;
@@ -31,9 +32,10 @@ export function TopNavigation({ editMode = false }: TopNavigationProps) {
   } = useSettings();
   const { toggleSidebarTransparency } = useSidebarState();
   const [isCustomizing, setIsCustomizing] = useState(false);
+  const mounted = useMountAnimation();
 
   return (
-    <header className={`${minimalNavigationMode ? 'h-14 bg-black text-white' : 'h-16 bg-background'} backdrop-blur-xl ${hideDividers ? '' : 'border-b border-border/50'} flex items-center justify-between px-6 animate-fade-in relative`}>
+    <header className={`${minimalNavigationMode ? 'h-14 bg-black text-white' : 'h-16 bg-background'} backdrop-blur-xl ${hideDividers ? '' : 'border-b border-border/50'} flex items-center justify-between px-6 ${mounted ? 'animate-fade-in' : ''} relative`}>
       <div className="flex items-center space-x-4">
         <SidebarTrigger />
         {showHeaderTitle && <DashboardTitle customTitle={customHeaderTitle} />}
