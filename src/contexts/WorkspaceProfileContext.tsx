@@ -478,7 +478,39 @@ export function WorkspaceProfileProvider({ children }: { children: React.ReactNo
       });
     }
   };
+  
+  // Polling-based sync for profile changes (no WebSockets)
+  useEffect(() => {
+    if (!user || !workspace || !currentProfile) return;
 
+    const interval = setInterval(async () => {
+      try {
+        const { data, error } = await supabase
+          .from('workspace_profiles')
+          .select('updated_at')
+          .eq('id', currentProfile.id)
+          .single();
+
+        if (!error && data && data.updated_at !== currentProfile.updated_at) {
+          const { data: full, error: err } = await supabase
+            .from('workspace_profiles')
+            .select('*')
+            .eq('id', currentProfile.id)
+            .single();
+          if (!err && full) {
+            setProfiles(prev => prev.map(p => p.id === full.id ? (full as WorkspaceProfile) : p));
+            setCurrentProfile(full as WorkspaceProfile);
+            loadProfileConfiguration(full as WorkspaceProfile);
+          }
+        }
+      } catch (e) {
+        console.warn('Workspace profile polling failed', e);
+      }
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [user, workspace, currentProfile]);
+  
   const getDefaultConfiguration = () => {
     return {
       // Dashboard Layout Settings

@@ -17,8 +17,9 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { BarChart3, Activity, Globe, TrendingUp, Users, Settings, Plus } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { GridSize } from '@/components/grid-layouts';
+import { useWorkspaceProfile } from '@/contexts/WorkspaceProfileContext';
 
 interface AnalyticsWidget {
   id: string;
@@ -30,6 +31,39 @@ interface AnalyticsWidget {
 
 export function AnalyticsPage() {
   const { editMode } = useSettings();
+  const { currentProfile, updateProfile } = useWorkspaceProfile();
+  const initializedRef = useRef(false);
+
+  // Helper mapping for widget hydration/serialization
+  const COMPONENT_MAP: Record<string, React.ComponentType<any>> = {
+    'analytics-overview': AnalyticsOverview,
+    'user-growth-chart': AnalyticsChart,
+    'pageviews-chart': AnalyticsChart,
+    'revenue-chart': AnalyticsChart,
+    'realtime-metrics': RealtimeMetrics,
+    'traffic-sources': TrafficSources,
+    'geographic-insights': GeographicInsights,
+  };
+
+  type StoredWidget = { id: string; typeId: string; title: string; props?: any; size: 'small'|'medium'|'large'|'full' };
+
+  const serializeWidgets = (widgets: AnalyticsWidget[]): StoredWidget[] =>
+    widgets.map(w => ({
+      id: w.id,
+      typeId: w.id.split('-').slice(0, -1).join('-') || w.id,
+      title: w.title,
+      props: w.props,
+      size: w.size,
+    }));
+
+  const hydrateWidgets = (stored: StoredWidget[]): AnalyticsWidget[] =>
+    stored.map(w => ({
+      id: w.id,
+      title: w.title,
+      component: COMPONENT_MAP[w.typeId] || AnalyticsOverview,
+      props: w.props,
+      size: w.size,
+    }));
   
   // Grid size state for each tab
   const [overviewGridSize, setOverviewGridSize] = useState<GridSize>('3x3');
