@@ -1,11 +1,11 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { FileText, Scale, CheckCircle } from 'lucide-react';
-import { PublicPageNav } from '@/components/shared';
+
 
 export function TermsOfServicePage() {
   return (
     <div className="min-h-screen w-screen bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
-      <PublicPageNav showLogo={false} />
+      
 
       {/* Hero Section */}
       <section className="py-24 px-8 sm:px-12 lg:px-16">

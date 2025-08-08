@@ -3,37 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Play, Users, Clock, Star } from 'lucide-react';
-import { Link } from 'react-router-dom';
+
 
 export function DemoPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
-      {/* Navigation */}
-      <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" asChild>
-                <Link to="/landing">← Back to Home</Link>
-              </Button>
-              <Link to="/landing" className="flex items-center hover:opacity-80 transition-opacity">
-                <img 
-                  src="/lovable-uploads/801f0a89-558e-4fd0-8e4e-102d5c5d2d3e.png" 
-                  alt="FlexIO Logo" 
-                  className="h-12 w-auto"
-                />
-              </Link>
-            </div>
-            <div className="hidden md:flex items-center space-x-8">
-              <Link to="/landing" className="text-foreground/60 hover:text-foreground transition-colors">Home</Link>
-              <Link to="/contact" className="text-foreground/60 hover:text-foreground transition-colors">Contact</Link>
-              <Button variant="outline" asChild>
-                <Link to="/contact">Contact Us</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </nav>
 
       {/* Header */}
       <section className="py-16 lg:py-24 px-8 sm:px-12 lg:px-16">
