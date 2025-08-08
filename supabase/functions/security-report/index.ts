@@ -6,6 +6,11 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// Simple in-memory rate limiter per IP
+const RATE_LIMIT_WINDOW_MS = 60_000
+const RATE_LIMIT_MAX = 60
+const rateMap = new Map<string, { count: number; windowStart: number }>()
+
 interface SecurityEvent {
   id: string;
   type: string;
@@ -25,30 +30,47 @@ serve(async (req) => {
   }
 
   try {
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      {
-        global: {
-          headers: { Authorization: req.headers.get('Authorization')! },
-        },
+    // Two clients: anon for auth, service for DB writes
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
+    const anonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+
+    const anonClient = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: req.headers.get('Authorization')! } } })
+    const serviceClient = createClient(supabaseUrl, serviceKey)
+
+
+  // Basic rate limiting per IP
+  const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown'
+  const now = Date.now()
+  const rec = rateMap.get(ip) || { count: 0, windowStart: now }
+  if (now - rec.windowStart > RATE_LIMIT_WINDOW_MS) {
+    rec.windowStart = now
+    rec.count = 0
+  }
+  rec.count++
+  rateMap.set(ip, rec)
+  if (rec.count > RATE_LIMIT_MAX) {
+    return new Response(JSON.stringify({ error: 'Too many requests' }), {
+      status: 429,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
+  }
+
+  // Get the current user
+  const {
+    data: { user },
+  } = await anonClient.auth.getUser()
+
+  if (!user) {
+    return new Response(
+      JSON.stringify({ error: 'Unauthorized' }),
+      { 
+        status: 401, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
       }
     )
+  }
 
-    // Get the current user
-    const {
-      data: { user },
-    } = await supabaseClient.auth.getUser()
-
-    if (!user) {
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { 
-          status: 401, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      )
-    }
 
     if (req.method === 'POST') {
       // Record security event
@@ -62,8 +84,7 @@ serve(async (req) => {
         created_at: new Date().toISOString(),
       }
 
-      // Store in database
-      const { error } = await supabaseClient
+      const { error } = await serviceClient
         .from('security_events')
         .insert([enhancedEvent])
 

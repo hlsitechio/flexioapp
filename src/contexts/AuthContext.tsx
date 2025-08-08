@@ -83,24 +83,46 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!authRateLimiter(email)) {
       return { error: { message: 'Too many sign in attempts. Please try again later.' } };
     }
-    
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    
-    if (error && data?.user) {
-      // Track failed login attempt
-      await supabase.rpc('track_failed_login', {
-        _user_id: data.user.id
-      });
-    } else if (data?.user && !error) {
-      // Reset failed attempts on successful login
-      await supabase.rpc('reset_failed_login_attempts', {
-        _user_id: data.user.id
-      });
+
+    // Attempt to fetch the user id by email to enforce lockout logic
+    let userId: string | null = null;
+    try {
+      const { data: fetchedId } = await (supabase as any).rpc('get_user_id_by_email', { _email: email });
+      userId = (fetchedId as unknown as string) || null;
+    } catch (e) {
+      // Ignore lookup errors to avoid leaking user existence
+      userId = null;
     }
-    
+
+    // If we have a user id, check lockout before attempting sign in
+    if (userId) {
+      try {
+        const { data: isLocked } = await supabase.rpc('is_account_locked', { _user_id: userId });
+        if (isLocked) {
+          return { error: { message: 'Your account is temporarily locked due to multiple failed attempts. Please try again later.' } };
+        }
+      } catch {}
+    }
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      // Track failed login attempt if we have a user id
+      if (userId) {
+        try {
+          const { data: nowLocked } = await supabase.rpc('track_failed_login', { _user_id: userId, _ip_address: null });
+          if (nowLocked) {
+            return { error: { message: 'Your account has been locked due to too many failed attempts. Please wait 15 minutes and try again.' } };
+          }
+        } catch {}
+      }
+    } else if (data?.user && userId) {
+      // Reset failed attempts on successful login
+      try {
+        await supabase.rpc('reset_failed_login_attempts', { _user_id: userId });
+      } catch {}
+    }
+
     return { error };
   };
 

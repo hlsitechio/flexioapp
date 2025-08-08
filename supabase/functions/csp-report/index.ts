@@ -6,6 +6,11 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// Simple in-memory rate limiter per IP
+const RATE_LIMIT_WINDOW_MS = 60_000
+const RATE_LIMIT_MAX = 120
+const rateMap = new Map<string, { count: number; windowStart: number }>()
+
 interface CSPViolation {
   documentURI: string;
   referrer: string;
@@ -26,17 +31,28 @@ serve(async (req) => {
   }
 
   try {
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      {
-        global: {
-          headers: { Authorization: req.headers.get('Authorization')! },
-        },
-      }
-    )
+    const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
+    const anonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
 
-    if (req.method === 'POST') {
+    const anonClient = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: req.headers.get('Authorization')! } } })
+    const serviceClient = createClient(supabaseUrl, serviceKey)
+
+  // Rate limit per IP
+  const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown'
+  const now = Date.now()
+  const rec = rateMap.get(ip) || { count: 0, windowStart: now }
+  if (now - rec.windowStart > RATE_LIMIT_WINDOW_MS) {
+    rec.windowStart = now
+    rec.count = 0
+  }
+  rec.count++
+  rateMap.set(ip, rec)
+  if (rec.count > RATE_LIMIT_MAX) {
+    return new Response(JSON.stringify({ error: 'Too many requests' }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } })
+  }
+
+  if (req.method === 'POST') {
       const violation: CSPViolation = await req.json()
       
       // Enhance violation with server-side data
@@ -47,10 +63,10 @@ serve(async (req) => {
         reported_at: new Date().toISOString(),
       }
 
-      // Store CSP violation
-      const { error } = await supabaseClient
-        .from('csp_violations')
-        .insert([enhancedViolation])
+    // Store CSP violation using service role (RLS-restricted)
+    const { error } = await serviceClient
+      .from('csp_violations')
+      .insert([enhancedViolation])
 
       if (error) {
         console.error('Error storing CSP violation:', error)
@@ -64,7 +80,7 @@ serve(async (req) => {
       }
 
       // Analyze violation for security implications
-      await analyzeCSPViolation(enhancedViolation, supabaseClient)
+    await analyzeCSPViolation(enhancedViolation, serviceClient)
 
       return new Response(
         JSON.stringify({ success: true }),
@@ -84,12 +100,12 @@ serve(async (req) => {
       const since = new Date()
       since.setHours(since.getHours() - hours)
 
-      const { data: violations, error } = await supabaseClient
-        .from('csp_violations')
-        .select('*')
-        .gte('created_at', since.toISOString())
-        .order('created_at', { ascending: false })
-        .limit(limit)
+    const { data: violations, error } = await anonClient
+      .from('csp_violations')
+      .select('*')
+      .gte('created_at', since.toISOString())
+      .order('created_at', { ascending: false })
+      .limit(limit)
 
       if (error) {
         console.error('Error fetching CSP violations:', error)

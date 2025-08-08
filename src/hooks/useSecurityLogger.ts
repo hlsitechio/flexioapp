@@ -26,18 +26,15 @@ export function useSecurityLogger() {
     metadata?: Record<string, any>
   ) => {
     try {
-      const { data: user } = await supabase.auth.getUser();
-      
-      await supabase
-        .from('security_events')
-        .insert({
-          event_type: eventType,
-          user_id: user.user?.id || null,
+      await supabase.functions.invoke('security-report', {
+        body: {
+          type: eventType,
           severity,
           metadata: metadata || {},
-          ip_address: null, // Will be filled by database trigger if available
-          user_agent: navigator.userAgent
-        });
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString()
+        }
+      });
     } catch (error) {
       console.error('Failed to log security event:', error);
     }

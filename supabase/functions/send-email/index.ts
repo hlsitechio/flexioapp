@@ -3,6 +3,11 @@ import { Resend } from 'npm:resend@2.0.0'
 
 const resend = new Resend(Deno.env.get('RESEND_API_KEY'))
 
+// Simple in-memory rate limiter per IP
+const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
+const RATE_LIMIT_MAX = 20; // 20 requests per minute
+const rateMap = new Map<string, { count: number; windowStart: number }>()
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -24,6 +29,23 @@ serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
+  }
+
+  // Basic rate limiting per IP
+  const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown'
+  const now = Date.now()
+  const rec = rateMap.get(ip) || { count: 0, windowStart: now }
+  if (now - rec.windowStart > RATE_LIMIT_WINDOW_MS) {
+    rec.windowStart = now
+    rec.count = 0
+  }
+  rec.count++
+  rateMap.set(ip, rec)
+  if (rec.count > RATE_LIMIT_MAX) {
+    return new Response(JSON.stringify({ error: 'Too many requests' }), {
+      status: 429,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    })
   }
 
   if (req.method !== 'POST') {

@@ -34,7 +34,21 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  try {
+  // Simple rate limiting per IP
+  const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+  const now = Date.now();
+  // deno-lint-ignore no-explicit-any
+  const globalThisAny: any = globalThis as any;
+  globalThisAny.__LEAD_RATE__ ||= new Map<string, { count: number; windowStart: number }>();
+  const store: Map<string, { count: number; windowStart: number }> = globalThisAny.__LEAD_RATE__;
+  const rec = store.get(ip) || { count: 0, windowStart: now };
+  if (now - rec.windowStart > 60_000) { rec.windowStart = now; rec.count = 0; }
+  rec.count++;
+  store.set(ip, rec);
+  if (rec.count > 60) {
+    return new Response(JSON.stringify({ error: 'Too many requests' }), { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  }
+
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get('VITE_SUPABASE_URL')!
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
