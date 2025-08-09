@@ -15,7 +15,7 @@ import { usePerformanceMonitor, markPerformance } from '@/hooks/usePerformanceMo
 import { PrefetchLink } from '@/components/navigation/PrefetchLink';
 import { useScrollVisibility } from '@/hooks/useScrollVisibility';
 import heroDashboard from '@/assets/hero-dashboard-hero.jpg';
-import { ToolsShowcase } from '@/components/showcase/ToolsShowcase';
+import quickToolsHero from '@/assets/quick-tools-hero.jpg';
 export function LandingPage() {
   const [showDemo, setShowDemo] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -292,43 +292,43 @@ export function LandingPage() {
 
 
       {/* Productivity for Everyone Section */}
-      <motion.section className="py-24 px-8 sm:px-12 lg:px-16 bg-background" initial="initial" whileInView="animate" viewport={{
-          once: true,
-          margin: "-100px"
-        }} variants={staggerContainer}>
-        <div className="max-w-[1400px] mx-auto text-center space-y-12">
-          <motion.div className="space-y-6" variants={fadeInUp}>
-            <div className="w-16 h-1 bg-primary mx-auto rounded-full"></div>
-            <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-              Productivity for the rest of us
-            </h2>
-            <p className="text-xl lg:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              FlexIO puts powerful, no-code tools in your hands. Customize layouts, switch workspace profiles, and use built-in widgets to streamline daily work—no setup or plugins required.
-            </p>
-          </motion.div>
-        </div>
-      </motion.section>
+      
 
       {/* Any Task, Any Question Section */}
-      <motion.section className="py-24 px-8 sm:px-12 lg:px-16 bg-gradient-to-br from-primary/5 via-background to-accent/5" initial="initial" whileInView="animate" viewport={{
+      <motion.section className="py-24 px-8 sm:px-12 lg:px-16 bg-muted/20" initial="initial" whileInView="animate" viewport={{
           once: true,
           margin: "-100px"
         }} variants={staggerContainer}>
         <div className="max-w-[1800px] mx-auto">
-          <motion.div className="space-y-4 mb-10 text-center" variants={fadeInUp}>
-            <div className="w-16 h-1 bg-primary rounded-full mx-auto"></div>
-            <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-              Your tools, one click away
-            </h2>
-            <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-4xl mx-auto">
-              Access Quick Note, Calculator, Task Counter, Time Tracker, Calendar, Kanban, Weather, Bookmarks—and more—from a single dashboard.
-              Everything runs in your browser—fast and reliable.
-            </p>
-          </motion.div>
-
-          <motion.div variants={slideInLeft}>
-            <ToolsShowcase className="md:-mx-4 lg:-mx-6 xl:-mx-8" />
-          </motion.div>
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+            <motion.div className="relative" variants={slideInLeft}>
+              <div className="bg-transparent rounded-none p-0 shadow-none">
+                <div className="bg-transparent p-0">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span className="ml-4 text-sm text-muted-foreground">Quick Tools Panel</span>
+                  </div>
+                  
+                  <LazyImage src={quickToolsHero} alt="Quick tools panel preview with notes, calculator, task counter, time tracker, weather, and bookmarks" className="w-full h-auto block" width={1280} height={800} />
+                </div>
+              </div>
+            </motion.div>
+            
+            <motion.div className="space-y-6" variants={slideInRight}>
+              <div className="space-y-4">
+                <div className="w-16 h-1 bg-primary rounded-full"></div>
+                <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
+                  Your tools, one click away
+                </h2>
+                <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">
+                  Access Quick Note, Calculator, Task Counter, Time Tracker, Calendar, Kanban, Weather, Bookmarks—and more—from a single dashboard.
+                  Everything runs in your browser—fast and reliable.
+                </p>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </motion.section>
 
