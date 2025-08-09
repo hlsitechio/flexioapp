@@ -105,14 +105,16 @@ export function ToolsShowcase({ className }: ToolsShowcaseProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="rounded-lg border border-primary/30 p-2 bg-gradient-to-br from-primary/5 to-accent/5">
-              <UICalendar
-                mode="single"
-                selected={today}
-                defaultMonth={today}
-                showOutsideDays
-                className="pointer-events-none"
-              />
+            <div className="flex justify-center">
+              <div className="rounded-lg border border-primary/30 bg-gradient-to-br from-primary/5 to-accent/5 max-w-md w-full p-3 md:p-4">
+                <UICalendar
+                  mode="single"
+                  selected={today}
+                  defaultMonth={today}
+                  showOutsideDays
+                  className="pointer-events-none mx-auto"
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
