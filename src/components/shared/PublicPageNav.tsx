@@ -41,6 +41,9 @@ export function PublicPageNav({
           </div>
           <div className="flex items-center space-x-4">
             <Button variant="ghost" asChild>
+              <Link to="/landing-2">Landing 2</Link>
+            </Button>
+            <Button variant="ghost" asChild>
               <Link to="/auth">Sign In</Link>
             </Button>
             <Button asChild>
