@@ -14,6 +14,7 @@ import { CriticalCSS } from '@/components/performance/CriticalCSS';
 import { usePerformanceMonitor, markPerformance } from '@/hooks/usePerformanceMonitor';
 import { PrefetchLink } from '@/components/navigation/PrefetchLink';
 import { useScrollVisibility } from '@/hooks/useScrollVisibility';
+import { AnalyticsOverview, RealtimeMetrics, TrafficSources } from '@/components/analytics';
 import heroDashboard from '@/assets/hero-dashboard-hero.jpg';
 import quickToolsHero from '@/assets/quick-tools-hero.jpg';
 export function LandingPage() {
@@ -565,28 +566,40 @@ export function LandingPage() {
             </motion.div>
 
             {/* Analytics Dashboard */}
-            <motion.div className="grid lg:grid-cols-2 gap-16 items-center" initial="initial" whileInView="animate" viewport={{
+            <motion.div className="space-y-10" initial="initial" whileInView="animate" viewport={{
                 once: true,
                 margin: "400px"
               }} variants={staggerContainer}>
-              <motion.div className="lg:order-2 space-y-6" variants={slideInRight}>
-                <div className="space-y-4">
-                  <div className="w-16 h-1 bg-green-500 rounded-full"></div>
-                  <h3 className="text-3xl lg:text-4xl font-bold">Built-in Analytics Widgets</h3>
-                  <p className="text-lg text-muted-foreground leading-relaxed">
-                    Add charts, KPIs, and real-time stats to your dashboard using ready-made widgets powered by Recharts.
-                  </p>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-sm">Performance Metrics</span>
-                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm">Time Tracking</span>
-                  <span className="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full text-sm">Reports</span>
-                </div>
+              <motion.div className="text-center space-y-4" variants={fadeInUp}>
+                <div className="w-16 h-1 bg-primary rounded-full mx-auto"></div>
+                <h3 className="text-3xl lg:text-4xl font-bold">Analytics Showcase</h3>
+                <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                  Real-time insights, traffic breakdowns, and KPI overviews — all ready to drop into your dashboard.
+                </p>
               </motion.div>
-              <motion.div className="lg:order-1 relative group hover-scale" variants={slideInLeft}>
-                <img src="/lovable-uploads/79fcf154-2cea-4690-a606-1b838ab3b07d.png" alt="Advanced Analytics" className="rounded-2xl shadow-2xl border border-border/50" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              </motion.div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <motion.div variants={scaleIn}>
+                  <Card className="border-0 shadow-xl bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 dark:from-primary/10 dark:via-accent/10 dark:to-secondary/10">
+                    <CardContent className="p-6">
+                      <AnalyticsOverview />
+                    </CardContent>
+                  </Card>
+                </motion.div>
+                <motion.div variants={scaleIn}>
+                  <Card className="border-0 shadow-xl bg-gradient-to-br from-secondary/5 via-primary/5 to-accent/5 dark:from-secondary/10 dark:via-primary/10 dark:to-accent/10">
+                    <CardContent className="p-6">
+                      <RealtimeMetrics />
+                    </CardContent>
+                  </Card>
+                </motion.div>
+                <motion.div variants={scaleIn}>
+                  <Card className="border-0 shadow-xl bg-gradient-to-br from-accent/5 via-secondary/5 to-primary/5 dark:from-accent/10 dark:via-secondary/10 dark:to-primary/10">
+                    <CardContent className="p-6">
+                      <TrafficSources />
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              </div>
             </motion.div>
 
             {/* Project Management */}
