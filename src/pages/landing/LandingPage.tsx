@@ -234,6 +234,9 @@ export function LandingPage() {
               <motion.h1 className="gradient-loop-text text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]" variants={fadeInUp}>
                 The productivity platform for everyone
               </motion.h1>
+              <motion.p className="text-sm md:text-base text-foreground/90" variants={fadeInUp}>
+                Play with our smart demo!
+              </motion.p>
             </motion.div>
 
             <motion.div className="relative" initial="initial" animate="animate" variants={slideInRight}>
