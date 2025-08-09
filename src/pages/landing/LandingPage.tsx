@@ -14,11 +14,7 @@ import { CriticalCSS } from '@/components/performance/CriticalCSS';
 import { usePerformanceMonitor, markPerformance } from '@/hooks/usePerformanceMonitor';
 import { PrefetchLink } from '@/components/navigation/PrefetchLink';
 import { useScrollVisibility } from '@/hooks/useScrollVisibility';
-import { AnalyticsOverview, RealtimeMetrics, TrafficSources } from '@/components/analytics';
-import { KanbanBoard } from '@/components/kanban';
-import { DashboardPromptsGallery } from '@/components/dashboard/DashboardPromptsGallery';
-import { DashboardFileManager } from '@/components/dashboard/DashboardFileManager';
-import { InteractiveHeroDashboard } from '@/components/showcase/InteractiveHeroDashboard';
+import heroDashboard from '@/assets/hero-dashboard-hero.jpg';
 import quickToolsHero from '@/assets/quick-tools-hero.jpg';
 export function LandingPage() {
   const [showDemo, setShowDemo] = useState(false);
@@ -229,16 +225,60 @@ export function LandingPage() {
       {/* Hero Section */}
       <section className="w-full pt-32 pb-24 lg:pb-32">
         <div className="mx-auto w-full max-w-[2560px] px-6 md:px-8">
-          <div className="space-y-10" >
-            <motion.div className="text-center space-y-6" initial="initial" animate="animate" variants={staggerContainer}>
-              <motion.h1 className="gradient-loop-text text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]" variants={fadeInUp}>
-                The productivity platform for everyone
-              </motion.h1>
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center min-h-[700px]">
+            <motion.div className="space-y-8" initial="initial" animate="animate" variants={staggerContainer}>
+              <div className="space-y-6">
+                
+                <motion.h1 className="gradient-loop-text text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]" variants={fadeInUp}>
+                  The productivity platform for everyone
+                </motion.h1>
+                <motion.p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-2xl" variants={fadeInUp}>
+                  Build your personal dashboard with ready-to-use widgets—Quick Notes, Tasks, Kanban, Calendar, Bookmarks, Timers, and Charts—no setup required.
+                </motion.p>
+              </div>
+
+              <motion.div className="flex flex-col sm:flex-row gap-4" variants={fadeInUp}>
+                <Button size="lg" className="text-lg px-8 py-4 rounded-full hover-scale" asChild>
+                  <PrefetchLink to="/workspace-selection">
+                    <span className="flex items-center">
+                      Get Started Free
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </span>
+                  </PrefetchLink>
+                </Button>
+                <Button size="lg" variant="outline" className="text-lg px-8 py-4 rounded-full hover-scale" onClick={scrollToDemo}>
+                  Try Demo
+                </Button>
+              </motion.div>
+
+              <motion.div className="flex items-center flex-wrap gap-8 text-sm text-muted-foreground" variants={fadeInUp}>
+                
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="h-4 w-4 text-emerald-500" />
+                  <span>Drag-and-drop layout</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="h-4 w-4 text-emerald-500" />
+                  <span>Light & dark themes</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="h-4 w-4 text-emerald-500" />
+                  <span>Workspace profiles</span>
+                </div>
+              </motion.div>
             </motion.div>
 
             <motion.div className="relative" initial="initial" animate="animate" variants={slideInRight}>
-              <div className="relative bg-gradient-to-br from-muted/30 to-muted/10 rounded-2xl p-4 sm:p-6 lg:p-8 border border-border/50 backdrop-blur-sm">
-                <InteractiveHeroDashboard />
+              <div className="relative bg-gradient-to-br from-muted/30 to-muted/10 rounded-2xl p-8 border border-border/50 backdrop-blur-sm">
+                <div className="bg-background rounded-xl p-6 shadow-2xl">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span className="ml-4 text-sm text-muted-foreground">FlexIO Dashboard</span>
+                  </div>
+                  <LazyImage src={heroDashboard} alt="FlexIO dashboard preview with Kanban, notes, mini calendar, bookmarks, timers, and charts" className="w-full rounded-lg shadow-lg" eager={true} width={1536} height={864} />
+                </div>
                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/20 rounded-full blur-xl"></div>
                 <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-accent/20 rounded-full blur-2xl"></div>
               </div>
@@ -522,94 +562,53 @@ export function LandingPage() {
             </motion.div>
 
             {/* Analytics Dashboard */}
-            <motion.div className="space-y-10" initial="initial" whileInView="animate" viewport={{
+            <motion.div className="grid lg:grid-cols-2 gap-16 items-center" initial="initial" whileInView="animate" viewport={{
                 once: true,
                 margin: "400px"
               }} variants={staggerContainer}>
-              <motion.div className="text-center space-y-4" variants={fadeInUp}>
-                <div className="w-16 h-1 bg-primary rounded-full mx-auto"></div>
-                <h3 className="text-3xl lg:text-4xl font-bold">Analytics Showcase</h3>
-                <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  Real-time insights, traffic breakdowns, and KPI overviews — all ready to drop into your dashboard.
-                </p>
+              <motion.div className="lg:order-2 space-y-6" variants={slideInRight}>
+                <div className="space-y-4">
+                  <div className="w-16 h-1 bg-green-500 rounded-full"></div>
+                  <h3 className="text-3xl lg:text-4xl font-bold">Built-in Analytics Widgets</h3>
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    Add charts, KPIs, and real-time stats to your dashboard using ready-made widgets powered by Recharts.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-3 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-sm">Performance Metrics</span>
+                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm">Time Tracking</span>
+                  <span className="px-3 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 rounded-full text-sm">Reports</span>
+                </div>
               </motion.div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <motion.div variants={scaleIn}>
-                  <Card className="border-0 shadow-xl bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 dark:from-primary/10 dark:via-accent/10 dark:to-secondary/10">
-                    <CardContent className="p-6">
-                      <AnalyticsOverview />
-                    </CardContent>
-                  </Card>
-                </motion.div>
-                <motion.div variants={scaleIn}>
-                  <Card className="border-0 shadow-xl bg-gradient-to-br from-secondary/5 via-primary/5 to-accent/5 dark:from-secondary/10 dark:via-primary/10 dark:to-accent/10">
-                    <CardContent className="p-6">
-                      <RealtimeMetrics />
-                    </CardContent>
-                  </Card>
-                </motion.div>
-                <motion.div variants={scaleIn}>
-                  <Card className="border-0 shadow-xl bg-gradient-to-br from-accent/5 via-secondary/5 to-primary/5 dark:from-accent/10 dark:via-secondary/10 dark:to-primary/10">
-                    <CardContent className="p-6">
-                      <TrafficSources />
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              </div>
+              <motion.div className="lg:order-1 relative group hover-scale" variants={slideInLeft}>
+                <img src="/lovable-uploads/79fcf154-2cea-4690-a606-1b838ab3b07d.png" alt="Advanced Analytics" className="rounded-2xl shadow-2xl border border-border/50" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </motion.div>
             </motion.div>
 
-            {/* Project Tools Showcase */}
-            <motion.div className="space-y-10" initial="initial" whileInView="animate" viewport={{
+            {/* Project Management */}
+            <motion.div className="grid lg:grid-cols-2 gap-16 items-center" initial="initial" whileInView="animate" viewport={{
                 once: true,
                 margin: "400px"
               }} variants={staggerContainer}>
-              <motion.div className="text-center space-y-4" variants={fadeInUp}>
-                <div className="w-16 h-1 bg-primary rounded-full mx-auto"></div>
-                <h3 className="text-3xl lg:text-4xl font-bold">Project Tools</h3>
-                <p className="text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                  Organize work with the Kanban board, task counters, quick notes, and bookmarks—simple and fast.
-                </p>
+              <motion.div className="space-y-6" variants={slideInLeft}>
+                <div className="space-y-4">
+                  <div className="w-16 h-1 bg-purple-500 rounded-full"></div>
+                  <h3 className="text-3xl lg:text-4xl font-bold">Project Tools</h3>
+                  <p className="text-lg text-muted-foreground leading-relaxed">
+                    Organize work with the Kanban board, task counters, quick notes, and bookmarks—simple and fast.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm">Kanban Boards</span>
+                  <span className="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full text-sm">Prompts Gallery</span>
+                  <span className="px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-full text-sm">File Manager</span>
+                </div>
               </motion.div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <motion.div variants={scaleIn}>
-                  <Card className="border-0 shadow-xl bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 dark:from-primary/10 dark:via-secondary/10 dark:to-accent/10">
-                    <CardContent className="p-6">
-                      <div className="h-72 overflow-hidden rounded-md border border-border/50 pointer-events-none select-none">
-                        <KanbanBoard
-                          columns={[
-                            { id: 'todo', title: 'To Do', items: [
-                              { id: 'k1', title: 'Wireframes', content: 'Create initial wireframes', type: 'tool' },
-                              { id: 'k2', title: 'API Spec', content: 'Draft endpoints', type: 'tool' }
-                            ]},
-                            { id: 'inprogress', title: 'In Progress', items: [
-                              { id: 'k3', title: 'UI Polish', content: 'Refine components', type: 'tool' }
-                            ]},
-                            { id: 'done', title: 'Done', items: [
-                              { id: 'k4', title: 'Setup', content: 'Project scaffolding', type: 'tool' }
-                            ]}
-                          ]}
-                          onColumnsChange={() => {}}
-                          className="p-2"
-                        />
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-                <motion.div variants={scaleIn}>
-                  <Card className="border-0 shadow-xl bg-gradient-to-br from-secondary/5 via-accent/5 to-primary/5 dark:from-secondary/10 dark:via-accent/10 dark:to-primary/10">
-                    <CardContent className="p-6">
-                      <DashboardPromptsGallery />
-                    </CardContent>
-                  </Card>
-                </motion.div>
-                <motion.div variants={scaleIn}>
-                  <Card className="border-0 shadow-xl bg-gradient-to-br from-accent/5 via-primary/5 to-secondary/5 dark:from-accent/10 dark:via-primary/10 dark:to-secondary/10">
-                    <CardContent className="p-6">
-                      <DashboardFileManager />
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              </div>
+              <motion.div className="relative group hover-scale" variants={slideInRight}>
+                <img src="https://images.unsplash.com/photo-1473091534298-04dcbce3278c?w=800&h=600&fit=crop&crop=center" alt="Project Management Suite Placeholder" className="rounded-2xl shadow-2xl border border-border/50" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              </motion.div>
             </motion.div>
           </div>
         </div>
