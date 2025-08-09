@@ -158,13 +158,18 @@
   /* Apply transitions to common elements that change with theme */
   html {
     @apply bg-gradient-to-br from-background to-muted/20;
-    overflow-x: clip; /* Prevent horizontal paint/overflow across the site */
+    /* Avoid root clipping to prevent 1px seams at fractional zoom */
+    overflow-x: visible;
+    background-color: hsl(var(--background)); /* solid base under gradient */
     transition: background-color var(--transition-smooth), background var(--transition-smooth);
   }
 
   body {
     @apply bg-gradient-to-br from-background to-muted/20 text-foreground font-sans antialiased;
-    overflow-x: clip;
+    /* Ensure background covers viewport on all DPIs */
+    min-height: 100svh; /* use 100vh if preferred; svh handles mobile bars */
+    overflow-x: hidden; /* safer alternative to clip */
+    background-color: hsl(var(--background)); /* base color under gradient */
     transition: 
       background var(--transition-smooth),
       color var(--transition-smooth);
@@ -290,10 +295,7 @@
   .glassmorphic-midnight::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: -1px; /* extend 1px past edges to avoid filter cut-off seams */
     backdrop-filter: blur(24px) saturate(200%);
     background: rgba(255, 255, 255, 0.15); /* Lighter overlay for better transparency */
     border: 1px solid rgba(255, 255, 255, 0.25);
