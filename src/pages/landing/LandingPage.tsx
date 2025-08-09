@@ -317,8 +317,8 @@ export function LandingPage() {
         <div className="max-w-[1800px] mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             <motion.div className="relative" variants={slideInLeft}>
-              <div className="bg-gradient-to-br from-background to-muted/30 rounded-2xl p-8 border border-border/50 shadow-2xl">
-                <div className="bg-background rounded-xl p-6">
+              <div className="bg-transparent rounded-none p-0 shadow-none">
+                <div className="bg-transparent p-0">
                   <div className="flex items-center gap-3 mb-6">
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
                     <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -326,15 +326,13 @@ export function LandingPage() {
                     <span className="ml-4 text-sm text-muted-foreground">Quick Tools Panel</span>
                   </div>
                   
-                  <div className="rounded-xl overflow-hidden border border-border/50">
-                    <LazyImage
-                      src={quickToolsHero}
-                      alt="Quick tools panel preview with notes, calculator, task counter, time tracker, weather, and bookmarks"
-                      className="w-full h-auto"
-                      width={1280}
-                      height={800}
-                    />
-                  </div>
+                  <LazyImage
+                    src={quickToolsHero}
+                    alt="Quick tools panel preview with notes, calculator, task counter, time tracker, weather, and bookmarks"
+                    className="w-full h-auto block"
+                    width={1280}
+                    height={800}
+                  />
                 </div>
               </div>
             </motion.div>
