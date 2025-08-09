@@ -21,7 +21,7 @@ export default function WebsiteLayout() {
         {isLanding ? (
           <Outlet />
         ) : (
-          <div className="mx-auto w-full max-w-screen-2xl px-6">
+          <div className="mx-auto w-full max-w-[1800px] px-6">
             <Outlet />
           </div>
         )}

@@ -4,7 +4,8 @@
 #__next {
   min-height: inherit;   /* inherits body's 100svh/100dvh */
   width: 100%;
-  margin: 0;
+  max-width: 1800px;     /* global width cap */
+  margin: 0 auto;        /* center site */
   padding: 0;
   isolation: isolate;    /* prevents child filters/shadows from bleeding to viewport */
 }
