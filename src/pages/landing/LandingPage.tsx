@@ -15,6 +15,7 @@ import { usePerformanceMonitor, markPerformance } from '@/hooks/usePerformanceMo
 import { PrefetchLink } from '@/components/navigation/PrefetchLink';
 import { useScrollVisibility } from '@/hooks/useScrollVisibility';
 import heroDashboard from '@/assets/hero-dashboard-hero.jpg';
+import quickToolsHero from '@/assets/quick-tools-hero.jpg';
 export function LandingPage() {
   const [showDemo, setShowDemo] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -325,50 +326,14 @@ export function LandingPage() {
                     <span className="ml-4 text-sm text-muted-foreground">Quick Tools Panel</span>
                   </div>
                   
-                  <div className="space-y-4 mb-6">
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm font-semibold">
-                        You
-                      </div>
-                      <div className="bg-muted/50 rounded-lg p-3 max-w-xs">
-                        <p className="text-sm">Show me productivity metrics for the last 5 months</p>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl p-4 space-y-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                          <span className="text-primary-foreground text-xs">QT</span>
-                        </div>
-                        <span className="text-sm font-medium">Productivity Analysis</span>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2">
-                        <div className="bg-background/80 rounded p-2 text-center">
-                          <div className="text-xs text-muted-foreground">Tasks</div>
-                          <div className="font-semibold">+23%</div>
-                        </div>
-                        <div className="bg-background/80 rounded p-2 text-center">
-                          <div className="text-xs text-muted-foreground">Time</div>
-                          <div className="font-semibold">-15%</div>
-                        </div>
-                        <div className="bg-background/80 rounded p-2 text-center">
-                          <div className="text-xs text-muted-foreground">Quality</div>
-                          <div className="font-semibold">+41%</div>
-                        </div>
-                      </div>
-                      <div className="h-16 bg-gradient-to-r from-blue-500/20 to-green-500/20 rounded flex items-end justify-around p-2">
-                        {[40, 65, 45, 80, 70].map((height, i) => <div key={i} className="bg-primary/60 rounded-sm w-4" style={{
-                            height: `${height}%`
-                          }}></div>)}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 p-3 bg-muted/30 rounded-lg">
-                    <input type="text" placeholder="Search widgets and commands..." className="flex-1 bg-transparent text-sm border-none outline-none placeholder:text-muted-foreground" />
-                    <Button size="sm" className="rounded-full">
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
+                  <div className="rounded-xl overflow-hidden border border-border/50">
+                    <LazyImage
+                      src={quickToolsHero}
+                      alt="Quick tools panel preview with notes, calculator, task counter, time tracker, weather, and bookmarks"
+                      className="w-full h-auto"
+                      width={1280}
+                      height={800}
+                    />
                   </div>
                 </div>
               </div>
