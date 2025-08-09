@@ -157,8 +157,7 @@
 
   /* Apply transitions to common elements that change with theme */
   html {
-    @apply bg-gradient-to-br from-background to-muted/20;
-    /* Avoid root clipping to prevent 1px seams at fractional zoom */
+    /* Solid base only; gradient is applied on body to avoid seams */
     overflow-x: visible;
     background-color: hsl(var(--background)); /* solid base under gradient */
     transition: background-color var(--transition-smooth), background var(--transition-smooth);
@@ -173,6 +172,11 @@
     transition: 
       background var(--transition-smooth),
       color var(--transition-smooth);
+  }
+
+  /* On desktop, prefer 100dvh to avoid rounding at odd zoom levels */
+  @media (hover: hover) and (pointer: fine) {
+    body { min-height: 100dvh; }
   }
 
   /* Premium scrollbars */
