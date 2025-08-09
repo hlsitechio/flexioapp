@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 export function PricingPage() {
   return (
-    <div className="min-h-screen w-screen bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
+  <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       <SEOHead
         title="FlexIO Pricing — Free, Pro, Premium"
         description="Simple pricing for every team: Free, Pro, and Premium plans. Start free and scale when you’re ready."

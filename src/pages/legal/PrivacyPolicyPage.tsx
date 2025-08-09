@@ -4,7 +4,7 @@ import { Shield, Lock, Eye } from 'lucide-react';
 
 export function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen w-screen bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       
 
       {/* Hero Section */}

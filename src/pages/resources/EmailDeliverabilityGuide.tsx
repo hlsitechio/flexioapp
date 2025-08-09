@@ -24,7 +24,7 @@ export function EmailDeliverabilityGuide() {
   };
 
   return (
-    <div className="min-h-screen w-screen bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       <SEOHead
         title="DMARC, SPF, DKIM Setup for flexioapp.com"
         description="Copy-ready DMARC for flexioapp.com with guidance for SPF/DKIM and Stripe sending domains."

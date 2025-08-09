@@ -159,7 +159,7 @@
   html {
     @apply bg-gradient-to-br from-background to-muted/20;
     overflow-x: clip; /* Prevent horizontal paint/overflow across the site */
-    scrollbar-gutter: stable both-edges; /* Avoid layout shift and visible gutters */
+    scrollbar-gutter: stable; /* Avoid layout shift without forcing extra right gutter */
     transition: background-color var(--transition-smooth), background var(--transition-smooth);
   }
 

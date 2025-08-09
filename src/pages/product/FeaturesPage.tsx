@@ -4,7 +4,7 @@ import { SEOHead } from '@/components/seo/SEOHead';
 
 export function FeaturesPage() {
   return (
-    <div className="min-h-screen w-screen bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       <SEOHead
         title="FlexIO Features — Powerful Productivity Tools"
         description="Explore FlexIO features: core tools, customization, and analytics for modern teams."
