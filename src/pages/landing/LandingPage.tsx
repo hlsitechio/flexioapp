@@ -193,16 +193,16 @@ export function LandingPage() {
             
             {/* Navigation Links */}
             <div className="hidden md:flex items-center space-x-4">
-              <Link to="/features" className="text-foreground/80 hover:text-foreground transition-colors font-medium px-4 py-2 rounded-full hover:bg-muted/40">
+              <Link to="/features" className="story-link hover-scale text-foreground/80 hover:text-foreground transition-all font-medium px-4 py-2 rounded-full hover:bg-muted/40">
                 Features
               </Link>
-              <Link to="/about" className="text-foreground/80 hover:text-foreground transition-colors font-medium px-4 py-2 rounded-full hover:bg-muted/40">
+              <Link to="/about" className="story-link hover-scale text-foreground/80 hover:text-foreground transition-all font-medium px-4 py-2 rounded-full hover:bg-muted/40">
                 About
               </Link>
-              <Link to="/contact" className="text-foreground/80 hover:text-foreground transition-colors font-medium px-4 py-2 rounded-full hover:bg-muted/40">
+              <Link to="/contact" className="story-link hover-scale text-foreground/80 hover:text-foreground transition-all font-medium px-4 py-2 rounded-full hover:bg-muted/40">
                 Contact
               </Link>
-              <Link to="/documentation" className="text-foreground/80 hover:text-foreground transition-colors font-medium px-4 py-2 rounded-full hover:bg-muted/40">
+              <Link to="/documentation" className="story-link hover-scale text-foreground/80 hover:text-foreground transition-all font-medium px-4 py-2 rounded-full hover:bg-muted/40">
                 Docs
               </Link>
             </div>
