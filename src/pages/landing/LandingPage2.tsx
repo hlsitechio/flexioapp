@@ -17,7 +17,7 @@ export function LandingPage2() {
 
       <main>
         {/* Hero */}
-        <section className="container mx-auto px-6 sm:px-8 lg:px-12 py-16 sm:py-24">
+        <section className="w-full px-6 sm:px-8 lg:px-12 py-16 sm:py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-3xl sm:text-5xl font-bold tracking-tight mb-4">
