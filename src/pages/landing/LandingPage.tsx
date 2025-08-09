@@ -319,19 +319,12 @@ export function LandingPage() {
             <motion.div className="relative" variants={slideInLeft}>
               <div className="bg-transparent rounded-none p-0 shadow-none">
                 <div className="bg-transparent p-0">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    <span className="ml-4 text-sm text-muted-foreground">Quick Tools Panel</span>
-                  </div>
-                  
                   <LazyImage
                     src={quickToolsHero}
                     alt="Quick tools panel preview with notes, calculator, task counter, time tracker, weather, and bookmarks"
-                    className="w-full h-auto block"
-                    width={1280}
-                    height={800}
+                    className="w-full h-auto block md:-mx-4 lg:-mx-6 xl:-mx-8"
+                    width={1536}
+                    height={960}
                   />
                 </div>
               </div>
