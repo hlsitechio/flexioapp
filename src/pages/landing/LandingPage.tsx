@@ -231,7 +231,7 @@ export function LandingPage() {
                   The productivity platform for everyone
                 </motion.h1>
                 <motion.p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-2xl" variants={fadeInUp}>
-                  Build a personal workspace with modular widgets: notes, tasks, calendar, bookmarks, timers, and charts—no setup required.
+                  Build your personal dashboard with ready-to-use widgets—Quick Notes, Tasks, Kanban, Calendar, Bookmarks, Timers, and Charts—no setup required.
                 </motion.p>
               </div>
 
@@ -256,11 +256,15 @@ export function LandingPage() {
                 </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="h-4 w-4 text-emerald-500" />
-                  <span>Customizable layout</span>
+                  <span>Drag-and-drop layout</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="h-4 w-4 text-emerald-500" />
-                  <span>Light and dark themes</span>
+                  <span>Light & dark themes</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="h-4 w-4 text-emerald-500" />
+                  <span>Workspace profiles</span>
                 </div>
               </motion.div>
             </motion.div>
@@ -297,8 +301,7 @@ export function LandingPage() {
               Productivity for the rest of us
             </h2>
             <p className="text-xl lg:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-              FlexIO makes productivity tools accessible to everyone—not just experts. With FlexIO as your 
-              dedicated productivity platform, you can streamline workflows and drive meaningful outcomes in your business.
+              FlexIO puts powerful, no-code tools in your hands. Customize layouts, switch workspace profiles, and use built-in widgets to streamline daily work—no setup or plugins required.
             </p>
           </motion.div>
         </div>
@@ -377,7 +380,7 @@ export function LandingPage() {
                   Your tools, one click away
                 </h2>
                 <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">
-                  Access Quick Note, Calculator, Task Counter, Time Tracker, Weather, Bookmarks and more from a single dashboard.
+                  Access Quick Note, Calculator, Task Counter, Time Tracker, Calendar, Kanban, Weather, Bookmarks—and more—from a single dashboard.
                   Everything runs in your browser—fast and reliable.
                 </p>
               </div>
@@ -397,8 +400,7 @@ export function LandingPage() {
               Everything you need in one platform
             </h2>
             <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              From project management to productivity tracking, FlexIO combines all your essential tools 
-              in one intelligent workspace.
+              FlexIO brings notes, Kanban, calendar, bookmarks, time tracking, and analytics together—customizable and ready to use.
             </p>
           </motion.div>
 
@@ -406,7 +408,7 @@ export function LandingPage() {
             <motion.div variants={scaleIn}>
               <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop&crop=center" alt="Task Management Interface Placeholder" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop&crop=center" alt="Task management widgets preview (Kanban, tasks, habits)" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                 <div className="absolute inset-0 bg-gradient-to-t from-blue-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">📋</div>
@@ -424,7 +426,7 @@ export function LandingPage() {
             <motion.div variants={scaleIn}>
               <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop&crop=center" alt="Smart Calendar Interface Placeholder" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop&crop=center" alt="Calendar widgets preview with mini views and events" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                 <div className="absolute inset-0 bg-gradient-to-t from-green-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">📅</div>
@@ -442,7 +444,7 @@ export function LandingPage() {
             <motion.div variants={scaleIn}>
               <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/30 dark:to-purple-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=600&fit=crop&crop=center" alt="Note Taking Interface Placeholder" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=600&fit=crop&crop=center" alt="Notes, code snippets, and prompts gallery preview" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                 <div className="absolute inset-0 bg-gradient-to-t from-purple-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">📝</div>
@@ -460,7 +462,7 @@ export function LandingPage() {
             <motion.div variants={scaleIn}>
               <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop&crop=center" alt="Bookmark Manager Interface Placeholder" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop&crop=center" alt="Bookmark manager with folders and quick search preview" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                 <div className="absolute inset-0 bg-gradient-to-t from-orange-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">🔗</div>
@@ -478,7 +480,7 @@ export function LandingPage() {
             <motion.div variants={scaleIn}>
               <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&crop=center" alt="Time Tracking Interface Placeholder" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop&crop=center" alt="Time tracking tools preview: countdowns and timers" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                 <div className="absolute inset-0 bg-gradient-to-t from-red-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">⏱️</div>
@@ -496,7 +498,7 @@ export function LandingPage() {
             <motion.div variants={scaleIn}>
               <Card className="group overflow-hidden border-0 shadow-xl bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-950/30 dark:to-cyan-900/30 hover-scale">
               <div className="aspect-video relative overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop&crop=center" alt="Quick Tools Interface Placeholder" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop&crop=center" alt="Quick tools: calculator, image gallery, and utilities preview" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                 <div className="absolute inset-0 bg-gradient-to-t from-cyan-900/60 to-transparent"></div>
                 <div className="absolute bottom-4 left-4">
                   <div className="text-2xl mb-2">🧮</div>
@@ -567,7 +569,7 @@ export function LandingPage() {
             </motion.div>
             
             <motion.div className="relative group hover-scale" variants={slideInRight}>
-              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&crop=center" alt="Multi-purpose Dashboard Interface Placeholder" className="rounded-2xl shadow-2xl border border-border/50 w-full" />
+              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&crop=center" alt="Multi-purpose dashboard layout preview" className="rounded-2xl shadow-2xl border border-border/50 w-full" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-sm rounded-lg p-2">
                 <span className="text-sm font-medium text-foreground">Live Dashboard</span>
@@ -588,8 +590,7 @@ export function LandingPage() {
               See FlexIO in action
             </h2>
             <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Explore how FlexIO transforms your workspace with intelligent dashboards, 
-              comprehensive analytics, and seamless project management.
+              Explore how FlexIO transforms your workspace with intelligent dashboards, real-time metrics and traffic sources, and seamless Kanban and calendar workflows.
             </p>
           </motion.div>
 
@@ -615,7 +616,7 @@ export function LandingPage() {
                 </div>
               </motion.div>
               <motion.div className="relative group hover-scale" variants={slideInRight}>
-                <img src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=800&h=600&fit=crop&crop=center" alt="Complete Dashboard Overview Placeholder" className="rounded-2xl shadow-2xl border border-border/50" />
+                <img src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=800&h=600&fit=crop&crop=center" alt="Complete dashboard overview preview" className="rounded-2xl shadow-2xl border border-border/50" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
               </motion.div>
             </motion.div>
@@ -660,8 +661,8 @@ export function LandingPage() {
                 </div>
                 <div className="flex flex-wrap gap-3">
                   <span className="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-sm">Kanban Boards</span>
-                  <span className="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full text-sm">Team Collaboration</span>
-                  <span className="px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-full text-sm">Timeline View</span>
+                  <span className="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full text-sm">Prompts Gallery</span>
+                  <span className="px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-full text-sm">File Manager</span>
                 </div>
               </motion.div>
               <motion.div className="relative group hover-scale" variants={slideInRight}>
