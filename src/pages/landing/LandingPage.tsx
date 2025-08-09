@@ -224,7 +224,7 @@ export function LandingPage() {
 
       {/* Hero Section */}
       <section className="w-full pt-32 pb-24 lg:pb-32">
-        <div className="mx-auto w-full max-w-[1600px] px-6 md:px-8">
+        <div className="mx-auto w-full max-w-[1800px] px-6 md:px-8">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center min-h-[700px]">
             <motion.div className="space-y-8" initial="initial" animate="animate" variants={staggerContainer}>
               <div className="space-y-6">
