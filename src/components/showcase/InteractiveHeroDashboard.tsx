@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Home, Kanban, StickyNote, Calendar as CalendarIcon, BookMarked, BarChart3, Settings, Search } from 'lucide-react';
+import { Home, Kanban, StickyNote, Calendar as CalendarIcon, BookMarked, BarChart3, Settings, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar as UICalendar } from '@/components/ui/calendar';
+import { Button } from '@/components/ui/button';
+import { TopNavigationGridLayout } from '@/components/top-navigation';
 import { KanbanBoard as KanbanBoardCmp } from '@/components/kanban/KanbanBoard';
 import type { KanbanColumn } from '@/types/kanban';
 import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
@@ -91,6 +93,7 @@ export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboard
 
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [note, setNote] = useState('Draft the kickoff agenda for Monday');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const mounted = useMountAnimation(100);
 
   return (
@@ -106,11 +109,23 @@ export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboard
           <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
           <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
           <div className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
-          <span className="ml-2 hidden sm:inline text-muted-foreground">FlexIO Dashboard</span>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Toggle sidebar"
+            onClick={() => setSidebarCollapsed((v) => !v)}
+            className="ml-1 h-7 w-7"
+          >
+            {sidebarCollapsed ? (
+              <ChevronsRight className="h-4 w-4" />
+            ) : (
+              <ChevronsLeft className="h-4 w-4" />
+            )}
+          </Button>
+          <span className="ml-1 hidden sm:inline text-muted-foreground">FlexIO Dashboard</span>
         </div>
-        <div className="hidden md:flex items-center gap-2 text-xs text-muted-foreground">
-          <Search className="h-4 w-4" />
-          <span>Search...</span>
+        <div className="hidden md:flex items-center gap-3">
+          <TopNavigationGridLayout />
         </div>
         <div className="w-6 h-6 rounded-full bg-primary/20" />
       </header>
@@ -123,22 +138,23 @@ export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboard
 
       <div className="flex relative z-10">
         {/* Sidebar */}
-        <aside className="hidden md:block w-56 border-r border-border/50 bg-muted/20">
+        <aside className={cn("hidden md:block border-r border-border/50 bg-muted/20", sidebarCollapsed ? "w-14" : "w-56")}>
           <div className="p-3">
-            <div className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Main</div>
+            {!sidebarCollapsed && (<div className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Main</div>)}
             <nav className="space-y-1">
               {navItems.map(({ label, icon: Icon, active }) => (
                 <button
                   key={label}
                   className={cn(
-                    'w-full text-left flex items-center gap-2 rounded-md px-2 py-1.5 text-sm',
+                    "w-full flex items-center gap-2 rounded-md px-2 py-1.5 text-sm",
+                    sidebarCollapsed ? "justify-center" : "text-left",
                     active
-                      ? 'bg-primary/10 text-foreground'
-                      : 'hover:bg-muted/50 text-muted-foreground'
+                      ? "bg-primary/10 text-foreground"
+                      : "hover:bg-muted/50 text-muted-foreground"
                   )}
                 >
-                  <Icon className={cn('h-4 w-4', active ? 'text-primary' : 'text-foreground/60')} />
-                  <span>{label}</span>
+                  <Icon className={cn("h-4 w-4", active ? "text-primary" : "text-foreground/60")} />
+                  {!sidebarCollapsed && <span>{label}</span>}
                 </button>
               ))}
             </nav>
