@@ -6,7 +6,7 @@ export default function WebsiteLayout() {
   const location = useLocation();
   const isLanding = location.pathname === '/' || location.pathname === '/landing';
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background overflow-x-clip">
       <SEOHead
         title="FlexIO Website"
         description="Explore FlexIO: BI platform, analytics and dashboards"

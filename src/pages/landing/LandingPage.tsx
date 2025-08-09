@@ -167,7 +167,7 @@ export function LandingPage() {
       <WelcomeAnimation onComplete={() => setAnimationComplete(true)}>
         <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       {/* Floating Navigation */}
-      <motion.div className="fixed top-6 left-0 right-0 flex justify-center z-50 px-4" initial={{
+      <motion.div className="fixed top-6 left-0 right-0 flex justify-center z-50" initial={{
           y: -100,
           opacity: 0
         }} animate={{
