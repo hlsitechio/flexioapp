@@ -315,12 +315,12 @@ export function LandingPage() {
           margin: "-100px"
         }} variants={staggerContainer}>
         <div className="max-w-[1800px] mx-auto">
-          <motion.div className="space-y-4 mb-10" variants={fadeInUp}>
-            <div className="w-16 h-1 bg-primary rounded-full"></div>
+          <motion.div className="space-y-4 mb-10 text-center" variants={fadeInUp}>
+            <div className="w-16 h-1 bg-primary rounded-full mx-auto"></div>
             <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
               Your tools, one click away
             </h2>
-            <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-4xl">
+            <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-4xl mx-auto">
               Access Quick Note, Calculator, Task Counter, Time Tracker, Calendar, Kanban, Weather, Bookmarks—and more—from a single dashboard.
               Everything runs in your browser—fast and reliable.
             </p>
