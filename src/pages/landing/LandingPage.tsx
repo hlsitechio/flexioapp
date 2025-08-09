@@ -15,7 +15,7 @@ import { usePerformanceMonitor, markPerformance } from '@/hooks/usePerformanceMo
 import { PrefetchLink } from '@/components/navigation/PrefetchLink';
 import { useScrollVisibility } from '@/hooks/useScrollVisibility';
 import heroDashboard from '@/assets/hero-dashboard-hero.jpg';
-import quickToolsHero from '@/assets/quick-tools-hero.jpg';
+import { ToolsShowcase } from '@/components/showcase/ToolsShowcase';
 export function LandingPage() {
   const [showDemo, setShowDemo] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -317,17 +317,7 @@ export function LandingPage() {
         <div className="max-w-[1800px] mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             <motion.div className="relative" variants={slideInLeft}>
-              <div className="bg-transparent rounded-none p-0 shadow-none">
-                <div className="bg-transparent p-0">
-                  <LazyImage
-                    src={quickToolsHero}
-                    alt="Quick tools panel preview with notes, calculator, task counter, time tracker, weather, and bookmarks"
-                    className="w-full h-auto block md:-mx-4 lg:-mx-6 xl:-mx-8"
-                    width={1536}
-                    height={960}
-                  />
-                </div>
-              </div>
+              <ToolsShowcase className="md:-mx-4 lg:-mx-6 xl:-mx-8" />
             </motion.div>
             
             <motion.div className="space-y-6" variants={slideInRight}>
