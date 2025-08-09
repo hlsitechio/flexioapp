@@ -155,7 +155,7 @@ export function LandingPage() {
   };
   return <>
       <CriticalCSS />
-      <SEOHead title="FlexIO - Advanced Business Intelligence Dashboard Platform" description="Transform your business with FlexIO's powerful analytics dashboard. Real-time data visualization, customizable widgets, and enterprise-grade business intelligence tools for data-driven decisions." keywords={['business intelligence', 'analytics dashboard', 'data visualization', 'real-time analytics', 'business metrics', 'dashboard platform', 'enterprise analytics', 'KPI dashboard', 'data insights', 'business dashboard']} canonicalUrl="/" ogType="website" />
+      <SEOHead title="FlexIO – Customizable Productivity Dashboard" description="Build your personal dashboard with widgets like notes, calendar, Kanban, bookmarks, timers, and charts. Try the live demo—no setup." keywords={['productivity dashboard', 'customizable widgets', 'kanban', 'calendar', 'notes', 'time tracking', 'analytics widgets', 'personal workspace', 'dark mode', 'react dashboard']} canonicalUrl="/" ogType="website" />
       
       <StructuredData type="organization" />
       <StructuredData type="website" />
@@ -231,7 +231,7 @@ export function LandingPage() {
                   The productivity platform for everyone
                 </motion.h1>
                 <motion.p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-2xl" variants={fadeInUp}>
-                  Streamline operations, boost productivity, and accelerate growth with our innovative platform that adapts to your workflow.
+                  Build a personal workspace with modular widgets: notes, tasks, calendar, bookmarks, timers, and charts—no setup required.
                 </motion.p>
               </div>
 
@@ -252,15 +252,15 @@ export function LandingPage() {
               <motion.div className="flex items-center flex-wrap gap-8 text-sm text-muted-foreground" variants={fadeInUp}>
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="h-4 w-4 text-emerald-500" />
-                  <span>Free forever plan</span>
+                  <span>Interactive demo—no signup</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="h-4 w-4 text-emerald-500" />
-                  <span>No setup required</span>
+                  <span>Customizable layout</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="h-4 w-4 text-emerald-500" />
-                  <span>Cancel anytime</span>
+                  <span>Light and dark themes</span>
                 </div>
               </motion.div>
             </motion.div>
@@ -318,7 +318,7 @@ export function LandingPage() {
                     <div className="w-3 h-3 rounded-full bg-red-500"></div>
                     <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    <span className="ml-4 text-sm text-muted-foreground">FlexIO Assistant</span>
+                    <span className="ml-4 text-sm text-muted-foreground">Quick Tools Panel</span>
                   </div>
                   
                   <div className="space-y-4 mb-6">
@@ -334,7 +334,7 @@ export function LandingPage() {
                     <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl p-4 space-y-3">
                       <div className="flex items-center gap-2">
                         <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                          <span className="text-primary-foreground text-xs">AI</span>
+                          <span className="text-primary-foreground text-xs">QT</span>
                         </div>
                         <span className="text-sm font-medium">Productivity Analysis</span>
                       </div>
@@ -361,7 +361,7 @@ export function LandingPage() {
                   </div>
                   
                   <div className="flex items-center gap-2 p-3 bg-muted/30 rounded-lg">
-                    <input type="text" placeholder="Ask about your workflow..." className="flex-1 bg-transparent text-sm border-none outline-none placeholder:text-muted-foreground" />
+                    <input type="text" placeholder="Search widgets and commands..." className="flex-1 bg-transparent text-sm border-none outline-none placeholder:text-muted-foreground" />
                     <Button size="sm" className="rounded-full">
                       <ArrowRight className="h-4 w-4" />
                     </Button>
@@ -374,13 +374,11 @@ export function LandingPage() {
               <div className="space-y-4">
                 <div className="w-16 h-1 bg-primary rounded-full"></div>
                 <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-                  Any task,{' '}
-                  <span className="text-primary">any question</span>
+                  Your tools, one click away
                 </h2>
                 <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">
-                  No matter how complex your workflow, FlexIO delivers intelligent answers in an intuitive, 
-                  conversational experience. Get insights about your productivity, track progress, and optimize 
-                  your workflow with natural language queries.
+                  Access Quick Note, Calculator, Task Counter, Time Tracker, Weather, Bookmarks and more from a single dashboard.
+                  Everything runs in your browser—fast and reliable.
                 </p>
               </div>
             </motion.div>
@@ -531,8 +529,7 @@ export function LandingPage() {
                   <span className="text-primary">for every workflow</span>
                 </h2>
                 <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">
-                  Adapt FlexIO to your unique business needs with customizable layouts, intelligent insights, 
-                  and seamless integration of all your productivity tools in one unified interface.
+                  Adapt FlexIO to your workflow with drag-and-drop layouts and a rich widget library. Arrange notes, tasks, calendars, and analytics in one place.
                 </p>
               </div>
               
@@ -552,8 +549,8 @@ export function LandingPage() {
                     <CheckCircle className="h-5 w-5 text-green-500" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-lg">Real-time Collaboration</h4>
-                    <p className="text-muted-foreground">Share workspaces and collaborate with team members instantly</p>
+                    <h4 className="font-semibold text-lg">Workspace Profiles</h4>
+                    <p className="text-muted-foreground">Create and switch between personal workspace profiles</p>
                   </div>
                 </div>
                 
@@ -562,8 +559,8 @@ export function LandingPage() {
                     <CheckCircle className="h-5 w-5 text-green-500" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-lg">Smart Automation</h4>
-                    <p className="text-muted-foreground">AI-powered suggestions and automated workflow optimizations</p>
+                    <h4 className="font-semibold text-lg">Dark Mode & Themes</h4>
+                    <p className="text-muted-foreground">Beautiful light/dark themes with gradient backgrounds</p>
                   </div>
                 </div>
               </div>
@@ -631,10 +628,9 @@ export function LandingPage() {
               <motion.div className="lg:order-2 space-y-6" variants={slideInRight}>
                 <div className="space-y-4">
                   <div className="w-16 h-1 bg-green-500 rounded-full"></div>
-                  <h3 className="text-3xl lg:text-4xl font-bold">Advanced Analytics</h3>
+                  <h3 className="text-3xl lg:text-4xl font-bold">Built-in Analytics Widgets</h3>
                   <p className="text-lg text-muted-foreground leading-relaxed">
-                    Deep insights into your productivity patterns. Track performance metrics, 
-                    identify trends, and optimize your workflow with data-driven decisions.
+                    Add charts, KPIs, and real-time stats to your dashboard using ready-made widgets powered by Recharts.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
@@ -657,10 +653,9 @@ export function LandingPage() {
               <motion.div className="space-y-6" variants={slideInLeft}>
                 <div className="space-y-4">
                   <div className="w-16 h-1 bg-purple-500 rounded-full"></div>
-                  <h3 className="text-3xl lg:text-4xl font-bold">Project Management Suite</h3>
+                  <h3 className="text-3xl lg:text-4xl font-bold">Project Tools</h3>
                   <p className="text-lg text-muted-foreground leading-relaxed">
-                    Comprehensive project oversight with Kanban boards, team collaboration tools, 
-                    timeline management, and integrated communication features.
+                    Organize work with the Kanban board, task counters, quick notes, and bookmarks—simple and fast.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">
@@ -791,10 +786,10 @@ export function LandingPage() {
           <div className="max-w-[1200px] mx-auto text-center space-y-12">
             <motion.div className="space-y-6" variants={fadeInUp}>
               <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-                Get Started Today
+                Start in minutes
               </h2>
               <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                Join thousands of teams already using FlexIO to streamline their operations and boost productivity.
+                Open the live demo, drag in a few widgets, and make it yours—no account required.
               </p>
             </motion.div>
             <motion.div variants={scaleIn}>
@@ -810,8 +805,8 @@ export function LandingPage() {
       <section className="py-20 lg:py-28 border-t border-border/50">
         <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16">
           <div className="text-center mb-10 space-y-3">
-            <h2 className="text-3xl lg:text-4xl font-bold tracking-tight">Simple, transparent pricing</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">Free to start. Upgrade to Pro when you need more. Premium for organizations.</p>
+            <h2 className="text-3xl lg:text-4xl font-bold tracking-tight">Sample pricing</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">Example tiers for demo purposes. Billing is not enabled in this preview.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             <Card className="border border-border/50 shadow-xl">
@@ -822,7 +817,7 @@ export function LandingPage() {
                   <li>Core widgets and dashboards</li>
                   <li>Up to 2 workspaces</li>
                 </ul>
-                <Button asChild size="sm" className="mt-2"><Link to="/workspace-selection">Get started</Link></Button>
+                <Button asChild size="sm" className="mt-2"><Link to="/workspace-selection">Try demo</Link></Button>
               </CardContent>
             </Card>
             <Card className="border border-border/50 shadow-2xl ring-1 ring-primary/20">
