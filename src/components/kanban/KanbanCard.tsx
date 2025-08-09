@@ -48,13 +48,13 @@ export function KanbanCard({ item, isDragging = false }: KanbanCardProps) {
   const getTypeColor = () => {
     switch (item.type) {
       case 'widget':
-        return 'bg-blue-500/10 text-blue-600 border-blue-500/20';
+        return 'bg-primary/10 text-primary border-primary/20';
       case 'component':
-        return 'bg-green-500/10 text-green-600 border-green-500/20';
+        return 'bg-secondary/10 text-secondary-foreground border-secondary/20';
       case 'tool':
-        return 'bg-purple-500/10 text-purple-600 border-purple-500/20';
+        return 'bg-accent/10 text-accent-foreground border-accent/20';
       default:
-        return 'bg-gray-500/10 text-gray-600 border-gray-500/20';
+        return 'bg-muted/30 text-muted-foreground border-border/30';
     }
   };
 
@@ -64,9 +64,10 @@ export function KanbanCard({ item, isDragging = false }: KanbanCardProps) {
       style={style}
       className={`
         group cursor-grab active:cursor-grabbing p-3 space-y-2
-        transition-all duration-200 hover:shadow-md
-        ${isDragging || isSortableDragging ? 'shadow-lg rotate-3 opacity-80' : ''}
-        ${isDragging ? 'z-50' : ''}
+        transition-all duration-300 ease-out hover:shadow-md hover-scale
+        ring-1 ring-transparent group-hover:ring-primary/20 bg-background/80 backdrop-blur-sm
+        ${isDragging || isSortableDragging ? 'scale-[1.03] rotate-2 shadow-xl ring-primary/30 bg-gradient-to-br from-primary/10 via-accent/10 to-secondary/10' : ''}
+        ${isDragging ? 'z-50 pointer-events-none' : ''}
       `}
       {...attributes}
       {...listeners}

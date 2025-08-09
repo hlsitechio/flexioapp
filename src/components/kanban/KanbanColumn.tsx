@@ -27,9 +27,9 @@ export function KanbanColumn({ column }: KanbanColumnProps) {
     <Card
       ref={setNodeRef}
       className={`
-        flex-1 min-w-0 flex flex-col bg-card/50 backdrop-blur-sm
-        transition-all duration-200 border-2
-        ${isOver ? 'border-primary/50 bg-primary/5' : 'border-border/50'}
+        flex-1 min-w-0 flex flex-col bg-card/60 backdrop-blur-sm
+        transition-all duration-300 ease-out border-2 hover:shadow-md
+        ${isOver ? 'border-primary/50 ring-2 ring-primary/30 bg-primary/5 pulse' : 'border-border/50'}
       `}
     >
       {/* Column Header */}
@@ -46,7 +46,7 @@ export function KanbanColumn({ column }: KanbanColumnProps) {
       </div>
 
       {/* Column Content */}
-      <div className="flex-1 p-4 space-y-3 min-h-[200px] max-h-[calc(100vh-300px)] overflow-y-auto">
+      <div className="flex-1 p-4 space-y-3 min-h-[220px] max-h-[calc(100vh-300px)] overflow-y-auto">
         <SortableContext
           items={column.items.map(item => item.id)}
           strategy={verticalListSortingStrategy}
