@@ -155,6 +155,8 @@ export function LandingPage() {
     }
   };
   
+  const heroText = "The productivity platform for everyone";
+  
   return <>
       <CriticalCSS />
       <SEOHead title="FlexIO - Advanced Business Intelligence Dashboard Platform" description="Transform your business with FlexIO's powerful analytics dashboard. Real-time data visualization, customizable widgets, and enterprise-grade business intelligence tools for data-driven decisions." keywords={['business intelligence', 'analytics dashboard', 'data visualization', 'real-time analytics', 'business metrics', 'dashboard platform', 'enterprise analytics', 'KPI dashboard', 'data insights', 'business dashboard']} canonicalUrl="/" ogType="website" />
@@ -232,8 +234,11 @@ export function LandingPage() {
                   <Zap className="h-4 w-4" />
                   Introducing FlexIO Platform
                 </motion.div>
-                <motion.h1 className="gradient-loop-text text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]" variants={fadeInUp}>
-                  The productivity platform for everyone
+                <motion.h1 className="gradient-loop-text whitespace-pre-wrap text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]" variants={fadeInUp} aria-label={heroText}>
+                  <span className="sr-only">{heroText}</span>
+                  {Array.from(heroText).map((ch, i) => (
+                    <span key={i} aria-hidden="true" className="shine-letter" style={{ animationDelay: `${i * 0.04 + 0.1}s` }}>{ch}</span>
+                  ))}
                 </motion.h1>
                 <motion.p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-2xl" variants={fadeInUp}>
                   Streamline operations, boost productivity, and accelerate growth with our innovative platform that adapts to your workflow.
