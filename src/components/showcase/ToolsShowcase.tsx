@@ -26,7 +26,7 @@ export function ToolsShowcase({ className }: ToolsShowcaseProps) {
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {/* Quick Note */}
-        <Card className="bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-border/50">
+        <Card className="border-border/50 bg-gradient-to-br from-primary/10 to-accent/10 backdrop-blur shadow-lg">
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-base">
               <StickyNote className="h-4 w-4 text-primary" />
@@ -34,7 +34,7 @@ export function ToolsShowcase({ className }: ToolsShowcaseProps) {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="rounded-lg border border-border/60 p-4 bg-muted/40 text-sm leading-relaxed">
+            <div className="rounded-lg border border-accent/40 p-4 bg-gradient-to-br from-accent/20 to-primary/10 text-sm leading-relaxed">
               – Draft the kickoff agenda for Monday\n              – Share dashboard links with the team\n              – Prepare quick demo walkthrough
             </div>
             <div className="text-xs text-muted-foreground">Last saved a few minutes ago</div>
@@ -42,7 +42,7 @@ export function ToolsShowcase({ className }: ToolsShowcaseProps) {
         </Card>
 
         {/* Task Counter */}
-        <Card className="bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-border/50">
+        <Card className="border-border/50 bg-gradient-to-br from-accent/10 to-primary/5 backdrop-blur shadow-lg">
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-base">
               <CheckSquare className="h-4 w-4 text-primary" />
@@ -73,7 +73,7 @@ export function ToolsShowcase({ className }: ToolsShowcaseProps) {
         </Card>
 
         {/* Time Tracker */}
-        <Card className="bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-border/50">
+        <Card className="border-border/50 bg-gradient-to-br from-primary/10 to-muted/20 backdrop-blur shadow-lg">
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-base">
               <Clock className="h-4 w-4 text-primary" />
@@ -97,7 +97,7 @@ export function ToolsShowcase({ className }: ToolsShowcaseProps) {
         </Card>
 
         {/* Mini Calendar */}
-        <Card className="bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-border/50 lg:col-span-1 sm:col-span-2">
+        <Card className="border-border/50 bg-gradient-to-br from-primary/5 to-accent/5 backdrop-blur shadow-lg lg:col-span-1 sm:col-span-2">
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-base">
               <CalendarIcon className="h-4 w-4 text-primary" />
@@ -105,7 +105,7 @@ export function ToolsShowcase({ className }: ToolsShowcaseProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="rounded-lg border border-border/60 p-2">
+            <div className="rounded-lg border border-primary/30 p-2 bg-gradient-to-br from-primary/5 to-accent/5">
               <UICalendar
                 mode="single"
                 selected={today}
