@@ -232,9 +232,8 @@ export function LandingPage() {
                   <Zap className="h-4 w-4" />
                   Introducing FlexIO Platform
                 </motion.div>
-                <motion.h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]" variants={fadeInUp}>
-                  The productivity platform{' '}
-                  <span className="gradient-loop-text">for everyone</span>
+                <motion.h1 className="gradient-loop-text text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]" variants={fadeInUp}>
+                  The productivity platform for everyone
                 </motion.h1>
                 <motion.p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-2xl" variants={fadeInUp}>
                   Streamline operations, boost productivity, and accelerate growth with our innovative platform that adapts to your workflow.
