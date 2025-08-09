@@ -14,6 +14,7 @@ import { CriticalCSS } from '@/components/performance/CriticalCSS';
 import { usePerformanceMonitor, markPerformance } from '@/hooks/usePerformanceMonitor';
 import { PrefetchLink } from '@/components/navigation/PrefetchLink';
 import { useScrollVisibility } from '@/hooks/useScrollVisibility';
+import heroDashboard from '@/assets/hero-dashboard-hero.jpg';
 export function LandingPage() {
   const [showDemo, setShowDemo] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -278,7 +279,7 @@ export function LandingPage() {
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
                     <span className="ml-4 text-sm text-muted-foreground">FlexIO Dashboard</span>
                   </div>
-                  <LazyImage src="/lovable-uploads/1e4e07cd-139c-439e-953b-8928b1dad0e1.png" alt="FlexIO Dashboard Preview - Real-time analytics and customizable widgets" className="w-full rounded-lg shadow-lg" eager={true} width={1200} height={675} />
+                  <LazyImage src={heroDashboard} alt="FlexIO dashboard preview with Kanban, notes, mini calendar, bookmarks, timers, and charts" className="w-full rounded-lg shadow-lg" eager={true} width={1536} height={864} />
                 </div>
                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/20 rounded-full blur-xl"></div>
                 <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-accent/20 rounded-full blur-2xl"></div>
