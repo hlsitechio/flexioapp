@@ -21,6 +21,7 @@ import { DashboardFileManager } from '@/components/dashboard/DashboardFileManage
 import heroDashboard from '@/assets/hero-dashboard-hero.jpg';
 import quickToolsHero from '@/assets/quick-tools-hero.jpg';
 import { ToolsShowcase } from '@/components/showcase/ToolsShowcase';
+import { MiniDashboardPreview } from '@/components/showcase/MiniDashboardPreview';
 export function LandingPage() {
   const [showDemo, setShowDemo] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -278,17 +279,7 @@ export function LandingPage() {
 
             <motion.div className="relative" initial="initial" animate="animate" variants={slideInRight}>
               <div className="relative bg-gradient-to-br from-muted/30 to-muted/10 rounded-2xl p-8 border border-border/50 backdrop-blur-sm">
-                <div className="bg-background rounded-xl p-6 shadow-2xl">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    <span className="ml-4 text-sm text-muted-foreground">FlexIO Dashboard</span>
-                  </div>
-                  <div className="w-full rounded-lg shadow-lg border border-border/50">
-                    <ToolsShowcase />
-                  </div>
-                </div>
+                <MiniDashboardPreview />
                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/20 rounded-full blur-xl"></div>
                 <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-accent/20 rounded-full blur-2xl"></div>
               </div>
