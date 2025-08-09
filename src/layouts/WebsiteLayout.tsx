@@ -18,7 +18,13 @@ export default function WebsiteLayout() {
         </header>
       )}
       <main className="flex-1 w-full">
-        <Outlet />
+        {isLanding ? (
+          <Outlet />
+        ) : (
+          <div className="mx-auto w-full max-w-screen-2xl px-6">
+            <Outlet />
+          </div>
+        )}
       </main>
     </div>
   );
