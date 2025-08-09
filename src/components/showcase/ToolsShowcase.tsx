@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Calendar as UICalendar } from '@/components/ui/calendar';
-import { StickyNote, CheckSquare, Calendar as CalendarIcon, Plus, Minus } from 'lucide-react';
+import { StickyNote, CheckSquare, Calendar as CalendarIcon, Plus, Minus, Clock, Play, Square } from 'lucide-react';
 
 interface ToolsShowcaseProps {
   className?: string;
@@ -67,6 +67,30 @@ export function ToolsShowcase({ className }: ToolsShowcaseProps) {
               <div className="mt-2 flex justify-between text-xs text-muted-foreground">
                 <span>Today</span>
                 <span>65% complete</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Time Tracker */}
+        <Card className="bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-border/50">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Clock className="h-4 w-4 text-primary" />
+              Time Tracker
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center gap-3">
+              <div className="font-mono text-3xl font-semibold tabular-nums">00:42:16</div>
+              <div className="text-sm text-muted-foreground">Design review</div>
+              <div className="ml-auto flex items-center gap-1 opacity-70">
+                <button className="w-6 h-6 grid place-items-center rounded border border-border/60" aria-label="pause" disabled>
+                  <Play className="h-3 w-3" />
+                </button>
+                <button className="w-6 h-6 grid place-items-center rounded border border-border/60" aria-label="stop" disabled>
+                  <Square className="h-3 w-3" />
+                </button>
               </div>
             </div>
           </CardContent>

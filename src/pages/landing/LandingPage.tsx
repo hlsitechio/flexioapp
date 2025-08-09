@@ -310,29 +310,25 @@ export function LandingPage() {
       </motion.section>
 
       {/* Any Task, Any Question Section */}
-      <motion.section className="py-24 px-8 sm:px-12 lg:px-16 bg-muted/20" initial="initial" whileInView="animate" viewport={{
+      <motion.section className="py-24 px-8 sm:px-12 lg:px-16 bg-gradient-to-br from-primary/5 via-background to-accent/5" initial="initial" whileInView="animate" viewport={{
           once: true,
           margin: "-100px"
         }} variants={staggerContainer}>
         <div className="max-w-[1800px] mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-            <motion.div className="relative" variants={slideInLeft}>
-              <ToolsShowcase className="md:-mx-4 lg:-mx-6 xl:-mx-8" />
-            </motion.div>
-            
-            <motion.div className="space-y-6" variants={slideInRight}>
-              <div className="space-y-4">
-                <div className="w-16 h-1 bg-primary rounded-full"></div>
-                <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-                  Your tools, one click away
-                </h2>
-                <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed">
-                  Access Quick Note, Calculator, Task Counter, Time Tracker, Calendar, Kanban, Weather, Bookmarks—and more—from a single dashboard.
-                  Everything runs in your browser—fast and reliable.
-                </p>
-              </div>
-            </motion.div>
-          </div>
+          <motion.div className="space-y-4 mb-10" variants={fadeInUp}>
+            <div className="w-16 h-1 bg-primary rounded-full"></div>
+            <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
+              Your tools, one click away
+            </h2>
+            <p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-4xl">
+              Access Quick Note, Calculator, Task Counter, Time Tracker, Calendar, Kanban, Weather, Bookmarks—and more—from a single dashboard.
+              Everything runs in your browser—fast and reliable.
+            </p>
+          </motion.div>
+
+          <motion.div variants={slideInLeft}>
+            <ToolsShowcase className="md:-mx-4 lg:-mx-6 xl:-mx-8" />
+          </motion.div>
         </div>
       </motion.section>
 
