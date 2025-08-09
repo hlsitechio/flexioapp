@@ -74,6 +74,19 @@ export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboard
       </div>
     );
   }
+  
+  const navItems = [
+    { label: 'Dashboard', icon: Home, active: true },
+    { label: 'Kanban', icon: Kanban },
+    { label: 'Notes', icon: StickyNote },
+    { label: 'Calendar', icon: CalendarIcon },
+    { label: 'Bookmarks', icon: BookMarked },
+    { label: 'Analytics', icon: BarChart3 },
+    { label: 'Settings', icon: Settings },
+  ];
+
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [note, setNote] = useState('Draft the kickoff agenda for Monday');
 
   return (
     <div
