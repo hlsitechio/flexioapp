@@ -15,7 +15,6 @@ import { usePerformanceMonitor, markPerformance } from '@/hooks/usePerformanceMo
 import { PrefetchLink } from '@/components/navigation/PrefetchLink';
 import { useScrollVisibility } from '@/hooks/useScrollVisibility';
 export function LandingPage() {
-  
   const [showDemo, setShowDemo] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
   const {
@@ -154,7 +153,6 @@ export function LandingPage() {
       ease: "easeOut"
     }
   };
-  
   return <>
       <CriticalCSS />
       <SEOHead title="FlexIO - Advanced Business Intelligence Dashboard Platform" description="Transform your business with FlexIO's powerful analytics dashboard. Real-time data visualization, customizable widgets, and enterprise-grade business intelligence tools for data-driven decisions." keywords={['business intelligence', 'analytics dashboard', 'data visualization', 'real-time analytics', 'business metrics', 'dashboard platform', 'enterprise analytics', 'KPI dashboard', 'data insights', 'business dashboard']} canonicalUrl="/" ogType="website" />
@@ -228,10 +226,7 @@ export function LandingPage() {
           <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center min-h-[700px]">
             <motion.div className="space-y-8" initial="initial" animate="animate" variants={staggerContainer}>
               <div className="space-y-6">
-                <motion.div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium" variants={fadeInUp}>
-                  <Zap className="h-4 w-4" />
-                  Introducing FlexIO Platform
-                </motion.div>
+                
                 <motion.h1 className="gradient-loop-text text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]" variants={fadeInUp}>
                   The productivity platform for everyone
                 </motion.h1>
