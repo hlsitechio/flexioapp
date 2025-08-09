@@ -11,7 +11,7 @@ import {
   DragStartEvent,
   DragOverEvent,
 } from '@dnd-kit/core';
-import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { arrayMove, sortableKeyboardCoordinates, SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable';
 import { useState } from 'react';
 import { KanbanColumn as KanbanColumnType, KanbanItem } from '@/types/kanban';
 import { KanbanColumn } from './KanbanColumn';
@@ -39,6 +39,12 @@ export function KanbanBoard({ columns, onColumnsChange, className = '' }: Kanban
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
+    // If dragging a column, no active item preview
+    const isColumn = columns.some(col => col.id === active.id);
+    if (isColumn) {
+      setActiveItem(null);
+      return;
+    }
     const activeColumn = columns.find(col => 
       col.items.some(item => item.id === active.id)
     );
@@ -115,6 +121,17 @@ export function KanbanBoard({ columns, onColumnsChange, className = '' }: Kanban
     const activeId = active.id;
     const overId = over.id;
 
+    // Column reordering
+    const isActiveColumn = columns.some(col => col.id === activeId);
+    const isOverColumn = columns.some(col => col.id === overId);
+    if (isActiveColumn && isOverColumn && activeId !== overId) {
+      const oldIndex = columns.findIndex(col => col.id === activeId);
+      const newIndex = columns.findIndex(col => col.id === overId);
+      const reordered = arrayMove(columns, oldIndex, newIndex);
+      onColumnsChange(reordered);
+      return;
+    }
+
     // Find the column containing the active item
     const activeColumn = columns.find(col => 
       col.items.some(item => item.id === activeId)
@@ -147,14 +164,16 @@ export function KanbanBoard({ columns, onColumnsChange, className = '' }: Kanban
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
     >
-      <div className={`flex gap-6 h-full w-full ${className}`}>
-        {columns.map((column) => (
-          <KanbanColumn
-            key={column.id}
-            column={column}
-          />
-        ))}
-      </div>
+      <SortableContext items={columns.map(c => c.id)} strategy={horizontalListSortingStrategy}>
+        <div className={`flex gap-6 h-full w-full ${className}`}>
+          {columns.map((column) => (
+            <KanbanColumn
+              key={column.id}
+              column={column}
+            />
+          ))}
+        </div>
+      </SortableContext>
       
       <DragOverlay 
         dropAnimation={{ 

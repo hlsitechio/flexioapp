@@ -5,6 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar as UICalendar } from '@/components/ui/calendar';
 import { KanbanBoard as KanbanBoardCmp } from '@/components/kanban/KanbanBoard';
 import type { KanbanColumn } from '@/types/kanban';
+import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
+import { SortableContext, arrayMove, sortableKeyboardCoordinates, rectSortingStrategy, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 interface InteractiveHeroDashboardProps {
   className?: string;
@@ -36,18 +39,41 @@ export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboard
     },
   ]);
 
-  const navItems = [
-    { label: 'Dashboard', icon: Home, active: true },
-    { label: 'Kanban', icon: Kanban },
-    { label: 'Notes', icon: StickyNote },
-    { label: 'Calendar', icon: CalendarIcon },
-    { label: 'Bookmarks', icon: BookMarked },
-    { label: 'Analytics', icon: BarChart3 },
-    { label: 'Settings', icon: Settings },
-  ];
+  const tilesDefault = ['kanban', 'calendar', 'note'] as const;
+  const [tiles, setTiles] = useState<string[]>([...tilesDefault]);
 
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [note, setNote] = useState('Draft the kickoff agenda for Monday');
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
+
+  const handleTilesDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const oldIndex = tiles.indexOf(active.id as string);
+    const newIndex = tiles.indexOf(over.id as string);
+    if (oldIndex === -1 || newIndex === -1) return;
+    setTiles(arrayMove(tiles, oldIndex, newIndex));
+  };
+
+  function SortableTile({ id, children }: { id: string; children: React.ReactNode }) {
+    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+    const style = { transform: CSS.Transform.toString(transform), transition } as React.CSSProperties;
+    return (
+      <div
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+        className={cn(
+          'will-change-transform transition-all duration-300 ease-out',
+          isDragging && 'z-50 scale-[1.02]'
+        )}
+      >
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div
@@ -97,52 +123,66 @@ export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboard
 
         {/* Main content */}
         <main className="flex-1 p-3 sm:p-4 lg:p-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
-            {/* Kanban (interactive) */}
-            <Card className="lg:col-span-2 border-0 shadow-lg bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 dark:from-primary/10 dark:via-accent/10 dark:to-secondary/10">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-base">Kanban Board</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <KanbanBoardCmp
-                  columns={columns}
-                  onColumnsChange={setColumns}
-                  className="p-1"
-                />
-              </CardContent>
-            </Card>
-
-            {/* Calendar */}
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-secondary/5 via-primary/5 to-accent/5 dark:from-secondary/10 dark:via-primary/10 dark:to-accent/10">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-base">Calendar</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <UICalendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  initialFocus
-                  className="p-3 pointer-events-auto"
-                />
-              </CardContent>
-            </Card>
-
-            {/* Quick Note */}
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-accent/5 via-secondary/5 to-primary/5 dark:from-accent/10 dark:via-secondary/10 dark:to-primary/10">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-base">Quick Note</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <textarea
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                  className="w-full h-28 resize-none rounded-md border border-border/50 bg-background p-3 text-sm"
-                  placeholder="Type a quick note..."
-                />
-              </CardContent>
-            </Card>
-          </div>
+          <DndContext sensors={sensors} onDragEnd={handleTilesDragEnd}>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+              <SortableContext items={tiles} strategy={rectSortingStrategy}>
+                {tiles.map((tile) => (
+                  tile === 'kanban' ? (
+                    <SortableTile id="kanban" key="kanban">
+                      {/* Kanban (interactive) */}
+                      <Card className="lg:col-span-2 border-0 shadow-lg bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 dark:from-primary/10 dark:via-accent/10 dark:to-secondary/10">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base">Kanban Board</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <KanbanBoardCmp
+                            columns={columns}
+                            onColumnsChange={setColumns}
+                            className="p-1"
+                          />
+                        </CardContent>
+                      </Card>
+                    </SortableTile>
+                  ) : tile === 'calendar' ? (
+                    <SortableTile id="calendar" key="calendar">
+                      {/* Calendar */}
+                      <Card className="border-0 shadow-lg bg-gradient-to-br from-secondary/5 via-primary/5 to-accent/5 dark:from-secondary/10 dark:via-primary/10 dark:to-accent/10">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base">Calendar</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <UICalendar
+                            mode="single"
+                            selected={date}
+                            onSelect={setDate}
+                            initialFocus
+                            className="p-3 pointer-events-auto"
+                          />
+                        </CardContent>
+                      </Card>
+                    </SortableTile>
+                  ) : (
+                    <SortableTile id="note" key="note">
+                      {/* Quick Note */}
+                      <Card className="border-0 shadow-lg bg-gradient-to-br from-accent/5 via-secondary/5 to-primary/5 dark:from-accent/10 dark:via-secondary/10 dark:to-primary/10">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base">Quick Note</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <textarea
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
+                            className="w-full h-28 resize-none rounded-md border border-border/50 bg-background p-3 text-sm"
+                            placeholder="Type a quick note..."
+                          />
+                        </CardContent>
+                      </Card>
+                    </SortableTile>
+                  )
+                ))}
+              </SortableContext>
+            </div>
+          </DndContext>
         </main>
       </div>
     </div>

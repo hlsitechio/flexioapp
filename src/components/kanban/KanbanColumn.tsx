@@ -1,6 +1,6 @@
 import React from 'react';
-import { useDroppable } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { KanbanColumn as KanbanColumnType } from '@/types/kanban';
 import { KanbanCard } from './KanbanCard';
 import { Card } from '@/components/ui/card';
@@ -12,28 +12,37 @@ interface KanbanColumnProps {
 
 export function KanbanColumn({ column }: KanbanColumnProps) {
   const {
+    attributes,
+    listeners,
     setNodeRef,
-    isOver,
-  } = useDroppable({
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
     id: column.id,
     data: {
       type: 'column',
       columnId: column.id,
-      accepts: ['widget', 'component', 'tool'],
     },
   });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   return (
     <Card
       ref={setNodeRef}
+      style={style}
       className={`
         flex-1 min-w-0 flex flex-col bg-card/60 backdrop-blur-sm
         transition-all duration-300 ease-out border-2 hover:shadow-md
-        ${isOver ? 'border-primary/50 ring-2 ring-primary/30 bg-primary/5 pulse' : 'border-border/50'}
+        ${isDragging ? 'border-primary/50 ring-2 ring-primary/30 bg-primary/5' : 'border-border/50'}
       `}
     >
       {/* Column Header */}
-      <div className="p-4 border-b border-border/50">
+      <div className="p-4 border-b border-border/50" {...attributes} {...listeners}>
         <div className="flex items-center justify-between">
           <h3 className="font-semibold text-card-foreground">
             {column.title}
