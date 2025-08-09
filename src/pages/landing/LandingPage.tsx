@@ -18,10 +18,8 @@ import { AnalyticsOverview, RealtimeMetrics, TrafficSources } from '@/components
 import { KanbanBoard } from '@/components/kanban';
 import { DashboardPromptsGallery } from '@/components/dashboard/DashboardPromptsGallery';
 import { DashboardFileManager } from '@/components/dashboard/DashboardFileManager';
-import heroDashboard from '@/assets/hero-dashboard-hero.jpg';
+import { InteractiveHeroDashboard } from '@/components/showcase/InteractiveHeroDashboard';
 import quickToolsHero from '@/assets/quick-tools-hero.jpg';
-import { ToolsShowcase } from '@/components/showcase/ToolsShowcase';
-import { MiniDashboardPreview } from '@/components/showcase/MiniDashboardPreview';
 export function LandingPage() {
   const [showDemo, setShowDemo] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -231,55 +229,16 @@ export function LandingPage() {
       {/* Hero Section */}
       <section className="w-full pt-32 pb-24 lg:pb-32">
         <div className="mx-auto w-full max-w-[2560px] px-6 md:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center min-h-[700px]">
-            <motion.div className="space-y-8" initial="initial" animate="animate" variants={staggerContainer}>
-              <div className="space-y-6">
-                
-                <motion.h1 className="gradient-loop-text text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]" variants={fadeInUp}>
-                  The productivity platform for everyone
-                </motion.h1>
-                <motion.p className="text-xl lg:text-2xl text-muted-foreground leading-relaxed max-w-2xl" variants={fadeInUp}>
-                  Build your personal dashboard with ready-to-use widgets—Quick Notes, Tasks, Kanban, Calendar, Bookmarks, Timers, and Charts—no setup required.
-                </motion.p>
-              </div>
-
-              <motion.div className="flex flex-col sm:flex-row gap-4" variants={fadeInUp}>
-                <Button size="lg" className="text-lg px-8 py-4 rounded-full hover-scale" asChild>
-                  <PrefetchLink to="/workspace-selection">
-                    <span className="flex items-center">
-                      Get Started Free
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </span>
-                  </PrefetchLink>
-                </Button>
-                <Button size="lg" variant="outline" className="text-lg px-8 py-4 rounded-full hover-scale" onClick={scrollToDemo}>
-                  Try Demo
-                </Button>
-              </motion.div>
-
-              <motion.div className="flex items-center flex-wrap gap-8 text-sm text-muted-foreground" variants={fadeInUp}>
-                <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-emerald-500" />
-                  <span>Interactive demo—no signup</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-emerald-500" />
-                  <span>Drag-and-drop layout</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-emerald-500" />
-                  <span>Light & dark themes</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-emerald-500" />
-                  <span>Workspace profiles</span>
-                </div>
-              </motion.div>
+          <div className="space-y-10" >
+            <motion.div className="text-center space-y-6" initial="initial" animate="animate" variants={staggerContainer}>
+              <motion.h1 className="gradient-loop-text text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight leading-[1.1]" variants={fadeInUp}>
+                The productivity platform for everyone
+              </motion.h1>
             </motion.div>
 
             <motion.div className="relative" initial="initial" animate="animate" variants={slideInRight}>
-              <div className="relative bg-gradient-to-br from-muted/30 to-muted/10 rounded-2xl p-8 border border-border/50 backdrop-blur-sm">
-                <MiniDashboardPreview />
+              <div className="relative bg-gradient-to-br from-muted/30 to-muted/10 rounded-2xl p-4 sm:p-6 lg:p-8 border border-border/50 backdrop-blur-sm">
+                <InteractiveHeroDashboard />
                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/20 rounded-full blur-xl"></div>
                 <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-accent/20 rounded-full blur-2xl"></div>
               </div>
