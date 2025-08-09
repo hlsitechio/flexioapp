@@ -362,19 +362,8 @@
     color: transparent;
     animation: gradient-shift 8s ease-in-out infinite;
   }
-  .shine-letter {
-    display: inline-block;
-    opacity: 0;
-    background-image: inherit;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    will-change: opacity, transform, filter;
-    animation: letter-reveal 0.75s ease-out forwards;
-  }
   @media (prefers-reduced-motion: reduce) {
     .gradient-loop-text { animation: none; }
-    .shine-letter { animation: none; opacity: 1; transform: none; filter: none; }
   }
 }
 
@@ -382,10 +371,4 @@
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
-}
-
-@keyframes letter-reveal {
-  0% { opacity: 0; transform: translateY(0.5em); filter: blur(6px) brightness(1.6); }
-  60% { opacity: 1; transform: translateY(0); filter: blur(0) brightness(1.15); }
-  100% { opacity: 1; filter: brightness(1); }
 }
