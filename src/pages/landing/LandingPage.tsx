@@ -20,6 +20,7 @@ import { DashboardPromptsGallery } from '@/components/dashboard/DashboardPrompts
 import { DashboardFileManager } from '@/components/dashboard/DashboardFileManager';
 import heroDashboard from '@/assets/hero-dashboard-hero.jpg';
 import quickToolsHero from '@/assets/quick-tools-hero.jpg';
+import { ToolsShowcase } from '@/components/showcase/ToolsShowcase';
 export function LandingPage() {
   const [showDemo, setShowDemo] = useState(false);
   const [animationComplete, setAnimationComplete] = useState(false);
@@ -284,7 +285,9 @@ export function LandingPage() {
                     <div className="w-3 h-3 rounded-full bg-green-500"></div>
                     <span className="ml-4 text-sm text-muted-foreground">FlexIO Dashboard</span>
                   </div>
-                  <LazyImage src={heroDashboard} alt="FlexIO dashboard preview with Kanban, notes, mini calendar, bookmarks, timers, and charts" className="w-full rounded-lg shadow-lg" eager={true} width={1536} height={864} />
+                  <div className="w-full rounded-lg shadow-lg border border-border/50">
+                    <ToolsShowcase />
+                  </div>
                 </div>
                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/20 rounded-full blur-xl"></div>
                 <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-accent/20 rounded-full blur-2xl"></div>
