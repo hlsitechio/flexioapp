@@ -164,11 +164,16 @@
   }
 
   body {
-    @apply bg-gradient-to-br from-background to-muted/20 text-foreground font-sans antialiased;
+    /* keep the gradient only here */
+    @apply text-foreground font-sans antialiased;
     /* Ensure background covers viewport on all DPIs */
     min-height: 100svh; /* use 100vh if preferred; svh handles mobile bars */
     overflow-x: hidden; /* safer alternative to clip */
     background-color: hsl(var(--background)); /* base color under gradient */
+    background-image: var(--gradient-bg);
+    background-repeat: no-repeat;
+    background-origin: border-box;
+    background-clip: border-box;
     transition: 
       background var(--transition-smooth),
       color var(--transition-smooth);
