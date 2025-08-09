@@ -3,8 +3,11 @@ import { Button } from '@/components/ui/button';
 import { DollarSign, Crown, Star, Check } from 'lucide-react';
 import { SEOHead } from '@/components/seo/SEOHead';
 import { Link } from 'react-router-dom';
-
+import { useState } from 'react';
+import { PricingToggle } from '@/components/pricing/PricingToggle';
+import { UsageCalculator } from '@/components/pricing/UsageCalculator';
 export function PricingPage() {
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   return (
   <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       <SEOHead
@@ -19,6 +22,9 @@ export function PricingPage() {
           <p className="text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Choose the perfect plan for your workflow. Start free and upgrade as you grow.
           </p>
+          <div className="pt-2 flex justify-center">
+            <PricingToggle value={billingCycle} onChange={setBillingCycle} />
+          </div>
         </div>
       </header>
 
@@ -130,6 +136,11 @@ export function PricingPage() {
                 </Button>
               </CardFooter>
             </Card>
+          </div>
+
+          {/* Usage Calculator */}
+          <div className="mt-12">
+            <UsageCalculator billingCycle={billingCycle} />
           </div>
 
           {/* CTA bar */}

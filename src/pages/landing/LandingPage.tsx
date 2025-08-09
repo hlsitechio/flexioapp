@@ -19,6 +19,7 @@ import { KanbanBoard } from '@/components/kanban';
 import { DashboardPromptsGallery } from '@/components/dashboard/DashboardPromptsGallery';
 import { DashboardFileManager } from '@/components/dashboard/DashboardFileManager';
 import { InteractiveHeroDashboard } from '@/components/showcase/InteractiveHeroDashboard';
+import { FeaturePeekCarousel } from '@/components/landing/FeaturePeekCarousel';
 import quickToolsHero from '@/assets/quick-tools-hero.jpg';
 export function LandingPage() {
   const [showDemo, setShowDemo] = useState(false);
@@ -251,9 +252,8 @@ export function LandingPage() {
       </section>
 
 
-      {/* Productivity for Everyone Section */}
-      
-
+{/* Feature Peek Carousel */}
+<FeaturePeekCarousel />
       {/* Any Task, Any Question Section */}
       <motion.section className="py-24 px-8 sm:px-12 lg:px-16 bg-muted/20" initial="initial" whileInView="animate" viewport={{
           once: true,
