@@ -1,7 +1,7 @@
-import { Dashboard } from '@/components/Dashboard';
+import UltraClearLanding from '@/pages/landing/UltraClearLanding';
 
 const Index = () => {
-  return <Dashboard />;
+  return <UltraClearLanding />;
 };
 
 export default Index;
