@@ -157,6 +157,8 @@
 
   /* Apply transitions to common elements that change with theme */
   html {
+    overflow-x: clip; /* Prevent horizontal paint/overflow across the site */
+    scrollbar-gutter: stable both-edges; /* Avoid layout shift and visible gutters */
     transition: background-color var(--transition-smooth);
   }
 
