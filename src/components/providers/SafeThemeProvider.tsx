@@ -20,8 +20,8 @@ export function SafeThemeProvider({ children }: SafeThemeProviderProps) {
   return (
     <ThemeProvider 
       attribute="class" 
-      defaultTheme="system" 
-      enableSystem 
+      defaultTheme="dark" 
+      enableSystem={false}
       disableTransitionOnChange
       storageKey="theme"
     >

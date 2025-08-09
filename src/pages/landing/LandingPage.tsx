@@ -165,7 +165,7 @@ export function LandingPage() {
       <AISearchOptimization pageType="homepage" primaryKeywords={['business intelligence platform', 'analytics dashboard software', 'data visualization tool', 'enterprise dashboard', 'business analytics solution']} contentCategory="business intelligence software homepage" businessContext="enterprise analytics and dashboard platform" />
       
       <WelcomeAnimation onComplete={() => setAnimationComplete(true)}>
-        <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
+        <div className="min-h-screen w-full bg-background overflow-x-hidden">
       {/* Floating Navigation */}
       <motion.div className="fixed top-6 left-0 right-0 flex justify-center z-50 overflow-x-hidden" initial={{
           y: -100,
@@ -685,7 +685,7 @@ export function LandingPage() {
       </motion.section>
 
       {/* Demo Section */}
-      {showDemo && <section id="demo-section" className="py-24 px-8 sm:px-12 lg:px-16 bg-gradient-to-br from-background to-muted/20">
+      {showDemo && <section id="demo-section" className="py-24 px-8 sm:px-12 lg:px-16 bg-background">
           <div className="max-w-[1400px] mx-auto">
             <div className="text-center space-y-6 mb-16">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
