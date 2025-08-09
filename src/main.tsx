@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AppProviders } from "@/providers/AppProviders";
 import App from "./App.tsx";
 import "./index.css";
+import "./global-overrides.css";
 
 // Initialize production-ready features
 if (typeof window !== 'undefined') {
