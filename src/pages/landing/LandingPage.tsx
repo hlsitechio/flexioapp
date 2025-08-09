@@ -857,8 +857,8 @@ export function LandingPage() {
         </div>
       </section>
       {/* Footer */}
-      <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16 py-16">
+      <footer className="border-t bg-background">
+        <div className="mx-auto w-full max-w-[2560px] px-8 sm:px-12 lg:px-16 py-16">
           <div className="grid md:grid-cols-4 gap-12">
             <div className="space-y-6">
               <h3 className="text-xl font-bold">FlexIO</h3>

@@ -201,8 +201,8 @@ export function DemoPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="max-w-[1800px] mx-auto px-8 sm:px-12 lg:px-16 py-8">
+      <footer className="border-t bg-background">
+        <div className="mx-auto w-full max-w-[2560px] px-8 sm:px-12 lg:px-16 py-8">
           <div className="text-center text-sm text-muted-foreground">
             <p>&copy; 2024 Your Platform. All rights reserved.</p>
           </div>
