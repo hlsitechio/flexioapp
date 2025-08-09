@@ -352,3 +352,23 @@
     backdrop-filter: blur(28px) saturate(180%);
   }
 }
+
+@layer utilities {
+  .gradient-loop-text {
+    background-image: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--primary-glow)) 100%);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradient-shift 8s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gradient-loop-text { animation: none; }
+  }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
