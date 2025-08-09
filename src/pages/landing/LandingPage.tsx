@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { WelcomeAnimation } from '@/components/animations/WelcomeAnimation';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { LazyImage } from '@/components/ui/lazy-image';
@@ -22,7 +22,7 @@ import { InteractiveHeroDashboard } from '@/components/showcase/InteractiveHeroD
 import quickToolsHero from '@/assets/quick-tools-hero.jpg';
 export function LandingPage() {
   const [showDemo, setShowDemo] = useState(false);
-  const [animationComplete, setAnimationComplete] = useState(false);
+  
   const {
     trackMetric
   } = usePerformanceMonitor();
@@ -168,7 +168,7 @@ export function LandingPage() {
       
       <AISearchOptimization pageType="homepage" primaryKeywords={['business intelligence platform', 'analytics dashboard software', 'data visualization tool', 'enterprise dashboard', 'business analytics solution']} contentCategory="business intelligence software homepage" businessContext="enterprise analytics and dashboard platform" />
       
-      <WelcomeAnimation onComplete={() => setAnimationComplete(true)}>
+      
         <div className="min-h-screen w-full bg-background overflow-x-hidden">
       {/* Floating Navigation */}
       <motion.div className="fixed top-6 left-0 right-0 flex justify-center z-50 overflow-x-hidden" initial={{
@@ -834,6 +834,6 @@ export function LandingPage() {
         </div>
       </footer>
         </div>
-      </WelcomeAnimation>
+      
     </>;
 }
