@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { BarChart3, ChevronsLeft, ChevronsRight, Rocket, Settings2, Shield, Sparkles, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { TopNavigationGridLayout } from '@/components/top-navigation';
+
 import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, arrayMove, sortableKeyboardCoordinates, rectSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -125,7 +125,15 @@ export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboard
           <span className="ml-1 hidden sm:inline text-muted-foreground">FlexIO Dashboard</span>
         </div>
         <div className="hidden md:flex items-center gap-3">
-          <TopNavigationGridLayout />
+          <motion.div className="h-2 w-24 rounded-full bg-muted/60 overflow-hidden" aria-hidden>
+            <motion.div
+              className="h-full bg-primary"
+              animate={{ x: ['-100%', '100%'] }}
+              transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
+              style={{ width: '40%' }}
+            />
+          </motion.div>
+          <span className="text-xs text-muted-foreground">Live demo</span>
         </div>
         <div className="w-6 h-6 rounded-full bg-primary/20" />
       </header>
