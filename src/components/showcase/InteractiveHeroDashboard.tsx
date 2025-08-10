@@ -14,6 +14,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { useMountAnimation } from '@/hooks/useMountAnimation';
 import { AnimatePresence, motion } from 'framer-motion';
 import MotionGlyph from '@/components/landing/PunchlineAnimations';
+import { HeroKanbanTile, HeroCalendarTile, HeroQuickNoteTile } from '@/components/showcase/tiles';
 interface PunchlineItem { id: string; title: string; blurb: string; cta?: { label: string; to: string }; icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; }
 
 const PUNCHLINES: PunchlineItem[] = [
@@ -237,53 +238,26 @@ export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboard
                   tile === 'kanban' ? (
                     <SortableTile id="kanban" key="kanban" delay={idx * 80}>
                       {/* Kanban (interactive) */}
-                      <Card className="lg:col-span-2 border-0 shadow-lg hover:shadow-2xl transition-shadow ring-1 ring-border/40 hover:ring-primary/40 bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 dark:from-primary/10 dark:via-accent/10 dark:to-secondary/10">
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-base">Kanban Board</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <KanbanBoardCmp
-                            columns={columns}
-                            onColumnsChange={setColumns}
-                            className="p-1"
-                          />
-                        </CardContent>
-                      </Card>
+                      <HeroKanbanTile
+                        columns={columns}
+                        onColumnsChange={setColumns}
+                      />
                     </SortableTile>
                   ) : tile === 'calendar' ? (
                     <SortableTile id="calendar" key="calendar" delay={idx * 80}>
                       {/* Calendar */}
-                      <Card className="border-0 shadow-lg hover:shadow-2xl transition-shadow ring-1 ring-border/40 hover:ring-primary/40 bg-gradient-to-br from-secondary/5 via-primary/5 to-accent/5 dark:from-secondary/10 dark:via-primary/10 dark:to-accent/10">
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-base">Calendar</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <UICalendar
-                            mode="single"
-                            selected={date}
-                            onSelect={setDate}
-                            initialFocus
-                            className="p-3 pointer-events-auto"
-                          />
-                        </CardContent>
-                      </Card>
+                      <HeroCalendarTile
+                        date={date}
+                        onDateChange={setDate}
+                      />
                     </SortableTile>
                   ) : (
                     <SortableTile id="note" key="note" delay={idx * 80}>
                       {/* Quick Note */}
-                      <Card className="border-0 shadow-lg hover:shadow-2xl transition-shadow ring-1 ring-border/40 hover:ring-primary/40 bg-gradient-to-br from-accent/5 via-secondary/5 to-primary/5 dark:from-accent/10 dark:via-secondary/10 dark:to-primary/10">
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-base">Quick Note</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <textarea
-                            value={note}
-                            onChange={(e) => setNote(e.target.value)}
-                            className="w-full h-28 resize-none rounded-md border border-border/50 bg-background p-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:border-transparent transition-shadow"
-                            placeholder="Type a quick note..."
-                          />
-                        </CardContent>
-                      </Card>
+                      <HeroQuickNoteTile
+                        note={note}
+                        onNoteChange={setNote}
+                      />
                     </SortableTile>
                   )
                 ))}
