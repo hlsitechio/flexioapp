@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CheckCircle2 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import RealtimeSparkline from './RealtimeSparkline';
+import TypingIndicator from './TypingIndicator';
 
 interface HeroQuickNoteTileProps {
   note: string;
@@ -25,27 +26,52 @@ export function HeroQuickNoteTile({ note, onNoteChange, className }: HeroQuickNo
   return (
     <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.995 }} className={className}>
       <Card className="border-0 shadow-lg hover:shadow-2xl transition-shadow ring-1 ring-border/40 hover:ring-primary/40 bg-gradient-to-br from-accent/5 via-secondary/5 to-primary/5 dark:from-accent/10 dark:via-secondary/10 dark:to-primary/10">
+        <div className="relative">
+          {/* Animated save progress bar */}
+          <AnimatePresence>
+            {status === 'editing' && (
+              <motion.div
+                key="progress"
+                className="absolute left-0 right-0 top-0 h-0.5 bg-primary/40"
+                initial={{ width: '0%' }}
+                animate={{ width: '100%' }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.7, ease: 'easeOut' }}
+              />
+            )}
+          </AnimatePresence>
+        </div>
         <CardHeader className="pb-2 flex items-center justify-between">
           <CardTitle className="text-base">Quick Note</CardTitle>
-          <div className="flex items-center gap-2">
-            <RealtimeSparkline />
-            <div className="text-xs text-muted-foreground min-w-[72px] text-right">
-              <AnimatePresence mode="wait">
-                {status === 'editing' ? (
-                  <motion.span key="editing" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}>
-                    Editing…
-                  </motion.span>
-                ) : status === 'saved' ? (
-                  <motion.span key="saved" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}>
-                    Saved
-                  </motion.span>
+          <div className="flex items-center gap-2 min-w-[92px] justify-end">
+            {status === 'editing' ? (
+              <TypingIndicator />
+            ) : (
+              <AnimatePresence mode="wait" initial={false}>
+                {status === 'saved' ? (
+                  <motion.div
+                    key="saved"
+                    className="flex items-center gap-1 text-primary"
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                  >
+                    <CheckCircle2 className="h-4 w-4" />
+                    <span className="text-xs">Saved</span>
+                  </motion.div>
                 ) : (
-                  <motion.span key="idle" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}>
+                  <motion.span
+                    key="ready"
+                    className="text-xs text-muted-foreground"
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                  >
                     Ready
                   </motion.span>
                 )}
               </AnimatePresence>
-            </div>
+            )}
           </div>
         </CardHeader>
         <CardContent>
