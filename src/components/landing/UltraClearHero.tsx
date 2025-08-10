@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { InteractiveHeroDashboard } from '@/components/showcase/InteractiveHeroDashboard';
+import { RealtimeKPITile } from '@/components/showcase/tiles/RealtimeKPITile';
 import { Link } from 'react-router-dom';
 
 import { BarChart3, Sparkles, Settings2 } from 'lucide-react';
@@ -49,9 +49,7 @@ export function UltraClearHero(): JSX.Element {
         </div>
 
         <div className="relative">
-          <div className="aspect-video rounded-lg overflow-hidden border border-border/50 shadow">
-            <InteractiveHeroDashboard className="h-full" />
-          </div>
+          <RealtimeKPITile />
         </div>
       </div>
     </section>
