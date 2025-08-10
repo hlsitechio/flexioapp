@@ -1,20 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { BarChart3, ChevronsLeft, ChevronsRight, Rocket, Settings2, Shield, Sparkles, Zap } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calendar as UICalendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { TopNavigationGridLayout } from '@/components/top-navigation';
-import { KanbanBoard as KanbanBoardCmp } from '@/components/kanban/KanbanBoard';
-import type { KanbanColumn } from '@/types/kanban';
 import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, arrayMove, sortableKeyboardCoordinates, rectSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useMountAnimation } from '@/hooks/useMountAnimation';
 import { AnimatePresence, motion } from 'framer-motion';
 import MotionGlyph from '@/components/landing/PunchlineAnimations';
-import { HeroKanbanTile, HeroCalendarTile, HeroQuickNoteTile } from '@/components/showcase/tiles';
+import { RealtimeKPITile, CustomizeControlsTile, WorkspaceSwitcherTile, SpeedGaugeTile, SecurityStatusTile, AIInsightsTile } from '@/components/showcase/tiles';
 interface PunchlineItem { id: string; title: string; blurb: string; cta?: { label: string; to: string }; icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; }
 
 const PUNCHLINES: PunchlineItem[] = [
@@ -31,32 +27,7 @@ interface InteractiveHeroDashboardProps {
 }
 
 export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboardProps) {
-  const [columns, setColumns] = useState<KanbanColumn[]>([
-    {
-      id: 'todo',
-      title: 'To Do',
-      items: [
-        { id: 'k1', title: 'Wireframes', content: 'Create initial wireframes', type: 'tool' },
-        { id: 'k2', title: 'API Spec', content: 'Draft endpoints', type: 'tool' },
-      ],
-    },
-    {
-      id: 'inprogress',
-      title: 'In Progress',
-      items: [
-        { id: 'k3', title: 'UI Polish', content: 'Refine components', type: 'tool' },
-      ],
-    },
-    {
-      id: 'done',
-      title: 'Done',
-      items: [
-        { id: 'k4', title: 'Setup', content: 'Project scaffolding', type: 'tool' },
-      ],
-    },
-  ]);
-
-  const tilesDefault = ['kanban', 'calendar', 'note'] as const;
+  const tilesDefault = ['realtime', 'customize', 'workspace', 'fast', 'secure', 'ai'] as const;
   const [tiles, setTiles] = useState<string[]>([...tilesDefault]);
 
   const sensors = useSensors(
@@ -98,8 +69,6 @@ export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboard
   
 // Sidebar items are punchlines defined above.
 
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [note, setNote] = useState('Draft the kickoff agenda for Monday');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const mounted = useMountAnimation(100);
 
@@ -235,31 +204,21 @@ export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboard
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
               <SortableContext items={tiles} strategy={rectSortingStrategy}>
                 {tiles.map((tile, idx) => (
-                  tile === 'kanban' ? (
-                    <SortableTile id="kanban" key="kanban" delay={idx * 80}>
-                      {/* Kanban (interactive) */}
-                      <HeroKanbanTile
-                        columns={columns}
-                        onColumnsChange={setColumns}
-                      />
-                    </SortableTile>
-                  ) : tile === 'calendar' ? (
-                    <SortableTile id="calendar" key="calendar" delay={idx * 80}>
-                      {/* Calendar */}
-                      <HeroCalendarTile
-                        date={date}
-                        onDateChange={setDate}
-                      />
-                    </SortableTile>
-                  ) : (
-                    <SortableTile id="note" key="note" delay={idx * 80}>
-                      {/* Quick Note */}
-                      <HeroQuickNoteTile
-                        note={note}
-                        onNoteChange={setNote}
-                      />
-                    </SortableTile>
-                  )
+                  <SortableTile id={tile} key={tile} delay={idx * 80}>
+                    {tile === 'realtime' ? (
+                      <RealtimeKPITile />
+                    ) : tile === 'customize' ? (
+                      <CustomizeControlsTile />
+                    ) : tile === 'workspace' ? (
+                      <WorkspaceSwitcherTile />
+                    ) : tile === 'fast' ? (
+                      <SpeedGaugeTile />
+                    ) : tile === 'secure' ? (
+                      <SecurityStatusTile />
+                    ) : (
+                      <AIInsightsTile />
+                    )}
+                  </SortableTile>
                 ))}
               </SortableContext>
             </div>
