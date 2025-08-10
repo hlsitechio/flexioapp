@@ -4,10 +4,10 @@ import { Puzzle, Link, Workflow } from 'lucide-react';
 
 export function IntegrationsPage() {
   return (
-    <div className="min-h-screen w-full max-w-[2050px] mx-auto bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-b from-background to-muted/20 overflow-x-hidden">
       {/* Hero Section */}
       <section className="py-24 px-8 sm:px-12 lg:px-16">
-        <div className="w-full mx-auto text-center space-y-12">
+        <div className="w-full max-w-[2050px] mx-auto text-center space-y-12">
           <div className="space-y-6">
             <h1 className="text-5xl lg:text-6xl font-bold tracking-tight">
               Integrations
