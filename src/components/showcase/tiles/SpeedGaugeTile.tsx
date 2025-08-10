@@ -18,11 +18,14 @@ export function SpeedGaugeTile({ className }: { className?: string }) {
         <CardContent>
           <div className="space-y-3">
             <div className="h-3 rounded-full bg-muted/60 overflow-hidden">
-              <motion.div
-                className="h-full rounded-full bg-primary"
-                animate={{ width: ['0%', '65%', '100%', '0%'] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
-              />
+              <div className="h-full rounded-full bg-primary origin-left will-change-transform" style={{ width: '100%' }}>
+                <motion.div
+                  className="h-full w-full"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: [0, 0.65, 1, 0] }}
+                  transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+                />
+              </div>
             </div>
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span>Page load</span>

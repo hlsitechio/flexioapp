@@ -22,10 +22,11 @@ export function WorkspaceSwitcherTile({ className }: { className?: string }) {
         <CardContent>
           <div className="relative rounded-md border border-border/50 bg-background/60 p-2 overflow-hidden">
             <motion.div
-              className="absolute top-2 left-2 right-2 h-8 rounded-md bg-primary/10"
+              className="absolute left-2 right-2 h-8 rounded-md bg-primary/10 will-change-transform"
               layoutId="wsHighlight"
               initial={false}
-              animate={{ top: active === 'mkt' ? 8 : active === 'prd' ? 40 : 72 }}
+              style={{ top: 8 }}
+              animate={{ y: active === 'mkt' ? 0 : active === 'prd' ? 32 : 64 }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             />
             <div className="relative flex flex-col gap-2">

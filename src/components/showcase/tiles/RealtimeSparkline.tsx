@@ -27,10 +27,10 @@ export function RealtimeSparkline({ className, bars = 10 }: RealtimeSparklinePro
       {values.map((v, i) => (
         <motion.div
           key={i}
-          initial={{ height: 4, opacity: 0.8 }}
-          animate={{ height: Math.max(4, v * 16) }}
+          initial={{ scaleY: 0.25, opacity: 0.9 }}
+          animate={{ scaleY: Math.max(0.25, v) }}
           transition={{ type: 'spring', stiffness: 170, damping: 18 }}
-          className="w-1 rounded-sm bg-primary/60 dark:bg-primary/70"
+          className="w-1 h-full origin-bottom rounded-sm bg-primary/60 dark:bg-primary/70 will-change-transform"
         />
       ))}
     </div>
