@@ -3,16 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { FileText, Download, ExternalLink, AlertCircle, ZoomIn, ZoomOut } from 'lucide-react';
+import { FileText, Download, ExternalLink, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-// Import PDF viewer
-const Document = React.lazy(() => 
-  import('react-pdf').then(module => ({ default: module.Document }))
-);
-const Page = React.lazy(() => 
-  import('react-pdf').then(module => ({ default: module.Page }))
-);
 
 interface DocumentViewerProps {
   fileUrl: string;
@@ -33,15 +25,6 @@ export function DocumentViewer({
 }: DocumentViewerProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [numPages, setNumPages] = useState<number>(0);
-  const [pageNumber, setPageNumber] = useState<number>(1);
-  const [scale, setScale] = useState<number>(1.0);
-
-  const handleLoadSuccess = ({ numPages }: { numPages: number }) => {
-    setNumPages(numPages);
-    setIsLoading(false);
-    setError(null);
-  };
 
   const handleLoadError = (err: any) => {
     setIsLoading(false);
@@ -58,64 +41,15 @@ export function DocumentViewer({
     
     if (extension === 'pdf') {
       return (
-        <React.Suspense fallback={<Skeleton className="h-[400px] w-full" />}>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setPageNumber(Math.max(1, pageNumber - 1))}
-                  disabled={pageNumber <= 1}
-                >
-                  Previous
-                </Button>
-                <span className="text-sm">
-                  Page {pageNumber} of {numPages}
-                </span>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setPageNumber(Math.min(numPages, pageNumber + 1))}
-                  disabled={pageNumber >= numPages}
-                >
-                  Next
-                </Button>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setScale(Math.max(0.5, scale - 0.1))}
-                >
-                  <ZoomOut className="h-3 w-3" />
-                </Button>
-                <span className="text-sm">{Math.round(scale * 100)}%</span>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setScale(Math.min(2.0, scale + 0.1))}
-                >
-                  <ZoomIn className="h-3 w-3" />
-                </Button>
-              </div>
-            </div>
-            <div className="overflow-auto" style={{ height: `${height - 100}px` }}>
-              <Document
-                file={fileUrl}
-                onLoadSuccess={handleLoadSuccess}
-                onLoadError={handleLoadError}
-                loading={<Skeleton className="h-[400px] w-full" />}
-              >
-                <Page 
-                  pageNumber={pageNumber} 
-                  scale={scale}
-                  loading={<Skeleton className="h-[400px] w-full" />}
-                />
-              </Document>
-            </div>
-          </div>
-        </React.Suspense>
+        <div className="w-full" style={{ height: `${height}px` }}>
+          <iframe 
+            src={fileUrl} 
+            className="w-full h-full border rounded"
+            title={fileName}
+            onLoad={() => setIsLoading(false)}
+            onError={() => handleLoadError('PDF load failed')}
+          />
+        </div>
       );
     }
     
