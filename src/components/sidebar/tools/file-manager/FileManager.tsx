@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { FolderOpen, Upload, FileText, Image } from 'lucide-react';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { DocumentViewer } from '@/components/shared/DocumentViewer';
+import { FolderOpen, Upload, FileText, Image, Eye } from 'lucide-react';
 
 export function FileManager() {
   const [files] = useState([
-    { name: 'document.pdf', type: 'pdf', size: '2.4 MB' },
-    { name: 'images/', type: 'folder', size: '12 files' },
-    { name: 'notes.txt', type: 'text', size: '1.2 KB' }
+    { name: 'document.pdf', type: 'pdf', size: '2.4 MB', url: '/lovable-uploads/sample-document.pdf' },
+    { name: 'images/', type: 'folder', size: '12 files', url: '' },
+    { name: 'notes.txt', type: 'text', size: '1.2 KB', url: '/lovable-uploads/sample-notes.txt' }
   ]);
 
   const storageUsed = 68;
@@ -20,6 +22,10 @@ export function FileManager() {
       case 'image': return <Image className="h-3 w-3 text-green-500" />;
       default: return <FileText className="h-3 w-3 text-gray-500" />;
     }
+  };
+
+  const isViewableFile = (type: string) => {
+    return ['pdf', 'text', 'image'].includes(type);
   };
 
   return (
@@ -47,6 +53,23 @@ export function FileManager() {
                 <div className="font-medium truncate">{file.name}</div>
                 <div className="text-xs text-muted-foreground">{file.size}</div>
               </div>
+              {isViewableFile(file.type) && file.url && (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size="sm" variant="ghost" className="h-5 w-5 p-0">
+                      <Eye className="h-2.5 w-2.5" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-3xl max-h-[80vh]">
+                    <DocumentViewer
+                      fileUrl={file.url}
+                      fileName={file.name}
+                      fileType={file.type}
+                      height={400}
+                    />
+                  </DialogContent>
+                </Dialog>
+              )}
             </div>
           ))}
         </div>

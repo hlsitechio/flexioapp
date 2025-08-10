@@ -26,6 +26,7 @@ export { DashboardMessageCenter } from './DashboardMessageCenter';
 
 // Utility
 export { DashboardFileManager } from './DashboardFileManager';
+export { DashboardDocumentViewer } from './DashboardDocumentViewer';
 export { DashboardQRCodeGenerator } from './DashboardQRCodeGenerator';
 
 // Entertainment
