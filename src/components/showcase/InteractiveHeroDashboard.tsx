@@ -12,6 +12,8 @@ import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, DragE
 import { SortableContext, arrayMove, sortableKeyboardCoordinates, rectSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useMountAnimation } from '@/hooks/useMountAnimation';
+import { AnimatePresence, motion } from 'framer-motion';
+import MotionGlyph from '@/components/landing/PunchlineAnimations';
 interface PunchlineItem { id: string; title: string; blurb: string; cta?: { label: string; to: string }; icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; }
 
 const PUNCHLINES: PunchlineItem[] = [
@@ -198,24 +200,34 @@ export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboard
         <main className="relative z-10 flex-1 p-3 sm:p-4 lg:p-6">
           {/* Punchline banner */}
           <div
-            className="mb-4 animate-fade-in"
+            className="mb-4"
             onMouseEnter={() => (pauseRef.current = true)}
             onMouseLeave={() => (pauseRef.current = false)}
           >
-            <div className="rounded-lg border border-border/50 bg-card/30 p-3 md:p-4 flex items-start justify-between gap-3">
-              <div className="flex items-start gap-3">
-                <currentPunch.icon className="h-5 w-5 text-primary mt-0.5" aria-hidden="true" />
-                <div>
-                  <div className="text-sm md:text-base font-medium">{currentPunch.title}</div>
-                  <div className="text-xs md:text-sm text-muted-foreground">{currentPunch.blurb}</div>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activePunch}
+                initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -8, scale: 0.98 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+              >
+                <div className="rounded-lg border border-border/50 bg-card/30 p-3 md:p-4 flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-3">
+                    <MotionGlyph id={currentPunch.id as any} Icon={currentPunch.icon} />
+                    <div>
+                      <div className="text-sm md:text-base font-medium">{currentPunch.title}</div>
+                      <div className="text-xs md:text-sm text-muted-foreground">{currentPunch.blurb}</div>
+                    </div>
+                  </div>
+                  {currentPunch.cta && (
+                    <Button asChild size="sm" className="story-link">
+                      <Link to={currentPunch.cta.to}>{currentPunch.cta.label}</Link>
+                    </Button>
+                  )}
                 </div>
-              </div>
-              {currentPunch.cta && (
-                <Button asChild size="sm" className="story-link">
-                  <Link to={currentPunch.cta.to}>{currentPunch.cta.label}</Link>
-                </Button>
-              )}
-            </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           <DndContext sensors={sensors} onDragEnd={handleTilesDragEnd}>
