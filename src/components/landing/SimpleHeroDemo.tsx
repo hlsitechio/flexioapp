@@ -49,20 +49,21 @@ export function SimpleHeroDemo({ className }: { className?: string }) {
     <div className={cn('grid grid-cols-1 md:grid-cols-[260px,1fr] h-full', className)}>
       <aside className="border-r border-border/50 bg-background/60">
         <nav aria-label="Hero feature list" className="p-2 md:p-3">
-          <div className="text-[11px] uppercase tracking-wide text-muted-foreground px-2 py-1">Main</div>
+          <div className="text-[11px] uppercase tracking-wider text-foreground/70 px-2 py-1 font-medium">Main</div>
           <ul className="space-y-1">
             {ITEMS.map((item) => (
               <li key={item.id}>
                 <button
                   type="button"
                   className={cn(
-                    'w-full text-left px-2.5 py-2 rounded-md text-sm transition-colors',
+                    'w-full text-left px-3 py-2.5 rounded-md text-[15px] md:text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-0',
                     active === item.id
-                      ? 'bg-primary/10 text-foreground ring-1 ring-primary/30'
-                      : 'hover:bg-muted/60 text-muted-foreground'
+                      ? 'bg-primary/15 text-foreground ring-1 ring-primary/40'
+                      : 'text-foreground/80 hover:text-foreground hover:bg-muted/70'
                   )}
                   onClick={() => setActive(item.id)}
                   aria-current={active === item.id ? 'true' : undefined}
+                  aria-selected={active === item.id}
                 >
                   {item.label}
                 </button>
