@@ -1,8 +1,6 @@
 import { SEOHead } from '@/components/seo/SEOHead';
 import { AISearchOptimization } from '@/components/seo/AISearchOptimization';
 import UltraClearHero from '@/components/landing/UltraClearHero';
-import { FeaturePeekCarousel } from '@/components/landing/FeaturePeekCarousel';
-import PunchlineSidebarShowcase from '@/components/landing/PunchlineSidebarShowcase';
 
 export default function UltraClearLanding(): JSX.Element {
   const canonical = typeof window !== 'undefined' ? window.location.pathname : '/';
@@ -28,8 +26,6 @@ export default function UltraClearLanding(): JSX.Element {
 
       <main>
         <UltraClearHero />
-        <PunchlineSidebarShowcase />
-        <FeaturePeekCarousel />
       </main>
     </div>
   );
