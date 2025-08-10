@@ -26,10 +26,14 @@ export function DocumentViewer({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const handleLoadError = (err: any) => {
+  const handleLoadError = () => {
     setIsLoading(false);
     setError('Failed to load document. Please try again or download the file.');
-    console.error('Document viewer error:', err);
+  };
+
+  const handleLoad = () => {
+    setIsLoading(false);
+    setError(null);
   };
 
   const getFileExtension = () => {
@@ -46,38 +50,38 @@ export function DocumentViewer({
             src={fileUrl} 
             className="w-full h-full border rounded"
             title={fileName}
-            onLoad={() => setIsLoading(false)}
-            onError={() => handleLoadError('PDF load failed')}
+            onLoad={handleLoad}
+            onError={handleLoadError}
           />
         </div>
       );
     }
     
     // Handle images
-    if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension || '')) {
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(extension || '')) {
       return (
         <div className="flex justify-center items-center" style={{ height: `${height}px` }}>
           <img 
             src={fileUrl} 
             alt={fileName}
-            className="max-w-full max-h-full object-contain"
-            onLoad={() => setIsLoading(false)}
-            onError={() => handleLoadError('Image load failed')}
+            className="max-w-full max-h-full object-contain rounded"
+            onLoad={handleLoad}
+            onError={handleLoadError}
           />
         </div>
       );
     }
     
-    // Handle text files
-    if (['txt', 'md', 'json', 'csv'].includes(extension || '')) {
+    // Handle text files and documents
+    if (['txt', 'md', 'json', 'csv', 'docx', 'xlsx', 'pptx'].includes(extension || '')) {
       return (
-        <div className="p-4" style={{ height: `${height}px`, overflow: 'auto' }}>
+        <div className="w-full" style={{ height: `${height}px` }}>
           <iframe 
             src={fileUrl} 
-            className="w-full h-full border-0"
+            className="w-full h-full border rounded"
             title={fileName}
-            onLoad={() => setIsLoading(false)}
-            onError={() => handleLoadError('Text file load failed')}
+            onLoad={handleLoad}
+            onError={handleLoadError}
           />
         </div>
       );
