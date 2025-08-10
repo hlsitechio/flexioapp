@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
-import { LazyImage } from '@/components/ui/lazy-image';
+import { InteractiveHeroDashboard } from '@/components/showcase/InteractiveHeroDashboard';
 import { Link } from 'react-router-dom';
-import heroImg from '@/assets/hero-dashboard-hero.jpg';
+
 import { BarChart3, Sparkles, Settings2 } from 'lucide-react';
 
 export function UltraClearHero(): JSX.Element {
@@ -50,13 +50,7 @@ export function UltraClearHero(): JSX.Element {
 
         <div className="relative">
           <div className="aspect-video rounded-lg overflow-hidden border border-border/50 shadow">
-            <LazyImage
-              src={heroImg}
-              alt="FlexIO realtime dashboard preview with charts, calendar, and widgets"
-              className="w-full h-full object-cover"
-              width={1200}
-              height={675}
-            />
+            <InteractiveHeroDashboard className="h-full" />
           </div>
         </div>
       </div>

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Home, Kanban, StickyNote, Calendar as CalendarIcon, BookMarked, BarChart3, Settings, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { BarChart3, ChevronsLeft, ChevronsRight, Rocket, Settings2, Shield, Sparkles, Zap } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar as UICalendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 import { TopNavigationGridLayout } from '@/components/top-navigation';
 import { KanbanBoard as KanbanBoardCmp } from '@/components/kanban/KanbanBoard';
 import type { KanbanColumn } from '@/types/kanban';
@@ -11,6 +12,17 @@ import { DndContext, KeyboardSensor, PointerSensor, useSensor, useSensors, DragE
 import { SortableContext, arrayMove, sortableKeyboardCoordinates, rectSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useMountAnimation } from '@/hooks/useMountAnimation';
+interface PunchlineItem { id: string; title: string; blurb: string; cta?: { label: string; to: string }; icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; }
+
+const PUNCHLINES: PunchlineItem[] = [
+  { id: 'realtime', title: 'Realtime BI dashboards — no setup pain', blurb: 'Stream KPIs and charts instantly. See changes as they happen.', cta: { label: 'Try the Live Demo', to: '/landing/demo' }, icon: Zap },
+  { id: 'customize', title: 'Drag‑and‑drop customization in minutes', blurb: 'Rearrange widgets, resize charts, and tailor layouts to your team.', cta: { label: 'See Features', to: '/product/features' }, icon: Settings2 },
+  { id: 'workspace', title: 'All‑in‑one workspace: dashboards, notes, calendar, projects', blurb: 'One place to focus: analytics, planning, and execution together.', cta: { label: 'Explore the Workspace', to: '/landing' }, icon: BarChart3 },
+  { id: 'fast', title: 'Lighting‑fast UI optimized for everyday teams', blurb: 'Open in milliseconds, navigate with zero friction, stay in flow.', cta: { label: 'Why Speed Matters', to: '/resources/documentation' }, icon: Rocket },
+  { id: 'secure', title: 'Built‑in security & privacy by default', blurb: 'Auditing, account protection, and safe defaults baked in.', cta: { label: 'Security Overview', to: '/settings/security' }, icon: Shield },
+  { id: 'ai', title: 'AI‑friendly content structure for better discovery', blurb: 'Clean metadata, structured data, and optimized semantics.', cta: { label: 'Our SEO Approach', to: '/resources/help-center' }, icon: Sparkles },
+];
+
 interface InteractiveHeroDashboardProps {
   className?: string;
 }
@@ -81,20 +93,36 @@ export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboard
     );
   }
   
-  const navItems = [
-    { label: 'Dashboard', icon: Home, active: true },
-    { label: 'Kanban', icon: Kanban },
-    { label: 'Notes', icon: StickyNote },
-    { label: 'Calendar', icon: CalendarIcon },
-    { label: 'Bookmarks', icon: BookMarked },
-    { label: 'Analytics', icon: BarChart3 },
-    { label: 'Settings', icon: Settings },
-  ];
+// Sidebar items are punchlines defined above.
 
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [note, setNote] = useState('Draft the kickoff agenda for Monday');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const mounted = useMountAnimation(100);
+
+  // Punchline autoplay + manual control
+  const [activePunch, setActivePunch] = useState<string>(PUNCHLINES[0].id);
+  const intervalRef = useRef<number | null>(null);
+  const pauseRef = useRef(false);
+
+  useEffect(() => {
+    const stop = () => { if (intervalRef.current) window.clearInterval(intervalRef.current); intervalRef.current = null; };
+    const start = () => {
+      stop();
+      intervalRef.current = window.setInterval(() => {
+        if (pauseRef.current) return;
+        setActivePunch((prev) => {
+          const idx = PUNCHLINES.findIndex((i) => i.id === prev);
+          const next = (idx + 1) % PUNCHLINES.length;
+          return PUNCHLINES[next].id;
+        });
+      }, 3500);
+    };
+    start();
+    return stop;
+  }, []);
+
+  const currentPunch = PUNCHLINES.find((i) => i.id === activePunch)!;
 
   return (
     <div
@@ -142,19 +170,24 @@ export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboard
           <div className="p-3">
             {!sidebarCollapsed && (<div className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Main</div>)}
             <nav className="space-y-1">
-              {navItems.map(({ label, icon: Icon, active }) => (
+              {PUNCHLINES.map((pl) => (
                 <button
-                  key={label}
+                  key={pl.id}
                   className={cn(
-                    "w-full flex items-center gap-2 rounded-md px-2 py-1.5 text-sm",
-                    sidebarCollapsed ? "justify-center" : "text-left",
-                    active
-                      ? "bg-primary/10 text-foreground"
-                      : "hover:bg-muted/50 text-muted-foreground"
+                    'w-full flex items-center gap-2 rounded-md px-2 py-1.5 text-sm',
+                    sidebarCollapsed ? 'justify-center' : 'text-left',
+                    activePunch === pl.id
+                      ? 'bg-primary/10 text-foreground'
+                      : 'hover:bg-muted/50 text-muted-foreground'
                   )}
+                  onClick={() => {
+                    pauseRef.current = true;
+                    setActivePunch(pl.id);
+                    window.setTimeout(() => (pauseRef.current = false), 600);
+                  }}
                 >
-                  <Icon className={cn("h-4 w-4", active ? "text-primary" : "text-foreground/60")} />
-                  {!sidebarCollapsed && <span>{label}</span>}
+                  <pl.icon className={cn('h-4 w-4', activePunch === pl.id ? 'text-primary' : 'text-foreground/60')} />
+                  {!sidebarCollapsed && <span>{pl.title}</span>}
                 </button>
               ))}
             </nav>
@@ -163,6 +196,28 @@ export function InteractiveHeroDashboard({ className }: InteractiveHeroDashboard
 
         {/* Main content */}
         <main className="relative z-10 flex-1 p-3 sm:p-4 lg:p-6">
+          {/* Punchline banner */}
+          <div
+            className="mb-4 animate-fade-in"
+            onMouseEnter={() => (pauseRef.current = true)}
+            onMouseLeave={() => (pauseRef.current = false)}
+          >
+            <div className="rounded-lg border border-border/50 bg-card/30 p-3 md:p-4 flex items-start justify-between gap-3">
+              <div className="flex items-start gap-3">
+                <currentPunch.icon className="h-5 w-5 text-primary mt-0.5" aria-hidden="true" />
+                <div>
+                  <div className="text-sm md:text-base font-medium">{currentPunch.title}</div>
+                  <div className="text-xs md:text-sm text-muted-foreground">{currentPunch.blurb}</div>
+                </div>
+              </div>
+              {currentPunch.cta && (
+                <Button asChild size="sm" className="story-link">
+                  <Link to={currentPunch.cta.to}>{currentPunch.cta.label}</Link>
+                </Button>
+              )}
+            </div>
+          </div>
+
           <DndContext sensors={sensors} onDragEnd={handleTilesDragEnd}>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
               <SortableContext items={tiles} strategy={rectSortingStrategy}>
