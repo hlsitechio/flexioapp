@@ -19,6 +19,7 @@ import { ProfilePage } from "./pages/profile";
 import { ComponentsPage } from "./pages/components";
 import { CustomizationPage } from "./pages/customization";
 import { WorkspaceProfilesPage } from "./pages/workspace";
+import { DocumentsPage } from "./pages/documents";
 import { WorkspaceHashNavigator } from "./components/workspace/WorkspaceHashNavigator";
 import { WorkspaceUrlManager } from "./components/workspace/WorkspaceUrlManager";
 import { LandingPage, ContactPage, DemoPage, LandingPage2 } from "./pages/landing";
@@ -159,6 +160,7 @@ const App = () => {
               <Route path="prompts-gallery" element={user ? <LazyPromptsGalleryPage /> : <Navigate to="/auth" replace />} />
               <Route path="code-snippets" element={user ? <LazyCodeSnippetsPage /> : <Navigate to="/auth" replace />} />
               <Route path="analytics" element={user ? <LazyAnalyticsPage /> : <Navigate to="/auth" replace />} />
+              <Route path="documents-viewer" element={user ? <DocumentsPage /> : <Navigate to="/auth" replace />} />
               <Route path="workspace-profiles" element={user ? <WorkspaceProfilesPage /> : <Navigate to="/auth" replace />} />
             </Route>
           </Route>
