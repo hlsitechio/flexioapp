@@ -10,9 +10,8 @@ import { analytics } from "@/lib/analytics";
 import { useEffect } from "react";
 import { useServiceWorker } from "@/hooks/useServiceWorker";
 import { toast } from "@/components/ui/sonner";
-import Index from "./pages/Index";
 // Use lazy-loaded heavy pages
-import { LazyAuthPage, LazyWorkspacePage, LazyAnalyticsPage, LazySettingsPage, LazyAdminDashboard, LazyCodeSnippetsPage, LazyPromptsGalleryPage } from "@/lib/code-splitting";
+import { LazyAuthPage, LazyWorkspacePage, LazyAnalyticsPage, LazySettingsPage, LazyAdminDashboard, LazyCodeSnippetsPage, LazyPromptsGalleryPage, LazyWorkspaceDashboard } from "@/lib/code-splitting";
 import { isPublicPath } from "@/lib/routes/publicPaths";
 import { EmailTest } from "./pages/settings/EmailTest";
 import { ProfilePage } from "./pages/profile";
@@ -126,8 +125,8 @@ const App = () => {
         <Routes>
           {/* Public routes under WebsiteLayout */}
           <Route element={<WebsiteLayout />}>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/landing" element={<UltraClearLanding />} />
+            <Route path="/" element={<UltraClearLanding />} />
+            <Route path="/landing" element={<LandingPage />} />
             <Route path="/landing-2" element={<LandingPage2 />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/demo" element={<DemoPage />} />
@@ -151,7 +150,7 @@ const App = () => {
 
             {/* Workspace-specific nested routes */}
             <Route path="/workspace/:workspaceDetails">
-              <Route index element={user && workspace ? <Index /> : <Navigate to="/workspace-selection" replace />} />
+              <Route index element={user && workspace ? <LazyWorkspaceDashboard /> : <Navigate to="/workspace-selection" replace />} />
               <Route path="profile" element={user ? <ProfilePage /> : <Navigate to="/auth" replace />} />
               <Route path="components" element={user ? <ComponentsPage /> : <Navigate to="/auth" replace />} />
               <Route path="settings" element={user ? <LazySettingsPage /> : <Navigate to="/auth" replace />} />

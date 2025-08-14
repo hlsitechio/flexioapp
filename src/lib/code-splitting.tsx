@@ -83,6 +83,11 @@ export const LazyPromptsGalleryPage = createLazyComponent(
   () => import('@/pages/prompts-gallery/PromptsGalleryPage').then(module => ({ default: module.PromptsGalleryPage }))
 );
 
+export const LazyWorkspaceDashboard = createLazyComponent(
+  () => import('@/pages/workspace/WorkspaceDashboard').then(module => ({ default: module.WorkspaceDashboard })),
+  DashboardSkeleton
+);
+
 // Utility for preloading components
 export function preloadComponent(importFn: () => Promise<any>) {
   return importFn();
