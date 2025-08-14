@@ -93,7 +93,7 @@ export function GridLayout({ editMode }: GridLayoutProps) {
   const totalCells = rows * cols;
   const handleAddComponent = (slotIndex: number) => {
     if (editMode) {
-      navigate(`/components?slot=${slotIndex}&gridSize=${gridSize}`);
+      navigate(`components?slot=${slotIndex}&gridSize=${gridSize}`);
     }
   };
   const placeholderImages = ['photo-1461749280684-dccba630e2f6',
