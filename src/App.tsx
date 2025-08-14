@@ -21,7 +21,7 @@ import { WorkspaceProfilesPage } from "./pages/workspace";
 import { DocumentsPage } from "./pages/documents";
 import { WorkspaceHashNavigator } from "./components/workspace/WorkspaceHashNavigator";
 import { WorkspaceUrlManager } from "./components/workspace/WorkspaceUrlManager";
-import { LandingPage, ContactPage, DemoPage, LandingPage2 } from "./pages/landing";
+import { LandingPage, ContactPage, DemoPage } from "./pages/landing";
 import UltraClearLanding from "./pages/landing/UltraClearLanding";
 import { AboutPage, CareersPage, BlogPage } from "./pages/company";
 import { FeaturesPage, PricingPage, IntegrationsPage } from "./pages/product";
@@ -127,7 +127,7 @@ const App = () => {
           <Route element={<WebsiteLayout />}>
             <Route path="/" element={<UltraClearLanding />} />
             <Route path="/landing" element={<LandingPage />} />
-            <Route path="/landing-2" element={<LandingPage2 />} />
+            
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/demo" element={<DemoPage />} />
             <Route path="/about" element={<AboutPage />} />
