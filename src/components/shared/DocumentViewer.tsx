@@ -43,20 +43,6 @@ export function DocumentViewer({
   const renderContent = () => {
     const extension = getFileExtension();
     
-    if (extension === 'pdf') {
-      return (
-        <div className="w-full" style={{ height: `${height}px` }}>
-          <iframe 
-            src={fileUrl} 
-            className="w-full h-full border rounded"
-            title={fileName}
-            onLoad={handleLoad}
-            onError={handleLoadError}
-          />
-        </div>
-      );
-    }
-    
     // Handle images
     if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(extension || '')) {
       return (
@@ -72,8 +58,8 @@ export function DocumentViewer({
       );
     }
     
-    // Handle text files and documents
-    if (['txt', 'md', 'json', 'csv', 'docx', 'xlsx', 'pptx'].includes(extension || '')) {
+    // Handle all other document types with iframe
+    if (['pdf', 'txt', 'md', 'json', 'csv', 'docx', 'xlsx', 'pptx'].includes(extension || '')) {
       return (
         <div className="w-full" style={{ height: `${height}px` }}>
           <iframe 

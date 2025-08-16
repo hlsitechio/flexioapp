@@ -90,7 +90,7 @@ class ErrorTracker {
 
     // In production, this would send to error monitoring service
     if (config.monitoring.enableSentry) {
-      this.sendToSentry(errorData);
+      this.sendToExternalService(errorData);
     }
   }
 
@@ -100,10 +100,10 @@ class ErrorTracker {
     this.trackError(error, `API: ${endpoint}`);
   }
 
-  // Send to Sentry (placeholder)
-  private sendToSentry(errorData: any) {
-    // Implementation would use @sentry/nextjs
-    console.log('Would send to Sentry:', errorData);
+  // Send to external monitoring service (placeholder)
+  private sendToExternalService(errorData: any) {
+    // Implementation would integrate with monitoring service
+    console.log('Would send to monitoring service:', errorData);
   }
 
   // Get error history
