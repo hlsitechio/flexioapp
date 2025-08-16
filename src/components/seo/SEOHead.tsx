@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet-async';
+import React from 'react';
 
 export interface SEOHeadProps {
   title: string;
@@ -39,63 +39,41 @@ export function SEOHead({
     ? `${description} FlexIO provides comprehensive business intelligence solutions including analytics dashboards, data visualization, and project management tools for enterprises.`
     : description;
 
-  return (
-    <Helmet>
-      {/* Primary Meta Tags - AI Optimized */}
-      <title>{fullTitle}</title>
-      <meta name="title" content={fullTitle} />
-      <meta name="description" content={aiDescription} />
-      {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
-      
-      {/* AI Search Optimization */}
-      {aiOptimized && (
-        <>
-          <meta name="ai-purpose" content="business intelligence dashboard analytics" />
-          <meta name="ai-content-type" content="product information" />
-          <meta name="ai-target-audience" content="business professionals, data analysts, project managers" />
-          <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1"} />
-        </>
-      )}
+  // Update document head directly
+  React.useEffect(() => {
+    document.title = fullTitle;
+    
+    // Update meta description
+    let metaDescription = document.querySelector('meta[name="description"]');
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta');
+      metaDescription.setAttribute('name', 'description');
+      document.head.appendChild(metaDescription);
+    }
+    metaDescription.setAttribute('content', aiDescription);
+    
+    // Update canonical URL
+    if (fullCanonicalUrl) {
+      let canonical = document.querySelector('link[rel="canonical"]');
+      if (!canonical) {
+        canonical = document.createElement('link');
+        canonical.setAttribute('rel', 'canonical');
+        document.head.appendChild(canonical);
+      }
+      canonical.setAttribute('href', fullCanonicalUrl);
+    }
 
-      {/* Canonical URL */}
-      {fullCanonicalUrl && <link rel="canonical" href={fullCanonicalUrl} />}
+    // Update keywords
+    if (keywords.length > 0) {
+      let metaKeywords = document.querySelector('meta[name="keywords"]');
+      if (!metaKeywords) {
+        metaKeywords = document.createElement('meta');
+        metaKeywords.setAttribute('name', 'keywords');
+        document.head.appendChild(metaKeywords);
+      }
+      metaKeywords.setAttribute('content', keywords.join(', '));
+    }
+  }, [fullTitle, aiDescription, fullCanonicalUrl, keywords]);
 
-      {/* Open Graph / Facebook */}
-      <meta property="og:type" content={ogType} />
-      <meta property="og:url" content={fullCanonicalUrl || siteUrl} />
-      <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={fullOgImage} />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
-      <meta property="og:site_name" content="FlexIO" />
-
-      {/* Article specific */}
-      {ogType === 'article' && (
-        <>
-          {publishedTime && <meta property="article:published_time" content={publishedTime} />}
-          {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
-          {author && <meta property="article:author" content={author} />}
-          {articleSection && <meta property="article:section" content={articleSection} />}
-        </>
-      )}
-
-      {/* Twitter */}
-      <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:url" content={fullCanonicalUrl || siteUrl} />
-      <meta property="twitter:title" content={fullTitle} />
-      <meta property="twitter:description" content={description} />
-      <meta property="twitter:image" content={fullOgImage} />
-
-      {/* AI-Optimized Structured Markup */}
-      <meta name="application-name" content="FlexIO" />
-      <meta name="theme-color" content="#0066cc" />
-      <meta name="format-detection" content="telephone=no" />
-      
-      {/* Schema.org for Search Engines */}
-      <meta itemProp="name" content={fullTitle} />
-      <meta itemProp="description" content={description} />
-      <meta itemProp="image" content={fullOgImage} />
-    </Helmet>
-  );
+  return null;
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { HelmetProvider } from 'react-helmet-async';
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { SafeThemeProvider } from "@/components/providers/SafeThemeProvider";
@@ -18,65 +17,65 @@ import { isPublicPath } from "@/lib/routes/publicPaths";
 // Wrapper for authenticated-only providers
 function AuthenticatedProviders({ children }: { children: React.ReactNode }) {
   return (
-    <NotificationProvider>
-      <WorkspaceProvider>
-        <WorkspaceProfileProvider>
-          <SettingsProvider>
-            <UISettingsProvider>
-              <DashboardSettingsProvider>
-                <NavigationSettingsProvider>
-                  {children}
-                </NavigationSettingsProvider>
-              </DashboardSettingsProvider>
-            </UISettingsProvider>
-          </SettingsProvider>
-        </WorkspaceProfileProvider>
-      </WorkspaceProvider>
-    </NotificationProvider>
+    <AuthProvider>
+      <NotificationProvider>
+        <WorkspaceProvider>
+          <WorkspaceProfileProvider>
+            <SettingsProvider>
+              <UISettingsProvider>
+                <DashboardSettingsProvider>
+                  <NavigationSettingsProvider>
+                    {children}
+                  </NavigationSettingsProvider>
+                </DashboardSettingsProvider>
+              </UISettingsProvider>
+            </SettingsProvider>
+          </WorkspaceProfileProvider>
+        </WorkspaceProvider>
+      </NotificationProvider>
+    </AuthProvider>
   );
 }
 
-// Minimal providers for public pages - NO auth-related contexts
+// Minimal wrapper for public pages
 function PublicProviders({ children }: { children: React.ReactNode }) {
-  return (
-    <>{children}</>
-  );
+  return <>{children}</>;
 }
-
-const queryClient = new QueryClient();
 
 interface AppProvidersProps {
   children: React.ReactNode;
 }
 
 export function AppProviders({ children }: AppProvidersProps) {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        retry: (failureCount, error) => {
+          if (failureCount < 2) return true;
+          console.error('Query failed:', error);
+          return false;
+        },
+      },
+    },
+  });
+
   const location = useLocation();
-  // Check if we're on a public page that doesn't need authentication contexts
-  const isPublicPage = isPublicPath(location.pathname);
+  const isPublic = isPublicPath(location.pathname);
+
+  const ProvidersWrapper = isPublic ? PublicProviders : AuthenticatedProviders;
 
   return (
     <QueryClientProvider client={queryClient}>
-      <HelmetProvider>
-        <SafeThemeProvider>
-          {isPublicPage ? (
-            // No AuthProvider on public pages to prevent Supabase calls
-            <TooltipProvider>
-              <SidebarProvider defaultOpen={true}>
-                <PublicProviders>{children}</PublicProviders>
-              </SidebarProvider>
-            </TooltipProvider>
-          ) : (
-            // Full providers for authenticated pages
-            <AuthProvider>
-              <TooltipProvider>
-                <SidebarProvider defaultOpen={true}>
-                  <AuthenticatedProviders>{children}</AuthenticatedProviders>
-                </SidebarProvider>
-              </TooltipProvider>
-            </AuthProvider>
-          )}
-        </SafeThemeProvider>
-      </HelmetProvider>
+      <SafeThemeProvider>
+        <TooltipProvider>
+          <SidebarProvider defaultOpen={!isPublic}>
+            <ProvidersWrapper>
+              {children}
+            </ProvidersWrapper>
+          </SidebarProvider>
+        </TooltipProvider>
+      </SafeThemeProvider>
     </QueryClientProvider>
   );
 }
