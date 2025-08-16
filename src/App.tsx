@@ -125,7 +125,7 @@ const App = () => {
         <Routes>
           {/* Public routes under WebsiteLayout */}
           <Route element={<WebsiteLayout />}>
-            <Route path="/" element={<UltraClearLanding />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/landing" element={<LandingPage />} />
             
             <Route path="/contact" element={<ContactPage />} />
