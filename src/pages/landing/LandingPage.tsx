@@ -1,57 +1,51 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { LazyImage } from '@/components/ui/lazy-image';
-import { CheckCircle, ArrowRight, Star, Users, Shield, Zap, Clock, UserCheck, Crown, DollarSign, BarChart3, Calendar, FileText, Bookmark, Calculator, Timer, Plus, Minus } from 'lucide-react';
-import { SEOHead, StructuredData } from '@/components/seo';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { 
+  BarChart3, 
+  Calendar, 
+  CheckCircle, 
+  Clock, 
+  Database, 
+  FileText, 
+  Globe, 
+  Layout, 
+  Lock, 
+  PieChart, 
+  Star, 
+  Target, 
+  TrendingUp,
+  Users,
+  Zap,
+  ArrowRight,
+  Play,
+  Shield,
+  Sparkles,
+  ChevronDown
+} from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { SEOHead } from '@/components/seo/SEOHead';
 import { CriticalCSS } from '@/components/performance/CriticalCSS';
-import { usePerformanceMonitor, markPerformance } from '@/hooks/usePerformanceMonitor';
-import { PrefetchLink } from '@/components/navigation/PrefetchLink';
-import { useScrollVisibility } from '@/hooks/useScrollVisibility';
 import { InteractiveHeroDashboard } from '@/components/showcase/InteractiveHeroDashboard';
+import { usePerformanceMonitor } from '@/hooks/usePerformanceMonitor';
+import { useScrollVisibility } from '@/hooks/useScrollVisibility';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 export function LandingPage() {
   const [showDemo, setShowDemo] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   
-  const {
-    trackMetric
-  } = usePerformanceMonitor();
-  const {
-    atTop,
-    scrollingDown,
-    progress
-  } = useScrollVisibility();
+  const { trackMetric } = usePerformanceMonitor();
+  const { atTop, scrollingDown, progress } = useScrollVisibility();
   
-  const intensity = atTop ? 0 : progress;
-  const blurPx = Math.round(intensity * (scrollingDown ? 20 : 10));
-  const navOpacity = Math.max(0.5, 1 - intensity * (scrollingDown ? 0.9 : 0.5));
-  const y = scrollingDown && !atTop ? -Math.round(32 * intensity) : 0;
-
   useEffect(() => {
-    if (import.meta.env.PROD) return;
-    markPerformance('landing-page-start');
-    const timer = setTimeout(() => {
-      markPerformance('landing-page-interactive');
-      trackMetric({
-        landingPageLoadTime: performance.now()
-      });
-    }, 100);
-    return () => clearTimeout(timer);
+    if (import.meta.env.DEV) {
+      trackMetric({ landingPageLoadTime: performance.now() });
+    }
   }, [trackMetric]);
-
-  const scrollToDemo = () => {
-    setShowDemo(true);
-    setTimeout(() => {
-      document.getElementById('demo-section')?.scrollIntoView({
-        behavior: 'smooth'
-      });
-    }, 100);
-  };
 
   // Animation variants
   const fadeInUp = {
@@ -92,75 +86,131 @@ export function LandingPage() {
 
   const features = [
     {
-      icon: <BarChart3 className="w-8 h-8" />,
+      icon: BarChart3,
       title: "Real-time Analytics",
-      description: "Monitor your productivity metrics with live data visualization and interactive charts",
-      benefit: "Increase decision-making speed by 75%",
-      image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&h=400&fit=crop"
+      description: "Monitor your productivity metrics with live data visualization and interactive charts that help you make better decisions.",
+      benefits: [
+        "Live data updates",
+        "Interactive dashboards", 
+        "Custom metrics",
+        "Export capabilities"
+      ],
+      image: "/src/assets/analytics-dashboard.jpg"
     },
     {
-      icon: <Calendar className="w-8 h-8" />,
+      icon: Calendar,
       title: "Smart Calendar",
-      description: "Advanced calendar with mini views, event management, and intelligent scheduling",
-      benefit: "Reduce scheduling conflicts by 90%",
-      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop"
+      description: "Advanced calendar with mini views, event management, and intelligent scheduling that adapts to your workflow.",
+      benefits: [
+        "Multiple view modes",
+        "Event management",
+        "Smart scheduling",
+        "Integration ready"
+      ],
+      image: "/src/assets/calendar-interface.jpg"
     },
     {
-      icon: <FileText className="w-8 h-8" />,
-      title: "Note Taking",
-      description: "Quick notes, code snippets, and prompts gallery for capturing ideas",
-      benefit: "Save 20+ hours weekly on organization",
-      image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=400&fit=crop"
+      icon: FileText,
+      title: "Note Management",
+      description: "Capture ideas quickly with our advanced note-taking system featuring code snippets and prompts gallery.",
+      benefits: [
+        "Quick capture",
+        "Code highlighting",
+        "Search & organize",
+        "Team sharing"
+      ],
+      image: "/src/assets/notes-interface.jpg"
+    },
+    {
+      icon: Layout,
+      title: "Customizable Dashboard",
+      description: "Build your perfect workspace with drag-and-drop widgets and fully customizable layouts.",
+      benefits: [
+        "Drag & drop interface",
+        "Multiple layouts",
+        "Widget library",
+        "Theme customization"
+      ],
+      image: "/src/assets/dashboard-main.jpg"
+    },
+    {
+      icon: Target,
+      title: "Project Management",
+      description: "Organize tasks with Kanban boards, track progress, and collaborate with your team effectively.",
+      benefits: [
+        "Kanban boards",
+        "Progress tracking",
+        "Team collaboration",
+        "Deadline management"
+      ],
+      image: "/src/assets/project-management.jpg"
+    },
+    {
+      icon: TrendingUp,
+      title: "Performance Insights",
+      description: "Get detailed insights into your productivity patterns and optimize your workflow accordingly.",
+      benefits: [
+        "Productivity analytics",
+        "Pattern recognition",
+        "Optimization tips",
+        "Progress reports"
+      ],
+      image: "/src/assets/analytics-dashboard.jpg"
     }
   ];
 
   const stats = [
-    { number: "50K+", label: "Active Users", icon: <Users className="w-6 h-6" /> },
-    { number: "99.9%", label: "Uptime", icon: <Shield className="w-6 h-6" /> },
-    { number: "24/7", label: "Support", icon: <Clock className="w-6 h-6" /> },
-    { number: "4.9★", label: "Rating", icon: <Star className="w-6 h-6" /> }
+    { number: "50K+", label: "Active Users", icon: Users },
+    { number: "99.9%", label: "Uptime", icon: Shield },
+    { number: "24/7", label: "Support", icon: Clock },
+    { number: "4.9★", label: "Rating", icon: Star }
   ];
 
   const pricingPlans = [
     {
       name: "Personal",
       price: "Free",
-      period: "forever",
+      description: "Perfect for individuals getting started",
       features: [
         "Up to 5 widgets",
         "Basic customization",
         "Local data storage",
-        "Community support"
+        "Community support",
+        "Basic templates"
       ],
       popular: false,
       cta: "Get Started"
     },
     {
       name: "Professional",
-      price: "$9",
-      period: "per month",
+      price: "$29",
+      description: "Best for growing teams and professionals",
       features: [
         "Unlimited widgets",
         "Advanced customization",
         "Cloud synchronization",
         "Priority support",
         "Team collaboration",
-        "Advanced analytics"
+        "Advanced analytics",
+        "Custom integrations",
+        "Premium templates"
       ],
       popular: true,
       cta: "Start Free Trial"
     },
     {
       name: "Enterprise",
-      price: "$29",
-      period: "per month",
+      price: "Custom",
+      description: "For large organizations with specific needs",
       features: [
         "Everything in Professional",
         "SSO integration",
         "Advanced security",
-        "Custom integrations",
+        "Custom development",
         "Dedicated support",
-        "SLA guarantee"
+        "SLA guarantee",
+        "On-premise deployment",
+        "Training & onboarding"
       ],
       popular: false,
       cta: "Contact Sales"
@@ -170,592 +220,447 @@ export function LandingPage() {
   const faqs = [
     {
       question: "What is FlexIO and how does it work?",
-      answer: "FlexIO is a customizable productivity dashboard that brings all your essential tools together in one place. You can add widgets like notes, calendar, Kanban boards, calculators, and more to create your perfect workspace."
+      answer: "FlexIO is a multi-purpose LLM and dashboard template that helps you build production-ready applications quickly. It combines powerful analytics, customizable widgets, and modern UI components in one comprehensive platform."
     },
     {
       question: "Is FlexIO free to use?",
-      answer: "Yes! FlexIO offers a free plan with up to 5 widgets and basic customization options. For advanced features and unlimited widgets, we offer affordable paid plans starting at $9/month."
+      answer: "Yes! FlexIO offers a free plan with core features and up to 5 widgets. For advanced features and unlimited customization, we offer affordable paid plans starting at $29/month."
     },
     {
-      question: "Can I use FlexIO offline?",
-      answer: "FlexIO works primarily in your browser and requires an internet connection for full functionality. However, many widgets like notes and calculator work offline, and your data syncs when you're back online."
+      question: "Can I customize the dashboard layout?",
+      answer: "Absolutely! FlexIO features a drag-and-drop interface that lets you customize your dashboard layout completely. Choose from multiple layout options and arrange widgets exactly how you want them."
+    },
+    {
+      question: "What integrations are available?",
+      answer: "FlexIO supports a wide range of integrations including Google Calendar, Slack, Notion, GitHub, and many more. Professional and Enterprise plans include custom integration support."
     },
     {
       question: "How secure is my data?",
-      answer: "We take security seriously. All data is encrypted in transit and at rest. We use industry-standard security practices and never share your personal data with third parties."
+      answer: "Security is our top priority. All data is encrypted in transit and at rest using industry-standard encryption. We follow strict security protocols and never share your data with third parties."
     },
     {
-      question: "Can I integrate FlexIO with other tools?",
-      answer: "Yes! Our Professional and Enterprise plans include integrations with popular tools like Google Calendar, Notion, Slack, and many more. Custom integrations are available for Enterprise customers."
-    },
-    {
-      question: "What kind of support do you offer?",
-      answer: "We offer community support for free users, email support for Professional users, and dedicated support with SLA guarantees for Enterprise customers."
+      question: "Do you offer technical support?",
+      answer: "Yes! We provide community support for free users, priority email support for Professional users, and dedicated support with SLA guarantees for Enterprise customers."
     }
   ];
 
   return (
-    <>
+    <div className="min-h-screen bg-background">
       <CriticalCSS />
       <SEOHead 
-        title="FlexIO – The Ultimate Productivity Dashboard Platform" 
-        description="Transform your workflow with FlexIO's customizable dashboard. Notes, calendar, Kanban, analytics, and more - all in one beautiful, dark-themed interface." 
-        keywords={['productivity dashboard', 'customizable widgets', 'dark theme dashboard', 'business productivity', 'workflow optimization']} 
-        canonicalUrl="/" 
-        ogType="website" 
+        title="FlexIO - Multi-purpose LLM and Dashboard Template"
+        description="Build production-ready dashboards with FlexIO's comprehensive BI platform. Features real-time analytics, customizable widgets, and powerful integrations."
+        canonicalUrl="/"
+        keywords={["dashboard template", "business intelligence", "analytics", "data visualization", "BI platform"]}
       />
       
-      <StructuredData type="organization" />
-      <StructuredData type="website" />
-      
-      <div className="min-h-screen w-full bg-background overflow-x-hidden">
-        {/* Floating Navigation */}
-        <motion.div 
-          className="fixed top-6 left-0 right-0 flex justify-center z-50 overflow-x-hidden" 
-          initial={{ y: -100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
-          <motion.nav 
-            className="bg-background/95 backdrop-blur-md border border-border/50 rounded-full px-8 py-4 shadow-xl mx-auto"
-            initial={false}
-            animate={{
-              filter: `blur(${blurPx}px)`,
-              opacity: navOpacity,
-              y
-            }}
-            transition={{
-              duration: 0.35,
-              ease: [0.4, 0, 0.2, 1]
-            }}
-            style={{ willChange: 'filter, opacity, transform' }}
-          >
-            <div className="flex items-center justify-center space-x-6 max-w-fit">
-              <Link to="/landing" className="flex items-center hover:opacity-80 transition-opacity">
-                <LazyImage 
-                  src="/lovable-uploads/801f0a89-558e-4fd0-8e4e-102d5c5d2d3e.png" 
-                  alt="FlexIO Logo" 
-                  className="h-10 w-auto" 
-                  eager={true} 
-                  width={80} 
-                  height={40} 
-                />
+      {/* Navigation */}
+      <motion.nav 
+        className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border/10"
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            <div className="flex items-center space-x-8">
+              <Link to="/" className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                  <BarChart3 className="w-5 h-5 text-primary-foreground" />
+                </div>
+                <span className="text-xl font-semibold text-foreground">
+                  FlexIO
+                </span>
               </Link>
-              
-              <div className="hidden md:flex items-center space-x-4">
-                <Link to="/features" className="text-foreground/80 hover:text-foreground transition-all font-medium px-4 py-2 rounded-full hover:bg-muted/40">
-                  Features
-                </Link>
-                <Link to="/pricing" className="text-foreground/80 hover:text-foreground transition-all font-medium px-4 py-2 rounded-full hover:bg-muted/40">
-                  Pricing
-                </Link>
-                <Link to="/contact" className="text-foreground/80 hover:text-foreground transition-all font-medium px-4 py-2 rounded-full hover:bg-muted/40">
-                  Contact
-                </Link>
-                <Link to="/documentation" className="text-foreground/80 hover:text-foreground transition-all font-medium px-4 py-2 rounded-full hover:bg-muted/40">
-                  Docs
-                </Link>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <Button variant="ghost" className="rounded-full font-medium text-foreground/80 hover:text-foreground" asChild>
-                  <PrefetchLink to="/auth">Sign In</PrefetchLink>
-                </Button>
-                <Button 
-                  className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-md hover:shadow-lg transition-all duration-200" 
-                  onClick={scrollToDemo}
-                >
-                  Try Demo
-                </Button>
+              <div className="hidden md:flex space-x-6">
+                <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">Features</a>
+                <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">Pricing</a>
+                <a href="#testimonials" className="text-muted-foreground hover:text-foreground transition-colors">Reviews</a>
+                <Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</Link>
               </div>
             </div>
-          </motion.nav>
-        </motion.div>
-
-        {/* Hero Section */}
-        <section className="w-full pt-32 pb-24 lg:pb-32 bg-gradient-to-br from-background via-background/95 to-muted/20">
-          <div className="mx-auto w-full max-w-7xl px-6 md:px-8">
-            <motion.div 
-              className="text-center space-y-8 mb-16" 
-              initial="initial" 
-              animate="animate" 
-              variants={staggerContainer}
-            >
-              <motion.div className="space-y-4" variants={fadeInUp}>
-                <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6">
-                  <Zap className="w-4 h-4 mr-2" />
-                  The Ultimate Productivity Platform
-                </div>
-                <h1 className="text-5xl lg:text-7xl font-bold tracking-tight leading-[1.1] bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent">
-                  Transform Your Workflow with
-                  <br />
-                  <span className="bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
-                    FlexIO Dashboard
-                  </span>
-                </h1>
-              </motion.div>
-              
-              <motion.p 
-                className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed" 
-                variants={fadeInUp}
-              >
-                The all-in-one productivity dashboard that adapts to your workflow. 
-                Combine notes, calendar, Kanban, analytics, and 20+ powerful widgets in one beautiful interface.
-              </motion.p>
-              
-              <motion.div className="flex flex-col sm:flex-row gap-4 justify-center items-center" variants={fadeInUp}>
-                <Button 
-                  size="lg" 
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-                  onClick={scrollToDemo}
-                >
-                  Try Interactive Demo
-                  <ArrowRight className="w-5 h-5 ml-2" />
+            <div className="flex items-center space-x-4">
+              <Link to="/auth">
+                <Button variant="ghost" size="sm">Sign In</Button>
+              </Link>
+              <Link to="/demo">
+                <Button size="sm" className="bg-primary hover:bg-primary/90">
+                  Get Started
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  className="px-8 py-4 text-lg font-semibold rounded-xl border-2"
-                  asChild
-                >
-                  <PrefetchLink to="/auth">
-                    Start Free Trial
-                  </PrefetchLink>
-                </Button>
-              </motion.div>
-            </motion.div>
-
-            {/* Hero Dashboard Preview */}
-            <motion.div 
-              className="relative max-w-6xl mx-auto" 
-              initial="initial" 
-              animate="animate" 
-              variants={slideInRight}
-            >
-              <div className="relative bg-gradient-to-br from-muted/30 to-muted/10 rounded-3xl p-6 lg:p-8 border border-border/50 backdrop-blur-sm shadow-2xl">
-                <InteractiveHeroDashboard />
-                <div className="absolute -top-6 -right-6 w-32 h-32 bg-primary/20 rounded-full blur-2xl"></div>
-                <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-accent/20 rounded-full blur-3xl"></div>
-              </div>
-            </motion.div>
+              </Link>
+            </div>
           </div>
-        </section>
+        </div>
+      </motion.nav>
 
-        {/* Stats Section */}
-        <section className="py-16 bg-muted/30">
-          <div className="max-w-7xl mx-auto px-6 md:px-8">
-            <motion.div 
-              className="grid grid-cols-2 lg:grid-cols-4 gap-8"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+      {/* Hero Section */}
+      <section className="relative pt-24 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-secondary/5">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center space-y-12">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="space-y-6"
             >
-              {stats.map((stat, index) => (
-                <motion.div 
-                  key={index}
-                  className="text-center space-y-2"
-                  variants={scaleIn}
-                >
-                  <div className="flex justify-center text-primary mb-2">
-                    {stat.icon}
-                  </div>
-                  <div className="text-3xl lg:text-4xl font-bold text-foreground">
-                    {stat.number}
-                  </div>
-                  <div className="text-muted-foreground">
-                    {stat.label}
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section className="py-24 bg-background">
-          <div className="max-w-7xl mx-auto px-6 md:px-8">
-            <motion.div 
-              className="text-center space-y-6 mb-20"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={fadeInUp}
-            >
-              <h2 className="text-4xl lg:text-6xl font-bold tracking-tight">
-                Everything You Need in One Platform
-              </h2>
-              <p className="text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                FlexIO combines the power of multiple productivity tools into one seamless, customizable dashboard experience.
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
+                Multi-purpose{' '}
+                <span className="text-primary">LLM</span> and{' '}
+                <span className="text-primary">Dashboard</span>{' '}
+                Template
+              </h1>
+              
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                Get started with your project using this professional template. 
+                Build production-ready dashboards with comprehensive BI features, 
+                real-time analytics, and customizable widgets.
               </p>
-            </motion.div>
-
-            <motion.div 
-              className="grid lg:grid-cols-3 gap-8 lg:gap-12"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
-            >
-              {features.map((feature, index) => (
-                <motion.div 
-                  key={index}
-                  variants={scaleIn}
-                  className="group"
-                >
-                  <Card className="overflow-hidden border-0 shadow-xl bg-gradient-to-br from-card to-card/50 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div className="aspect-video relative overflow-hidden">
-                      <img 
-                        src={feature.image} 
-                        alt={feature.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent"></div>
-                      <div className="absolute bottom-4 left-4">
-                        <div className="text-primary mb-2">
-                          {feature.icon}
-                        </div>
-                        <h3 className="text-xl font-bold text-foreground">
-                          {feature.title}
-                        </h3>
-                      </div>
-                    </div>
-                    <CardContent className="p-6 space-y-4">
-                      <p className="text-muted-foreground leading-relaxed">
-                        {feature.description}
-                      </p>
-                      <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
-                        <CheckCircle className="w-4 h-4 mr-2" />
-                        {feature.benefit}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Detailed Features Section */}
-        <section className="py-24 bg-muted/30">
-          <div className="max-w-7xl mx-auto px-6 md:px-8">
-            <motion.div 
-              className="text-center space-y-6 mb-20"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={fadeInUp}
-            >
-              <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-                Powerful Widgets, Endless Possibilities
-              </h2>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Choose from 20+ professionally designed widgets to build your perfect productivity workspace.
-              </p>
-            </motion.div>
-
-            <motion.div 
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
-            >
-              {[
-                { icon: <Calendar className="w-6 h-6" />, title: "Smart Calendar", desc: "Mini calendar with event management" },
-                { icon: <FileText className="w-6 h-6" />, title: "Quick Notes", desc: "Capture ideas instantly" },
-                { icon: <BarChart3 className="w-6 h-6" />, title: "Analytics", desc: "Real-time data visualization" },
-                { icon: <Bookmark className="w-6 h-6" />, title: "Bookmarks", desc: "Organize your important links" },
-                { icon: <Calculator className="w-6 h-6" />, title: "Calculator", desc: "Quick calculations at hand" },
-                { icon: <Timer className="w-6 h-6" />, title: "Time Tracker", desc: "Monitor your productivity" },
-                { icon: <UserCheck className="w-6 h-6" />, title: "Habit Tracker", desc: "Build better habits" },
-                { icon: <Crown className="w-6 h-6" />, title: "Task Manager", desc: "Kanban boards and to-dos" },
-                { icon: <Shield className="w-6 h-6" />, title: "Security", desc: "Enterprise-grade protection" }
-              ].map((widget, index) => (
-                <motion.div 
-                  key={index}
-                  variants={scaleIn}
-                  className="bg-card border border-border/50 rounded-xl p-6 hover:shadow-lg transition-all duration-300"
-                >
-                  <div className="flex items-center space-x-3 mb-3">
-                    <div className="text-primary">
-                      {widget.icon}
-                    </div>
-                    <h3 className="font-semibold text-foreground">
-                      {widget.title}
-                    </h3>
-                  </div>
-                  <p className="text-muted-foreground text-sm">
-                    {widget.desc}
-                  </p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Pricing Section */}
-        <section className="py-24 bg-background">
-          <div className="max-w-7xl mx-auto px-6 md:px-8">
-            <motion.div 
-              className="text-center space-y-6 mb-20"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={fadeInUp}
-            >
-              <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-                Simple, Transparent Pricing
-              </h2>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Choose the plan that fits your needs. Upgrade or downgrade anytime.
-              </p>
-            </motion.div>
-
-            <motion.div 
-              className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
-            >
-              {pricingPlans.map((plan, index) => (
-                <motion.div 
-                  key={index}
-                  variants={scaleIn}
-                  className={`relative ${plan.popular ? 'transform scale-105' : ''}`}
-                >
-                  {plan.popular && (
-                    <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                      <div className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-medium">
-                        Most Popular
-                      </div>
-                    </div>
-                  )}
-                  <Card className={`h-full border-2 ${plan.popular ? 'border-primary shadow-2xl' : 'border-border'} bg-card`}>
-                    <CardContent className="p-8 space-y-6">
-                      <div className="space-y-2">
-                        <h3 className="text-2xl font-bold text-foreground">
-                          {plan.name}
-                        </h3>
-                        <div className="flex items-baseline space-x-2">
-                          <span className="text-4xl font-bold text-foreground">
-                            {plan.price}
-                          </span>
-                          <span className="text-muted-foreground">
-                            {plan.period}
-                          </span>
-                        </div>
-                      </div>
-                      
-                      <ul className="space-y-3">
-                        {plan.features.map((feature, featureIndex) => (
-                          <li key={featureIndex} className="flex items-center space-x-3">
-                            <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                            <span className="text-muted-foreground">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      
-                      <Button 
-                        className={`w-full py-3 font-semibold ${
-                          plan.popular 
-                            ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
-                            : 'bg-muted hover:bg-muted/80 text-foreground'
-                        }`}
-                        size="lg"
-                      >
-                        {plan.cta}
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* FAQ Section */}
-        <section className="py-24 bg-muted/30">
-          <div className="max-w-4xl mx-auto px-6 md:px-8">
-            <motion.div 
-              className="text-center space-y-6 mb-20"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={fadeInUp}
-            >
-              <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-                Frequently Asked Questions
-              </h2>
-              <p className="text-xl text-muted-foreground">
-                Everything you need to know about FlexIO
-              </p>
-            </motion.div>
-
-            <motion.div 
-              className="space-y-4"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
-            >
-              {faqs.map((faq, index) => (
-                <motion.div 
-                  key={index}
-                  variants={fadeInUp}
-                  className="bg-card border border-border/50 rounded-xl overflow-hidden"
-                >
-                  <button
-                    className="w-full p-6 text-left flex items-center justify-between hover:bg-muted/30 transition-colors"
-                    onClick={() => setOpenFaq(openFaq === index ? null : index)}
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+                <Link to="/demo">
+                  <Button 
+                    size="lg" 
+                    className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-lg px-8 py-3"
                   >
-                    <h3 className="font-semibold text-foreground pr-8">
-                      {faq.question}
-                    </h3>
-                    <div className="text-primary">
-                      {openFaq === index ? (
-                        <Minus className="w-5 h-5" />
-                      ) : (
-                        <Plus className="w-5 h-5" />
-                      )}
+                    Live Preview
+                  </Button>
+                </Link>
+                <Link to="/auth">
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    className="w-full sm:w-auto text-lg px-8 py-3"
+                  >
+                    Get Started Free
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Dashboard Preview */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <motion.div 
+          className="max-w-6xl mx-auto"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <div className="relative">
+            <div className="bg-background rounded-xl border border-border shadow-lg overflow-hidden">
+              <div className="p-6">
+                <InteractiveHeroDashboard />
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-secondary/5">
+        <div className="max-w-7xl mx-auto">
+          <motion.div 
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl font-bold text-foreground mb-4">
+              Comprehensive BI in One Platform
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Everything you need to transform your business data into actionable insights
+            </p>
+          </motion.div>
+          
+          <motion.div 
+            className="grid grid-cols-2 lg:grid-cols-4 gap-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center space-y-2">
+                <div className="flex justify-center mb-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                    <stat.icon className="w-6 h-6 text-primary" />
+                  </div>
+                </div>
+                <div className="text-3xl lg:text-4xl font-bold text-foreground">
+                  {stat.number}
+                </div>
+                <div className="text-muted-foreground font-medium">{stat.label}</div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-foreground">
+              Powerful Features for Every Need
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Everything you need to build, deploy, and scale your analytics platform
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <Card className="h-full group hover:shadow-lg transition-all duration-300">
+                  <CardHeader className="space-y-4">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                      <feature.icon className="w-6 h-6 text-primary" />
                     </div>
-                  </button>
-                  {openFaq === index && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="px-6 pb-6"
-                    >
-                      <p className="text-muted-foreground leading-relaxed">
-                        {faq.answer}
-                      </p>
-                    </motion.div>
-                  )}
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Final CTA Section */}
-        <section className="py-24 bg-gradient-to-br from-primary/10 via-background to-accent/10">
-          <div className="max-w-4xl mx-auto px-6 md:px-8 text-center">
-            <motion.div 
-              className="space-y-8"
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
-            >
-              <motion.h2 
-                className="text-4xl lg:text-5xl font-bold tracking-tight"
-                variants={fadeInUp}
-              >
-                Ready to Transform Your Productivity?
-              </motion.h2>
-              <motion.p 
-                className="text-xl text-muted-foreground max-w-2xl mx-auto"
-                variants={fadeInUp}
-              >
-                Join thousands of professionals who have already revolutionized their workflow with FlexIO.
-              </motion.p>
-              <motion.div 
-                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-                variants={fadeInUp}
-              >
-                <Button 
-                  size="lg" 
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-                  id="demo-section"
-                  onClick={scrollToDemo}
-                >
-                  Start Your Free Trial
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  className="px-8 py-4 text-lg font-semibold rounded-xl border-2"
-                  asChild
-                >
-                  <Link to="/contact">
-                    Schedule Demo Call
-                  </Link>
-                </Button>
+                    <CardTitle className="text-xl text-foreground">{feature.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <CardDescription className="text-base leading-relaxed">
+                      {feature.description}
+                    </CardDescription>
+                    <div className="space-y-2">
+                      {feature.benefits.map((benefit, benefitIndex) => (
+                        <div key={benefitIndex} className="flex items-center space-x-2 text-sm">
+                          <CheckCircle className="w-4 h-4 text-primary flex-shrink-0" />
+                          <span className="text-muted-foreground">{benefit}</span>
+                        </div>
+                      ))}
+                    </div>
+                    {feature.image && (
+                      <div className="rounded-lg overflow-hidden border border-border/30 mt-4">
+                        <img 
+                          src={feature.image} 
+                          alt={feature.title}
+                          className="w-full h-32 object-cover"
+                        />
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
               </motion.div>
-            </motion.div>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Footer */}
-        <footer className="bg-background border-t border-border/50 py-16">
-          <div className="max-w-7xl mx-auto px-6 md:px-8">
-            <div className="grid md:grid-cols-4 gap-8">
-              <div className="space-y-4">
-                <LazyImage 
-                  src="/lovable-uploads/801f0a89-558e-4fd0-8e4e-102d5c5d2d3e.png" 
-                  alt="FlexIO Logo" 
-                  className="h-12 w-auto" 
-                  width={96} 
-                  height={48} 
-                />
-                <p className="text-muted-foreground">
-                  The ultimate productivity dashboard for modern professionals.
-                </p>
+      {/* Pricing Section */}
+      <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/5">
+        <div className="max-w-7xl mx-auto">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-foreground">
+              Simple, Transparent Pricing
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Choose the plan that's right for your team. All plans include core features.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {pricingPlans.map((plan, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className={`relative ${plan.popular ? 'transform scale-105' : ''}`}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <Badge className="bg-primary text-primary-foreground px-4 py-1">
+                      Most Popular
+                    </Badge>
+                  </div>
+                )}
+                <Card className={`h-full ${plan.popular ? 'border-primary shadow-lg' : ''}`}>
+                  <CardHeader className="text-center space-y-4">
+                    <CardTitle className="text-2xl text-foreground">{plan.name}</CardTitle>
+                    <div className="space-y-2">
+                      <div className="text-4xl font-bold text-foreground">
+                        {plan.price}
+                        {plan.price !== 'Free' && plan.price !== 'Custom' && (
+                          <span className="text-lg text-muted-foreground font-normal">/month</span>
+                        )}
+                      </div>
+                      <CardDescription>{plan.description}</CardDescription>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <ul className="space-y-3">
+                      {plan.features.map((feature, featureIndex) => (
+                        <li key={featureIndex} className="flex items-center space-x-3">
+                          <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
+                          <span className="text-sm text-muted-foreground">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Button 
+                      className={`w-full ${plan.popular ? 'bg-primary hover:bg-primary/90' : ''}`}
+                      variant={plan.popular ? 'default' : 'outline'}
+                      size="lg"
+                    >
+                      {plan.cta}
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-foreground">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-xl text-muted-foreground">
+              Find answers to common questions about FlexIO
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <Accordion type="single" collapsible className="space-y-4">
+              {faqs.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`} className="border border-border rounded-lg px-6">
+                  <AccordionTrigger className="text-left text-foreground hover:no-underline">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-primary/5">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="space-y-8"
+          >
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground">
+              Ready to Transform Your Workflow?
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Join thousands of teams already using FlexIO to build better dashboards and improve their productivity.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link to="/demo">
+                <Button size="lg" className="bg-primary hover:bg-primary/90 text-lg px-8 py-3">
+                  Start Free Trial
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </Link>
+              <Link to="/contact">
+                <Button variant="outline" size="lg" className="text-lg px-8 py-3">
+                  Contact Sales
+                </Button>
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-background border-t border-border py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="space-y-4">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                  <BarChart3 className="w-5 h-5 text-primary-foreground" />
+                </div>
+                <span className="text-xl font-semibold text-foreground">FlexIO</span>
               </div>
-              
-              <div>
-                <h4 className="font-semibold text-foreground mb-4">Product</h4>
-                <ul className="space-y-2 text-muted-foreground">
-                  <li><Link to="/features" className="hover:text-foreground transition-colors">Features</Link></li>
-                  <li><Link to="/pricing" className="hover:text-foreground transition-colors">Pricing</Link></li>
-                  <li><Link to="/integrations" className="hover:text-foreground transition-colors">Integrations</Link></li>
-                  <li><Link to="/documentation" className="hover:text-foreground transition-colors">Documentation</Link></li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="font-semibold text-foreground mb-4">Company</h4>
-                <ul className="space-y-2 text-muted-foreground">
-                  <li><Link to="/about" className="hover:text-foreground transition-colors">About</Link></li>
-                  <li><Link to="/blog" className="hover:text-foreground transition-colors">Blog</Link></li>
-                  <li><Link to="/careers" className="hover:text-foreground transition-colors">Careers</Link></li>
-                  <li><Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link></li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="font-semibold text-foreground mb-4">Legal</h4>
-                <ul className="space-y-2 text-muted-foreground">
-                  <li><Link to="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
-                  <li><Link to="/terms" className="hover:text-foreground transition-colors">Terms of Service</Link></li>
-                  <li><Link to="/security" className="hover:text-foreground transition-colors">Security</Link></li>
-                </ul>
-              </div>
+              <p className="text-muted-foreground">
+                The ultimate multi-purpose dashboard template for modern businesses.
+              </p>
             </div>
             
-            <div className="border-t border-border/50 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center">
-              <p className="text-muted-foreground">
-                © 2024 FlexIO. All rights reserved.
-              </p>
-              <div className="flex space-x-6 mt-4 sm:mt-0">
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Twitter
-                </a>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  LinkedIn
-                </a>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                  GitHub
-                </a>
-              </div>
+            <div>
+              <h4 className="font-semibold text-foreground mb-4">Product</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><Link to="/features" className="hover:text-foreground transition-colors">Features</Link></li>
+                <li><Link to="/pricing" className="hover:text-foreground transition-colors">Pricing</Link></li>
+                <li><Link to="/integrations" className="hover:text-foreground transition-colors">Integrations</Link></li>
+                <li><Link to="/demo" className="hover:text-foreground transition-colors">Demo</Link></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold text-foreground mb-4">Resources</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><Link to="/documentation" className="hover:text-foreground transition-colors">Documentation</Link></li>
+                <li><Link to="/help" className="hover:text-foreground transition-colors">Help Center</Link></li>
+                <li><Link to="/blog" className="hover:text-foreground transition-colors">Blog</Link></li>
+                <li><Link to="/changelog" className="hover:text-foreground transition-colors">Changelog</Link></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold text-foreground mb-4">Company</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><Link to="/about" className="hover:text-foreground transition-colors">About</Link></li>
+                <li><Link to="/careers" className="hover:text-foreground transition-colors">Careers</Link></li>
+                <li><Link to="/contact" className="hover:text-foreground transition-colors">Contact</Link></li>
+                <li><Link to="/legal/privacy" className="hover:text-foreground transition-colors">Privacy</Link></li>
+              </ul>
             </div>
           </div>
-        </footer>
-      </div>
-    </>
+          
+          <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
+            <p>&copy; 2024 FlexIO. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
   );
 }
