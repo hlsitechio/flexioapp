@@ -113,6 +113,13 @@ export function GridLayout({ editMode }: GridLayoutProps) {
 
   const renderComponent = (componentName: string, componentGridSize?: string) => {
     const size = componentGridSize || gridSize;
+    
+    // Explicitly block any showcase/demo components from being rendered
+    const blockedComponents = ['InteractiveHeroDashboard', 'ToolsShowcase', 'MiniDashboardPreview', 'SimpleHeroDemo'];
+    if (blockedComponents.includes(componentName)) {
+      return null;
+    }
+    
     switch (componentName) {
       case 'Calendar':
         return <Calendar gridSize={size as GridSize} />;
