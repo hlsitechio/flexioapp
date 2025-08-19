@@ -3,3 +3,4 @@ export { SecurityMessageCenter } from './SecurityMessageCenter';
 export { AdminAuditLog } from './AdminAuditLog';
 export { SecurityEventsMonitor } from './SecurityEventsMonitor';
 export { AccountLockoutStatus } from './AccountLockoutStatus';
+export { SecurityStatus } from './SecurityStatus';

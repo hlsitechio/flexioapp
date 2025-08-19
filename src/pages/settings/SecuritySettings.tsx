@@ -1,7 +1,7 @@
 import React from 'react';
 import { DashboardSidebar } from '@/components/sidebar';
 import { TopNavigation } from '@/components/top-navigation';
-import { SecurityDashboard } from '@/components/security';
+import { SecurityDashboard, SecurityStatus } from '@/components/security';
 import { useSettings } from '@/contexts/SettingsContext';
 
 export function SecuritySettings() {
@@ -15,7 +15,8 @@ export function SecuritySettings() {
         <TopNavigation editMode={editMode} />
         
         <main className="flex-1 p-6">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-6xl mx-auto space-y-6">
+            <SecurityStatus />
             <SecurityDashboard />
           </div>
         </main>

@@ -1329,6 +1329,15 @@ export type Database = {
         }
         Returns: undefined
       }
+      log_data_access: {
+        Args: {
+          _action: string
+          _metadata?: Json
+          _record_id?: string
+          _table_name: string
+        }
+        Returns: undefined
+      }
       reset_failed_login_attempts: {
         Args: { _user_id: string }
         Returns: undefined
